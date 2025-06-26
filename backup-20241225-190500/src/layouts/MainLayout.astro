@@ -1,0 +1,148 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Hero from '../components/Hero.astro';
+import CompactSubscribe from '../components/CompactSubscribe.astro';
+import TrackingPixels from '../components/TrackingPixels.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Latest AI news, reviews, and insights" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} | AI Buzz Media</title>
+    <meta name="description" content={description} />
+    
+    <!-- E-E-A-T Compliant Organization Schema Markup -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "AI Buzz Media",
+      "url": "https://aibuzzmedia.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://aibuzzmedia.com/logo.png",
+        "width": 512,
+        "height": 512
+      },
+      "description": "Leading source for AI news, reviews, and insights. Expert coverage of artificial intelligence, machine learning, and emerging technologies.",
+      "foundingDate": "2024",
+      "sameAs": [
+        "https://twitter.com/aibuzzmedia",
+        "https://linkedin.com/company/aibuzzmedia",
+        "https://facebook.com/aibuzzmedia",
+        "https://youtube.com/@aibuzzmedia"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "email": "contact@aibuzzmedia.com",
+        "url": "https://aibuzzmedia.com/contact"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "AI Buzz Media"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://aibuzzmedia.com"
+      },
+      "knowsAbout": [
+        "Artificial Intelligence",
+        "Machine Learning",
+        "Deep Learning",
+        "Natural Language Processing",
+        "Computer Vision",
+        "Robotics",
+        "Technology News",
+        "AI Ethics",
+        "Emerging Technologies"
+      ],
+      "hasCredential": [
+        "AI Technology Journalism",
+        "Expert Technology Analysis",
+        "Industry Research",
+        "Professional AI Coverage"
+      ]
+    })} />
+    
+    <!-- Website Schema -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "AI Buzz Media",
+      "url": "https://aibuzzmedia.com",
+      "description": "Latest AI news, reviews, and insights from industry experts",
+      "publisher": {
+        "@type": "Organization",
+        "name": "AI Buzz Media",
+        "url": "https://aibuzzmedia.com"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://aibuzzmedia.com/search?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    })} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <TrackingPixels />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --accent: 136, 58, 234;
+    --accent-light: 224, 204, 250;
+    --accent-dark: 49, 10, 101;
+    --accent-gradient: linear-gradient(45deg, rgb(var(--accent)), rgb(var(--accent-light)) 30%, white 60%);
+    --color-bg: #1a1a1b;
+    --color-text: #ffffff;
+    --color-text-secondary: #b3b3b3;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --gradient-primary: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+  }
+
+  html {
+    font-family: system-ui, sans-serif;
+    background: var(--color-bg);
+    background-size: 224px;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  code {
+    font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+      Bitstream Vera Sans Mono, Courier New, monospace;
+  }
+
+  .content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+</style> 

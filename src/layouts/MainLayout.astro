@@ -1,0 +1,281 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SEOOptimizer from '../components/SEOOptimizer.astro';
+import PerformanceMonitor from '../components/PerformanceMonitor.astro';
+import AdvancedCache from '../components/AdvancedCache.astro';
+
+interface Props {
+	title: string;
+	description: string;
+	image?: string;
+	type?: 'website' | 'article' | 'author' | 'category';
+	publishedAt?: string;
+	modifiedAt?: string;
+	author?: {
+		name: string;
+		slug?: string;
+		image?: string;
+		bio?: string;
+	};
+	category?: {
+		name: string;
+		slug: string;
+	};
+	tags?: string[];
+	readingTime?: number;
+	wordCount?: number;
+	canonicalUrl?: string;
+	noindex?: boolean;
+	nofollow?: boolean;
+}
+
+const { 
+	title, 
+	description, 
+	image = '/images/default-og.jpg',
+	type = 'website',
+	publishedAt,
+	modifiedAt,
+	author,
+	category,
+	tags = [],
+	readingTime,
+	wordCount,
+	canonicalUrl,
+	noindex = false,
+	nofollow = false
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		
+		<!-- Mobile Responsive CSS -->
+		<link rel="stylesheet" href="/styles/mobile-responsive.css" />
+		
+		<!-- Advanced SEO Optimization -->
+		<SEOOptimizer 
+			title={title}
+			description={description}
+			image={image}
+			type={type}
+			publishedAt={publishedAt}
+			modifiedAt={modifiedAt}
+			author={author}
+			category={category}
+			tags={tags}
+			readingTime={readingTime}
+			wordCount={wordCount}
+			canonicalUrl={canonicalUrl}
+			noindex={noindex}
+			nofollow={nofollow}
+		/>
+		
+		<!-- Performance Monitoring -->
+		<PerformanceMonitor 
+			enableAnalytics={true}
+			enableConsole={false}
+			enableRealUserMonitoring={true}
+		/>
+		
+		<!-- Advanced Caching -->
+		<AdvancedCache 
+			enableServiceWorker={true}
+			enablePreload={true}
+			enablePrefetch={true}
+			enableBackgroundSync={true}
+		/>
+		
+		<!-- Additional Performance Optimizations -->
+		<script>
+			// Critical performance optimizations
+			if (typeof window !== 'undefined') {
+				// Preload critical resources
+				const criticalResources = [
+					'/styles/global.css',
+					'/fonts/atkinson-regular.woff',
+					'/fonts/atkinson-bold.woff'
+				];
+				
+				criticalResources.forEach(resource => {
+					const link = document.createElement('link');
+					link.rel = 'preload';
+					link.as = resource.endsWith('.css') ? 'style' : 'font';
+					link.href = resource;
+					link.crossOrigin = 'anonymous';
+					document.head.appendChild(link);
+				});
+				
+				// Optimize images
+				document.addEventListener('DOMContentLoaded', () => {
+					const images = document.querySelectorAll('img');
+					images.forEach(img => {
+						if (!img.loading) {
+							img.loading = 'lazy';
+						}
+						if (!img.decoding) {
+							img.decoding = 'async';
+						}
+					});
+				});
+				
+				// Optimize fonts
+				if ('fonts' in document) {
+					document.fonts.ready.then(() => {
+						document.documentElement.classList.add('fonts-loaded');
+					});
+				}
+			}
+		</script>
+		
+		<!-- Structured Data for Organization -->
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "Organization",
+			"name": "AI Buzz Media",
+			"url": Astro.site || 'http://localhost:4321',
+			"logo": {
+				"@type": "ImageObject",
+				"url": `${Astro.site || 'http://localhost:4321'}/logo.png`,
+				"width": 512,
+				"height": 512
+			},
+			"description": "Latest AI news, reviews, and insights from industry experts",
+			"foundingDate": "2024",
+			"sameAs": [
+				"https://twitter.com/aibuzzmedia",
+				"https://linkedin.com/company/aibuzzmedia",
+				"https://facebook.com/aibuzzmedia",
+				"https://youtube.com/@aibuzzmedia"
+			],
+			"contactPoint": {
+				"@type": "ContactPoint",
+				"contactType": "customer service",
+				"email": "contact@aibuzzmedia.com",
+				"url": `${Astro.site || 'http://localhost:4321'}/contact`
+			},
+			"address": {
+				"@type": "PostalAddress",
+				"addressCountry": "US"
+			},
+			"publisher": {
+				"@type": "Organization",
+				"name": "AI Buzz Media",
+				"url": Astro.site || 'http://localhost:4321'
+			}
+		})} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<slot />
+		</main>
+		<Footer />
+		
+		<!-- Service Worker Registration -->
+		<script>
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', () => {
+					navigator.serviceWorker.register('/sw.js')
+						.then(registration => {
+							console.log('SW registered: ', registration);
+						})
+						.catch(registrationError => {
+							console.log('SW registration failed: ', registrationError);
+						});
+				});
+			}
+		</script>
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		--accent: 136, 58, 234;
+		--accent-light: 224, 204, 250;
+		--accent-dark: 49, 10, 101;
+		--accent-gradient: linear-gradient(45deg, rgb(var(--accent)), rgb(var(--accent-light)) 30%, white 60%);
+		--color-bg: #1a1a1b;
+		--color-text: #ffffff;
+		--color-text-secondary: #b3b3b3;
+		--border-color: rgba(255, 255, 255, 0.1);
+		--gradient-primary: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	}
+
+	html {
+		font-family: system-ui, sans-serif;
+		background: var(--color-bg);
+		background-size: 224px;
+		scroll-behavior: smooth;
+	}
+
+	body {
+		margin: 0;
+		padding: 0;
+		min-height: 100vh;
+		background: var(--color-bg);
+		color: var(--color-text);
+		line-height: 1.6;
+	}
+
+	code {
+		font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+			Bitstream Vera Sans Mono, Courier New, monospace;
+	}
+
+	.content-wrapper {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 2rem;
+	}
+
+	/* Performance optimizations */
+	.fonts-loaded {
+		font-display: swap;
+	}
+
+	/* Reduce layout shift */
+	img {
+		max-width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	/* Optimize animations */
+	@media (prefers-reduced-motion: reduce) {
+		*,
+		*::before,
+		*::after {
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.01ms !important;
+		}
+	}
+
+	/* Focus styles for accessibility */
+	:focus {
+		outline: 2px solid #00d4ff;
+		outline-offset: 2px;
+	}
+
+	/* Skip link for accessibility */
+	.skip-link {
+		position: absolute;
+		top: -40px;
+		left: 6px;
+		background: #00d4ff;
+		color: white;
+		padding: 8px;
+		text-decoration: none;
+		border-radius: 4px;
+		z-index: 1000;
+	}
+
+	.skip-link:focus {
+		top: 6px;
+	}
+</style> 

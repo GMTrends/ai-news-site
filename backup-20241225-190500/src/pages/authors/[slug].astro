@@ -1,0 +1,42 @@
+---
+import { getAllAuthors, getAuthorBySlug, getArticlesByAuthor } from '../../lib/sanity'
+import AuthorLayout from '../../layouts/AuthorLayout.astro'
+import { sanityClient } from '../../lib/sanity';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import '../../styles/global.css';
+
+// Enable static generation for this page
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const authors = await getAllAuthors()
+  
+  return authors.map((author: any) => ({
+    params: { slug: author.slug.current },
+    props: { author },
+  }))
+}
+
+const { slug } = Astro.params
+const { author } = Astro.props
+
+// If author not found in props, try to fetch it
+const authorData = author || await getAuthorBySlug(slug as string)
+
+if (!authorData) {
+  return Astro.redirect('/404')
+}
+
+// Type assertion to tell TypeScript about the _id property
+const authorWithId = authorData as any
+
+if (!authorWithId._id) {
+  return Astro.redirect('/404')
+}
+
+// Get articles by this author
+const articles = await getArticlesByAuthor(authorWithId._id)
+---
+
+<AuthorLayout author={authorWithId} articles={articles} />

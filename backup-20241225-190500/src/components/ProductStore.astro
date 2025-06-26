@@ -1,0 +1,70 @@
+---
+// Digital products store
+---
+
+<section class="digital-store">
+    <div class="store-container">
+      <h2>AI Learning Resources</h2>
+      
+      <div class="products-grid">
+        <div class="product-card">
+          <h3>AI Mastery Course</h3>
+          <p>Complete guide to understanding AI</p>
+          <div class="price">$97</div>
+          <button class="buy-button" data-price="9700" data-product="ai-course">
+            Buy Now with Stripe
+          </button>
+        </div>
+        
+        <div class="product-card">
+          <h3>AI Tools Directory</h3>
+          <p>Curated list of 500+ AI tools</p>
+          <div class="price">$27</div>
+          <div id="paypal-button-container"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Stripe Integration -->
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+  const stripe = (window as any).Stripe('pk_test_YOUR_STRIPE_KEY');
+  
+  document.querySelectorAll('.buy-button').forEach((button) => {
+    (button as HTMLButtonElement).addEventListener('click', async () => {
+      const price = (button as HTMLButtonElement).dataset.price;
+      const product = (button as HTMLButtonElement).dataset.product;
+      
+      // Call your Stripe checkout
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ price, product })
+      });
+      
+      const session = await response.json();
+      stripe.redirectToCheckout({ sessionId: session.id });
+    });
+  });
+  </script>
+  
+  <!-- PayPal Integration -->
+  <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID"></script>
+  <script>
+  (window as any).paypal.Buttons({
+    createOrder: function(data: any, actions: any) {
+      return actions.order.create({
+        purchase_units: [{
+          amount: { value: '27.00' }
+        }]
+      });
+    },
+    onApprove: function(data: any, actions: any) {
+      return actions.order.capture().then(function(details: any) {
+        // Handle successful payment
+        window.location.href = '/thank-you';
+      });
+    }
+  }).render('#paypal-button-container');
+  </script>

@@ -1,0 +1,488 @@
+{
+  "timestamp": "2025-06-26T02-45-44-976Z",
+  "backupName": "backup-2025-06-26T02-45-44-976Z",
+  "git": {
+    "commitHash": "5434c6831ef3c08af470cf56202aa52fb7ac0741",
+    "branch": "main",
+    "hasUncommittedChanges": true,
+    "status": "M .gitignore\n M README.md\n M astro.config.mjs\n M package-lock.json\n M package.json\n M src/components/BaseHead.astro\n M src/components/Footer.astro\n M src/components/Header.astro\n M src/components/HeaderLink.astro\n M src/consts.ts\n M src/content.config.ts\n M src/content/blog/first-post.md\n M src/layouts/BlogPost.astro\n M src/pages/about.astro\n M src/pages/blog/[...slug].astro\n M src/pages/index.astro\n M src/pages/rss.xml.js\n M src/styles/global.css\n?? .astro/\n?? .github/\n?? BACKUP_SYSTEM_GUIDE.md\n?? DEPLOYMENT_GUIDE.md\n?? MIGRATION_TEST_RESULTS.md\n?? MOBILE_RESPONSIVENESS_SUMMARY.md\n?? STEP13_COMPLETION.md\n?? STEP9_COMPLETION.md\n?? TESTING_CHECKLIST.md\n?? backup-20241225-190500/\n?? backup-system.cjs\n?? backup-system.js\n?? clean-astro-test/\n?? cleanup-astro-content.js\n?? debug-content-config.js\n?? deploy.sh\n?? env.example\n?? netlify.toml\n?? netlify/\n?? src/components/AIBuzzLayout.astro\n?? src/components/AdvancedCache.astro\n?? src/components/Analytics.astro\n?? src/components/ArticleGrid.astro\n?? src/components/ArticleSidebar.astro\n?? src/components/CategorySections.astro\n?? src/components/CategoryShortcuts.astro\n?? src/components/CompactSubscribe.astro\n?? src/components/Hero.astro\n?? src/components/MobileNav.astro\n?? src/components/PerformanceMonitor.astro\n?? src/components/ProductStore.astro\n?? src/components/SEOOptimizer.astro\n?? src/components/SearchBar.astro\n?? src/components/SubscribeSection.astro\n?? src/components/TrackingPixels.astro\n?? src/content/articles/\n?? src/content/authors/\n?? src/content/categories/\n?? src/content/pages/\n?? src/content/site-settings/\n?? src/env.d.ts\n?? src/layouts/AuthorLayout.astro\n?? src/layouts/MainLayout.astro\n?? src/lib/\n?? src/middleware.ts\n?? src/pages/404.astro\n?? src/pages/[category]/\n?? src/pages/admin.astro\n?? src/pages/advertise-with-us.astro\n?? src/pages/affiliate-disclosure.astro\n?? src/pages/api/\n?? src/pages/authors/\n?? src/pages/categories/\n?? src/pages/contact.astro\n?? src/pages/cookie-policy.astro\n?? src/pages/disclaimers.astro\n?? src/pages/mobile-test.astro\n?? src/pages/privacy-policy.astro\n?? src/pages/sitemap.xml.ts\n?? src/pages/terms-of-service.astro\n?? src/styles/article.css\n?? src/styles/mobile-responsive.css\n?? src/utils/"
+  },
+  "files": [
+    {
+      "path": "src\\content\\articles\\2024-01-20-gpt-5-breakthrough-analysis.md",
+      "size": 7292,
+      "modified": "2025-06-26T01:36:29.519Z",
+      "checksum": "cfed088c797a39423c121572eb4f8081f06fb0197c2059ddb128890303ab6cc3"
+    },
+    {
+      "path": "src\\content\\articles\\simple-test.md",
+      "size": 87,
+      "modified": "2025-06-26T00:46:32.199Z",
+      "checksum": "61765e211427554cde9ad18d8bb23007fd81ec6fad8284b932d98c79e8d0b47f"
+    },
+    {
+      "path": "src\\content\\authors\\john-doe.md",
+      "size": 240,
+      "modified": "2025-06-26T00:58:30.757Z",
+      "checksum": "3968cbf4a6107478353b8869b961d978076b26b705e7908e70f6ec92ba0dbf2a"
+    },
+    {
+      "path": "src\\content\\authors\\sarah-chen.md",
+      "size": 3778,
+      "modified": "2025-06-26T01:36:14.509Z",
+      "checksum": "9519323c7b156f6787fbd45d934da1f09e223b625aa1dc67e3d6d3f2128ae2b5"
+    },
+    {
+      "path": "src\\content\\categories\\ai-agents.md",
+      "size": 247,
+      "modified": "2025-06-26T02:36:53.396Z",
+      "checksum": "3b608aa48b4ed811c0b60fc999eba6a47d9dfeeddb40ceb48f10f32b661c7b2e"
+    },
+    {
+      "path": "src\\content\\categories\\ai-news.md",
+      "size": 240,
+      "modified": "2025-06-26T02:36:56.274Z",
+      "checksum": "edada3b0a4e4147192063450b756823f51261b15bc157dcc6d68b15ab1d8a551"
+    },
+    {
+      "path": "src\\content\\categories\\business.md",
+      "size": 303,
+      "modified": "2025-06-26T02:36:45.028Z",
+      "checksum": "56a84048d73787f32f5dc0b6e8543181a6db9d30e0546042971bebbc1a75f87f"
+    },
+    {
+      "path": "src\\content\\categories\\finance.md",
+      "size": 244,
+      "modified": "2025-06-26T02:36:49.584Z",
+      "checksum": "0f051b26c2c53eacec33520d37b38d252d938820cdd3c22da127ba1d92afc79a"
+    },
+    {
+      "path": "src\\content\\categories\\reviews.md",
+      "size": 270,
+      "modified": "2025-06-26T02:36:37.023Z",
+      "checksum": "a77a9e75e226c9341831b20d253ba87f71737b1e94578cd530636a52feef426a"
+    },
+    {
+      "path": "src\\content\\categories\\tutorials.md",
+      "size": 272,
+      "modified": "2025-06-26T02:36:41.162Z",
+      "checksum": "03026f9e804dd2dd73d990824a7a2751dd3346fdc21a4655715625da2f99bd18"
+    },
+    {
+      "path": "src\\content\\pages\\about.md",
+      "size": 5716,
+      "modified": "2025-06-26T01:36:57.036Z",
+      "checksum": "64c0ea2c816d4d1e09fafc09600ecd70111ee5a58702a533b3dd2aa740e2e0de"
+    },
+    {
+      "path": "src\\content\\site-settings\\site-config.json",
+      "size": 489,
+      "modified": "2025-06-26T01:34:05.158Z",
+      "checksum": "afba09944cdb5cce768fb612b5657e68b827361f7194af057a67cda64f4e1a6d"
+    },
+    {
+      "path": "src\\components\\AdvancedCache.astro",
+      "size": 12601,
+      "modified": "2025-06-26T02:15:03.372Z",
+      "checksum": "ddfd745ec4cba43073002257114d4e28c72a9a5bc032ee01e193f1b66f015024"
+    },
+    {
+      "path": "src\\components\\AIBuzzLayout.astro",
+      "size": 36422,
+      "modified": "2025-06-26T01:22:01.395Z",
+      "checksum": "a2eb55a7f5268f558d12658811bf5b61bcb93fb6ac29fe2bd9b6448008d52378"
+    },
+    {
+      "path": "src\\components\\Analytics.astro",
+      "size": 5204,
+      "modified": "2025-06-16T23:57:10.536Z",
+      "checksum": "e590205bdc558e72cce8046e45b3655b8fc00299bcd0a7adb0516ffcedc0164d"
+    },
+    {
+      "path": "src\\components\\ArticleGrid.astro",
+      "size": 17839,
+      "modified": "2025-06-23T04:01:35.812Z",
+      "checksum": "ed1d414340ead4334ae9cbaf92610c292f5d4f5281e1f08691a6e5abcbddbc5b"
+    },
+    {
+      "path": "src\\components\\ArticleSidebar.astro",
+      "size": 1680,
+      "modified": "2025-06-26T01:14:05.209Z",
+      "checksum": "254559cf9c4c19e8c51743647d3f76ed903e2d5c0df487a01c936478714dac28"
+    },
+    {
+      "path": "src\\components\\BaseHead.astro",
+      "size": 6557,
+      "modified": "2025-06-26T02:10:24.147Z",
+      "checksum": "fc3717eef748b2e77b24f6745ffb850a97a1864c2fb071da792477d14042b026"
+    },
+    {
+      "path": "src\\components\\CategorySections.astro",
+      "size": 12452,
+      "modified": "2025-06-23T04:01:40.166Z",
+      "checksum": "a4c5b934591340f36eb89c92f41fb531e1fea13aefe2a53d4c9fd34f74e10022"
+    },
+    {
+      "path": "src\\components\\CategoryShortcuts.astro",
+      "size": 4823,
+      "modified": "2025-06-26T00:59:54.380Z",
+      "checksum": "f557d24e6e6af9fa30c3bfcfe7bd0cd38a1bdd432bdd85b78a0f842df6cb32fa"
+    },
+    {
+      "path": "src\\components\\CompactSubscribe.astro",
+      "size": 10196,
+      "modified": "2025-06-18T09:21:49.969Z",
+      "checksum": "fe28ba158a0b048e66cba8ffbcd3b858d71c7ab5a987411cf3ec1a043f150e7e"
+    },
+    {
+      "path": "src\\components\\Footer.astro",
+      "size": 11720,
+      "modified": "2025-06-24T01:00:59.648Z",
+      "checksum": "59e647093562daeca6fb97d2916eb5d4e0c63b452870fa07b2de8a8945548b63"
+    },
+    {
+      "path": "src\\components\\FormattedDate.astro",
+      "size": 224,
+      "modified": "2025-06-13T11:31:44.000Z",
+      "checksum": "3a7e8f80a5b38c918862754b2d1370c9baf70a9e2fab5ee6af58d8013ca20e0d"
+    },
+    {
+      "path": "src\\components\\Header.astro",
+      "size": 6369,
+      "modified": "2025-06-26T01:09:23.728Z",
+      "checksum": "d3670032e42edd7f2416bb76afd9242d80d837c26806aa899faa1533977614d3"
+    },
+    {
+      "path": "src\\components\\HeaderLink.astro",
+      "size": 621,
+      "modified": "2025-06-24T01:00:40.575Z",
+      "checksum": "506ba1ffdebe6ecdf39c6cf7998851a57bf210e717f58b4e717747bcda7619a8"
+    },
+    {
+      "path": "src\\components\\Hero.astro",
+      "size": 8482,
+      "modified": "2025-06-26T01:00:38.173Z",
+      "checksum": "a7de25d914b2957022a77eeb2c6f8ad36d1b421bfe042e8f30401dee2704be25"
+    },
+    {
+      "path": "src\\components\\MobileNav.astro",
+      "size": 6170,
+      "modified": "2025-06-24T01:01:07.932Z",
+      "checksum": "6972ada4aa38287ed2ff7ff00174aaf7b59d3f0a3b1f68e433d194d924df70ff"
+    },
+    {
+      "path": "src\\components\\PerformanceMonitor.astro",
+      "size": 10253,
+      "modified": "2025-06-26T02:14:08.946Z",
+      "checksum": "e7e1051ee97ebc42b10e81a265b760b0e90ac426d56b12446d322aa437f1b16d"
+    },
+    {
+      "path": "src\\components\\ProductStore.astro",
+      "size": 2275,
+      "modified": "2025-06-17T00:12:05.113Z",
+      "checksum": "27dadef4078f7689dcce808e64d7bbfe2cf8245e4b02b35cbea05fb42120c45e"
+    },
+    {
+      "path": "src\\components\\SearchBar.astro",
+      "size": 16353,
+      "modified": "2025-06-26T02:05:42.211Z",
+      "checksum": "b2e1030547b1789ddbccde3d2f032a5fc22dd1902f1dfb930df6ac3bc6c9b754"
+    },
+    {
+      "path": "src\\components\\SEOOptimizer.astro",
+      "size": 8022,
+      "modified": "2025-06-26T02:12:35.321Z",
+      "checksum": "45c4cd33ac7767bab472a2ab332ac392cc2c844af733d2f8a54f004445c5d717"
+    },
+    {
+      "path": "src\\components\\SubscribeSection.astro",
+      "size": 8796,
+      "modified": "2025-06-17T19:05:25.973Z",
+      "checksum": "bca3b73eaa978dfe0c214e13744d26eda511fad5e808e84b8a7b8585141eaf2e"
+    },
+    {
+      "path": "src\\components\\TrackingPixels.astro",
+      "size": 17650,
+      "modified": "2025-06-17T16:40:45.907Z",
+      "checksum": "197b025275ba04f198d7fb17148fb1ea3e309a4e1f965a644675214983aef064"
+    },
+    {
+      "path": "src\\pages\\404.astro",
+      "size": 2497,
+      "modified": "2025-06-23T02:35:02.770Z",
+      "checksum": "2ce4b35ca8e8f4348b429e73a11049408f9ff8e67b1a3bd3a7c5145d90660d3a"
+    },
+    {
+      "path": "src\\pages\\about.astro",
+      "size": 14292,
+      "modified": "2025-06-23T23:24:02.505Z",
+      "checksum": "4940857e1cf382bb919e16096e91ecef5b36e199f32c826018fe647d13d1ea01"
+    },
+    {
+      "path": "src\\pages\\admin.astro",
+      "size": 4157,
+      "modified": "2025-06-26T01:09:36.298Z",
+      "checksum": "65f9602b98a37c1e90b738eae5575bf9f5f5c7b997f5cf123ce4a3c570d805f4"
+    },
+    {
+      "path": "src\\pages\\advertise-with-us.astro",
+      "size": 27053,
+      "modified": "2025-06-24T00:42:49.463Z",
+      "checksum": "ff5604880ff108e49c4fc6091d55a680afe5faa239c7e20c434af3c339e0207a"
+    },
+    {
+      "path": "src\\pages\\affiliate-disclosure.astro",
+      "size": 15705,
+      "modified": "2025-06-23T23:24:06.920Z",
+      "checksum": "1dab6111f8dbaaf46c8ff86de614126e42f2bca47e0b178245cf66039bc0378b"
+    },
+    {
+      "path": "src\\pages\\api\\search-articles.json.ts",
+      "size": 1179,
+      "modified": "2025-06-26T00:56:22.645Z",
+      "checksum": "bd4291e66d844ca01042b861547be689ce8dabe4932ae3578dfd190ce7e503ad"
+    },
+    {
+      "path": "src\\pages\\api\\security-check.json.ts",
+      "size": 1509,
+      "modified": "2025-06-16T07:15:42.614Z",
+      "checksum": "7d77768d2e6281a4d86859c8c975cc3cee24b80ef41b6d33948f0fceebd3e312"
+    },
+    {
+      "path": "src\\pages\\authors\\index.astro",
+      "size": 4979,
+      "modified": "2025-06-26T00:59:32.133Z",
+      "checksum": "1629ad05f58b3740f1f46ecc5b2fd3e0337c9ff310a87dae9b7e30c9b07131d6"
+    },
+    {
+      "path": "src\\pages\\authors\\[slug].astro",
+      "size": 1045,
+      "modified": "2025-06-26T00:58:19.647Z",
+      "checksum": "928093d2907163c9a14be49ed71b4b6261f4f0c0d4e3ce02ce85d939c395fc5f"
+    },
+    {
+      "path": "src\\pages\\categories\\ai-agents.astro",
+      "size": 6656,
+      "modified": "2025-06-26T01:19:13.956Z",
+      "checksum": "418c923eaf1e32fdd62925b733aac748dd6abfa0aa87412d6f86d4c35868573b"
+    },
+    {
+      "path": "src\\pages\\categories\\ai-news.astro",
+      "size": 6736,
+      "modified": "2025-06-26T01:18:53.011Z",
+      "checksum": "3324c80c101c1140c00304370e7c7c6334b4eddaf50ed89d1a64585e393726be"
+    },
+    {
+      "path": "src\\pages\\categories\\business.astro",
+      "size": 6713,
+      "modified": "2025-06-26T01:19:43.476Z",
+      "checksum": "661761c250621e89ecedad2c82dc228ac20b9bef0b060007a06ca3ba35fb0269"
+    },
+    {
+      "path": "src\\pages\\categories\\finance.astro",
+      "size": 6672,
+      "modified": "2025-06-26T01:20:07.472Z",
+      "checksum": "7c9d833909b5876ded93ddd7cf6cd547c8536249fadb0da0450d56815a1c527c"
+    },
+    {
+      "path": "src\\pages\\categories\\reviews.astro",
+      "size": 6681,
+      "modified": "2025-06-26T01:20:34.454Z",
+      "checksum": "c225337bfd639934b64be0ab56ea3f6d0c61de4f5d8bf0d9744885af70963f6e"
+    },
+    {
+      "path": "src\\pages\\categories\\tutorials.astro",
+      "size": 6708,
+      "modified": "2025-06-26T01:20:57.831Z",
+      "checksum": "271120bb120dafaee8c13d3b0e714c934871583ade760a14071bc73e07e59a9c"
+    },
+    {
+      "path": "src\\pages\\contact.astro",
+      "size": 11813,
+      "modified": "2025-06-23T23:24:00.144Z",
+      "checksum": "616f16002538dd6a892499c83e1dd769e83c3fca7efe3e1a5792531c0af5f4ef"
+    },
+    {
+      "path": "src\\pages\\cookie-policy.astro",
+      "size": 23467,
+      "modified": "2025-06-23T23:36:09.709Z",
+      "checksum": "a4db95c7fca66dc758b61ea65e23c03211a1218f6a80680fd70f3c5bc4b05d4f"
+    },
+    {
+      "path": "src\\pages\\disclaimers.astro",
+      "size": 11880,
+      "modified": "2025-06-18T06:56:59.288Z",
+      "checksum": "0b99c30439a059f0c9c159eb3021e5a76cdf667e5b3a879d43d6b3df2bdbfb42"
+    },
+    {
+      "path": "src\\pages\\index.astro",
+      "size": 629,
+      "modified": "2025-06-17T17:43:06.218Z",
+      "checksum": "5c5bd6ea432fa58bb379270fffc79fa3bb42cf324e00f70f536c7f6c92b8ba16"
+    },
+    {
+      "path": "src\\pages\\mobile-test.astro",
+      "size": 56,
+      "modified": "2025-06-26T02:27:20.104Z",
+      "checksum": "7f3378b1c049a2aeba77ba05ab4b3e3d91c075adcbdd12a0ada766735105df05"
+    },
+    {
+      "path": "src\\pages\\privacy-policy.astro",
+      "size": 9412,
+      "modified": "2025-06-18T06:56:57.103Z",
+      "checksum": "611faf7a39c42c120d975a2ddaec78c17618576089a56d9675c19d4abc2e48a7"
+    },
+    {
+      "path": "src\\pages\\rss.xml.js",
+      "size": 758,
+      "modified": "2025-06-26T01:37:47.465Z",
+      "checksum": "f69ebb30ad61b1ab258a5abf21f45f3aaa0a647c18de48396f628d911a2cb63b"
+    },
+    {
+      "path": "src\\pages\\sitemap.xml.ts",
+      "size": 884,
+      "modified": "2025-06-26T00:55:56.090Z",
+      "checksum": "95b45b9a0980a50776651ba576608e0d274cba97ce20c217004aa19bdd3daaea"
+    },
+    {
+      "path": "src\\pages\\terms-of-service.astro",
+      "size": 10619,
+      "modified": "2025-06-18T06:56:55.237Z",
+      "checksum": "a82074da8f67fd660a2389aedf70aa8c5bc4cb498723ddb67cdb650a878fab23"
+    },
+    {
+      "path": "src\\pages\\[category]\\[slug].astro",
+      "size": 5688,
+      "modified": "2025-06-26T00:59:05.239Z",
+      "checksum": "3c2a30534bb94ff1feb8aacf0ce2f2025717243f6bc05a5683e4d7f3aba2bfb3"
+    },
+    {
+      "path": "src\\styles\\article.css",
+      "size": 13562,
+      "modified": "2025-06-18T07:17:40.245Z",
+      "checksum": "ff7ad618883e63330ea69d1abcad62c9cdac7e73fc40a04a57c442b08e933140"
+    },
+    {
+      "path": "src\\styles\\global.css",
+      "size": 6504,
+      "modified": "2025-06-18T09:21:53.993Z",
+      "checksum": "8c31f528cec48517a1df6976952ccee5c2df837f45a670dc1ca08de78bdc372b"
+    },
+    {
+      "path": "src\\styles\\mobile-responsive.css",
+      "size": 30462,
+      "modified": "2025-06-26T02:25:59.369Z",
+      "checksum": "ef9441bd3a84171053ffc0968428e5e9b599727bc97ae6e781721dc948640ffa"
+    },
+    {
+      "path": "src\\layouts\\AuthorLayout.astro",
+      "size": 9692,
+      "modified": "2025-06-26T01:23:05.183Z",
+      "checksum": "6851558b32a064d833ab1f4cf57233f4ff7c5dbb795b98af9649a58aad394257"
+    },
+    {
+      "path": "src\\layouts\\MainLayout.astro",
+      "size": 6641,
+      "modified": "2025-06-26T02:26:12.714Z",
+      "checksum": "4370539cc5351db61c23624c59515c0fe522087f25308474e9a180dec65701a3"
+    },
+    {
+      "path": "src\\lib\\lockout.ts",
+      "size": 4031,
+      "modified": "2025-06-16T07:14:34.214Z",
+      "checksum": "cbeb59205c087ef62473f353c9a79c968cb6c9d97ca7aa1fede6b7697d47a5d3"
+    },
+    {
+      "path": "src\\lib\\security.ts",
+      "size": 3255,
+      "modified": "2025-06-16T06:55:01.796Z",
+      "checksum": "051f287021f056ac4e8b3cef7565eaf9cbbb43462e9c2f37f48c121119e43786"
+    },
+    {
+      "path": "src\\utils\\imageOptimization.ts",
+      "size": 8740,
+      "modified": "2025-06-26T02:11:35.564Z",
+      "checksum": "e8ffbddffe1b3808b2602946b32870363e0a58c1fe7438a269453e7e9658dcc5"
+    },
+    {
+      "path": "src\\utils\\urlHelpers.ts",
+      "size": 700,
+      "modified": "2025-06-17T02:59:37.738Z",
+      "checksum": "f95f2b11e17a3fa668f3fd6667754a3252c9719bd20ff7f165018e56a5c35200"
+    },
+    {
+      "path": "public\\admin\\config.yml",
+      "size": 11627,
+      "modified": "2025-06-26T01:37:35.702Z",
+      "checksum": "86b4b2330228e70a1db8aaf23868b67134f681c2420c66fd15966f3cf7b9e558"
+    },
+    {
+      "path": "public\\admin\\index.html",
+      "size": 14096,
+      "modified": "2025-06-26T01:35:46.639Z",
+      "checksum": "30c30d6fa401f43543d49aa1f7ca506a091eb263e938b68495823013540b9075"
+    },
+    {
+      "path": "public\\favicon.svg",
+      "size": 749,
+      "modified": "2025-06-13T11:31:44.000Z",
+      "checksum": "2d7a310283d6f9cc753210d83224cd6db6348cb82a5536348884e5831d46203f"
+    },
+    {
+      "path": "public\\fonts\\atkinson-bold.woff",
+      "size": 23780,
+      "modified": "2025-06-13T11:31:44.000Z",
+      "checksum": "f0de8ccb0af6e50fd1b51d50d5032c6824adc0f1b435345919fca1d9b72b3623"
+    },
+    {
+      "path": "public\\fonts\\atkinson-regular.woff",
+      "size": 22792,
+      "modified": "2025-06-13T11:31:44.000Z",
+      "checksum": "b51d2e16226a56e304ab9ba67d22f504afc5bdceab1caefe386063a26ee4bc0b"
+    },
+    {
+      "path": "public\\manifest.json",
+      "size": 2782,
+      "modified": "2025-06-26T02:10:37.951Z",
+      "checksum": "ea1f32659b29565a9b56bc3240eff543bf4ca97fc75e6cdbf0e38262626dad36"
+    },
+    {
+      "path": "public\\offline.html",
+      "size": 6720,
+      "modified": "2025-06-26T02:13:33.431Z",
+      "checksum": "7af311ccab319e202310b4c62056d341426eb6a79311a5bff2997c86e2b1b967"
+    },
+    {
+      "path": "public\\robots.txt",
+      "size": 844,
+      "modified": "2025-06-26T01:40:50.073Z",
+      "checksum": "3f1901c06be243582e9efec43004cdbce240d723a88e1840f072d8d85ddc9dd7"
+    },
+    {
+      "path": "public\\styles\\mobile-responsive.css",
+      "size": 30462,
+      "modified": "2025-06-26T02:25:59.369Z",
+      "checksum": "ef9441bd3a84171053ffc0968428e5e9b599727bc97ae6e781721dc948640ffa"
+    },
+    {
+      "path": "public\\sw.js",
+      "size": 6240,
+      "modified": "2025-06-26T02:12:59.804Z",
+      "checksum": "bdc0f45c16972a5d17e55f7b86a3e0808ced92c659c5560cc99f8daaac6e4cc2"
+    },
+    {
+      "path": "netlify\\functions\\contact.js",
+      "size": 5175,
+      "modified": "2025-06-26T01:40:06.451Z",
+      "checksum": "690b85869f0c5034f6fc50a2ed533de3ea608b6b4e7ba3c08f59c9e423d1aa36"
+    },
+    {
+      "path": "netlify\\functions\\subscribe.js",
+      "size": 8631,
+      "modified": "2025-06-26T01:40:38.685Z",
+      "checksum": "ea4c80d3913849367e93e158e020314661572c44c204c576f147c35e6095e5e3"
+    }
+  ],
+  "totalSize": 629160,
+  "checksum": null
+}

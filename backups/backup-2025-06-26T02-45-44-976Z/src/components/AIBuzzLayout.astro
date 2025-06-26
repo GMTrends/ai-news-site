@@ -1,0 +1,1342 @@
+---
+import { getCollection } from 'astro:content';
+import { generateWebPUrl, generateResponsiveSrcSet } from '../utils/imageOptimization'
+
+// Helper functions
+function getArticleUrl(article: any) {
+	const category = article.data.category || 'ai-news'
+	const slug = article.slug
+	return `/${category}/${slug}`
+}
+
+function formatDate(dateString: string) {
+	return new Date(dateString).toLocaleDateString('en-US', { 
+		month: 'short', 
+		day: 'numeric' 
+	})
+}
+
+// Fetch data for all sections
+const allArticles = await getCollection('articles');
+
+// Filter articles by category
+const newsArticles = allArticles
+	.filter(article => article.data.category === 'ai-news')
+	.sort((a, b) => new Date(b.data.publishedAt || 0).getTime() - new Date(a.data.publishedAt || 0).getTime())
+	.slice(0, 6);
+
+const reviewsArticles = allArticles
+	.filter(article => article.data.category === 'reviews')
+	.sort((a, b) => new Date(b.data.publishedAt || 0).getTime() - new Date(a.data.publishedAt || 0).getTime())
+	.slice(0, 8);
+
+const aiAgentsArticles = allArticles
+	.filter(article => article.data.category === 'ai-agents')
+	.sort((a, b) => new Date(b.data.publishedAt || 0).getTime() - new Date(a.data.publishedAt || 0).getTime())
+	.slice(0, 8);
+
+const tutorialsArticles = allArticles
+	.filter(article => article.data.category === 'tutorials')
+	.sort((a, b) => new Date(b.data.publishedAt || 0).getTime() - new Date(a.data.publishedAt || 0).getTime())
+	.slice(0, 8);
+
+// Fallback data if no articles are found
+const fallbacks = [
+	{ data: { title: "Sample AI News Article", excerpt: "This is a sample article for demonstration.", category: "ai-news", author: "AI Expert", publishedAt: new Date().toISOString() }, slug: "sample-1" },
+	{ data: { title: "Another AI Update", excerpt: "Another sample article for the grid.", category: "ai-news", author: "Tech Writer", publishedAt: new Date().toISOString() }, slug: "sample-2" },
+	{ data: { title: "AI Technology Review", excerpt: "Review of latest AI technology.", category: "ai-news", author: "Reviewer", publishedAt: new Date().toISOString() }, slug: "sample-3" },
+	{ data: { title: "Industry Analysis", excerpt: "Deep dive into AI industry trends.", category: "ai-news", author: "Analyst", publishedAt: new Date().toISOString() }, slug: "sample-4" },
+	{ data: { title: "Tutorial Guide", excerpt: "How to implement AI solutions.", category: "ai-news", author: "Instructor", publishedAt: new Date().toISOString() }, slug: "sample-5" },
+	{ data: { title: "Latest Updates", excerpt: "Recent developments in AI field.", category: "ai-news", author: "Reporter", publishedAt: new Date().toISOString() }, slug: "sample-6" },
+	{ data: { title: "AI Agent Development Guide", excerpt: "Learn how to build and deploy intelligent AI agents for automation.", category: "ai-agents", author: "AI Developer", publishedAt: new Date().toISOString() }, slug: "ai-agent-guide" },
+	{ data: { title: "Enterprise AI Agents", excerpt: "How businesses are leveraging AI agents to streamline operations.", category: "ai-agents", author: "Business Analyst", publishedAt: new Date().toISOString() }, slug: "enterprise-ai-agents" }
+]
+
+// Use fallback data if no articles are found
+const finalNewsArticles = newsArticles.length > 0 ? newsArticles : fallbacks.slice(0, 6);
+const finalReviewsArticles = reviewsArticles.length > 0 ? reviewsArticles : fallbacks.slice(0, 8);
+const finalAIAgentsArticles = aiAgentsArticles.length > 0 ? aiAgentsArticles : fallbacks.slice(0, 8);
+const finalTutorialsArticles = tutorialsArticles.length > 0 ? tutorialsArticles : fallbacks.slice(0, 8);
+
+// Split articles: 4 for main grid, 2+ for sidebar
+function splitArticles(articles: any[], category: string) {
+	if (!articles || articles.length === 0) {
+		return { 
+			main: fallbacks.slice(0, 4), 
+			sidebar: fallbacks.slice(4, 6) 
+		}
+	}
+	
+	return {
+		main: articles.slice(0, 4),
+		sidebar: articles.slice(4, 6)
+	}
+}
+
+// Special split for Reviews section to get 4 sidebar articles
+function splitReviewsArticles(articles: any[]) {
+	if (!articles || articles.length === 0) {
+		return { 
+			main: fallbacks.slice(0, 4), 
+			sidebar: fallbacks.slice(4, 8) 
+		}
+	}
+	
+	return {
+		main: articles.slice(0, 4),
+		sidebar: articles.slice(4, 8)
+	}
+}
+
+// Special split for AI Agents section to get 4 sidebar articles
+function splitAIAgentsArticles(articles: any[]) {
+	if (!articles || articles.length === 0) {
+		return { 
+			main: fallbacks.slice(0, 4), 
+			sidebar: fallbacks.slice(4, 8) 
+		}
+	}
+	
+	return {
+		main: articles.slice(0, 4),
+		sidebar: articles.slice(4, 8)
+	}
+}
+
+// Special split for Tutorials section to get 4 sidebar articles
+function splitTutorialsArticles(articles: any[]) {
+	if (!articles || articles.length === 0) {
+		return { 
+			main: fallbacks.slice(0, 4), 
+			sidebar: fallbacks.slice(4, 8) 
+		}
+	}
+	
+	return {
+		main: articles.slice(0, 4),
+		sidebar: articles.slice(4, 8)
+	}
+}
+
+const newsData = splitArticles(finalNewsArticles, 'News')
+const reviewsData = splitReviewsArticles(finalReviewsArticles)
+const aiAgentsData = splitAIAgentsArticles(finalAIAgentsArticles)
+const tutorialsData = splitTutorialsArticles(finalTutorialsArticles)
+---
+
+<section class="aibuzz-layout">
+	<div class="layout-container">
+		
+		<!-- News Section -->
+		<section class="content-section">
+			<div class="section-header">
+				<h2 class="section-title">📰 Latest AI News</h2>
+				<a href="/categories/ai-news" class="view-all-link">View All →</a>
+			</div>
+			
+			<div class="section-layout">
+				<!-- Main Content Area (Left) -->
+				<div class="main-content">
+					<div class="grid-layout-special">
+						<!-- Top Row: 2 Large Cards -->
+						<div class="top-row">
+							{newsData.main.slice(0, 2).map((article: any) => (
+								<article class="large-card">
+									<div class="card-image">
+										{article.data.image ? (
+											<picture>
+												<source 
+													srcset={generateResponsiveSrcSet(article.data.image, [600, 800, 1200])} 
+													type="image/webp" 
+													sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+												>
+												<source 
+													srcset={generateResponsiveSrcSet(article.data.image.replace('fm=webp', 'fm=jpg'), [600, 800, 1200])} 
+													type="image/jpeg" 
+													sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+												>
+												<img 
+													src={generateWebPUrl(article.data.image, 600, 400)} 
+													alt={article.data.title}
+													width="600"
+													height="400"
+													loading="lazy"
+													decoding="async"
+												/>
+											</picture>
+										) : (
+											<div class="placeholder-image">📰</div>
+										)}
+									</div>
+									<div class="card-content">
+										<span class="category-badge news">AI News</span>
+										<h3><a href={getArticleUrl(article)}>{article.data.title}</a></h3>
+										<p>{article.data.excerpt}</p>
+										<div class="card-meta">
+											<span class="author">By {article.data.author || 'Anonymous'}</span>
+											<span class="date">{formatDate(article.data.publishedAt || Date.now())}</span>
+										</div>
+									</div>
+								</article>
+							))}
+						</div>
+						
+						<!-- Bottom Row: 2 Stacked Cards -->
+						<div class="bottom-row">
+							{newsData.main.slice(2, 4).map((article: any) => (
+								<article class="stacked-card">
+									<div class="stacked-image">
+										{article.data.image ? (
+											<img src={article.data.image} alt={article.data.title} />
+										) : (
+											<div class="placeholder-small">📰</div>
+										)}
+									</div>
+									<div class="stacked-content">
+										<span class="category-badge-small news">AI News</span>
+										<h4><a href={getArticleUrl(article)}>{article.data.title}</a></h4>
+										<div class="stacked-meta">
+											<span class="author">{article.data.author || 'Anonymous'}</span>
+											<span class="date">{formatDate(article.data.publishedAt || Date.now())}</span>
+										</div>
+									</div>
+								</article>
+							))}
+						</div>
+					</div>
+				</div>
+				
+				<!-- Sidebar (Right) -->
+				<div class="content-sidebar">
+					<!-- Advertisement Space -->
+					<div class="ad-space">
+						<div class="ad-placeholder">
+							<div class="ad-label">Advertisement</div>
+							<div class="ad-content">
+								<h4>Your Ad Here</h4>
+								<p>Promote your AI tools, courses, or services to our engaged audience.</p>
+								<button class="ad-cta">Learn More</button>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Newsletter Signup -->
+					<div class="sidebar-section">
+						<div class="newsletter-signup">
+                            <div class="newsletter-header">
+								<h4>📧 AI Insights Newsletter</h4>
+								<p>Get weekly AI news and analysis delivered to your inbox</p>
+							</div>
+							<form class="newsletter-form">
+								<input type="email" placeholder="Enter your email" class="newsletter-input" />
+								<button type="submit" class="newsletter-btn">Subscribe</button>
+							</form>
+						</div>
+					</div>
+					
+					<!-- Sidebar Articles -->
+					<div class="sidebar-articles">
+						<h3 class="sidebar-title">More News</h3>
+						{newsData.sidebar.map((article: any) => (
+							<article class="sidebar-article">
+								<div class="sidebar-image">
+									{article.data.image ? (
+										<picture>
+											<source 
+												srcset={generateResponsiveSrcSet(article.data.image, [200, 300, 400])} 
+												type="image/webp" 
+												sizes="(max-width: 768px) 100vw, 200px"
+											>
+											<source 
+												srcset={generateResponsiveSrcSet(article.data.image.replace('fm=webp', 'fm=jpg'), [200, 300, 400])} 
+												type="image/jpeg" 
+												sizes="(max-width: 768px) 100vw, 200px"
+											>
+											<img 
+												src={generateWebPUrl(article.data.image, 200, 200)} 
+												alt={article.data.title}
+												width="200"
+												height="200"
+												loading="lazy"
+												decoding="async"
+											/>
+										</picture>
+									) : (
+										<div class="sidebar-placeholder">📰</div>
+									)}
+								</div>
+								<div class="sidebar-content">
+									<h5><a href={getArticleUrl(article)}>{article.data.title}</a></h5>
+									<div class="sidebar-meta">
+										<span class="date">{formatDate(article.data.publishedAt || Date.now())}</span>
+									</div>
+								</div>
+							</article>
+						))}
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Reviews Section -->
+		<section class="content-section">
+			<div class="section-header">
+				<h2 class="section-title">📊 AI Reviews & Analysis</h2>
+				<a href="/categories/reviews" class="view-all-link">View All →</a>
+			</div>
+			
+			<div class="section-layout">
+				<div class="main-content">
+					<div class="grid-layout-special">
+						<div class="top-row">
+							{reviewsData.main.slice(0, 2).map((article: any) => (
+								<article class="large-card review-style">
+									<div class="card-image">
+										{article.data.image ? (
+											<img src={article.data.image} alt={article.data.title} />
+										) : (
+											<div class="placeholder-image">📊</div>
+										)}
+										<div class="review-score">9.2</div>
+									</div>
+									<div class="card-content">
+										<span class="category-badge reviews">Review</span>
+										<h3><a href={getArticleUrl(article)}>{article.data.title}</a></h3>
+										<p>{article.data.excerpt}</p>
+										<div class="review-stars">⭐⭐⭐⭐⭐</div>
+										<div class="card-meta">
+											<span class="author">By {article.data.author || 'Anonymous'}</span>
+											<span class="date">{formatDate(article.data.publishedAt || Date.now())}</span>
+										</div>
+									</div>
+								</article>
+							))}
+						</div>
+						
+						<div class="bottom-row">
+							{reviewsData.main.slice(2, 4).map((article: any) => (
+								<article class="stacked-card">
+									<div class="stacked-image">
+										{article.data.image ? (
+											<img src={article.data.image} alt={article.data.title} />
+										) : (
+											<div class="placeholder-small">📊</div>
+										)}
+									</div>
+									<div class="stacked-content">
+										<span class="category-badge-small reviews">Review</span>
+										<h4><a href={getArticleUrl(article)}>{article.data.title}</a></h4>
+										<div class="stacked-meta">
+											<span class="author">{article.data.author || 'Anonymous'}</span>
+											<span class="date">{formatDate(article.data.publishedAt || Date.now())}</span>
+										</div>
+									</div>
+								</article>
+							))}
+						</div>
+					</div>
+				</div>
+				
+				<div class="content-sidebar">
+					<!-- Advertisement Space -->
+					<div class="ad-space">
+						<div class="ad-placeholder ad-reviews">
+							<div class="ad-label">Sponsored</div>
+							<div class="ad-content">
+								<h4>AI Tool Reviews</h4>
+								<p>Get your AI product reviewed by our expert team. Reach thousands of potential users.</p>
+								<button class="ad-cta">Get Reviewed</button>
+							</div>
+						</div>
+					</div>
+					
+					<div class="sidebar-articles">
+						<h3 class="sidebar-title">More Reviews</h3>
+						{reviewsData.sidebar.map((article: any) => (
+							<article class="sidebar-article">
+								<div class="sidebar-image">
+									{article.data.image ? (
+										<img src={article.data.image} alt={article.data.title} />
+									) : (
+										<div class="sidebar-placeholder">📊</div>
+									)}
+								</div>
+								<div class="sidebar-content">
+									<h5><a href={getArticleUrl(article)}>{article.data.title}</a></h5>
+									<div class="sidebar-meta">
+										<span class="date">{formatDate(article.data.publishedAt || Date.now())}</span>
+									</div>
+								</div>
+							</article>
+						))}
+					</div>
+					
+					<!-- Second Advertisement Space -->
+					<div class="ad-space">
+						<div class="ad-placeholder ad-reviews-secondary">
+							<div class="ad-label">Advertisement</div>
+							<div class="ad-content">
+								<h4>AI Tools Directory</h4>
+								<p>Discover and compare the best AI tools for your business needs.</p>
+								<button class="ad-cta">Browse Tools</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- AI Agents Section -->
+		<section class="content-section">
+			<div class="section-header">
+				<h2 class="section-title">🤖 AI Agents</h2>
+				<a href="/categories/ai-agents" class="view-all-link">View All →</a>
+			</div>
+			
+			<div class="section-layout">
+				<div class="main-content">
+					<div class="grid-layout-special">
+						<div class="top-row">
+							{aiAgentsData.main.slice(0, 2).map((article: any) => (
+								<article class="large-card ai-agent-style">
+									<div class="card-image">
+										{article.data.image ? (
+											<img src={article.data.image} alt={article.data.title} />
+										) : (
+											<div class="placeholder-image">🤖</div>
+										)}
+									</div>
+									<div class="card-content">
+										<span class="category-badge ai-agents">AI Agent</span>
+										<h3><a href={getArticleUrl(article)}>{article.data.title}</a></h3>
+										<p>{article.data.excerpt}</p>
+										<div class="ai-agent-indicators">
+											<span class="specialization">🔧 Specialization</span>
+											<span class="capability">🌟 Capability</span>
+										</div>
+										<div class="card-meta">
+											<span class="author">By {article.data.author || 'Anonymous'}</span>
+											<span class="date">{formatDate(article.data.publishedAt || Date.now())}</span>
+										</div>
+									</div>
+								</article>
+							))}
+						</div>
+						
+						<div class="bottom-row">
+							{aiAgentsData.main.slice(2, 4).map((article: any) => (
+								<article class="stacked-card">
+									<div class="stacked-image">
+										{article.data.image ? (
+											<img src={article.data.image} alt={article.data.title} />
+										) : (
+											<div class="placeholder-small">🤖</div>
+										)}
+									</div>
+									<div class="stacked-content">
+										<span class="category-badge-small ai-agents">AI Agent</span>
+										<h4><a href={getArticleUrl(article)}>{article.data.title}</a></h4>
+										<div class="stacked-meta">
+											<span class="author">{article.data.author || 'Anonymous'}</span>
+											<span class="date">{formatDate(article.data.publishedAt || Date.now())}</span>
+										</div>
+									</div>
+								</article>
+							))}
+						</div>
+					</div>
+				</div>
+				
+				<div class="content-sidebar">
+					<!-- Advertisement Space -->
+					<div class="ad-space">
+						<div class="ad-placeholder">
+							<div class="ad-label">Advertisement</div>
+							<div class="ad-content">
+								<h4>Your Ad Here</h4>
+								<p>Promote your AI tools, courses, or services to our engaged audience.</p>
+								<button class="ad-cta">Learn More</button>
+							</div>
+						</div>
+					</div>
+					
+					<div class="sidebar-articles">
+						<h3 class="sidebar-title">Popular AI Agents</h3>
+						{aiAgentsData.sidebar.map((article: any) => (
+							<article class="sidebar-article">
+								<div class="sidebar-image">
+									{article.data.image ? (
+										<img src={article.data.image} alt={article.data.title} />
+									) : (
+										<div class="sidebar-placeholder">🤖</div>
+									)}
+								</div>
+								<div class="sidebar-content">
+									<h5><a href={getArticleUrl(article)}>{article.data.title}</a></h5>
+									<div class="sidebar-meta">
+										<span class="date">{formatDate(article.data.publishedAt || Date.now())}</span>
+									</div>
+								</div>
+							</article>
+						))}
+					</div>
+					
+					<!-- Second Advertisement Space -->
+					<div class="ad-space">
+						<div class="ad-placeholder ad-ai-agents-secondary">
+							<div class="ad-label">Sponsored</div>
+							<div class="ad-content">
+								<h4>AI Agent Development</h4>
+								<p>Build and deploy custom AI agents for your business needs.</p>
+								<button class="ad-cta">Get Started</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Tutorials Section -->
+		<section class="content-section">
+			<div class="section-header">
+				<h2 class="section-title">🎓 Tutorials & Guides</h2>
+				<a href="/categories/tutorials" class="view-all-link">View All →</a>
+			</div>
+			
+			<div class="section-layout">
+				<div class="main-content">
+					<div class="grid-layout-special">
+						<div class="top-row">
+							{tutorialsData.main.slice(0, 2).map((article: any) => (
+								<article class="large-card tutorial-style">
+									<div class="card-image">
+										{article.data.image ? (
+											<img src={article.data.image} alt={article.data.title} />
+										) : (
+											<div class="placeholder-image">🎓</div>
+										)}
+									</div>
+									<div class="card-content">
+										<span class="category-badge tutorials">Tutorial</span>
+										<h3><a href={getArticleUrl(article)}>{article.data.title}</a></h3>
+										<p>{article.data.excerpt}</p>
+										<div class="tutorial-indicators">
+											<span class="difficulty">🟢 Beginner</span>
+											<span class="duration">⏱️ 15 min read</span>
+										</div>
+										<div class="card-meta">
+											<span class="author">By {article.data.author || 'Anonymous'}</span>
+											<span class="date">{formatDate(article.data.publishedAt || Date.now())}</span>
+										</div>
+									</div>
+								</article>
+							))}
+						</div>
+						
+						<div class="bottom-row">
+							{tutorialsData.main.slice(2, 4).map((article: any) => (
+								<article class="stacked-card">
+									<div class="stacked-image">
+										{article.data.image ? (
+											<img src={article.data.image} alt={article.data.title} />
+										) : (
+											<div class="placeholder-small">🎓</div>
+										)}
+									</div>
+									<div class="stacked-content">
+										<span class="category-badge-small tutorials">Tutorial</span>
+										<h4><a href={getArticleUrl(article)}>{article.data.title}</a></h4>
+										<div class="stacked-meta">
+											<span class="author">{article.data.author || 'Anonymous'}</span>
+											<span class="date">{formatDate(article.data.publishedAt || Date.now())}</span>
+										</div>
+									</div>
+								</article>
+							))}
+						</div>
+					</div>
+				</div>
+				
+				<div class="content-sidebar">
+					<!-- Learning Resources -->
+					<div class="ad-space">
+						<div class="learning-resources">
+							<div class="resource-header">
+								<h4>🚀 Free AI Learning Path</h4>
+								<p>Master AI fundamentals with our curated learning resources</p>
+							</div>
+							<div class="resource-list">
+								<div class="resource-item">
+									<span class="resource-icon">📚</span>
+									<span class="resource-text">AI Basics Course</span>
+								</div>
+								<div class="resource-item">
+									<span class="resource-icon">🧠</span>
+									<span class="resource-text">Machine Learning 101</span>
+								</div>
+								<div class="resource-item">
+									<span class="resource-icon">🤖</span>
+									<span class="resource-text">Build Your First AI App</span>
+								</div>
+							</div>
+							<button class="resource-cta">Start Learning</button>
+						</div>
+					</div>
+					
+					<div class="sidebar-articles">
+						<h3 class="sidebar-title">Popular Tutorials</h3>
+						{tutorialsData.sidebar.map((article: any) => (
+							<article class="sidebar-article">
+								<div class="sidebar-image">
+									{article.data.image ? (
+										<img src={article.data.image} alt={article.data.title} />
+									) : (
+										<div class="sidebar-placeholder">🎓</div>
+									)}
+								</div>
+								<div class="sidebar-content">
+									<h5><a href={getArticleUrl(article)}>{article.data.title}</a></h5>
+									<div class="sidebar-meta">
+										<span class="date">{formatDate(article.data.publishedAt || Date.now())}</span>
+									</div>
+								</div>
+							</article>
+						))}
+					</div>
+				</div>
+			</div>
+		</section>
+
+	</div>
+</section>
+
+<style>
+.aibuzz-layout {
+	padding: 4rem 0;
+	background: var(--bg-primary);
+}
+
+.layout-container {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 0 2rem;
+}
+
+.content-section {
+	margin-bottom: 6rem;
+}
+
+.section-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 3rem;
+	padding-bottom: 1rem;
+	border-bottom: 3px solid rgba(0, 212, 255, 0.2);
+}
+
+.section-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	margin: 0;
+}
+
+.view-all-link {
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	color: white;
+	padding: 0.75rem 2rem;
+	border-radius: 30px;
+	text-decoration: none;
+	font-weight: 600;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+}
+
+.view-all-link:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+}
+
+.section-layout {
+	display: grid;
+	grid-template-columns: 1fr 300px;
+	gap: 3rem;
+}
+
+.main-content {
+	min-height: 600px;
+}
+
+.grid-layout-special {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	height: 100%;
+}
+
+/* Top Row: 2 Large Cards Side by Side */
+.top-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 2rem;
+	flex: 2;
+}
+
+.large-card {
+	background: #1a1a1b;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 16px;
+	overflow: hidden;
+	transition: all 0.3s ease;
+	display: flex;
+	flex-direction: column;
+}
+
+.large-card:hover {
+	transform: translateY(-8px);
+	box-shadow: 0 25px 60px rgba(0, 212, 255, 0.2);
+	border-color: rgba(0, 212, 255, 0.3);
+}
+
+.card-image {
+	position: relative;
+	height: 250px;
+	overflow: hidden;
+}
+
+.card-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.3s ease;
+}
+
+.large-card:hover .card-image img {
+	transform: scale(1.05);
+}
+
+.placeholder-image {
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 102, 255, 0.2) 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 4rem;
+}
+
+.review-score {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	color: white;
+	padding: 0.5rem 1rem;
+	border-radius: 20px;
+	font-weight: 700;
+	font-size: 1.1rem;
+}
+
+.card-content {
+	padding: 2rem;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.category-badge {
+	font-size: 0.8rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	padding: 0.5rem 1rem;
+	border-radius: 20px;
+	display: inline-block;
+	margin-bottom: 1rem;
+	width: fit-content;
+}
+
+.category-badge.news { background: rgba(0, 212, 255, 0.2); color: #00d4ff; }
+.category-badge.reviews { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+.category-badge.business { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+.category-badge.finance { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+.category-badge.tutorials { background: rgba(168, 85, 247, 0.2); color: #a855f7; }
+.category-badge.ai-agents { background: rgba(20, 184, 166, 0.2); color: #14b8a6; }
+
+.card-content h3 {
+	font-size: 1.4rem;
+	font-weight: 600;
+	margin: 0 0 1rem 0;
+	line-height: 1.3;
+	flex: 1;
+}
+
+.card-content h3 a {
+	color: #ffffff;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+.card-content h3 a:hover {
+	color: #00d4ff;
+}
+
+.card-content p {
+	color: #b3b3b3;
+	line-height: 1.6;
+	margin-bottom: 1.5rem;
+	font-size: 0.95rem;
+}
+
+.review-stars {
+	color: #ffb800;
+	margin-bottom: 1rem;
+	font-size: 1.1rem;
+}
+
+.ai-agent-indicators {
+	display: flex;
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+
+.specialization, .capability {
+	background: rgba(255, 184, 0, 0.1);
+	color: #ffb800;
+	padding: 0.25rem 0.75rem;
+	border-radius: 12px;
+	font-size: 0.8rem;
+	font-weight: 500;
+}
+
+.tutorial-indicators {
+	display: flex;
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+
+.difficulty, .duration {
+	background: rgba(168, 85, 247, 0.1);
+	color: #a855f7;
+	padding: 0.25rem 0.75rem;
+	border-radius: 12px;
+	font-size: 0.8rem;
+	font-weight: 500;
+}
+
+.card-meta {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 0.85rem;
+	color: #666666;
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
+	padding-top: 1rem;
+	margin-top: auto;
+}
+
+/* Bottom Row: 2 Stacked Cards */
+.bottom-row {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	flex: 1;
+}
+
+.stacked-card {
+	background: #1a1a1b;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 12px;
+	padding: 1.5rem;
+	display: flex;
+	gap: 1.5rem;
+	transition: all 0.3s ease;
+}
+
+.stacked-card:hover {
+	transform: translateX(8px);
+	box-shadow: 0 15px 40px rgba(0, 212, 255, 0.15);
+	border-color: rgba(0, 212, 255, 0.3);
+}
+
+.stacked-image {
+	width: 120px;
+	height: 100px;
+	border-radius: 8px;
+	overflow: hidden;
+	flex-shrink: 0;
+}
+
+.stacked-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.placeholder-small {
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 102, 255, 0.2) 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 2rem;
+}
+
+.stacked-content {
+	flex: 1;
+}
+
+.category-badge-small {
+	font-size: 0.7rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	padding: 0.25rem 0.75rem;
+	border-radius: 15px;
+	display: inline-block;
+	margin-bottom: 0.75rem;
+}
+
+.category-badge-small.news { background: rgba(0, 212, 255, 0.2); color: #00d4ff; }
+.category-badge-small.reviews { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+.category-badge-small.business { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+.category-badge-small.finance { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+.category-badge-small.tutorials { background: rgba(168, 85, 247, 0.2); color: #a855f7; }
+.category-badge-small.ai-agents { background: rgba(20, 184, 166, 0.2); color: #14b8a6; }
+
+.stacked-content h4 {
+	font-size: 1.1rem;
+	font-weight: 600;
+	margin: 0 0 0.75rem 0;
+	line-height: 1.3;
+}
+
+.stacked-content h4 a {
+	color: #ffffff;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+.stacked-content h4 a:hover {
+	color: #00d4ff;
+}
+
+.stacked-meta {
+	display: flex;
+	gap: 1rem;
+	font-size: 0.8rem;
+	color: #666666;
+}
+
+/* Sidebar Styles */
+.content-sidebar {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.ad-space {
+	background: rgba(30, 30, 31, 0.85);
+	border: 1.5px solid rgba(0, 212, 255, 0.13);
+	border-radius: 18px;
+	overflow: hidden;
+	box-shadow: 0 8px 32px rgba(0, 212, 255, 0.08);
+}
+
+.ad-placeholder {
+	padding: 1rem;
+	text-align: center;
+	background: linear-gradient(135deg, rgba(0, 212, 255, 0.08) 0%, rgba(0, 102, 255, 0.08) 100%);
+}
+
+.ad-reviews {
+	background: linear-gradient(135deg, rgba(0, 212, 255, 0.08) 0%, rgba(0, 102, 255, 0.08) 100%);
+}
+
+.ad-label {
+	font-size: 0.7rem;
+	text-transform: uppercase;
+	color: #00d4ff;
+	margin-bottom: 0.5rem;
+	letter-spacing: 0.5px;
+	font-weight: 700;
+}
+
+.ad-content h4 {
+	color: #ffffff;
+	margin-bottom: 0.75rem;
+	font-size: 1.1rem;
+}
+
+.ad-content p {
+	color: #b3b3b3;
+	margin-bottom: 1rem;
+	line-height: 1.5;
+	font-size: 0.9rem;
+}
+
+.ad-cta {
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	color: white;
+	border: none;
+	padding: 0.75rem 1.5rem;
+	border-radius: 25px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.ad-cta:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+}
+
+/* Learning Resources */
+.learning-resources {
+	padding: 1rem;
+	border-radius: 18px;
+	box-shadow: 0 8px 32px rgba(168, 85, 247, 0.10);
+	margin-bottom: 2rem;
+	background: linear-gradient(135deg, rgba(168, 85, 247, 0.08) 0%, rgba(255, 184, 0, 0.08) 100%);
+	min-height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Override ad-space background for learning resources */
+.ad-space:has(.learning-resources) {
+	background: transparent !important;
+	border: 1.5px solid rgba(168, 85, 247, 0.18);
+	box-shadow: 0 8px 32px rgba(168, 85, 247, 0.10);
+	padding: 0;
+}
+
+/* Ensure no background conflicts for learning resources */
+.ad-space:has(.learning-resources) .ad-placeholder {
+	background: transparent !important;
+}
+
+.resource-header h4 {
+	color: #ffffff;
+	margin-bottom: 0.5rem;
+	font-size: 1.1rem;
+}
+
+.resource-header p {
+	color: #b3b3b3;
+	margin-bottom: 1rem;
+	font-size: 0.9rem;
+	line-height: 1.5;
+}
+
+.resource-list {
+	margin-bottom: 1rem;
+}
+
+.resource-item {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.5rem 0;
+	color: #b3b3b3;
+	font-size: 0.9rem;
+}
+
+.resource-icon {
+	font-size: 1.2rem;
+}
+
+.resource-cta {
+	background: linear-gradient(135deg, #a855f7 0%, #ffb800 100%);
+	color: white;
+	border: none;
+	padding: 0.75rem 1.5rem;
+	border-radius: 25px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	width: 100%;
+}
+
+.resource-cta:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 25px rgba(168, 85, 247, 0.4);
+}
+
+/* Sidebar Articles */
+.sidebar-articles {
+	background: linear-gradient(135deg, rgba(0, 212, 255, 0.08) 0%, rgba(0, 102, 255, 0.08) 100%);
+	border: 1.5px solid rgba(0, 212, 255, 0.18);
+	border-radius: 18px;
+	padding: 1rem;
+	box-shadow: 0 4px 16px rgba(0, 212, 255, 0.10);
+}
+
+.sidebar-title {
+	color: #ffffff;
+	font-size: 1.1rem;
+	font-weight: 700;
+	margin-bottom: 1rem;
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+	letter-spacing: 0.5px;
+}
+
+.sidebar-article {
+	display: flex;
+	gap: 1rem;
+	padding: 0.75rem;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+	transition: all 0.3s ease;
+	background: rgba(25, 25, 26, 0.8);
+	border-radius: 10px;
+	margin-bottom: 0.75rem;
+	border: 1px solid rgba(0, 212, 255, 0.1);
+}
+
+.sidebar-article:last-child {
+	border-bottom: none;
+	margin-bottom: 0;
+}
+
+.sidebar-article:hover {
+	background: rgba(0, 212, 255, 0.15);
+	border-color: rgba(0, 212, 255, 0.2);
+	transform: translateX(2px);
+}
+
+.sidebar-image {
+	width: 54px;
+	height: 54px;
+	border-radius: 8px;
+	overflow: hidden;
+	flex-shrink: 0;
+	background: rgba(22, 22, 23, 0.85);
+	border: 1px solid rgba(0, 212, 255, 0.15);
+}
+
+.sidebar-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.sidebar-placeholder {
+	width: 100%;
+	height: 100%;
+	background: rgba(22, 22, 23, 0.85);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.5rem;
+	color: #00d4ff;
+}
+
+.sidebar-content {
+	flex: 1;
+}
+
+.sidebar-content h5 {
+	font-size: 0.95rem;
+	font-weight: 600;
+	margin: 0 0 0.3rem 0;
+	line-height: 1.3;
+}
+
+.sidebar-content h5 a {
+	color: #ffffff;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+.sidebar-content h5 a:hover {
+	color: #00d4ff;
+}
+
+.sidebar-meta {
+	font-size: 0.8rem;
+	color: #888888;
+}
+
+/* Newsletter Signup */
+.newsletter-signup {
+	padding: 2rem;
+	background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%);
+}
+
+.newsletter-header h4 {
+	color: #ffffff;
+	margin-bottom: 0.75rem;
+	font-size: 1.2rem;
+}
+
+.newsletter-header p {
+	color: #b3b3b3;
+	margin-bottom: 1.5rem;
+	font-size: 0.9rem;
+	line-height: 1.5;
+}
+
+.newsletter-form {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.newsletter-input {
+	padding: 0.75rem;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 8px;
+	background: rgba(0, 0, 0, 0.3);
+	color: #ffffff;
+	font-size: 0.9rem;
+	width: 100%;
+}
+
+.newsletter-input::placeholder {
+	color: #666666;
+}
+
+.newsletter-btn {
+	background: linear-gradient(135deg, #a855f7 0%, #00d4ff 100%);
+	color: white;
+	border: none;
+	padding: 0.75rem;
+	border-radius: 8px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	width: 100%;
+}
+
+.newsletter-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 25px rgba(168, 85, 247, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+	.section-layout {
+		grid-template-columns: 1fr 250px;
+		gap: 2rem;
+	}
+}
+
+@media (max-width: 968px) {
+	.section-layout {
+		grid-template-columns: 1fr;
+		gap: 2rem;
+	}
+	
+	.content-sidebar {
+		order: -1;
+	}
+}
+
+@media (max-width: 768px) {
+	.section-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 1rem;
+	}
+	
+	.section-title {
+		font-size: 2rem;
+	}
+	
+	.top-row {
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+	}
+	
+	.card-image {
+		height: 200px;
+	}
+	
+	.large-card {
+		margin-bottom: 1rem;
+	}
+}
+
+/* Sidebar Sections */
+.sidebar-section {
+	background: var(--color-bg);
+	border: 1px solid var(--border-color);
+	border-radius: 16px;
+	overflow: hidden;
+}
+
+/* Category Badges - Updated Colors */
+.category-badge.news, .category-badge-small.news {
+  background: rgba(0, 212, 255, 0.2);
+  color: #00d4ff;
+}
+.category-badge.reviews, .category-badge-small.reviews {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+/* Category Titles Above Articles (if used) */
+.category-title.news, .grid-category.news, .sidebar-placeholder.news {
+  color: #00d4ff;
+}
+.category-title.reviews, .grid-category.reviews, .sidebar-placeholder.reviews {
+  color: #3b82f6;
+}
+
+/* Sidebar Placeholders (if colored backgrounds are used) */
+.sidebar-placeholder.news {
+  background: rgba(0, 212, 255, 0.08);
+  color: #00d4ff;
+}
+.sidebar-placeholder.reviews {
+  background: rgba(59, 130, 246, 0.08);
+  color: #3b82f6;
+}
+</style>
+
+<script>
+	// Initialize lazy loading and image optimization
+	document.addEventListener('DOMContentLoaded', function() {
+		// Setup intersection observer for lazy loading
+		const imageObserver = new IntersectionObserver((entries, observer) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					const img = entry.target as HTMLImageElement;
+					const dataSrc = img.dataset.src;
+					
+					if (dataSrc) {
+						img.src = dataSrc;
+						img.classList.remove('lazy');
+						observer.unobserve(img);
+					}
+				}
+			});
+		}, {
+			rootMargin: '50px 0px',
+			threshold: 0.01
+		});
+		
+		// Observe all lazy images
+		document.querySelectorAll('img[data-src]').forEach(img => {
+			imageObserver.observe(img);
+		});
+		
+		// Preload critical images
+		const criticalImages = document.querySelectorAll('img[fetchpriority="high"]');
+		criticalImages.forEach(img => {
+			const imgElement = img as HTMLImageElement;
+			const link = document.createElement('link');
+			link.rel = 'preload';
+			link.as = 'image';
+			link.href = imgElement.src;
+			document.head.appendChild(link);
+		});
+	});
+</script>
+</body>

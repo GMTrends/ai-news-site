@@ -1,0 +1,532 @@
+---
+import { sanityClient } from '../../lib/sanity';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import '../../styles/article.css';
+import ArticleSidebar from '../../components/ArticleSidebar.astro';
+import { generateWebPUrl, generateResponsiveSrcSet } from '../../utils/imageOptimization';
+
+// Enable static generation for this page
+export const prerender = true;
+
+interface Article {
+  title: string;
+  slug: string;
+  category: { name: string; slug: string };
+  content: any;
+  publishDate: string;
+  excerpt: string;
+  author: { 
+    name: string;
+    slug?: string;
+    image?: string;
+    bio?: any;
+    expertise?: string[];
+    credentials?: string;
+  };
+  featuredImage: string;
+  tags?: { title: string }[];
+}
+
+export async function getStaticPaths() {
+  try {
+    const articles = await sanityClient.fetch<Article[]>(`
+      *[_type == "article" && defined(slug.current) && status == "published"] {
+        title,
+        "slug": slug.current,
+        "category": category->{name, "slug": slug.current},
+        content,
+        "publishDate": publishedAt,
+        excerpt,
+        "author": author->{
+          name,
+          "slug": slug.current,
+          "image": image.asset->url,
+          bio,
+          expertise,
+          credentials
+        },
+        "featuredImage": featuredImage.asset->url,
+        "tags": tags[]->{title}
+      }
+    `);
+    
+    console.log(`📄 Found ${articles.length} published articles for static generation`);
+    
+    if (!articles || articles.length === 0) {
+      console.log('⚠️ No published articles found, returning empty paths');
+      return [];
+    }
+    
+    return articles.map((article) => {
+      // Ensure we have the required data
+      if (!article || !article.title || !article.slug) {
+        console.log('⚠️ Skipping article with missing required fields:', article);
+        return null;
+      }
+      
+      return {
+        params: { 
+          category: article.category?.slug || 'ai-news',
+          slug: typeof article.slug === 'object' ? (article.slug as any).current : article.slug 
+        },
+        props: { article },
+      };
+    }).filter(Boolean); // Remove any null entries
+  } catch (error) {
+    console.error('❌ Error in getStaticPaths:', error);
+    return [];
+  }
+}
+
+const { article } = Astro.props;
+
+// Safety check - if no article is found, return a 404 page
+if (!article || !article.title) {
+  return Astro.redirect('/404');
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{article.title} | AI Buzz Media</title>
+  <meta name="description" content={article.excerpt || 'Latest AI news and insights from AI Buzz Media'} />
+  <meta name="keywords" content={article.tags?.map(tag => tag.title).join(', ') || 'AI, artificial intelligence, news'} />
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content={Astro.url} />
+  <meta property="og:title" content={article.title} />
+  <meta property="og:description" content={article.excerpt || 'Latest AI news and insights from AI Buzz Media'} />
+  {article.featuredImage && <meta property="og:image" content={article.featuredImage} />}
+  <meta property="og:site_name" content="AI Buzz Media" />
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content={Astro.url} />
+  <meta property="twitter:title" content={article.title} />
+  <meta property="twitter:description" content={article.excerpt || 'Latest AI news and insights from AI Buzz Media'} />
+  {article.featuredImage && <meta property="twitter:image" content={article.featuredImage} />}
+  
+  <!-- Article Meta -->
+  <meta property="article:published_time" content={article.publishDate || new Date().toISOString()} />
+  <meta property="article:author" content={article.author?.name || 'AI Buzz Media'} />
+  <meta property="article:section" content={article.category?.name || 'Technology'} />
+  
+  <link rel="canonical" href={Astro.url} />
+  
+  <!-- E-E-A-T Compliant Schema Markup -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": article.title,
+    "description": article.excerpt,
+    "image": article.featuredImage ? {
+      "@type": "ImageObject",
+      "url": article.featuredImage,
+      "width": 1200,
+      "height": 630
+    } : undefined,
+    "datePublished": article.publishDate,
+    "dateModified": article.publishDate,
+    "author": {
+      "@type": "Person",
+      "name": article.author?.name || "AI Buzz Media",
+      "url": article.author?.slug ? `https://aibuzzmedia.com/authors/${article.author.slug}` : "https://aibuzzmedia.com",
+      "image": article.author?.image ? {
+        "@type": "ImageObject",
+        "url": article.author.image,
+        "width": 200,
+        "height": 200
+      } : undefined,
+      "description": article.author?.bio ? article.author.bio.map((block: any) => 
+        block.children?.map((child: any) => child.text).join(' ') || ''
+      ).join(' ') : undefined,
+      "knowsAbout": article.author?.expertise || ["Artificial Intelligence", "Technology", "News"],
+      "jobTitle": "AI Technology Journalist",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "AI Buzz Media",
+        "url": "https://aibuzzmedia.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://aibuzzmedia.com/logo.png",
+          "width": 512,
+          "height": 512
+        },
+        "sameAs": [
+          "https://twitter.com/aibuzzmedia",
+          "https://linkedin.com/company/aibuzzmedia"
+        ]
+      }
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "AI Buzz Media",
+      "url": "https://aibuzzmedia.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://aibuzzmedia.com/logo.png",
+        "width": 512,
+        "height": 512
+      },
+      "sameAs": [
+        "https://twitter.com/aibuzzmedia",
+        "https://linkedin.com/company/aibuzzmedia",
+        "https://facebook.com/aibuzzmedia"
+      ]
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": Astro.url
+    },
+    "articleSection": article.category?.name || "Technology",
+    "keywords": article.tags?.map(tag => tag.title).join(', ') || "AI, artificial intelligence, news",
+    "wordCount": article.content ? article.content.reduce((count: number, block: any) => {
+      if (block._type === 'block' && block.children) {
+        return count + block.children.reduce((blockCount: number, child: any) => blockCount + (child.text?.length || 0), 0);
+      }
+      return count;
+    }, 0) : 0,
+    "timeRequired": "PT5M",
+    "inLanguage": "en-US",
+    "isAccessibleForFree": true,
+    "isPartOf": {
+      "@type": "CreativeWork",
+      "name": "AI Buzz Media",
+      "url": "https://aibuzzmedia.com"
+    },
+    "url": Astro.url,
+    "identifier": {
+      "@type": "PropertyValue",
+      "name": "Article ID",
+      "value": article.slug
+    },
+    "about": {
+      "@type": "Thing",
+      "name": article.category?.name || "Technology"
+    },
+    "mentions": article.tags?.map(tag => ({
+      "@type": "Thing",
+      "name": tag.title
+    })) || [],
+    "speakable": {
+      "@type": "SpeakableSpecification",
+      "cssSelector": [".article-title", ".article-excerpt", ".content-body"]
+    }
+  }, null, 2)} />
+  
+  <!-- Additional Author Schema for E-E-A-T -->
+  {article.author && (
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": article.author.name,
+      "url": article.author.slug ? `https://aibuzzmedia.com/authors/${article.author.slug}` : "https://aibuzzmedia.com",
+      "image": article.author.image ? {
+        "@type": "ImageObject",
+        "url": article.author.image,
+        "width": 200,
+        "height": 200
+      } : undefined,
+      "description": article.author.bio ? article.author.bio.map((block: any) => 
+        block.children?.map((child: any) => child.text).join(' ') || ''
+      ).join(' ') : `Expert AI technology journalist and ${article.author.expertise?.join(', ') || 'technology'} specialist`,
+      "knowsAbout": article.author.expertise || ["Artificial Intelligence", "Technology", "News"],
+      "jobTitle": "AI Technology Journalist",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "AI Buzz Media",
+        "url": "https://aibuzzmedia.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://aibuzzmedia.com/logo.png",
+          "width": 512,
+          "height": 512
+        }
+      },
+      "hasCredential": article.author.credentials ? [article.author.credentials] : undefined,
+      "alumniOf": {
+        "@type": "Organization",
+        "name": "AI Technology Industry"
+      },
+      "sameAs": [
+        "https://aibuzzmedia.com/authors",
+        "https://linkedin.com/company/aibuzzmedia"
+      ],
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": article.author.slug ? `https://aibuzzmedia.com/authors/${article.author.slug}` : "https://aibuzzmedia.com"
+      }
+    }, null, 2)} />
+  )}
+  
+  <!-- Breadcrumb Schema -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://aibuzzmedia.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": article.category?.name || "Technology",
+        "item": `https://aibuzzmedia.com/${article.category?.slug || 'ai-news'}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": article.title,
+        "item": Astro.url
+      }
+    ]
+  }, null, 2)} />
+</head>
+<body>
+  <Header />
+  
+  <!-- Hero Section -->
+  <section class="article-hero">
+    <div class="hero-background">
+      <div class="gradient-overlay"></div>
+      {article.featuredImage && (
+        <div class="hero-image">
+          <picture>
+            <source 
+              srcset={generateResponsiveSrcSet(article.featuredImage, [800, 1200, 1600])} 
+              type="image/webp" 
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+            >
+            <source 
+              srcset={generateResponsiveSrcSet(article.featuredImage.replace('fm=webp', 'fm=jpg'), [800, 1200, 1600])} 
+              type="image/jpeg" 
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+            >
+            <img 
+              src={generateWebPUrl(article.featuredImage, 1200, 630)} 
+              alt={article.title}
+              width="1200"
+              height="630"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+            />
+          </picture>
+        </div>
+      )}
+    </div>
+    
+    <div class="hero-content">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="/" class="breadcrumb-link">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href={`/${article.category?.slug}`} class="breadcrumb-link">{article.category?.name}</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Article</span>
+        </div>
+        
+        <div class="article-header">
+          <div class="category-badge">
+            <span class="category-icon">🚀</span>
+            {article.category?.name || 'Technology'}
+          </div>
+          
+          <h1 class="article-title">{article.title}</h1>
+          
+          <p class="article-excerpt">{article.excerpt}</p>
+          
+          <div class="article-meta">
+            <div class="author-info">
+              <div class="author-avatar">
+                <span class="avatar-text">{article.author?.name?.charAt(0) || 'A'}</span>
+              </div>
+              <div class="author-details">
+                <span class="author-name">By {article.author?.name || 'AI Buzz Media'}</span>
+                <span class="publish-date">{new Date(article.publishDate).toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}</span>
+              </div>
+            </div>
+            
+            <div class="article-actions">
+              <button class="share-button" onclick="shareArticle()">
+                <span class="share-icon">📤</span>
+                Share
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Article Content -->
+  <section class="article-content-section">
+    <div class="container">
+      <div class="content-wrapper">
+        <article class="article-content">
+          <div class="content-body">
+            {article.content && article.content.map((block: any, index: number) => {
+              if (block._type === 'block' && block.children) {
+                if (block.style === 'h2') {
+                  return <h2 class="content-heading">{block.children.map((child: any) => child.text).join(' ')}</h2>
+                } else if (block.style === 'h3') {
+                  return <h3 class="content-subheading">{block.children.map((child: any) => child.text).join(' ')}</h3>
+                } else if (block.style === 'h4') {
+                  return <h4 class="content-subheading-small">{block.children.map((child: any) => child.text).join(' ')}</h4>
+                } else {
+                  return (
+                    <p class="content-paragraph">
+                      {block.children.map((child: any, childIndex: number) => {
+                        if (child.marks && child.marks.length > 0) {
+                          const linkMark = child.marks.find((markKey: string) => 
+                            block.markDefs?.find((def: any) => def._key === markKey && def._type === 'link')
+                          );
+                          if (linkMark) {
+                            const linkDef = block.markDefs.find((def: any) => def._key === linkMark);
+                            return <a href={linkDef.href} target="_blank" rel="noopener" class="content-link">{child.text}</a>
+                          }
+                        }
+                        return <span>{child.text}</span>
+                      })}
+                    </p>
+                  )
+                }
+              } else if (block._type === 'image') {
+                let imageUrl = '';
+                if (block.asset && block.asset._ref) {
+                  const ref = block.asset._ref;
+                  const ext = ref.includes('-png') ? 'png' : ref.includes('-jpg') ? 'jpg' : ref.includes('-jpeg') ? 'jpeg' : 'webp';
+                  const imageId = ref.replace('image-', '').replace(`-${ext}`, '');
+                  imageUrl = `https://cdn.sanity.io/images/crtekmb2/production/${imageId}.${ext}?w=800&h=600&fit=crop&auto=format`;
+                }
+                return (
+                  <figure class="content-image">
+                    {imageUrl ? (
+                      <picture>
+                        <source 
+                          srcset={generateResponsiveSrcSet(imageUrl, [400, 600, 800])} 
+                          type="image/webp" 
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
+                        >
+                        <source 
+                          srcset={generateResponsiveSrcSet(imageUrl.replace('fm=webp', 'fm=jpg'), [400, 600, 800])} 
+                          type="image/jpeg" 
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
+                        >
+                        <img 
+                          src={generateWebPUrl(imageUrl, 800, 600)} 
+                          alt={block.alt || ''}
+                          width="800"
+                          height="600"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </picture>
+                    ) : (
+                      <div class="image-placeholder">Image unavailable</div>
+                    )}
+                    {block.caption && <figcaption class="image-caption">{block.caption}</figcaption>}
+                  </figure>
+                )
+              } else if (block._type === 'customQuote') {
+                return (
+                  <blockquote class="content-quote">
+                    <div class="quote-content">
+                      <p class="quote-text">"{block.text}"</p>
+                      {block.author && <cite class="quote-author">— {block.author}{block.authorTitle ? `, ${block.authorTitle}` : ''}</cite>}
+                    </div>
+                  </blockquote>
+                )
+              } else if (block._type === 'htmlBlock') {
+                return (
+                  <div class="html-block" set:html={block.html}></div>
+                )
+              } else if (block._type === 'videoEmbed') {
+                let embedUrl = '';
+                if (block.url) {
+                  if (block.url.includes('youtube.com') || block.url.includes('youtu.be')) {
+                    const match = block.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
+                    const videoId = match ? match[1] : '';
+                    embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : block.url;
+                  } else if (block.url.includes('vimeo.com')) {
+                    const match = block.url.match(/vimeo\.com\/(\d+)/);
+                    const videoId = match ? match[1] : '';
+                    embedUrl = videoId ? `https://player.vimeo.com/video/${videoId}` : block.url;
+                  } else {
+                    embedUrl = block.url;
+                  }
+                }
+                return (
+                  <div class="video-embed">
+                    {embedUrl ? (
+                      <iframe src={embedUrl} frameborder="0" allowfullscreen title={block.caption || 'Embedded Video'}></iframe>
+                    ) : (
+                      <div class="video-placeholder">Video unavailable</div>
+                    )}
+                    {block.caption && <div class="video-caption">{block.caption}</div>}
+                  </div>
+                )
+              } else if (block._type === 'callToAction') {
+                return (
+                  <div class="call-to-action">
+                    {block.title && <h3 class="cta-title">{block.title}</h3>}
+                    {block.description && <p class="cta-description">{block.description}</p>}
+                    {block.buttonText && block.buttonUrl && (
+                      <a href={block.buttonUrl} class="cta-button" target="_blank" rel="noopener">{block.buttonText}</a>
+                    )}
+                  </div>
+                )
+              }
+              return null;
+            })}
+          </div>
+        </article>
+        <ArticleSidebar categorySlug={article.category?.slug} currentArticleSlug={article.slug} />
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+
+  <script>
+    function shareArticle() {
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          url: window.location.href
+        });
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Link copied to clipboard!');
+      }
+    }
+    
+    function shareToTwitter() {
+      const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(document.title)}&url=${encodeURIComponent(window.location.href)}`;
+      window.open(url, '_blank');
+    }
+    
+    function shareToLinkedIn() {
+      const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
+      window.open(url, '_blank');
+    }
+    
+    function shareToFacebook() {
+      const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+      window.open(url, '_blank');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+---
+import { getCollection } from 'astro:content';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import '../../styles/article.css';
+import ArticleSidebar from '../../components/ArticleSidebar.astro';
+
+// Enable static generation for this page
+export const prerender = true;
+
+export async function getStaticPaths() {
+  try {
+    const articles = await getCollection('articles');
+    
+    console.log(`📄 Found ${articles.length} articles for static generation`);
+    
+    if (!articles || articles.length === 0) {
+      console.log('⚠️ No articles found, returning empty paths');
+      return [];
+    }
+    
+    return articles.map((article) => {
+      // Ensure we have the required data
+      if (!article || !article.data.title || !article.slug) {
+        console.log('⚠️ Skipping article with missing required fields:', article);
+        return null;
+      }
+      
+      return {
+        params: { 
+          category: article.data.category || 'ai-news',
+          slug: article.slug
+        },
+        props: { article },
+      };
+    }).filter(Boolean); // Remove any null entries
+  } catch (error) {
+    console.error('❌ Error in getStaticPaths:', error);
+    return [];
+  }
+}
+
+const { article } = Astro.props;
+
+// Safety check - if no article is found, return a 404 page
+if (!article || !article.data.title) {
+  return Astro.redirect('/404');
+}
+
+// Render the article content
+const { Content } = await article.render();
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{article.data.title} | AI Buzz Media</title>
+  <meta name="description" content={article.data.excerpt || 'Latest AI news and insights from AI Buzz Media'} />
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content={Astro.url} />
+  <meta property="og:title" content={article.data.title} />
+  <meta property="og:description" content={article.data.excerpt || 'Latest AI news and insights from AI Buzz Media'} />
+  <meta property="og:site_name" content="AI Buzz Media" />
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content={Astro.url} />
+  <meta property="twitter:title" content={article.data.title} />
+  <meta property="twitter:description" content={article.data.excerpt || 'Latest AI news and insights from AI Buzz Media'} />
+  
+  <!-- Article Meta -->
+  <meta property="article:published_time" content={article.data.publishedAt || new Date().toISOString()} />
+  <meta property="article:author" content={article.data.author || 'AI Buzz Media'} />
+  <meta property="article:section" content={article.data.category || 'Technology'} />
+  
+  <link rel="canonical" href={Astro.url} />
+</head>
+<body>
+  <Header />
+  
+  <!-- Hero Section -->
+  <section class="article-hero">
+    <div class="hero-content">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="/" class="breadcrumb-link">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href={`/${article.data.category || 'ai-news'}`} class="breadcrumb-link">{article.data.category || 'AI News'}</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Article</span>
+        </div>
+        
+        <div class="article-header">
+          <div class="category-badge">
+            <span class="category-icon">🚀</span>
+            {article.data.category || 'Technology'}
+          </div>
+          
+          <h1 class="article-title">{article.data.title}</h1>
+          
+          {article.data.excerpt && <p class="article-excerpt">{article.data.excerpt}</p>}
+          
+          <div class="article-meta">
+            <div class="author-info">
+              <div class="author-avatar">
+                <span class="avatar-text">{article.data.author?.charAt(0) || 'A'}</span>
+              </div>
+              <div class="author-details">
+                <span class="author-name">By {article.data.author || 'AI Buzz Media'}</span>
+                <span class="publish-date">{new Date(article.data.publishedAt || new Date()).toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}</span>
+              </div>
+            </div>
+            
+            <div class="article-actions">
+              <button class="share-button" onclick="shareArticle()">
+                <span class="share-icon">📤</span>
+                Share
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Article Content -->
+  <section class="article-content-section">
+    <div class="container">
+      <div class="content-wrapper">
+        <article class="article-content">
+          <div class="content-body">
+            <Content />
+          </div>
+        </article>
+        <ArticleSidebar categorySlug={article.data.category} currentArticleSlug={article.slug} />
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+
+  <script>
+    function shareArticle() {
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          url: window.location.href
+        });
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Link copied to clipboard!');
+      }
+    }
+  </script>
+</body>
+</html>

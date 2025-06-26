@@ -1,0 +1,190 @@
+---
+// Import the global.css file here so that it is included on
+// all pages through the use of the <BaseHead /> component.
+import '../styles/global.css';
+import { SITE_TITLE } from '../consts';
+import FallbackImage from '../assets/blog-placeholder-1.jpg';
+import type { ImageMetadata } from 'astro';
+import Analytics from './Analytics.astro';
+import TrackingPixels from './TrackingPixels.astro';
+
+// Add these additional imports at the top of the script section (Recommended by GenSpark AI)
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/space-grotesk/400.css';
+import '@fontsource/space-grotesk/500.css';
+import '@fontsource/space-grotesk/700.css';
+import '@fontsource/jetbrains-mono/400.css';
+
+interface Props {
+	title: string;
+	description: string;
+	image?: ImageMetadata;
+}
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'http://localhost:4321');
+
+const { title, description, image = FallbackImage } = Astro.props;
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#00d4ff" />
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="/manifest.json" />
+
+<!-- DNS Prefetch for external domains -->
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="dns-prefetch" href="//fonts.gstatic.com" />
+<link rel="dns-prefetch" href="//www.googletagmanager.com" />
+<link rel="dns-prefetch" href="//www.google-analytics.com" />
+
+<!-- Preconnect to external domains -->
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+<link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
+
+<!-- Resource Hints -->
+<link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/space-grotesk-var.woff2" as="font" type="font/woff2" crossorigin />
+
+<!-- Critical CSS Inline -->
+<style>
+  /* Critical CSS for above-the-fold content */
+  :root {
+    --accent: 136, 58, 234;
+    --accent-light: 224, 204, 250;
+    --accent-dark: 49, 10, 101;
+    --color-bg: #1a1a1b;
+    --color-text: #ffffff;
+    --color-text-secondary: #b3b3b3;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --gradient-primary: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+  }
+  
+  html {
+    font-family: system-ui, sans-serif;
+    background: var(--color-bg);
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+  }
+  
+  /* Optimize for Core Web Vitals */
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  /* Reduce layout shift */
+  .hero-image {
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+  }
+</style>
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link
+	rel="alternate"
+	type="application/rss+xml"
+	title={SITE_TITLE}
+	href={new URL('rss.xml', Astro.site || 'http://localhost:4321')}
+/>
+<meta name="generator" content={Astro.generator} />
+
+<!-- Font preloads -->
+<link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
+<link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin />
+
+<!-- SEO Meta Tags -->
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:image" content={new URL(image.src, Astro.site || 'http://localhost:4321')} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={title} />
+
+<!-- Twitter Card -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonicalURL} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={new URL(image.src, Astro.site || 'http://localhost:4321')} />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": SITE_TITLE,
+  "url": Astro.site || 'http://localhost:4321',
+  "description": "Latest AI news, reviews, and insights from industry experts",
+  "publisher": {
+    "@type": "Organization",
+    "name": "AI Buzz Media",
+    "url": Astro.site || 'http://localhost:4321',
+    "logo": {
+      "@type": "ImageObject",
+      "url": `${Astro.site || 'http://localhost:4321'}/logo.png`,
+      "width": 512,
+      "height": 512
+    }
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": `${Astro.site || 'http://localhost:4321'}/search?q={search_term_string}`
+    },
+    "query-input": "required name=search_term_string"
+  }
+})} />
+
+<!-- Performance Monitoring -->
+<script>
+  // Basic performance monitoring
+  if (typeof window !== 'undefined') {
+    // Page load time
+    window.addEventListener('load', () => {
+      const loadTime = performance.now();
+      console.log('Page Load Time:', loadTime);
+      
+      // Navigation timing
+      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      if (navigation) {
+        console.log('DOM Content Loaded:', navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart);
+        console.log('First Paint:', performance.getEntriesByName('first-paint')[0]?.startTime);
+      }
+    });
+  }
+</script>
+
+<Analytics />
+<TrackingPixels />

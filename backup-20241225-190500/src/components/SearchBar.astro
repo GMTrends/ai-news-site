@@ -1,0 +1,685 @@
+---
+// Interactive search and filter component
+const { compact = false } = Astro.props;
+---
+
+<script>
+declare global {
+	interface Window {
+		handleCompactSearch: (e: Event) => void;
+	}
+}
+
+// Search functionality with real CMS data
+document.addEventListener('DOMContentLoaded', async function() {
+	const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+	const clearButton = document.getElementById('clearSearch') as HTMLButtonElement;
+	const searchResults = document.getElementById('searchResults') as HTMLElement;
+	const filterTabs = document.querySelectorAll('.filter-tab') as NodeListOf<HTMLButtonElement>;
+
+	// Check if elements exist
+	if (!searchInput || !clearButton || !searchResults || !filterTabs) {
+		console.error('Search elements not found');
+		return;
+	}
+
+	// Fetch real articles from Sanity
+	let allArticles: any[] = [];
+	
+	try {
+		const response = await fetch('/api/search-articles.json');
+		if (response.ok) {
+			allArticles = await response.json();
+			console.log('Loaded articles for search:', allArticles.length);
+		}
+	} catch (error) {
+		console.error('Failed to load articles for search:', error);
+		// Fallback to sample data if API fails
+		allArticles = [
+			{
+				title: "Create some articles in your CMS",
+				category: "ai-news",
+				excerpt: "Add published articles to see them in search results",
+				author: { name: "System" }
+			}
+		];
+	}
+
+	let currentFilter = 'all';
+
+	// Search input handler
+	searchInput.addEventListener('input', function() {
+		const query = this.value.toLowerCase();
+		if (query.length > 2) {
+			showSearchResults(query);
+		} else {
+			hideSearchResults();
+		}
+	});
+
+	// Clear search
+	clearButton.addEventListener('click', function() {
+		searchInput.value = '';
+		hideSearchResults();
+		searchInput.focus();
+	});
+
+	// Filter tabs
+	filterTabs.forEach(tab => {
+		tab.addEventListener('click', function() {
+			// Update active tab
+			filterTabs.forEach(t => t.classList.remove('active'));
+			this.classList.add('active');
+			
+			const category = this.getAttribute('data-category');
+			if (category) {
+				currentFilter = category;
+			}
+			
+			// If there's a search query, refresh results
+			if (searchInput.value.length > 2) {
+				showSearchResults(searchInput.value.toLowerCase());
+			}
+		});
+	});
+
+	function showSearchResults(query: string) {
+		let filteredArticles = allArticles.filter(article => {
+			const matchesQuery = 
+				article.title.toLowerCase().includes(query) ||
+				(article.excerpt && article.excerpt.toLowerCase().includes(query)) ||
+				(article.author?.name && article.author.name.toLowerCase().includes(query));
+			
+			const matchesFilter = 
+				currentFilter === 'all' || 
+				(article.category?.name && article.category.name.toLowerCase() === currentFilter);
+			
+			return matchesQuery && matchesFilter;
+		});
+
+		if (filteredArticles.length > 0) {
+			const resultsHTML = filteredArticles.slice(0, 10).map(article => {
+				const categorySlug = typeof article.category?.slug === 'object' ? article.category.slug.current : article.category?.slug || 'ai-news';
+				const articleSlug = typeof article.slug === 'object' ? article.slug.current : article.slug;
+				const articleUrl = `/${categorySlug}/${articleSlug}`;
+				return `
+					<div class="search-result-item" onclick="window.location.href='${articleUrl}'">
+						<div class="result-title">${article.title}</div>
+						<div class="result-category">${article.category?.name || 'AI News'}</div>
+						<div class="result-excerpt">${article.excerpt || ''}</div>
+						<div class="result-author">By ${article.author?.name || 'Anonymous'}</div>
+					</div>
+				`;
+			}).join('');
+
+			searchResults.innerHTML = resultsHTML;
+			searchResults.classList.add('active');
+		} else {
+			searchResults.innerHTML = `
+				<div class="search-result-item">
+					<div class="result-title">No results found</div>
+					<div class="result-excerpt">Try adjusting your search terms or filters. Make sure you have published articles in your CMS.</div>
+				</div>
+			`;
+			searchResults.classList.add('active');
+		}
+	}
+
+	function hideSearchResults() {
+		searchResults.classList.remove('active');
+	}
+
+	// Hide results when clicking outside
+	document.addEventListener('click', function(e) {
+		const target = e.target as HTMLElement;
+		if (!target.closest('.search-container')) {
+			hideSearchResults();
+		}
+	});
+});
+
+async function fetchSidebarArticles() {
+	try {
+		const response = await fetch('/api/search-articles.json');
+		if (response.ok) {
+			return await response.json();
+		}
+	} catch (e) {}
+	return [];
+}
+
+function handleCompactSearch(e: Event) {
+	e.preventDefault();
+	const input = document.getElementById('sidebarSearchInput') as HTMLInputElement;
+	if (!input) return;
+	const query = input.value.trim().toLowerCase();
+	showSidebarResults(query);
+}
+
+async function showSidebarResults(query: string) {
+	const resultsBox = document.getElementById('sidebarSearchResults');
+	if (!resultsBox) return;
+	if (!query || query.length < 2) {
+		resultsBox.classList.remove('active');
+		resultsBox.innerHTML = '';
+		return;
+	}
+	const articles = await fetchSidebarArticles();
+	const filtered = articles.filter((a: any) =>
+		a.title.toLowerCase().includes(query) ||
+		(a.excerpt && a.excerpt.toLowerCase().includes(query))
+	).slice(0, 6);
+	if (filtered.length === 0) {
+		resultsBox.innerHTML = `<div class='sidebar-search-no-results'>No results found.</div>`;
+	} else {
+		resultsBox.innerHTML = filtered.map((a: any) => {
+			const categorySlug = typeof a.category?.slug === 'object' ? a.category.slug.current : a.category?.slug || 'ai-news';
+			const articleSlug = typeof a.slug === 'object' ? a.slug.current : a.slug;
+			const articleUrl = `/${categorySlug}/${articleSlug}`;
+			return `
+				<a href='${articleUrl}' class='sidebar-search-result-item'>
+					<div class='sidebar-search-result-title'>${a.title}</div>
+					${a.excerpt ? `<div class='sidebar-search-result-excerpt'>${a.excerpt}</div>` : ''}
+					<div class='sidebar-search-result-meta'>
+						${a.category?.name ? `<span class='sidebar-search-result-category'>${a.category.name}</span>` : ''}
+						${a.author?.name ? `<span class='sidebar-search-result-author'>By ${a.author.name}</span>` : ''}
+					</div>
+				</a>
+			`;
+		}).join('');
+	}
+	resultsBox.classList.add('active');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+	const input = document.getElementById('sidebarSearchInput') as HTMLInputElement;
+	if (!input) return;
+	input.addEventListener('input', function() {
+		const query = (this as HTMLInputElement).value.trim().toLowerCase();
+		showSidebarResults(query);
+	});
+	document.addEventListener('click', function(e: MouseEvent) {
+		const resultsBox = document.getElementById('sidebarSearchResults');
+		if (!resultsBox) return;
+		if (!resultsBox.contains(e.target as Node) && e.target !== input) {
+			resultsBox.classList.remove('active');
+		}
+	});
+});
+
+window.handleCompactSearch = handleCompactSearch;
+</script>
+
+{compact ? (
+	<form class="searchbar-compact" onsubmit="window.handleCompactSearch(event)">
+		<input type="text" class="searchbar-compact-input" placeholder="Search..." id="sidebarSearchInput" autocomplete="off" />
+		<button type="submit" class="searchbar-compact-btn" aria-label="Search">
+			<svg class="searchbar-compact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+				<circle cx="11" cy="11" r="8"></circle>
+				<path d="m21 21-4.35-4.35"></path>
+			</svg>
+		</button>
+		<div class="sidebar-search-results" id="sidebarSearchResults"></div>
+	</form>
+) : (
+	<div class="search-container">
+		<div class="search-wrapper">
+			<div class="search-box">
+				<svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+					<circle cx="11" cy="11" r="8"></circle>
+					<path d="m21 21-4.35-4.35"></path>
+				</svg>
+				<input 
+					type="text" 
+					placeholder="Search AI News, reviews, insights..." 
+					class="search-input"
+					id="searchInput"
+				>
+				<button class="search-clear" id="clearSearch">✕</button>
+			</div>
+			<div class="filter-tabs">
+				<button class="filter-tab active" data-category="all">All</button>
+				<button class="filter-tab" data-category="ai-news">AI News</button>
+				<button class="filter-tab" data-category="reviews">Reviews</button>
+				<button class="filter-tab" data-category="tutorials">Tutorials</button>
+				<button class="filter-tab" data-category="business">Business</button>
+				<button class="filter-tab" data-category="finance">Finance</button>
+				<button class="filter-tab" data-category="ai-agents">AI Agents</button>
+			</div>
+		</div>
+		<div class="search-results" id="searchResults"></div>
+	</div>
+)}
+
+<style>
+.search-container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 2rem;
+	position: relative;
+}
+
+.search-wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	align-items: center;
+}
+
+.search-box {
+	position: relative;
+	width: 100%;
+	max-width: 600px;
+}
+
+.search-input {
+	width: 100%;
+	padding: 1rem 3rem 1rem 3rem;
+	background: rgba(30, 30, 31, 0.8);
+	backdrop-filter: blur(10px);
+	border: 2px solid rgba(0, 212, 255, 0.3);
+	border-radius: 50px;
+	color: #ffffff;
+	font-size: 1rem;
+	font-family: var(--font-body);
+	transition: all 0.3s ease;
+}
+
+.search-input:focus {
+	outline: none;
+	border-color: #00d4ff;
+	box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+.search-input::placeholder {
+	color: #666666;
+}
+
+.search-icon {
+	position: absolute;
+	left: 1rem;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 20px;
+	height: 20px;
+	color: #666666;
+	pointer-events: none;
+}
+
+.search-clear {
+	position: absolute;
+	right: 1rem;
+	top: 50%;
+	transform: translateY(-50%);
+	background: none;
+	border: none;
+	color: #666666;
+	font-size: 1.2rem;
+	cursor: pointer;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+.search-clear:hover {
+	color: #ff4757;
+}
+
+.search-input:not(:placeholder-shown) + .search-clear {
+	opacity: 1;
+}
+
+.filter-tabs {
+	display: flex;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.filter-tab {
+	padding: 0.5rem 1.5rem;
+	background: rgba(30, 30, 31, 0.6);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 25px;
+	color: #b3b3b3;
+	font-size: 0.9rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	backdrop-filter: blur(10px);
+}
+
+.filter-tab:hover {
+	background: rgba(0, 212, 255, 0.1);
+	border-color: rgba(0, 212, 255, 0.3);
+	color: #00d4ff;
+}
+
+.filter-tab.active {
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	border-color: transparent;
+	color: #ffffff;
+	box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+}
+
+.search-results {
+	position: absolute;
+	top: 100%;
+	left: 2rem;
+	right: 2rem;
+	background: rgba(30, 30, 31, 0.95);
+	backdrop-filter: blur(20px);
+	border: 1px solid rgba(0, 212, 255, 0.2);
+	border-radius: 12px;
+	max-height: 400px;
+	overflow-y: auto;
+	z-index: 1000;
+	display: none;
+}
+
+.search-results.active {
+	display: block;
+}
+
+.search-result-item {
+	padding: 1rem;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	cursor: pointer;
+	transition: all 0.3s ease;
+	color: #00d4ff !important;
+}
+
+.search-result-item:hover {
+	background: rgba(0, 212, 255, 0.1);
+	color: #ffffff !important;
+}
+
+.search-result-item:last-child {
+	border-bottom: none;
+}
+
+.result-title {
+	color: #00d4ff !important;
+	font-weight: 600;
+	margin-bottom: 0.25rem;
+}
+
+.search-result-item:hover .result-title {
+	color: #ffffff !important;
+}
+
+.result-category {
+	color: #00d4ff;
+	font-size: 0.8rem;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.result-excerpt {
+	color: #b3b3b3;
+	font-size: 0.9rem;
+	margin-top: 0.25rem;
+}
+
+.result-author {
+	color: #666666;
+	font-size: 0.8rem;
+	margin-top: 0.25rem;
+}
+
+/* Override any default link styling for main search */
+.search-results a,
+.search-results a:link,
+.search-results a:visited,
+.search-results a:active {
+	color: #00d4ff !important;
+	text-decoration: none !important;
+}
+
+.search-results a:hover {
+	color: #ffffff !important;
+	text-decoration: none !important;
+}
+
+/* Additional specific selectors for main search results */
+.search-results .search-result-item,
+.search-results .search-result-item:link,
+.search-results .search-result-item:visited,
+.search-results .search-result-item:active {
+	color: #00d4ff !important;
+	text-decoration: none !important;
+}
+
+.search-results .search-result-item:hover {
+	color: #ffffff !important;
+	text-decoration: none !important;
+}
+
+/* Force bright blue color on all search result elements */
+.search-results [onclick] {
+	color: #00d4ff !important;
+}
+
+.search-results [onclick]:hover {
+	color: #ffffff !important;
+}
+
+@media (max-width: 768px) {
+	.search-container {
+		padding: 0 1rem;
+	}
+	
+	.search-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 1rem;
+		margin-bottom: 1.5rem;
+	}
+	
+	.search-title {
+		font-size: 1.8rem;
+		line-height: 1.2;
+	}
+	
+	.search-subtitle {
+		font-size: 0.9rem;
+	}
+	
+	.search-form {
+		flex-direction: column;
+		gap: 1rem;
+	}
+	
+	.search-input-group {
+		width: 100%;
+	}
+	
+	.search-input {
+		width: 100%;
+		padding: 0.875rem 1rem;
+		font-size: 1rem;
+		min-height: 48px;
+	}
+	
+	.search-button {
+		width: 100%;
+		padding: 0.875rem 1.5rem;
+		font-size: 1rem;
+		min-height: 48px;
+	}
+	
+	.filter-tabs {
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		justify-content: flex-start;
+	}
+	
+	.filter-tab {
+		padding: 0.6rem 1rem;
+		font-size: 0.85rem;
+		min-height: 40px;
+	}
+	
+	.search-results {
+		top: calc(100% + 0.5rem);
+		max-height: 60vh;
+	}
+	
+	.search-result-item {
+		padding: 1rem;
+	}
+	
+	.result-title {
+		font-size: 0.95rem;
+		line-height: 1.3;
+	}
+	
+	.result-category {
+		font-size: 0.75rem;
+	}
+	
+	.result-excerpt {
+		font-size: 0.85rem;
+		line-height: 1.4;
+	}
+	
+	.result-author {
+		font-size: 0.75rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.search-container {
+		padding: 0 0.75rem;
+	}
+	
+	.search-header {
+		margin-bottom: 1.25rem;
+	}
+	
+	.search-title {
+		font-size: 1.5rem;
+	}
+	
+	.search-subtitle {
+		font-size: 0.85rem;
+	}
+	
+	.search-form {
+		gap: 0.75rem;
+	}
+	
+	.search-input {
+		padding: 0.75rem 1rem;
+		font-size: 0.95rem;
+	}
+	
+	.search-button {
+		padding: 0.75rem 1.25rem;
+		font-size: 0.95rem;
+	}
+	
+	.filter-tabs {
+		gap: 0.4rem;
+	}
+	
+	.filter-tab {
+		padding: 0.5rem 0.8rem;
+		font-size: 0.8rem;
+		min-height: 36px;
+	}
+	
+	.search-results {
+		max-height: 50vh;
+	}
+	
+	.search-result-item {
+		padding: 0.75rem;
+	}
+	
+	.result-title {
+		font-size: 0.9rem;
+	}
+	
+	.result-excerpt {
+		font-size: 0.8rem;
+	}
+}
+
+/* Sidebar search mobile improvements */
+@media (max-width: 768px) {
+	.sidebar-search-container {
+		padding: 0.75rem;
+	}
+	
+	.sidebar-search-input {
+		padding: 0.75rem 1rem;
+		font-size: 0.95rem;
+		min-height: 44px;
+	}
+	
+	.sidebar-search-results {
+		max-height: 40vh;
+	}
+	
+	.sidebar-search-result-item {
+		padding: 0.75rem;
+	}
+	
+	.sidebar-search-result-title {
+		font-size: 0.9rem;
+		line-height: 1.3;
+	}
+	
+	.sidebar-search-result-excerpt {
+		font-size: 0.8rem;
+		line-height: 1.4;
+	}
+	
+	.sidebar-search-result-meta {
+		font-size: 0.75rem;
+		gap: 0.5rem;
+	}
+}
+</style>
+
+<style>
+.searchbar-compact {
+	position: relative;
+	display: flex;
+	align-items: center;
+	background: rgba(30, 30, 31, 0.85);
+	border: 1.5px solid rgba(0, 212, 255, 0.18);
+	border-radius: 30px;
+	box-shadow: 0 2px 8px rgba(0, 212, 255, 0.08);
+	width: 100%;
+	max-width: 220px;
+	margin: 0 auto;
+}
+.searchbar-compact-input {
+	background: transparent;
+	border: none;
+	color: #fff;
+	font-size: 0.98rem;
+	padding: 0.4rem 2.1rem 0.4rem 0.7rem;
+	flex: 1;
+	outline: none;
+	border-radius: 30px;
+}
+.searchbar-compact-btn {
+	position: absolute;
+	right: 0.3rem;
+	top: 50%;
+	transform: translateY(-50%);
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0.2rem;
+	display: flex;
+	align-items: center;
+}
+.searchbar-compact-icon {
+	width: 1.2rem;
+	height: 1.2rem;
+	color: #00d4ff;
+}
+</style>
