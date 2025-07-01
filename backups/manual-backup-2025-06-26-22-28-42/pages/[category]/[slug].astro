@@ -1,0 +1,229 @@
+---
+import { sanityClient } from '../../lib/sanity';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import '../../styles/article.css';
+import CategorySidebar from '../../components/CategorySidebar.astro';
+
+// Enable static generation for this page
+export const prerender = true;
+
+export async function getStaticPaths() {
+  try {
+    // Fetch all articles from Sanity
+    const articles = await sanityClient.fetch(`
+      *[_type == "article" && 
+        (status == "published" || 
+         (status == "scheduled" && publishedAt <= now())
+        )] {
+        _id,
+        title,
+        slug,
+        category->{
+          name,
+          slug
+        },
+        excerpt,
+        content,
+        featuredImage,
+        publishedAt,
+        author->{
+          name,
+          bio,
+          image
+        },
+        tags
+      }
+    `);
+    
+    console.log(`📄 Found ${articles.length} articles for static generation`);
+    
+    if (!articles || articles.length === 0) {
+      console.log('⚠️ No articles found, returning empty paths');
+      return [];
+    }
+    
+    return articles.map((article: any) => {
+      // Ensure we have the required data
+      if (!article || !article.title || !article.slug?.current) {
+        console.log('⚠️ Skipping article with missing required fields:', article);
+        return null;
+      }
+      
+      return {
+        params: { 
+          category: article.category?.slug?.current || 'ai-news',
+          slug: article.slug.current
+        },
+        props: { article },
+      };
+    }).filter(Boolean); // Remove any null entries
+  } catch (error) {
+    console.error('❌ Error in getStaticPaths:', error);
+    return [];
+  }
+}
+
+interface Props {
+  article: any;
+}
+
+const { article }: Props = Astro.props;
+
+// Safety check - if no article is found, return a 404 page
+if (!article || !article.title) {
+  return Astro.redirect('/404');
+}
+
+// Convert Sanity content to HTML for rendering
+function renderContent(content: any[]): string {
+  if (!content || !Array.isArray(content)) return '';
+  
+  return content.map((block: any) => {
+    if (block._type === 'block') {
+      // Handle rich text blocks
+      let text = block.children?.map((child: any) => {
+        let result = child.text || '';
+        if (child.marks?.includes('strong')) result = `<strong>${result}</strong>`;
+        if (child.marks?.includes('em')) result = `<em>${result}</em>`;
+        if (child.marks?.includes('code')) result = `<code>${result}</code>`;
+        return result;
+      }).join('') || '';
+      
+      const style = block.style || 'normal';
+      if (style === 'h2') return `<h2>${text}</h2>`;
+      if (style === 'h3') return `<h3>${text}</h3>`;
+      if (style === 'h4') return `<h4>${text}</h4>`;
+      if (style === 'blockquote') return `<blockquote>${text}</blockquote>`;
+      return `<p>${text}</p>`;
+    } else if (block._type === 'image') {
+      // Handle image blocks
+      const alt = block.alt || '';
+      const caption = block.caption ? `<figcaption>${block.caption}</figcaption>` : '';
+      return `<figure><img src="${block.asset?.url || ''}" alt="${alt}" />${caption}</figure>`;
+    }
+    return '';
+  }).join('');
+}
+
+const articleContent = renderContent(article.content);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{article.title} | AI Buzz Media</title>
+  <meta name="description" content={article.excerpt || 'Latest AI news and insights from AI Buzz Media'} />
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content={Astro.url} />
+  <meta property="og:title" content={article.title} />
+  <meta property="og:description" content={article.excerpt || 'Latest AI news and insights from AI Buzz Media'} />
+  <meta property="og:site_name" content="AI Buzz Media" />
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content={Astro.url} />
+  <meta property="twitter:title" content={article.title} />
+  <meta property="twitter:description" content={article.excerpt || 'Latest AI news and insights from AI Buzz Media'} />
+  
+  <!-- Article Meta -->
+  <meta property="article:published_time" content={article.publishedAt || new Date().toISOString()} />
+  <meta property="article:author" content={article.author?.name || 'AI Buzz Media'} />
+  <meta property="article:section" content={article.category?.name || 'Technology'} />
+  
+  <link rel="canonical" href={Astro.url} />
+</head>
+<body>
+  <Header />
+  
+  <!-- Hero Section -->
+  <section class="article-hero">
+    <div class="hero-content">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="/" class="breadcrumb-link">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href={`/${article.category?.slug?.current || 'ai-news'}`} class="breadcrumb-link">{article.category?.name || 'AI News'}</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Article</span>
+        </div>
+        
+        <div class="article-header">
+          <div class="category-badge">
+            <span class="category-icon">🚀</span>
+            {article.category?.name || 'Technology'}
+          </div>
+          
+          <h1 class="article-title">{article.title}</h1>
+          
+          {article.excerpt && <p class="article-excerpt">{article.excerpt}</p>}
+          
+          <div class="article-meta">
+            <div class="author-info">
+              <div class="author-avatar">
+                {article.author?.image ? (
+                  <img src={article.author.image.url} alt={article.author.name} />
+                ) : (
+                  <span class="avatar-text">{article.author?.name?.charAt(0) || 'A'}</span>
+                )}
+              </div>
+              <div class="author-details">
+                <span class="author-name">By {article.author?.name || 'AI Buzz Media'}</span>
+                <span class="publish-date">{new Date(article.publishedAt || new Date()).toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}</span>
+              </div>
+            </div>
+            
+            <div class="article-actions">
+              <button class="share-button" onclick="shareArticle()">
+                <span class="share-icon">📤</span>
+                Share
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Article Content -->
+  <section class="article-content-section">
+    <div class="container">
+      <div class="content-wrapper">
+        <article class="article-content">
+          <div class="content-body">
+            <Fragment set:html={articleContent} />
+          </div>
+        </article>
+        <CategorySidebar 
+          categorySlug={article.category?.slug?.current} 
+          currentArticleSlug={article.slug?.current}
+        />
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+
+  <script>
+    function shareArticle() {
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          url: window.location.href
+        });
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Link copied to clipboard!');
+      }
+    }
+  </script>
+</body>
+</html>

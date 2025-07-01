@@ -1,0 +1,994 @@
+---
+import { getArticlesByCategory } from '../lib/sanity';
+import { generateWebPUrl, generateResponsiveSrcSet } from '../utils/imageOptimization'
+import CategorySidebar from './CategorySidebar.astro';
+
+// Helper functions
+function getArticleUrl(article: any) {
+	const category = article.category?.slug?.current || 'ai-news'
+	const slug = article.slug?.current || article.slug
+	return `/${category}/${slug}`
+}
+
+function formatDate(dateString: string) {
+	return new Date(dateString).toLocaleDateString('en-US', { 
+		month: 'short', 
+		day: 'numeric' 
+	})
+}
+
+// Fetch data for all sections from Sanity with more articles to avoid repetition
+const newsArticles = await getArticlesByCategory('ai-news', 8); // Increased to 8
+const reviewsArticles = await getArticlesByCategory('reviews', 10); // Increased to 10
+const aiAgentsArticles = await getArticlesByCategory('ai-agents', 8); // Increased to 8
+const tutorialsArticles = await getArticlesByCategory('tutorials', 8); // Increased to 8);
+
+// Fallback data if no articles are found
+const fallbacks = [
+	{ data: { title: "Sample AI News Article", excerpt: "This is a sample article for demonstration.", category: "ai-news", author: "AI Expert", publishedAt: new Date().toISOString() }, slug: "sample-1" },
+	{ data: { title: "Another AI Update", excerpt: "Another sample article for the grid.", category: "ai-news", author: "Tech Writer", publishedAt: new Date().toISOString() }, slug: "sample-2" },
+	{ data: { title: "AI Technology Review", excerpt: "Review of latest AI technology.", category: "ai-news", author: "Reviewer", publishedAt: new Date().toISOString() }, slug: "sample-3" },
+	{ data: { title: "Industry Analysis", excerpt: "Deep dive into AI industry trends.", category: "ai-news", author: "Analyst", publishedAt: new Date().toISOString() }, slug: "sample-4" },
+	{ data: { title: "Tutorial Guide", excerpt: "How to implement AI solutions.", category: "ai-news", author: "Instructor", publishedAt: new Date().toISOString() }, slug: "sample-5" },
+	{ data: { title: "Latest Updates", excerpt: "Recent developments in AI field.", category: "ai-news", author: "Reporter", publishedAt: new Date().toISOString() }, slug: "sample-6" },
+	{ data: { title: "AI Agent Development Guide", excerpt: "Learn how to build and deploy intelligent AI agents for automation.", category: "ai-agents", author: "AI Developer", publishedAt: new Date().toISOString() }, slug: "ai-agent-guide" },
+	{ data: { title: "Enterprise AI Agents", excerpt: "How businesses are leveraging AI agents to streamline operations.", category: "ai-agents", author: "Business Analyst", publishedAt: new Date().toISOString() }, slug: "enterprise-ai-agents" }
+]
+
+// Use fallback data if no articles are found
+const finalNewsArticles = newsArticles.length > 0 ? newsArticles : fallbacks.slice(0, 8);
+const finalReviewsArticles = reviewsArticles.length > 0 ? reviewsArticles : fallbacks.slice(0, 10);
+const finalAIAgentsArticles = aiAgentsArticles.length > 0 ? aiAgentsArticles : fallbacks.slice(0, 8);
+const finalTutorialsArticles = tutorialsArticles.length > 0 ? tutorialsArticles : fallbacks.slice(0, 8);
+
+// Get main articles for each section (4 articles each, except reviews which has 6 large cards)
+const newsMainArticles = finalNewsArticles.slice(0, 4);
+const reviewsMainArticles = finalReviewsArticles.slice(0, 6);
+const aiAgentsMainArticles = finalAIAgentsArticles.slice(0, 4);
+const tutorialsMainArticles = finalTutorialsArticles.slice(0, 4);
+
+// Get sidebar articles (starting from the article after the main grid ends)
+const newsSidebarArticles = finalNewsArticles.slice(newsMainArticles.length, newsMainArticles.length + 4);
+const reviewsSidebarArticles = finalReviewsArticles.slice(reviewsMainArticles.length, reviewsMainArticles.length + 4);
+const aiAgentsSidebarArticles = finalAIAgentsArticles.slice(aiAgentsMainArticles.length, aiAgentsMainArticles.length + 4);
+const tutorialsSidebarArticles = finalTutorialsArticles.slice(tutorialsMainArticles.length, tutorialsMainArticles.length + 4);
+
+// Debug logging
+console.log('🔍 Debug: Article counts for homepage sections');
+console.log('News - Main:', newsMainArticles.length, 'Sidebar:', newsSidebarArticles.length);
+console.log('Reviews - Main:', reviewsMainArticles.length, 'Sidebar:', reviewsSidebarArticles.length);
+console.log('AI Agents - Main:', aiAgentsMainArticles.length, 'Sidebar:', aiAgentsSidebarArticles.length);
+console.log('Tutorials - Main:', tutorialsMainArticles.length, 'Sidebar:', tutorialsSidebarArticles.length);
+
+// Log first few articles to check for duplicates
+console.log('🔍 Debug: First 2 main news articles:', newsMainArticles.slice(0, 2).map((a: any) => a.title));
+console.log('🔍 Debug: First 2 sidebar news articles:', newsSidebarArticles.slice(0, 2).map((a: any) => a.title));
+---
+
+<section class="aibuzz-layout">
+	<div class="layout-container">
+		
+		<!-- News Section -->
+		<section class="content-section">
+			<div class="section-header">
+				<h2 class="section-title">📰 Latest AI News</h2>
+				<a href="/categories/ai-news" class="view-all-link">View All →</a>
+			</div>
+			
+			<div class="section-layout">
+				<!-- Main Content Area (Left) -->
+				<div class="main-content">
+					<div class="grid-layout-special">
+						<!-- Top Row: 2 Large Cards -->
+						<div class="top-row">
+							{newsMainArticles.slice(0, 2).map((article: any) => (
+								<article class="large-card">
+									<div class="card-image">
+										{article.featuredImage ? (
+											<picture>
+												<source 
+													srcset={generateResponsiveSrcSet(article.featuredImage, [600, 800, 1200])} 
+													type="image/webp" 
+													sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+												>
+												<source 
+													srcset={generateResponsiveSrcSet(article.featuredImage.replace('fm=webp', 'fm=jpg'), [600, 800, 1200])} 
+													type="image/jpeg" 
+													sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+												>
+												<img 
+													src={generateWebPUrl(article.featuredImage, 600, 400)} 
+													alt={article.title}
+													width="600"
+													height="400"
+													loading="lazy"
+													decoding="async"
+												/>
+											</picture>
+										) : (
+											<div class="placeholder-image">📰</div>
+										)}
+									</div>
+									<div class="card-content">
+										<span class="category-badge news">AI News</span>
+										<h3><a href={getArticleUrl(article)}>{article.title}</a></h3>
+										<p>{article.excerpt}</p>
+										<div class="card-meta">
+											<span class="author">By {article.author?.name || 'Anonymous'}</span>
+											<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
+										</div>
+									</div>
+								</article>
+							))}
+						</div>
+						
+						<!-- Bottom Row: 2 Stacked Cards -->
+						<div class="bottom-row news-bottom">
+							{newsMainArticles.slice(2, 4).map((article: any) => (
+								<article class="stacked-card">
+									<div class="stacked-image">
+										{article.featuredImage ? (
+											<img src={article.featuredImage} alt={article.title} />
+										) : (
+											<div class="placeholder-small">📰</div>
+										)}
+									</div>
+									<div class="stacked-content">
+										<span class="category-badge-small news">AI News</span>
+										<h4><a href={getArticleUrl(article)}>{article.title}</a></h4>
+										<div class="stacked-meta">
+											<span class="author">{article.author?.name || 'Anonymous'}</span>
+											<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
+										</div>
+									</div>
+								</article>
+							))}
+						</div>
+					</div>
+				</div>
+				
+				<!-- CategorySidebar for News Section -->
+				<CategorySidebar categorySlug="ai-news" articles={newsSidebarArticles} />
+			</div>
+		</section>
+
+		<!-- Reviews Section -->
+		<section class="content-section">
+			<div class="section-header">
+				<h2 class="section-title">📊 AI Reviews & Analysis</h2>
+				<a href="/categories/reviews" class="view-all-link">View All →</a>
+			</div>
+			
+			<div class="section-layout">
+				<div class="main-content">
+					<div class="grid-layout-special">
+						<div class="top-row">
+							{reviewsMainArticles.slice(0, 2).map((article: any) => (
+								<article class="large-card review-style">
+									<div class="card-image">
+										{article.featuredImage ? (
+											<img src={article.featuredImage} alt={article.title} />
+										) : (
+											<div class="placeholder-image">📊</div>
+										)}
+										<div class="review-score">9.2</div>
+									</div>
+									<div class="card-content">
+										<span class="category-badge reviews">Review</span>
+										<h3><a href={getArticleUrl(article)}>{article.title}</a></h3>
+										<p>{article.excerpt}</p>
+										<div class="review-stars">⭐⭐⭐⭐⭐</div>
+										<div class="card-meta">
+											<span class="author">By {article.author?.name || 'Anonymous'}</span>
+											<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
+										</div>
+									</div>
+								</article>
+							))}
+						</div>
+						
+						<div class="bottom-row">
+							{reviewsMainArticles.slice(2, 4).map((article: any) => (
+								<article class="large-card review-style">
+									<div class="card-image">
+										{article.featuredImage ? (
+											<img src={article.featuredImage} alt={article.title} />
+										) : (
+											<div class="placeholder-image">📊</div>
+										)}
+										<div class="review-score">9.2</div>
+									</div>
+									<div class="card-content">
+										<span class="category-badge reviews">Review</span>
+										<h3><a href={getArticleUrl(article)}>{article.title}</a></h3>
+										<p>{article.excerpt}</p>
+										<div class="review-stars">⭐⭐⭐⭐⭐</div>
+										<div class="card-meta">
+											<span class="author">By {article.author?.name || 'Anonymous'}</span>
+											<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
+										</div>
+									</div>
+								</article>
+							))}
+						</div>
+						
+						<div class="bottom-row">
+							{reviewsMainArticles.slice(4, 6).map((article: any) => (
+								<article class="large-card review-style">
+									<div class="card-image">
+										{article.featuredImage ? (
+											<img src={article.featuredImage} alt={article.title} />
+										) : (
+											<div class="placeholder-image">📊</div>
+										)}
+										<div class="review-score">9.2</div>
+									</div>
+									<div class="card-content">
+										<span class="category-badge reviews">Review</span>
+										<h3><a href={getArticleUrl(article)}>{article.title}</a></h3>
+										<p>{article.excerpt}</p>
+										<div class="review-stars">⭐⭐⭐⭐⭐</div>
+										<div class="card-meta">
+											<span class="author">By {article.author?.name || 'Anonymous'}</span>
+											<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
+										</div>
+									</div>
+								</article>
+							))}
+						</div>
+					</div>
+				</div>
+				
+				<!-- CategorySidebar for Reviews Section -->
+				<CategorySidebar categorySlug="reviews" articles={reviewsSidebarArticles} />
+			</div>
+		</section>
+
+		<!-- Tutorials Section -->
+		<section class="content-section">
+			<div class="section-header">
+				<h2 class="section-title">📚 Tutorials & Guides</h2>
+				<a href="/categories/tutorials" class="view-all-link">View All →</a>
+			</div>
+			
+			<div class="section-layout">
+				<div class="main-content">
+					<div class="grid-layout-special">
+						<div class="top-row">
+							{tutorialsMainArticles.slice(0, 2).map((article: any) => (
+								<article class="large-card tutorial-style">
+									<div class="card-image">
+										{article.featuredImage ? (
+											<img src={article.featuredImage} alt={article.title} />
+										) : (
+											<div class="placeholder-image">📚</div>
+										)}
+									</div>
+									<div class="card-content">
+										<span class="category-badge tutorials">Tutorial</span>
+										<h3><a href={getArticleUrl(article)}>{article.title}</a></h3>
+										<p>{article.excerpt}</p>
+										<div class="tutorial-indicators">
+											<span class="difficulty">🟢 Beginner</span>
+											<span class="duration">⏱️ 15 min read</span>
+										</div>
+										<div class="card-meta">
+											<span class="author">By {article.author?.name || 'Anonymous'}</span>
+											<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
+										</div>
+									</div>
+								</article>
+							))}
+						</div>
+						
+						<div class="bottom-row tutorials-bottom">
+							{tutorialsMainArticles.slice(2, 4).map((article: any) => (
+								<article class="stacked-card">
+									<div class="stacked-image">
+										{article.featuredImage ? (
+											<img src={article.featuredImage} alt={article.title} />
+										) : (
+											<div class="placeholder-small">📚</div>
+										)}
+									</div>
+									<div class="stacked-content">
+										<span class="category-badge-small tutorials">Tutorial</span>
+										<h4><a href={getArticleUrl(article)}>{article.title}</a></h4>
+										<div class="stacked-meta">
+											<span class="author">{article.author?.name || 'Anonymous'}</span>
+											<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
+										</div>
+									</div>
+								</article>
+							))}
+						</div>
+					</div>
+				</div>
+				
+				<!-- CategorySidebar for Tutorials Section -->
+				<CategorySidebar categorySlug="tutorials" articles={tutorialsSidebarArticles} />
+			</div>
+		</section>
+
+		<!-- AI Agents Section -->
+		<section class="content-section">
+			<div class="section-header">
+				<h2 class="section-title">🤖 AI Agents</h2>
+				<a href="/categories/ai-agents" class="view-all-link">View All →</a>
+			</div>
+			
+			<div class="section-layout">
+				<div class="main-content">
+					<div class="grid-layout-2x2">
+						{aiAgentsMainArticles.slice(0, 4).map((article: any) => (
+							<article class="grid-card ai-agent-style">
+								<div class="card-image">
+									{article.featuredImage ? (
+										<img src={article.featuredImage} alt={article.title} />
+									) : (
+										<div class="placeholder-image">🤖</div>
+									)}
+								</div>
+								<div class="card-content">
+									<span class="category-badge ai-agents">AI Agent</span>
+									<h3><a href={getArticleUrl(article)}>{article.title}</a></h3>
+									<p>{article.excerpt}</p>
+									<div class="ai-agent-indicators">
+										<span class="specialization">🔧 Specialization</span>
+										<span class="capability">🌟 Capability</span>
+									</div>
+									<div class="card-meta">
+										<span class="author">By {article.author?.name || 'Anonymous'}</span>
+										<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
+									</div>
+								</div>
+							</article>
+						))}
+					</div>
+				</div>
+				
+				<!-- CategorySidebar for AI Agents Section -->
+				<CategorySidebar categorySlug="ai-agents" articles={aiAgentsSidebarArticles} />
+			</div>
+		</section>
+	</div>
+</section>
+
+<style>
+	.aibuzz-layout {
+		padding: 2rem 0;
+		background: var(--bg-primary);
+		/* Natural document flow */
+		position: relative;
+		/* Remove z-index that might cause issues */
+		z-index: 1;
+		/* Ensure proper spacing for footer */
+		margin-bottom: 0;
+	}
+
+	.layout-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 2rem;
+		/* Natural document flow */
+		position: relative;
+		z-index: 1;
+		/* Remove bottom padding that might interfere */
+		padding-bottom: 0;
+	}
+
+	.content-section {
+		margin-bottom: 4rem;
+	}
+
+	.content-section:last-child {
+		margin-bottom: 0;
+	}
+
+	.section-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 2rem;
+		margin-top: 2rem;
+		padding-bottom: 1rem;
+		border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+	}
+
+	.section-title {
+		font-size: 2.5rem;
+		font-weight: 700;
+		color: #ffffff;
+		margin: 0;
+	}
+
+	.view-all-link {
+		color: #00d4ff;
+		text-decoration: none;
+		font-weight: 600;
+		font-size: 1rem;
+		transition: color 0.2s ease;
+		padding: 0.5rem 1rem;
+		border-radius: 8px;
+		background: rgba(0, 212, 255, 0.1);
+		border: 1px solid rgba(0, 212, 255, 0.2);
+	}
+
+	.view-all-link:hover {
+		color: #ffffff;
+		background: rgba(0, 212, 255, 0.2);
+	}
+
+	/* Section Layout */
+	.section-layout {
+		display: grid;
+		grid-template-columns: 1fr 340px;
+		gap: 2rem;
+		align-items: start;
+	}
+
+	.main-content {
+		min-width: 0;
+	}
+
+	/* Grid Layout for Main Content */
+	.grid-layout-special {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		height: 100%;
+	}
+
+	/* Top Row: 2 Large Cards Side by Side */
+	.top-row {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 2rem;
+		flex: 2;
+	}
+
+	.large-card {
+		background: #1a1a1b;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 16px;
+		overflow: hidden;
+		transition: all 0.2s ease;
+		display: flex;
+		flex-direction: column;
+		will-change: transform;
+	}
+
+	.large-card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 15px 30px rgba(0, 212, 255, 0.15);
+		border-color: rgba(0, 212, 255, 0.3);
+	}
+
+	.card-image {
+		position: relative;
+		height: 250px;
+		overflow: hidden;
+	}
+
+	.card-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.2s ease;
+		will-change: transform;
+	}
+
+	.large-card:hover .card-image img {
+		transform: scale(1.02);
+	}
+
+	.placeholder-image {
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 102, 255, 0.2) 100%);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 4rem;
+	}
+
+	.review-score {
+		position: absolute;
+		top: 15px;
+		right: 15px;
+		background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+		color: white;
+		padding: 0.5rem 1rem;
+		border-radius: 20px;
+		font-weight: 700;
+		font-size: 1.1rem;
+	}
+
+	.card-content {
+		padding: 2rem;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.category-badge {
+		font-size: 0.8rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		padding: 0.5rem 1rem;
+		border-radius: 20px;
+		display: inline-block;
+		margin-bottom: 1rem;
+		width: fit-content;
+	}
+
+	.category-badge.news { background: rgba(0, 212, 255, 0.2); color: #00d4ff; }
+	.category-badge.reviews { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+	.category-badge.business { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+	.category-badge.finance { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+	.category-badge.tutorials { background: rgba(168, 85, 247, 0.2); color: #a855f7; }
+	.category-badge.ai-agents { background: rgba(20, 184, 166, 0.2); color: #14b8a6; }
+
+	.card-content h3 {
+		font-size: 1.4rem;
+		font-weight: 600;
+		margin: 0 0 1rem 0;
+		line-height: 1.3;
+		flex: 1;
+	}
+
+	.card-content h3 a {
+		color: #ffffff;
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+
+	.card-content h3 a:hover {
+		color: #00d4ff;
+	}
+
+	.card-content p {
+		color: #b3b3b3;
+		line-height: 1.6;
+		margin-bottom: 1.5rem;
+		font-size: 0.95rem;
+	}
+
+	.review-stars {
+		color: #ffb800;
+		margin-bottom: 1rem;
+		font-size: 1.1rem;
+	}
+
+	.ai-agent-indicators {
+		display: flex;
+		gap: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	.specialization, .capability {
+		background: rgba(255, 184, 0, 0.1);
+		color: #ffb800;
+		padding: 0.25rem 0.75rem;
+		border-radius: 12px;
+		font-size: 0.8rem;
+		font-weight: 500;
+	}
+
+	.tutorial-indicators {
+		display: flex;
+		gap: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	.difficulty, .duration {
+		background: rgba(168, 85, 247, 0.1);
+		color: #a855f7;
+		padding: 0.25rem 0.75rem;
+		border-radius: 12px;
+		font-size: 0.8rem;
+		font-weight: 500;
+	}
+
+	.card-meta {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		font-size: 0.85rem;
+		color: #666666;
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+		padding-top: 1rem;
+		margin-top: auto;
+	}
+
+	/* Bottom Row: 2 Large Cards Side by Side */
+	.bottom-row {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 2rem;
+		flex: 1;
+	}
+
+	/* Tutorials Bottom Row: Stacked Cards Vertically */
+	.tutorials-bottom {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	/* News Bottom Row: Stacked Cards Vertically */
+	.news-bottom {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.stacked-card {
+		background: #1a1a1b;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 12px;
+		padding: 1.5rem;
+		display: flex;
+		gap: 1.5rem;
+		transition: all 0.2s ease;
+		will-change: transform;
+	}
+
+	.stacked-card:hover {
+		transform: translateX(4px);
+		box-shadow: 0 8px 20px rgba(0, 212, 255, 0.1);
+		border-color: rgba(0, 212, 255, 0.3);
+	}
+
+	.stacked-image {
+		width: 120px;
+		height: 100px;
+		border-radius: 8px;
+		overflow: hidden;
+		flex-shrink: 0;
+	}
+
+	.stacked-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.placeholder-small {
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 102, 255, 0.2) 100%);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 2rem;
+	}
+
+	.stacked-content {
+		flex: 1;
+	}
+
+	.category-badge-small {
+		font-size: 0.7rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		padding: 0.25rem 0.75rem;
+		border-radius: 15px;
+		display: inline-block;
+		margin-bottom: 0.75rem;
+	}
+
+	.category-badge-small.news { background: rgba(0, 212, 255, 0.2); color: #00d4ff; }
+	.category-badge-small.reviews { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+	.category-badge-small.business { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+	.category-badge-small.finance { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+	.category-badge-small.tutorials { background: rgba(168, 85, 247, 0.2); color: #a855f7; }
+	.category-badge-small.ai-agents { background: rgba(20, 184, 166, 0.2); color: #14b8a6; }
+
+	.stacked-content h4 {
+		font-size: 1.1rem;
+		font-weight: 600;
+		margin: 0 0 0.75rem 0;
+		line-height: 1.3;
+	}
+
+	.stacked-content h4 a {
+		color: #ffffff;
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+
+	.stacked-content h4 a:hover {
+		color: #00d4ff;
+	}
+
+	.stacked-meta {
+		display: flex;
+		gap: 1rem;
+		font-size: 0.8rem;
+		color: #666666;
+	}
+
+	/* Responsive Design */
+	@media (max-width: 1200px) {
+		.section-layout {
+			grid-template-columns: 1fr 300px;
+			gap: 1.5rem;
+		}
+		
+		.layout-container {
+			padding: 0 1.5rem;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.aibuzz-layout {
+			padding: 1rem 0;
+		}
+		
+		.layout-container {
+			padding: 0 1rem;
+		}
+		
+		.section-layout {
+			grid-template-columns: 1fr;
+			gap: 1rem;
+		}
+		
+		.content-section {
+			margin-bottom: 2rem;
+		}
+		
+		.section-header {
+			margin-bottom: 1.5rem;
+			margin-top: 1.5rem;
+		}
+		
+		.section-title {
+			font-size: 2rem;
+		}
+		
+		/* Top Row: Stack cards vertically on mobile */
+		.top-row {
+			grid-template-columns: 1fr;
+			gap: 1rem;
+		}
+		
+		/* 2x2 Grid: Stack cards vertically on mobile */
+		.grid-layout-2x2 {
+			grid-template-columns: 1fr;
+			grid-template-rows: auto;
+			gap: 1rem;
+		}
+		
+		/* Tutorials and News bottom rows: Keep vertical stacking */
+		.tutorials-bottom,
+		.news-bottom {
+			gap: 1rem;
+		}
+		
+		.large-card {
+			margin-bottom: 0;
+		}
+		
+		.grid-card {
+			margin-bottom: 0;
+		}
+		
+		.card-content {
+			padding: 1.5rem;
+		}
+		
+		.card-content h3 {
+			font-size: 1.2rem;
+		}
+		
+		.stacked-card {
+			padding: 1rem;
+			gap: 1rem;
+		}
+		
+		.stacked-image {
+			width: 80px;
+			height: 80px;
+		}
+		
+		.stacked-content h4 {
+			font-size: 1rem;
+		}
+		
+		/* Ensure proper spacing for footer */
+		.aibuzz-layout {
+			/* Remove min-height that might cause issues */
+		}
+	}
+
+	@media (max-width: 480px) {
+		.aibuzz-layout {
+			padding: 0.5rem 0;
+		}
+		
+		.layout-container {
+			padding: 0 0.75rem;
+		}
+		
+		.section-header {
+			flex-direction: column;
+			gap: 1rem;
+			text-align: center;
+			margin-bottom: 1rem;
+		}
+		
+		.section-title {
+			font-size: 1.8rem;
+		}
+		
+		.view-all-link {
+			align-self: center;
+			font-size: 0.9rem;
+			padding: 0.4rem 0.8rem;
+		}
+		
+		.content-section {
+			margin-bottom: 1.5rem;
+		}
+		
+		.card-content {
+			padding: 1rem;
+		}
+		
+		.card-content h3 {
+			font-size: 1.1rem;
+		}
+		
+		.card-content p {
+			font-size: 0.9rem;
+		}
+		
+		.stacked-card {
+			flex-direction: column;
+			text-align: center;
+			padding: 0.75rem;
+		}
+		
+		.stacked-image {
+			width: 100%;
+			height: 120px;
+		}
+		
+		.stacked-content h4 {
+			font-size: 0.95rem;
+		}
+		
+		.stacked-meta {
+			flex-direction: column;
+			gap: 0.25rem;
+			align-items: center;
+		}
+		
+		/* AI Agent indicators on mobile */
+		.ai-agent-indicators {
+			flex-direction: column;
+			gap: 0.25rem;
+		}
+		
+		.ai-agent-indicators span {
+			font-size: 0.8rem;
+		}
+		
+		/* Tutorial indicators on mobile */
+		.tutorial-indicators {
+			flex-direction: column;
+			gap: 0.25rem;
+		}
+		
+		.tutorial-indicators span {
+			font-size: 0.8rem;
+		}
+		
+		/* Review stars on mobile */
+		.review-stars {
+			font-size: 0.9rem;
+		}
+		
+		/* Ensure footer is visible */
+		.aibuzz-layout {
+			/* Remove min-height that might cause issues */
+		}
+	}
+
+	/* Extra small devices */
+	@media (max-width: 360px) {
+		.layout-container {
+			padding: 0 0.5rem;
+		}
+		
+		.section-title {
+			font-size: 1.6rem;
+		}
+		
+		.card-content {
+			padding: 0.75rem;
+		}
+		
+		.card-content h3 {
+			font-size: 1rem;
+		}
+		
+		.stacked-card {
+			padding: 0.5rem;
+		}
+		
+		.stacked-content h4 {
+			font-size: 0.9rem;
+		}
+	}
+
+	/* 2x2 Grid Layout for AI Agents */
+	.grid-layout-2x2 {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: 1fr 1fr;
+		gap: 2rem;
+		height: 100%;
+	}
+
+	.grid-card {
+		background: #1a1a1b;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 16px;
+		overflow: hidden;
+		transition: all 0.3s ease;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
+
+	.grid-card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+		border-color: rgba(0, 212, 255, 0.4);
+	}
+</style>
+
+<script>
+	// Initialize lazy loading and image optimization
+	document.addEventListener('DOMContentLoaded', function() {
+		// Setup intersection observer for lazy loading
+		const imageObserver = new IntersectionObserver((entries, observer) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					const img = entry.target as HTMLImageElement;
+					const dataSrc = img.dataset.src;
+					
+					if (dataSrc) {
+						img.src = dataSrc;
+						img.classList.remove('lazy');
+						observer.unobserve(img);
+					}
+				}
+			});
+		}, {
+			rootMargin: '50px 0px',
+			threshold: 0.01
+		});
+		
+		// Observe all lazy images
+		document.querySelectorAll('img[data-src]').forEach(img => {
+			imageObserver.observe(img);
+		});
+		
+		// Preload critical images
+		const criticalImages = document.querySelectorAll('img[fetchpriority="high"]');
+		criticalImages.forEach(img => {
+			const imgElement = img as HTMLImageElement;
+			const link = document.createElement('link');
+			link.rel = 'preload';
+			link.as = 'image';
+			link.href = imgElement.src;
+			document.head.appendChild(link);
+		});
+	});
+</script>

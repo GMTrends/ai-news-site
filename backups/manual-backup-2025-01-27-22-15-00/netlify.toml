@@ -1,0 +1,175 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Redirects for SPA routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://graph.facebook.com; frame-src https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';"
+
+# API routes
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# Admin redirects for Sanity Studio
+[[redirects]]
+  from = "/admin"
+  to = "http://localhost:3333"
+  status = 302
+  force = true
+
+# Sitemap
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/api/sitemap"
+  status = 200
+
+# RSS feed
+[[redirects]]
+  from = "/rss.xml"
+  to = "/api/rss"
+  status = 200
+
+# Security: Block access to sensitive files
+[[redirects]]
+  from = "/.env*"
+  to = "/404"
+  status = 404
+
+[[redirects]]
+  from = "/package*.json"
+  to = "/404"
+  status = 404
+
+[[redirects]]
+  from = "/node_modules/*"
+  to = "/404"
+  status = 404
+
+# Performance optimizations
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.jpeg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.gif"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.woff"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.woff2"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# HTML files should be cached for a shorter time
+[[headers]]
+  for = "*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# API responses should not be cached
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Pragma = "no-cache"
+    Expires = "0"
+
+# Functions configuration
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Edge functions (if needed)
+[[edge_functions]]
+  function = "security-check"
+  path = "/api/security-check"
+
+# Form handling
+[[redirects]]
+  from = "/contact"
+  to = "/.netlify/functions/contact"
+  status = 200
+
+[[redirects]]
+  from = "/subscribe"
+  to = "/.netlify/functions/subscribe"
+  status = 200
+
+# Sanity webhook
+[[redirects]]
+  from = "/api/sanity-webhook"
+  to = "/.netlify/functions/sanity-webhook"
+  status = 200
+
+# Development redirects
+[context.deploy-preview]
+  command = "npm run build:preview"
+
+[context.branch-deploy]
+  command = "npm run build:staging"
+
+# Environment-specific settings
+[context.production.environment]
+  NODE_ENV = "production"
+  SITE_URL = "https://aibuzzmedia.com"
+
+[context.deploy-preview.environment]
+  NODE_ENV = "preview"
+  SITE_URL = "https://deploy-preview-{id}--aibuzzmedia.netlify.app"
+
+[context.branch-deploy.environment]
+  NODE_ENV = "staging"
+  SITE_URL = "https://{branch}--aibuzzmedia.netlify.app" 

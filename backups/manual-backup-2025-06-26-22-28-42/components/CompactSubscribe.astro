@@ -1,0 +1,519 @@
+---
+// Compact newsletter subscription component for top placement
+---
+
+<section class="compact-subscribe">
+  <div class="compact-container">
+    <div class="compact-content">
+      <div class="compact-text">
+        <h2>Stay Ahead in AI</h2>
+        <p>Get weekly insights delivered to your inbox</p>
+      </div>
+      
+      <form class="subscribe-form" id="compactSubscribeForm">
+        <!-- CSRF Token (hidden) -->
+        <input type="hidden" name="_csrf" id="compactSubscribeCsrfToken" />
+        
+        <!-- Honeypot field (hidden from users) -->
+        <div class="honeypot-field" style="display: none;">
+          <input type="text" name="honeypot" id="compactSubscribeHoneypot" tabindex="-1" autocomplete="off" />
+        </div>
+        
+        <div class="form-group">
+          <input 
+            type="email" 
+            name="email"
+            class="subscribe-input" 
+            placeholder="Enter your email address"
+            required
+            autocomplete="email"
+          />
+          <button type="submit" class="subscribe-button">
+            <span class="button-text">Subscribe</span>
+            <span class="button-icon">📧</span>
+          </button>
+        </div>
+        
+        <!-- Form Messages -->
+        <div class="form-message-container">
+          <div class="form-message" id="compactSubscribeMessage"></div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+.compact-subscribe {
+  padding: 2rem 0;
+  background: linear-gradient(135deg, 
+    rgba(0, 212, 255, 0.05) 0%, 
+    rgba(0, 102, 255, 0.02) 50%, 
+    rgba(168, 85, 247, 0.05) 100%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.compact-subscribe::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 50%);
+  animation: float 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(180deg); }
+}
+
+.compact-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.compact-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  background: rgba(26, 26, 27, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.compact-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(0, 212, 255, 0.05) 0%, 
+    rgba(0, 102, 255, 0.02) 50%, 
+    rgba(168, 85, 247, 0.05) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.compact-content:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 25px 60px rgba(0, 212, 255, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-color: rgba(0, 212, 255, 0.4);
+}
+
+.compact-content:hover::before {
+  opacity: 1;
+}
+
+.compact-content:hover .compact-text h2 {
+  filter: brightness(1.1) saturate(1.1);
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+.compact-content:hover .compact-text p {
+  color: #d0d0d0;
+}
+
+.compact-content:hover .subscribe-button {
+  /*
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(0, 212, 255, 0.4);
+  */
+}
+
+.subscribe-form .subscribe-input {
+  width: 280px;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.compact-content:hover .subscribe-input {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(0, 212, 255, 0.3);
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+}
+
+.subscribe-form .subscribe-input:focus {
+  outline: none;
+  border-color: #00d4ff;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.compact-text h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.compact-text p {
+  font-size: 0.95rem;
+  color: #b3b3b3;
+  margin: 0.5rem 0 0 0;
+}
+
+.subscribe-form {
+  margin: 0;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.subscribe-form .form-group {
+  display: flex;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.subscribe-form .subscribe-input {
+  width: 280px;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.subscribe-form .subscribe-input:focus {
+  outline: none;
+  border-color: #00d4ff;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.subscribe-form .subscribe-input::placeholder {
+  color: #666666;
+}
+
+.subscribe-form .subscribe-button {
+  background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.subscribe-form .subscribe-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.subscribe-form .subscribe-button:hover::before {
+  left: 100%;
+}
+
+/* Direct button hover only */
+.subscribe-form .subscribe-button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(0, 212, 255, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .compact-subscribe {
+    padding: 1.5rem 0;
+  }
+  
+  .compact-container {
+    padding: 0 1rem;
+  }
+  
+  .compact-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+    padding: 1.25rem;
+  }
+  
+  .compact-text h2 {
+    font-size: 1.3rem;
+  }
+  
+  .compact-text p {
+    font-size: 0.9rem;
+  }
+  
+  .subscribe-form .form-group {
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+  }
+  
+  .subscribe-form .subscribe-input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+    min-height: 48px;
+  }
+  
+  .subscribe-form .subscribe-button {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+    min-height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .compact-subscribe {
+    padding: 1rem 0;
+  }
+  
+  .compact-container {
+    padding: 0 0.75rem;
+  }
+  
+  .compact-content {
+    padding: 1rem;
+    gap: 1.25rem;
+  }
+  
+  .compact-text h2 {
+    font-size: 1.2rem;
+  }
+  
+  .compact-text p {
+    font-size: 0.85rem;
+  }
+  
+  .subscribe-form .subscribe-input {
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+  }
+  
+  .subscribe-form .subscribe-button {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+  }
+}
+
+.form-message {
+  position: absolute;
+  bottom: -25px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #00d4ff;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.form-message.show {
+  opacity: 1;
+}
+
+.form-message.error {
+  color: #ff4d4d;
+}
+
+/* Add loading state styles */
+.subscribe-button.loading {
+  position: relative;
+  color: transparent;
+}
+
+.subscribe-button.loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  margin: -10px 0 0 -10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: button-loading-spinner 0.6s linear infinite;
+}
+
+@keyframes button-loading-spinner {
+  from {
+    transform: rotate(0turn);
+  }
+  to {
+    transform: rotate(1turn);
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('compactSubscribeForm') as HTMLFormElement;
+  const button = form?.querySelector('.subscribe-button') as HTMLButtonElement;
+  const input = form?.querySelector('.subscribe-input') as HTMLInputElement;
+  const message = form?.querySelector('.form-message') as HTMLDivElement;
+  const csrfTokenInput = document.getElementById('compactSubscribeCsrfToken') as HTMLInputElement;
+
+  // Utility functions
+  function showMessage(msg: string, type: 'success' | 'error') {
+    if (message) {
+      message.textContent = msg;
+      message.className = `form-message ${type}`;
+      message.style.display = 'block';
+      
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        message.style.display = 'none';
+      }, 5000);
+    }
+  }
+
+  function setLoadingState(loading: boolean) {
+    if (button && input) {
+      if (loading) {
+        button.classList.add('loading');
+        button.disabled = true;
+        input.disabled = true;
+      } else {
+        button.classList.remove('loading');
+        button.disabled = false;
+        input.disabled = false;
+      }
+    }
+  }
+
+  // Get CSRF token
+  async function getCSRFToken() {
+    try {
+      const response = await fetch('/api/subscribe');
+      const data = await response.json();
+      return data.csrfToken;
+    } catch (error) {
+      console.error('Failed to get CSRF token:', error);
+      return null;
+    }
+  }
+
+  // Initialize form
+  async function initializeForm() {
+    if (form && csrfTokenInput) {
+      // Get CSRF token
+      const csrfToken = await getCSRFToken();
+      if (csrfToken) {
+        csrfTokenInput.value = csrfToken;
+      }
+    }
+  }
+
+  // Initialize on page load
+  initializeForm();
+
+  if (form) {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const email = input.value.trim();
+      if (!email) {
+        showMessage('Please enter your email address', 'error');
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        showMessage('Please enter a valid email address', 'error');
+        return;
+      }
+
+      // Show loading state
+      setLoadingState(true);
+
+      try {
+        // Prepare form data
+        const formData = {
+          email: email,
+          honeypot: (document.getElementById('compactSubscribeHoneypot') as HTMLInputElement)?.value || '',
+          _csrf: csrfTokenInput?.value || ''
+        };
+
+        const response = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        // Update CSRF token if provided
+        const newToken = response.headers.get('X-CSRF-Token');
+        if (newToken && csrfTokenInput) {
+          csrfTokenInput.value = newToken;
+        }
+
+        if (response.ok && result.success) {
+          showMessage(result.message || 'Successfully subscribed!', 'success');
+          input.value = '';
+          
+          // Get new CSRF token after successful submission
+          const newCsrfToken = await getCSRFToken();
+          if (newCsrfToken && csrfTokenInput) {
+            csrfTokenInput.value = newCsrfToken;
+          }
+        } else {
+          showMessage(result.error || 'Failed to subscribe. Please try again.', 'error');
+        }
+      } catch (error) {
+        console.error('Subscribe error:', error);
+        showMessage('Network error. Please check your connection and try again.', 'error');
+      } finally {
+        setLoadingState(false);
+      }
+    });
+  }
+
+  // Email validation function
+  function isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+});
+</script> 
