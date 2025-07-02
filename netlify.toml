@@ -172,4 +172,25 @@
 
 [context.branch-deploy.environment]
   NODE_ENV = "staging"
-  SITE_URL = "https://{branch}--aibuzzmedia.netlify.app" 
+  SITE_URL = "https://{branch}--aibuzzmedia.netlify.app"
+
+# New redirects from old category URLs to the new category URLs for SEO and user experience
+[[redirects]]
+  from = "/categories/ai-news"
+  to = "/categories/marketing"
+  status = 301
+
+[[redirects]]
+  from = "/categories/reviews"
+  to = "/categories/marketing"
+  status = 301
+
+[[redirects]]
+  from = "/categories/tutorials"
+  to = "/categories/creative"
+  status = 301
+
+[[redirects]]
+  from = "/categories/finance"
+  to = "/categories/business"
+  status = 301 

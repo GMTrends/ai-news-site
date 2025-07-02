@@ -1,24 +1,77 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
-import { render } from 'astro:content';
+import { sanityClient, getImageUrl } from '../../lib/sanity';
+import CategorySidebar from '../../components/CategorySidebar.astro';
 
-// Enable static generation for this page
-export const prerender = true;
+// SSR: No prerender, no getStaticPaths
 
-export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
+const slugParam = Array.isArray(Astro.params.slug)
+	? Astro.params.slug[Astro.params.slug.length - 1]
+	: Astro.params.slug;
+
+const article = await sanityClient.fetch(
+	`*[_type == "article" && slug.current == $slug][0]{
+		_id,
+		title,
+		slug,
+		category->{name, slug},
+		excerpt,
+		content,
+		featuredImage,
+		publishedAt,
+		author->{name, bio, image},
+		tags
+	}`,
+	{ slug: slugParam }
+);
+
+console.log('DEBUG featuredImage:', JSON.stringify(article.featuredImage));
+
+if (!article) {
+	return Astro.redirect('/404');
 }
-type Props = CollectionEntry<'blog'>;
 
-const post = Astro.props;
-const { Content } = await render(post);
+const heroImage = getImageUrl(article.featuredImage);
+
+// Convert Sanity content blocks to HTML (reuse your renderContent function if needed)
+function renderContent(content: any[]): string {
+	if (!content || !Array.isArray(content)) return '';
+	return content.map((block: any) => {
+		if (block._type === 'block') {
+			let text = block.children?.map((child: any) => {
+				let result = child.text || '';
+				if (child.marks?.includes('strong')) result = `<strong>${result}</strong>`;
+				if (child.marks?.includes('em')) result = `<em>${result}</em>`;
+				if (child.marks?.includes('code')) result = `<code>${result}</code>`;
+				return result;
+			}).join('') || '';
+			const style = block.style || 'normal';
+			if (style === 'h2') return `<h2>${text}</h2>`;
+			if (style === 'h3') return `<h3>${text}</h3>`;
+			if (style === 'h4') return `<h4>${text}</h4>`;
+			if (style === 'blockquote') return `<blockquote>${text}</blockquote>`;
+			return `<p>${text}</p>`;
+		} else if (block._type === 'image') {
+			const alt = block.alt || '';
+			const caption = block.caption ? `<figcaption>${block.caption}</figcaption>` : '';
+			return `<figure><img src="${block.asset?.url || ''}" alt="${alt}" />${caption}</figure>`;
+		}
+		return '';
+	}).join('');
+}
+
+const articleContent = renderContent(article.content);
 ---
-
-<BlogPost {...post.data}>
-	<Content />
+<BlogPost
+	title={article.title}
+	description={article.excerpt}
+	pubDate={article.publishedAt}
+	heroImage={heroImage}
+>
+	<Fragment set:html={articleContent} />
+	<CategorySidebar 
+		categorySlug={article.category?.slug?.current} 
+		currentArticleSlug={article.slug?.current}
+		slot="sidebar"
+	/>
 </BlogPost>

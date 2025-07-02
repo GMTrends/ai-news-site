@@ -2,7 +2,7 @@
 import HeaderLink from './HeaderLink.astro';
 import MobileNav from './MobileNav.astro';
 import AdminLink from './AdminLink.astro';
-import { SITE_TITLE } from '../consts';
+import { SITE_TITLE, CATEGORIES } from '../consts';
 ---
 
 <header class="ai-header">
@@ -16,12 +16,9 @@ import { SITE_TITLE } from '../consts';
 		
 		<!-- Desktop Navigation -->
 		<div class="nav-links desktop-nav">
-			<HeaderLink href="/categories/ai-news">AI News</HeaderLink>
-			<HeaderLink href="/categories/reviews">Reviews</HeaderLink>
-			<HeaderLink href="/categories/tutorials">Tutorials</HeaderLink>
-			<HeaderLink href="/categories/business">Business</HeaderLink>
-			<HeaderLink href="/categories/finance">Finance</HeaderLink>
-			<HeaderLink href="/categories/ai-agents">AI Agents</HeaderLink>
+			{CATEGORIES.map(cat => (
+				<HeaderLink href={`/categories/${cat.slug}`}>{cat.displayName}</HeaderLink>
+			))}
 			<HeaderLink href="/about">About</HeaderLink>
 			<HeaderLink href="/contact">Contact</HeaderLink>
 			<!-- 

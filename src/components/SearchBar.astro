@@ -13,12 +13,14 @@ declare global {
 // Search functionality with real CMS data
 document.addEventListener('DOMContentLoaded', async function() {
 	const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+	if (!searchInput) return;
+
 	const clearButton = document.getElementById('clearSearch') as HTMLButtonElement;
 	const searchResults = document.getElementById('searchResults') as HTMLElement;
 	const filterTabs = document.querySelectorAll('.filter-tab') as NodeListOf<HTMLButtonElement>;
 
 	// Check if elements exist
-	if (!searchInput || !clearButton || !searchResults || !filterTabs) {
+	if (!clearButton || !searchResults || !filterTabs) {
 		console.error('Search elements not found');
 		return;
 	}

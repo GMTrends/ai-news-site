@@ -1,5 +1,6 @@
 ---
 // Mobile navigation menu
+import { CATEGORIES } from '../consts.ts';
 ---
 
 <div class="mobile-nav-container">
@@ -17,14 +18,11 @@
 			</div>
 			
 			<nav class="mobile-nav-links">
-				<a href="/categories/ai-news" class="mobile-nav-link">📰 AI News</a>
-				<a href="/categories/reviews" class="mobile-nav-link">📊 Reviews</a>
-				<a href="/categories/tutorials" class="mobile-nav-link">📖 Tutorials</a>
-				<a href="/categories/business" class="mobile-nav-link">💼 Business</a>
-				<a href="/categories/finance" class="mobile-nav-link">💰 Finance</a>
-				<a href="/categories/ai-agents" class="mobile-nav-link">🤖 AI Agents</a>
-				<a href="/about" class="mobile-nav-link">ℹ️ About</a>
-				<a href="/contact" class="mobile-nav-link">📞 Contact</a>
+				{CATEGORIES.map(cat => (
+					<a href={`/categories/${cat.slug}`} class="mobile-nav-link">{cat.displayName}</a>
+				))}
+				<a href="/about" class="mobile-nav-link">About</a>
+				<a href="/contact" class="mobile-nav-link">Contact</a>
 			</nav>
 			
 			<div class="mobile-nav-footer">

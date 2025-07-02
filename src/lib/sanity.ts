@@ -10,12 +10,11 @@ export const sanityClient = createClient({
 
 // Helper function to generate Sanity image URLs
 export function urlFor(source: any) {
-  if (!source?.asset?._ref) return null
-  
-  const ref = source.asset._ref
-  const [_file, id, extension] = ref.split('-')
-  
-  return `https://cdn.sanity.io/images/crtekmb2/production/${id}-${extension}`
+  if (!source?.asset?._ref) return null;
+  // Example ref: image-662255fed9c98a09a9aa1076a5e8364f242f5c6a-1280x720-jpg
+  const ref = source.asset._ref;
+  const [, id, dimensions, format] = ref.split('-');
+  return `https://cdn.sanity.io/images/crtekmb2/production/${id}-${dimensions}.${format}`;
 }
 
 // Enhanced image URL helper
@@ -52,44 +51,47 @@ export function getImageUrl(image: any) {
   return url
 }
 
-export async function getFeaturedArticles(limit: number = 3) {
-    try {
-      const featuredArticles = await sanityClient.fetch(`
-        *[_type == "article" && 
-          (status == "published" || 
-           (status == "scheduled" && publishedAt <= now())
-          ) && 
-          featured == true] | order(publishedAt desc) {
-          _id,
-          title,
-          "slug": slug.current,
-          excerpt,
-          publishedAt,
-          status,
-          featured,
-          "author": author->{name, slug},
-          "category": category->{name, slug, icon, color},
-          "featuredImage": featuredImage{
-            asset->{
-              _id,
-              url,
-              metadata
-            }
+export async function getFeaturedArticles(limit: number = 12) {
+  try {
+    const featuredArticles = await sanityClient.fetch(`
+      *[_type == "article" && 
+        (status == "published" || 
+         (status == "scheduled" && publishedAt <= now())
+        )
+      ] | order(publishedAt desc) {
+        _id,
+        title,
+        "slug": slug.current,
+        excerpt,
+        publishedAt,
+        status,
+        heroPlacement,
+        priority,
+        revenueClassification,
+        contentType,
+        "author": author->{name, slug},
+        "category": category->{name, slug, icon, color},
+        "featuredImage": featuredImage{
+          asset->{
+            _id,
+            url,
+            metadata
           }
         }
-      `)
-      
-      // Process images and limit
-      const articlesWithImages = featuredArticles.map((article: any) => ({
-        ...article,
-        featuredImage: getImageUrl(article.featuredImage)
-      })).slice(0, limit)
-      
-      return articlesWithImages
-    } catch (error) {
-      console.error('❌ Error fetching articles:', error)
-      return []
-    }
+      }
+    `)
+    
+    // Process images and limit
+    const articlesWithImages = featuredArticles.map((article: any) => ({
+      ...article,
+      featuredImage: getImageUrl(article.featuredImage)
+    })).slice(0, limit)
+    
+    return articlesWithImages
+  } catch (error) {
+    console.error('❌ Error fetching articles:', error)
+    return []
+  }
 }  
 
 export async function getArticlesByCategory(categorySlug: string, limit: number = 3) {

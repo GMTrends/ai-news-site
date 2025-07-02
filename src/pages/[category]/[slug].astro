@@ -1,10 +1,13 @@
 ---
-import { sanityClient } from '../../lib/sanity';
-import { getCategoryUrl } from '../../utils/urlHelpers';
+import BlogPost from '../../layouts/BlogPost.astro';
+import { sanityClient, getImageUrl } from '../../lib/sanity';
+import CategorySidebar from '../../components/CategorySidebar.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { getCategoryUrl } from '../../utils/urlHelpers';
 import '../../styles/article.css';
-import CategorySidebar from '../../components/CategorySidebar.astro';
+import '../../styles/global.css';
 
 // Enable static generation for this page
 export const prerender = true;
@@ -30,6 +33,7 @@ export async function getStaticPaths() {
         publishedAt,
         author->{
           name,
+          slug,
           bio,
           image
         },
@@ -53,7 +57,7 @@ export async function getStaticPaths() {
       
       return {
         params: { 
-          category: article.category?.slug?.current || 'ai-news',
+          category: article.category?.slug?.current || 'marketing',
           slug: article.slug.current
         },
         props: { article },
@@ -108,127 +112,25 @@ function renderContent(content: any[]): string {
 }
 
 const articleContent = renderContent(article.content);
+const heroImage = getImageUrl(article.featuredImage);
+
+console.log('DEBUG featuredImage:', JSON.stringify(article.featuredImage));
+console.log('DEBUG categorySlug:', {categorySlug: article.category?.slug?.current});
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{article.title} | AI Buzz Media</title>
-  <meta name="description" content={article.excerpt || 'Latest AI news and insights from AI Buzz Media'} />
-  
-  <!-- Open Graph -->
-  <meta property="og:type" content="article" />
-  <meta property="og:url" content={Astro.url} />
-  <meta property="og:title" content={article.title} />
-  <meta property="og:description" content={article.excerpt || 'Latest AI news and insights from AI Buzz Media'} />
-  <meta property="og:site_name" content="AI Buzz Media" />
-  
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content={Astro.url} />
-  <meta property="twitter:title" content={article.title} />
-  <meta property="twitter:description" content={article.excerpt || 'Latest AI news and insights from AI Buzz Media'} />
-  
-  <!-- Article Meta -->
-  <meta property="article:published_time" content={article.publishedAt || new Date().toISOString()} />
-  <meta property="article:author" content={article.author?.name || 'AI Buzz Media'} />
-  <meta property="article:section" content={article.category?.name || 'Technology'} />
-  
-  <link rel="canonical" href={Astro.url} />
-</head>
-<body>
-  <Header />
-  
-  <!-- Hero Section -->
-  <section class="article-hero">
-    <div class="hero-content">
-      <div class="container">
-        <div class="breadcrumb">
-          <a href="/" class="breadcrumb-link">Home</a>
-          <span class="breadcrumb-separator">/</span>
-          <a href={`/${article.category?.slug?.current || 'ai-news'}`} class="breadcrumb-link">{article.category?.name || 'AI News'}</a>
-          <span class="breadcrumb-separator">/</span>
-          <span class="breadcrumb-current">Article</span>
-        </div>
-        
-        <div class="article-header">
-          <a href={getCategoryUrl(article.category?.name || 'Technology')} class="category-badge-small category-link-safe">
-            <span class="category-icon">🚀</span>
-            {article.category?.name || 'Technology'}
-          </a>
-          
-          <h1 class="article-title">{article.title}</h1>
-          
-          {article.excerpt && <p class="article-excerpt">{article.excerpt}</p>}
-          
-          <div class="article-meta">
-            <div class="author-info">
-              <div class="author-avatar">
-                {article.author?.image ? (
-                  <img src={article.author.image.url} alt={article.author.name} />
-                ) : (
-                  <span class="avatar-text">{article.author?.name?.charAt(0) || 'A'}</span>
-                )}
-              </div>
-              <div class="author-details">
-                <span class="author-name">
-                  By <a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'AI Buzz Media'}`}>
-                    {article.author?.name || 'AI Buzz Media'}
-                  </a>
-                </span>
-                <span class="publish-date">{new Date(article.publishedAt || new Date()).toLocaleDateString('en-US', { 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })}</span>
-              </div>
-            </div>
-            
-            <div class="article-actions">
-              <button class="share-button" onclick="shareArticle()">
-                <span class="share-icon">📤</span>
-                Share
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Article Content -->
-  <section class="article-content-section">
-    <div class="container">
-      <div class="content-wrapper">
-        <article class="article-content">
-          <div class="content-body">
-            <Fragment set:html={articleContent} />
-          </div>
-        </article>
-        <CategorySidebar 
-          categorySlug={article.category?.slug?.current} 
-          currentArticleSlug={article.slug?.current}
-        />
-      </div>
-    </div>
-  </section>
-
-  <Footer />
-
-  <script>
-    function shareArticle() {
-      if (navigator.share) {
-        navigator.share({
-          title: document.title,
-          url: window.location.href
-        });
-      } else {
-        navigator.clipboard.writeText(window.location.href);
-        alert('Link copied to clipboard!');
-      }
-    }
-  </script>
-</body>
-</html>
+<BlogPost
+	title={article.title}
+	description={article.excerpt}
+	pubDate={article.publishedAt}
+	updatedDate={article.updatedAt}
+	heroImage={heroImage}
+	authorName={article.author?.name}
+	authorSlug={article.author?.slug?.current}
+>
+	<Fragment set:html={articleContent} />
+	<CategorySidebar 
+		categorySlug={article.category?.slug?.current} 
+		currentArticleSlug={article.slug?.current}
+		slot="sidebar"
+	/>
+</BlogPost>

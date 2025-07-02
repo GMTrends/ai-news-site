@@ -252,24 +252,63 @@ export default defineType({
       }
     }),
     defineField({
-      name: 'featured',
-      title: 'Featured Article',
-      type: 'boolean',
-      description: 'Show in hero section (only applies to published articles)',
-    }),
-    defineField({
       name: 'author',
       title: 'Author',
       type: 'reference',
       to: [{ type: 'author' }],
       description: 'Select the article author',
     }),
+    // HERO PLACEMENT FIELD
     defineField({
-      name: 'tags',
-      title: 'Tags',
-      type: 'array',
-      of: [{ type: 'string' }],
-      description: 'e.g., Machine Learning, GPT, OpenAI',
+      name: 'heroPlacement',
+      title: 'Hero Placement',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Large Card', value: 'large' },
+          { title: 'Small Cards', value: 'small' },
+          { title: 'Not Featured', value: 'none' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'none',
+      description: 'Controls if and how this article appears in the homepage hero section.'
+    }),
+
+    // REVENUE POTENTIAL FIELD
+    defineField({
+      name: 'revenuePotential',
+      title: 'Revenue Potential',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'High Affiliate (5+ links)', value: 'high-affiliate' },
+          { title: 'Medium Affiliate (2-4 links)', value: 'medium-affiliate' },
+          { title: 'Conversion Focused', value: 'conversion-focused' },
+          { title: 'Standard', value: 'standard' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'standard',
+      description: 'Indicate the revenue/affiliate potential of this article.'
+    }),
+
+    // CONTENT TYPE FIELD
+    defineField({
+      name: 'contentType',
+      title: 'Content Type',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Tool Review', value: 'tool-review' },
+          { title: 'Tool Comparison', value: 'comparison' },
+          { title: 'Tutorial/Guide', value: 'tutorial' },
+          { title: 'Breaking News', value: 'breaking-news' },
+          { title: 'General Article', value: 'general' },
+        ],
+      },
+      initialValue: 'general',
+      description: 'What type of content is this article?'
     }),
     defineField({
         name: 'priority',
@@ -314,7 +353,6 @@ export default defineType({
       title: 'title',
       categoryName: 'category.name',
       status: 'status',
-      featured: 'featured',
       publishedAt: 'publishedAt',
       media: 'featuredImage',
       author: 'author.name',
@@ -323,7 +361,7 @@ export default defineType({
   },
   
     prepare(selection) {
-      const { title, categoryName, status, featured, publishedAt, author, slug, category } = selection
+      const { title, categoryName, status, publishedAt, author, slug, category } = selection
       
       // Format the date
       const formatDate = (dateString: string) => {
@@ -347,17 +385,11 @@ export default defineType({
       
       const currentStatus = status || 'draft'
       const emoji = statusEmoji[currentStatus] || '📝'
-      const featuredIcon = featured ? ' ⭐' : ''
-      
-      // Generate preview URL for published articles
-      const previewUrl = currentStatus === 'published' && slug && category 
-        ? `/${category}/${slug}`
-        : null
       
       const baseSubtitle = `${categoryName || 'No category'} • ${currentStatus} • ${formatDate(publishedAt)} • By ${author || 'No author'}`
       
       return {
-        title: `${emoji}${featuredIcon} ${title}`,
+        title: `${emoji} ${title}`,
         subtitle: baseSubtitle,
         media: selection.media
       }

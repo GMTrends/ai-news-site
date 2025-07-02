@@ -6,12 +6,13 @@ import BaseHead from './BaseHead.astro';
 import Header from './Header.astro';
 import Footer from './Footer.astro';
 import { getCategoryUrl } from '../utils/urlHelpers';
+import { HOMEPAGE_CATEGORIES } from '../consts.ts';
 
 // Helper functions
 function getArticleUrl(article: any) {
-	const category = article.category?.slug?.current || 'ai-news'
-	const slug = article.slug?.current || article.slug
-	return `/${category}/${slug}`
+	const category = article.category?.slug?.current || 'marketing';
+	const slug = article.slug?.current || article.slug;
+	return `/${category}/${slug}`;
 }
 
 function formatDate(dateString: string) {
@@ -21,11 +22,11 @@ function formatDate(dateString: string) {
 	})
 }
 
-// Fetch data for all sections from Sanity with more articles to avoid repetition
-const newsArticles = await getArticlesByCategory('ai-news', 8); // Increased to 8
-const reviewsArticles = await getArticlesByCategory('reviews', 10); // Increased to 10
-const aiAgentsArticles = await getArticlesByCategory('ai-agents', 8); // Increased to 8
-const tutorialsArticles = await getArticlesByCategory('tutorials', 8); // Increased to 8);
+// Fetch articles for each homepage category
+const categoryArticles: Record<string, any[]> = {};
+for (const category of HOMEPAGE_CATEGORIES) {
+	categoryArticles[category.slug] = await getArticlesByCategory(category.slug, 8);
+}
 
 // Fallback data if no articles are found
 const fallbacks = [
@@ -40,463 +41,126 @@ const fallbacks = [
 ]
 
 // Use fallback data if no articles are found
-const finalNewsArticles = newsArticles.length > 0 ? newsArticles : fallbacks.slice(0, 8);
-const finalReviewsArticles = reviewsArticles.length > 0 ? reviewsArticles : fallbacks.slice(0, 10);
-const finalAIAgentsArticles = aiAgentsArticles.length > 0 ? aiAgentsArticles : fallbacks.slice(0, 8);
-const finalTutorialsArticles = tutorialsArticles.length > 0 ? tutorialsArticles : fallbacks.slice(0, 8);
+const finalArticles: Record<string, any[]> = {};
+for (const category in categoryArticles) {
+	finalArticles[category] = categoryArticles[category].length > 0 ? categoryArticles[category] : fallbacks.slice(0, 8);
+}
 
 // Get main articles for each section (4 articles each, except reviews which has 6 large cards)
-const newsMainArticles = finalNewsArticles.slice(0, 4);
-const reviewsMainArticles = finalReviewsArticles.slice(0, 6);
-const aiAgentsMainArticles = finalAIAgentsArticles.slice(0, 6); // Changed to 6 articles
-const tutorialsMainArticles = finalTutorialsArticles.slice(0, 4);
+const mainArticles: Record<string, any[]> = {};
+for (const category in finalArticles) {
+	mainArticles[category] = finalArticles[category].slice(0, 4);
+}
 
 // Get sidebar articles (starting from the article after the main grid ends)
-const newsSidebarArticles = finalNewsArticles.slice(newsMainArticles.length, newsMainArticles.length + 4);
-const reviewsSidebarArticles = finalReviewsArticles.slice(reviewsMainArticles.length, reviewsMainArticles.length + 4);
-const aiAgentsSidebarArticles = finalAIAgentsArticles.slice(aiAgentsMainArticles.length, aiAgentsMainArticles.length + 4);
-const tutorialsSidebarArticles = finalTutorialsArticles.slice(tutorialsMainArticles.length, tutorialsMainArticles.length + 4);
+const sidebarArticles: Record<string, any[]> = {};
+for (const category in finalArticles) {
+	sidebarArticles[category] = finalArticles[category].slice(mainArticles[category].length, mainArticles[category].length + 4);
+}
 
 // Debug logging
 console.log('🔍 Debug: Article counts for homepage sections');
-console.log('News - Main:', newsMainArticles.length, 'Sidebar:', newsSidebarArticles.length);
-console.log('Reviews - Main:', reviewsMainArticles.length, 'Sidebar:', reviewsSidebarArticles.length);
-console.log('AI Agents - Main:', aiAgentsMainArticles.length, 'Sidebar:', aiAgentsSidebarArticles.length);
-console.log('Tutorials - Main:', tutorialsMainArticles.length, 'Sidebar:', tutorialsSidebarArticles.length);
+for (const category in mainArticles) {
+	console.log(`${category} - Main: ${mainArticles[category].length}, Sidebar: ${sidebarArticles[category].length}`);
+}
 
 // Log first few articles to check for duplicates
-console.log('🔍 Debug: First 2 main news articles:', newsMainArticles.slice(0, 2).map((a: any) => a.title));
-console.log('🔍 Debug: First 2 sidebar news articles:', newsSidebarArticles.slice(0, 2).map((a: any) => a.title));
+for (const category in mainArticles) {
+	console.log(`🔍 Debug: First 2 main ${category} articles:`, mainArticles[category].slice(0, 2).map((a: any) => a.title));
+	console.log(`🔍 Debug: First 2 sidebar ${category} articles:`, sidebarArticles[category].slice(0, 2).map((a: any) => a.title));
+}
 
 // Debug author data structure
-if (newsMainArticles.length > 0 && newsMainArticles[0].author) {
-	console.log('🔍 Debug: Author data structure:', JSON.stringify(newsMainArticles[0].author, null, 2));
+for (const category in mainArticles) {
+	if (mainArticles[category].length > 0 && mainArticles[category][0].author) {
+		console.log(`🔍 Debug: Author data structure for ${category}:`, JSON.stringify(mainArticles[category][0].author, null, 2));
+	}
 }
 ---
 
 <section class="aibuzz-layout">
 	<div class="layout-container">
-		
-		<!-- News Section -->
-		<section class="content-section">
-			<div class="section-header">
-				<h2 class="section-title">📰 Latest AI News</h2>
-				<a href="/categories/ai-news" class="view-all-link">View All →</a>
-			</div>
-			
-			<div class="section-layout">
-				<!-- Main Content Area (Left) -->
-				<div class="main-content">
-					<div class="grid-layout-special">
-						<!-- Top Row: 2 Large Cards -->
-						<div class="top-row">
-							{newsMainArticles.slice(0, 2).map((article: any) => (
-								<article class="large-card">
-									<a href={getArticleUrl(article)} class="card-image-link">
-										<div class="card-image">
-											{article.featuredImage ? (
-												<picture>
-													<source 
-														srcset={generateResponsiveSrcSet(article.featuredImage, [600, 800, 1200])} 
-														type="image/webp" 
-														sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
-													>
-													<source 
-														srcset={generateResponsiveSrcSet(article.featuredImage.replace('fm=webp', 'fm=jpg'), [600, 800, 1200])} 
-														type="image/jpeg" 
-														sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
-													>
-													<img 
-														src={generateWebPUrl(article.featuredImage, 600, 400)} 
-														alt={article.title}
-														width="600"
-														height="400"
-														loading="lazy"
-														decoding="async"
-													/>
-												</picture>
-											) : (
-												<div class="placeholder-image">📰</div>
-											)}
-										</div>
-									</a>
-									<div class="card-content">
-										<a href={getCategoryUrl('AI News')} class="category-tag news category-link-safe">
-											AI News
-										</a>
-										<div style="height: 16px;"></div>
-										<h3><a href={getArticleUrl(article)}>{article.title}</a></h3>
-										<p>{article.excerpt}</p>
-										<div class="card-meta">
-											<span class="author">
-												By <a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>
-													{article.author?.name || 'Anonymous'}
-												</a>
-											</span>
-											<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
-										</div>
-									</div>
-								</article>
-							))}
-						</div>
-						
-						<!-- Bottom Row: 2 Stacked Cards -->
-						<div class="bottom-row news-bottom">
-							{newsMainArticles.slice(2, 4).map((article: any) => (
-								<article class="stacked-card">
-									<a href={getArticleUrl(article)} class="stacked-image-link">
-										<div class="stacked-image">
-											{article.featuredImage ? (
-												<img src={article.featuredImage} alt={article.title} />
-											) : (
-												<div class="placeholder-small">📰</div>
-											)}
-										</div>
-									</a>
-									<div class="stacked-content">
-										<a href={getCategoryUrl('AI News')} class="category-tag news category-link-safe">
-											AI News
-										</a>
-										<div style="height: 16px;"></div>
-										<h4><a href={getArticleUrl(article)}>{article.title}</a></h4>
-										<div class="stacked-meta">
-											<span class="author">
-												<a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>
-													{article.author?.name || 'Anonymous'}
-												</a>
-											</span>
-											<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
-										</div>
-									</div>
-								</article>
-							))}
-						</div>
+		{HOMEPAGE_CATEGORIES.map((category) => {
+			const articles = categoryArticles[category.slug] || [];
+			const mainArticles = articles.slice(0, 4);
+			const sidebarArticles = articles.slice(4, 8);
+			return (
+				<section class="content-section" id={category.slug}>
+					<div class="section-header">
+						<h2 class="section-title">{category.displayName}</h2>
+						<a href={`/categories/${category.slug}`} class="view-all-link">View All →</a>
 					</div>
-				</div>
-				
-				<!-- CategorySidebar for News Section -->
-				<CategorySidebar categorySlug="ai-news" articles={newsSidebarArticles} />
-			</div>
-		</section>
-
-		<!-- Reviews Section -->
-		<section class="content-section">
-			<div class="section-header">
-				<h2 class="section-title">📊 AI Reviews & Analysis</h2>
-				<a href="/categories/reviews" class="view-all-link">View All →</a>
-			</div>
-			
-			<div class="section-layout">
-				<div class="main-content">
-					<div class="grid-layout-special">
-						<div class="top-row">
-							{reviewsMainArticles.slice(0, 2).map((article: any) => (
-								<article class="large-card review-style">
-									<a href={getArticleUrl(article)} class="card-image-link">
-										<div class="card-image">
-											{article.featuredImage ? (
-												<img src={article.featuredImage} alt={article.title} />
-											) : (
-												<div class="placeholder-image">📊</div>
-											)}
-											<div class="review-score">9.2</div>
-										</div>
-									</a>
-									<div class="card-content">
-										<a href={getCategoryUrl('Review')} class="category-tag reviews category-link-safe">
-											Review
-										</a>
-										<div style="height: 16px;"></div>
-										<h3><a href={getArticleUrl(article)}>{article.title}</a></h3>
-										<p>{article.excerpt}</p>
-										<div class="review-stars">⭐⭐⭐⭐⭐</div>
-										<div class="card-meta">
-											<span class="author">
-												<a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>
-													{article.author?.name || 'Anonymous'}
+					<div class="section-layout">
+						<div class="main-content">
+							<div class="grid-layout-special">
+								<div class="top-row">
+									{mainArticles.slice(0, 2).map((article: any) => (
+										<article class="large-card">
+											<a href={getArticleUrl(article)} class="card-image-link">
+												<div class="card-image">
+													{article.featuredImage ? (
+														<img src={article.featuredImage} alt={article.title} />
+													) : (
+														<div class="placeholder-image">📰</div>
+													)}
+												</div>
+											</a>
+											<div class="card-content">
+												<a href={getCategoryUrl(category.displayName)} class="category-tag category-link-safe">
+													{category.displayName}
 												</a>
-											</span>
-											<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
-										</div>
-									</div>
-								</article>
-							))}
-						</div>
-						
-						<div class="bottom-row">
-							{reviewsMainArticles.slice(2, 4).map((article: any) => (
-								<article class="large-card review-style">
-									<a href={getArticleUrl(article)} class="card-image-link">
-										<div class="card-image">
-											{article.featuredImage ? (
-												<img src={article.featuredImage} alt={article.title} />
-											) : (
-												<div class="placeholder-image">📊</div>
-											)}
-											<div class="review-score">9.2</div>
-										</div>
-									</a>
-									<div class="card-content">
-										<a href={getCategoryUrl('Review')} class="category-tag reviews category-link-safe">
-											Review
-										</a>
-										<div style="height: 16px;"></div>
-										<h3><a href={getArticleUrl(article)}>{article.title}</a></h3>
-										<p>{article.excerpt}</p>
-										<div class="review-stars">⭐⭐⭐⭐⭐</div>
-										<div class="card-meta">
-											<span class="author">
-												<a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>
-													{article.author?.name || 'Anonymous'}
+												<div style="height: 16px;"></div>
+												<h3><a href={getArticleUrl(article)}>{article.title}</a></h3>
+												<p>{article.excerpt}</p>
+												<div class="card-meta">
+													<span class="author">
+														By <a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>
+															{article.author?.name || 'Anonymous'}
+														</a>
+													</span>
+													<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
+												</div>
+											</div>
+										</article>
+									))}
+								</div>
+								<div class="bottom-row">
+									{mainArticles.slice(2, 4).map((article: any) => (
+										<article class="stacked-card">
+											<a href={getArticleUrl(article)} class="stacked-image-link">
+												<div class="stacked-image">
+													{article.featuredImage ? (
+														<img src={article.featuredImage} alt={article.title} />
+													) : (
+														<div class="placeholder-small">📰</div>
+													)}
+												</div>
+											</a>
+											<div class="stacked-content">
+												<a href={getCategoryUrl(category.displayName)} class="category-tag category-link-safe">
+													{category.displayName}
 												</a>
-											</span>
-											<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
-										</div>
-									</div>
-								</article>
-							))}
+												<div style="height: 16px;"></div>
+												<h4><a href={getArticleUrl(article)}>{article.title}</a></h4>
+												<div class="stacked-meta">
+													<span class="author">
+														<a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>
+															{article.author?.name || 'Anonymous'}
+														</a>
+													</span>
+													<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
+												</div>
+											</div>
+										</article>
+									))}
+								</div>
+							</div>
 						</div>
-						
-						<!-- Bottom Row: 2 Stacked Cards for Reviews -->
-						<div class="bottom-row reviews-bottom">
-							{reviewsMainArticles.slice(4, 6).map((article: any) => (
-								<article class="stacked-card">
-									<a href={getArticleUrl(article)} class="stacked-image-link">
-										<div class="stacked-image">
-											{article.featuredImage ? (
-												<img src={article.featuredImage} alt={article.title} />
-											) : (
-												<div class="placeholder-small">📊</div>
-											)}
-										</div>
-									</a>
-									<div class="stacked-content">
-										<a href={getCategoryUrl('Review')} class="category-tag reviews category-link-safe">
-											Review
-										</a>
-										<div style="height: 16px;"></div>
-										<h4><a href={getArticleUrl(article)}>{article.title}</a></h4>
-										<div class="stacked-meta">
-											<span class="author">
-												<a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>
-													{article.author?.name || 'Anonymous'}
-												</a>
-											</span>
-											<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
-										</div>
-									</div>
-								</article>
-							))}
-						</div>
+						<CategorySidebar categorySlug={category.slug} articles={sidebarArticles} />
 					</div>
-				</div>
-				
-				<!-- CategorySidebar for Reviews Section -->
-				<CategorySidebar categorySlug="reviews" articles={reviewsSidebarArticles} />
-			</div>
-		</section>
-
-		<!-- Tutorials Section -->
-		<section class="content-section">
-			<div class="section-header">
-				<h2 class="section-title">📚 Tutorials & Guides</h2>
-				<a href="/categories/tutorials" class="view-all-link">View All →</a>
-			</div>
-			
-			<div class="section-layout">
-				<div class="main-content">
-					<div class="grid-layout-special">
-						<div class="top-row">
-							{tutorialsMainArticles.slice(0, 2).map((article: any) => (
-								<article class="large-card tutorial-style">
-									<a href={getArticleUrl(article)} class="card-image-link">
-										<div class="card-image">
-											{article.featuredImage ? (
-												<img src={article.featuredImage} alt={article.title} />
-											) : (
-												<div class="placeholder-image">📚</div>
-											)}
-										</div>
-									</a>
-									<div class="card-content">
-										<a href={getCategoryUrl('Tutorial')} class="category-tag tutorials category-link-safe">
-											Tutorial
-										</a>
-										<div style="height: 16px;"></div>
-										<h3><a href={getArticleUrl(article)}>{article.title}</a></h3>
-										<p>{article.excerpt}</p>
-										<div class="tutorial-indicators">
-											<span class="difficulty">🟢 Beginner</span>
-											<span class="duration">⏱️ 15 min read</span>
-										</div>
-										<div class="card-meta">
-											<span class="author">
-												<a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>
-													{article.author?.name || 'Anonymous'}
-												</a>
-											</span>
-											<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
-										</div>
-									</div>
-								</article>
-							))}
-						</div>
-						
-						<div class="bottom-row tutorials-bottom">
-							{tutorialsMainArticles.slice(2, 4).map((article: any) => (
-								<article class="stacked-card">
-									<a href={getArticleUrl(article)} class="stacked-image-link">
-										<div class="stacked-image">
-											{article.featuredImage ? (
-												<img src={article.featuredImage} alt={article.title} />
-											) : (
-												<div class="placeholder-small">📚</div>
-											)}
-										</div>
-									</a>
-									<div class="stacked-content">
-										<a href={getCategoryUrl('Tutorial')} class="category-tag tutorials category-link-safe">
-											Tutorial
-										</a>
-										<div style="height: 16px;"></div>
-										<h4><a href={getArticleUrl(article)}>{article.title}</a></h4>
-										<div class="stacked-meta">
-											<span class="author">
-												<a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>
-													{article.author?.name || 'Anonymous'}
-												</a>
-											</span>
-											<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
-										</div>
-									</div>
-								</article>
-							))}
-						</div>
-					</div>
-				</div>
-				
-				<!-- CategorySidebar for Tutorials Section -->
-				<CategorySidebar categorySlug="tutorials" articles={tutorialsSidebarArticles} />
-			</div>
-		</section>
-
-		<!-- AI Agents Section -->
-		<section class="content-section">
-			<div class="section-header">
-				<h2 class="section-title">AI Agents</h2>
-				<a href="/categories/ai-agents" class="view-all-link">View All →</a>
-			</div>
-			
-			<div class="section-layout">
-				<div class="main-content">
-					<div class="grid-layout-special">
-						<!-- Top Row: 2 Full-Height Articles -->
-						<div class="top-row">
-							{aiAgentsMainArticles.slice(0, 2).map((article: any) => (
-								<article class="large-card ai-agent-style">
-									<a href={getArticleUrl(article)} class="card-image-link">
-										<div class="card-image">
-											{article.featuredImage ? (
-												<img src={article.featuredImage} alt={article.title} />
-											) : (
-												<div class="placeholder-image">🤖</div>
-											)}
-										</div>
-									</a>
-									<div class="card-content">
-										<a href={getCategoryUrl('AI Agent')} class="category-tag ai-agents category-link-safe">
-											AI Agent
-										</a>
-										<div style="height: 16px;"></div>
-										<h3><a href={getArticleUrl(article)}>{article.title}</a></h3>
-										<p>{article.excerpt}</p>
-										<div class="ai-agent-indicators">
-											<span class="specialization">🔧 Specialization</span>
-											<span class="capability">🌟 Capability</span>
-										</div>
-										<div class="card-meta">
-											<span class="author">
-												<a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>
-													{article.author?.name || 'Anonymous'}
-												</a>
-											</span>
-											<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
-										</div>
-									</div>
-								</article>
-							))}
-						</div>
-						
-						<!-- Second Row: 2 Stacked Articles -->
-						<div class="bottom-row">
-							{aiAgentsMainArticles.slice(2, 4).map((article: any) => (
-								<article class="stacked-card">
-									<a href={getArticleUrl(article)} class="stacked-image-link">
-										<div class="stacked-image">
-											{article.featuredImage ? (
-												<img src={article.featuredImage} alt={article.title} />
-											) : (
-												<div class="placeholder-small">🤖</div>
-											)}
-										</div>
-									</a>
-									<div class="stacked-content">
-										<a href={getCategoryUrl('AI Agent')} class="category-tag ai-agents category-link-safe">
-											AI Agent
-										</a>
-										<div style="height: 16px;"></div>
-										<h4><a href={getArticleUrl(article)}>{article.title}</a></h4>
-										<div class="stacked-meta">
-											<span class="author">
-												<a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>
-													{article.author?.name || 'Anonymous'}
-												</a>
-											</span>
-											<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
-										</div>
-									</div>
-								</article>
-							))}
-						</div>
-						
-						<!-- Third Row: 2 Stacked Articles (Vertical Layout) -->
-						<div class="bottom-row ai-agents-bottom">
-							{aiAgentsMainArticles.slice(4, 6).map((article: any) => (
-								<article class="stacked-card">
-									<a href={getArticleUrl(article)} class="stacked-image-link">
-										<div class="stacked-image">
-											{article.featuredImage ? (
-												<img src={article.featuredImage} alt={article.title} />
-											) : (
-												<div class="placeholder-small">🤖</div>
-											)}
-										</div>
-									</a>
-									<div class="stacked-content">
-										<a href={getCategoryUrl('AI Agent')} class="category-tag ai-agents category-link-safe">
-											AI Agent
-										</a>
-										<div style="height: 16px;"></div>
-										<h4><a href={getArticleUrl(article)}>{article.title}</a></h4>
-										<div class="stacked-meta">
-											<span class="author">
-												<a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>
-													{article.author?.name || 'Anonymous'}
-												</a>
-											</span>
-											<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
-										</div>
-									</div>
-								</article>
-							))}
-						</div>
-					</div>
-				</div>
-				
-				<!-- CategorySidebar for AI Agents Section -->
-				<CategorySidebar categorySlug="ai-agents" articles={aiAgentsSidebarArticles} />
-			</div>
-		</section>
+				</section>
+			);
+		})}
 	</div>
 </section>
 

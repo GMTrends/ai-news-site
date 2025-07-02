@@ -12,11 +12,24 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'displayName',
+      title: 'Short Display Name',
+      type: 'string',
+      description: 'Short name for navigation and UI (e.g., Marketing, Business, AI Agents, Creative, eCommerce, Coding)',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'homepagePriority',
+      title: 'Homepage Priority',
+      type: 'number',
+      description: '1 = highest (Marketing), 2 = Business, 3 = AI Agents, 4 = Creative. Leave blank for categories not on homepage.',
+    }),
+    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
       options: {
-        source: 'name',
+        source: 'displayName',
         maxLength: 96,
       },
       validation: (Rule) => Rule.required(),
@@ -40,15 +53,15 @@ export default defineType({
       type: 'string',
       options: {
         list: [
-          { title: 'Red (News)', value: 'red' },
-          { title: 'Blue (Reviews)', value: 'blue' },
-          { title: 'Purple (Tutorials)', value: 'purple' },
-          { title: 'Green (Business)', value: 'green' },
-          { title: 'Orange (Finance)', value: 'orange' },
+          { title: 'Blue (AI Marketing)', value: 'blue' },
+          { title: 'Green (AI Business)', value: 'green' },
           { title: 'Teal (AI Agents)', value: 'teal' },
+          { title: 'Purple (AI Creative)', value: 'purple' },
+          { title: 'Orange (AI eCommerce)', value: 'orange' },
+          { title: 'Magenta (AI Coding)', value: 'magenta' },
         ],
       },
-      initialValue: 'red',
+      initialValue: 'blue',
     }),
     defineField({
       name: 'featured',
@@ -111,4 +124,13 @@ export default defineType({
       by: [{ field: 'featured', direction: 'desc' }, { field: 'sortOrder', direction: 'asc' }]
     },
   ],
-}) 
+})
+
+// Only the following 6 categories should be featured (set featured: true in Sanity Studio):
+// 1. AI Marketing
+// 2. AI Business
+// 3. AI Agents
+// 4. AI Creative
+// 5. AI eCommerce
+// 6. AI Coding
+// All other categories should have featured: false or be deleted if unused. 

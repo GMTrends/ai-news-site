@@ -557,3 +557,241 @@
       0 0 16px #0066ff66;
   }
   
+  .category-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+  
+  .category-main {
+    flex: 1 1 0%;
+  }
+  
+  .category-sidebar {
+    width: 340px;
+    flex-shrink: 0;
+  }
+  
+  @media (max-width: 900px) {
+    .category-layout {
+      flex-direction: column;
+    }
+    .category-sidebar {
+      width: 100%;
+    }
+  }
+  
+  /* GenSpark Content Integration Styles - Enhanced for AI News Theme */
+  .genspark-content {
+    /* Ensure proper spacing and typography */
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .genspark-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    background: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+    border: 1px solid var(--border-color);
+    /* Performance optimization */
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .genspark-content table:hover {
+    box-shadow: 0 12px 40px rgba(0, 212, 255, 0.15);
+    transform: translateY(-2px) translateZ(0);
+    transition: transform var(--transition-duration) ease, box-shadow var(--transition-duration) ease;
+  }
+
+  .genspark-content th,
+  .genspark-content td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.95rem;
+  }
+
+  .genspark-content th {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 102, 255, 0.1) 100%);
+    color: var(--accent-cyan);
+    font-weight: 600;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+  }
+
+  .genspark-content tr:hover {
+    background: rgba(0, 212, 255, 0.05);
+  }
+
+  .genspark-content tr:last-child td {
+    border-bottom: none;
+  }
+
+  .genspark-content .comparison-chart {
+    overflow-x: auto;
+    margin: 2rem 0;
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+  }
+
+  .genspark-content .comparison-chart img,
+  .genspark-content .comparison-chart svg {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+  }
+
+  /* Enhanced feature comparison tables */
+  .genspark-content .feature-table {
+    margin: 3rem 0;
+  }
+
+  .genspark-content .feature-table th:first-child {
+    min-width: 200px;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15) 0%, rgba(0, 102, 255, 0.15) 100%);
+  }
+
+  /* Pros and Cons styling for GenSpark content */
+  .genspark-content .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+
+  .genspark-content .pros,
+  .genspark-content .cons {
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+  }
+
+  .genspark-content .pros {
+    border-left: 4px solid #00d4ff;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(0, 102, 255, 0.05) 100%);
+  }
+
+  .genspark-content .cons {
+    border-left: 4px solid #ff4757;
+    background: linear-gradient(135deg, rgba(255, 71, 87, 0.05) 0%, rgba(255, 0, 0, 0.05) 100%);
+  }
+
+  .genspark-content .pros h3 {
+    color: var(--accent-cyan);
+    margin-top: 0;
+    font-family: var(--font-heading);
+  }
+
+  .genspark-content .cons h3 {
+    color: #ff4757;
+    margin-top: 0;
+    font-family: var(--font-heading);
+  }
+
+  .genspark-content .pros ul,
+  .genspark-content .cons ul {
+    margin: 1rem 0 0 0;
+    padding-left: 1.5rem;
+  }
+
+  .genspark-content .pros li,
+  .genspark-content .cons li {
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+  }
+
+  /* Rating displays for GenSpark content */
+  .genspark-content .rating-display {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 2rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 102, 255, 0.1) 100%);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+  }
+
+  .genspark-content .rating-score {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-family: var(--font-heading);
+  }
+
+  .genspark-content .rating-details {
+    flex: 1;
+  }
+
+  .genspark-content .rating-label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+  }
+
+  .genspark-content .rating-description {
+    font-size: 1rem;
+    color: var(--text-secondary);
+  }
+
+  /* Responsive design for GenSpark content */
+  @media (max-width: 768px) {
+    .genspark-content .pros-cons {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .genspark-content .rating-display {
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+    }
+
+    .genspark-content .rating-score {
+      font-size: 3rem;
+    }
+
+    .genspark-content table {
+      font-size: 0.9rem;
+    }
+
+    .genspark-content th,
+    .genspark-content td {
+      padding: 12px 16px;
+    }
+
+    .genspark-content .comparison-chart {
+      padding: 1rem;
+    }
+  }
+
+  /* Performance optimizations for GenSpark content */
+  .genspark-content * {
+    will-change: auto;
+  }
+
+  .genspark-content table,
+  .genspark-content .comparison-chart,
+  .genspark-content .rating-display {
+    will-change: transform, box-shadow;
+  }
+  

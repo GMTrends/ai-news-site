@@ -5,12 +5,10 @@ import Footer from '../../components/Footer.astro';
 import CategorySidebar from '../../components/CategorySidebar.astro';
 import '../../styles/global.css';
 
-// Fetch all business articles from Sanity CMS
-const businessArticles = await getArticlesByCategory('business', 20);
+const ecommerceArticles = await getArticlesByCategory('ecommerce', 20);
 
-// SEO metadata
-const pageTitle = "AI Business Insights - AI Strategy and Business Applications";
-const pageDescription = "Discover how AI is transforming business. Get insights on AI strategy, implementation, ROI, and business applications across industries.";
+const pageTitle = "AI for eCommerce & Online Business - Tools & Strategies";
+const pageDescription = "Learn how AI is transforming eCommerce and online business. Get the latest news, strategies, and tools for digital commerce success.";
 ---
 
 <!DOCTYPE html>
@@ -20,74 +18,69 @@ const pageDescription = "Discover how AI is transforming business. Get insights 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{pageTitle}</title>
   <meta name="description" content={pageDescription} />
-  <meta name="keywords" content="AI business, business AI, enterprise AI, AI solutions, AI strategy, business technology" />
-  
-  <!-- Open Graph -->
+  <meta name="keywords" content="AI ecommerce, online business, AI commerce, digital commerce, ecommerce tools" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={Astro.url} />
   <meta property="og:title" content={pageTitle} />
   <meta property="og:description" content={pageDescription} />
   <meta property="og:site_name" content="AI Buzz Media" />
-  
-  <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content={Astro.url} />
   <meta property="twitter:title" content={pageTitle} />
   <meta property="twitter:description" content={pageDescription} />
-  
   <link rel="canonical" href={Astro.url} />
 </head>
 <body>
   <Header />
-  
   <main class="category-page">
     <div class="category-hero">
       <div class="container">
         <div class="category-header">
-          <div class="category-icon">💼</div>
-          <h1 class="category-title">AI Business</h1>
-          <p class="category-description">Discover how AI is transforming business and driving growth in the modern economy.</p>
+          <div class="category-icon">🛒</div>
+          <h1 class="category-title">AI for eCommerce & Online Business</h1>
+          <p class="category-description">Learn how AI is transforming eCommerce and online business. Get the latest news, strategies, and tools for digital commerce success.</p>
         </div>
       </div>
     </div>
-    
     <div class="category-content">
       <div class="container">
         <div class="category-layout">
           <div class="category-main">
             <div class="articles-grid">
-              {businessArticles.map((article: any) => (
-                <article class="category-article">
-                  <div class="article-image">
-                    {article.featuredImage ? (
-                      <img src={article.featuredImage} alt={article.title} />
-                    ) : (
-                      <div class="placeholder">💼</div>
-                    )}
-                  </div>
-                  <div class="article-content">
-                    <span class="category-badge-small business">Business</span>
-                    <h2><a href={`/business/${article.slug}`}>{article.title}</a></h2>
-                    <p>{article.excerpt}</p>
-                    <div class="article-meta">
-                      <span class="author">By <a href={`/authors/${article.author?.slug?.current || 'anonymous'}`} class="author-link">{article.author?.name || 'Anonymous'}</a></span>
-                      <span class="date">{new Date(article.publishedAt || Date.now()).toLocaleDateString('en-US', { 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                      })}</span>
+              {ecommerceArticles.length > 0 ? (
+                ecommerceArticles.map((article: any) => (
+                  <article class="category-article">
+                    <div class="article-image">
+                      {article.featuredImage ? (
+                        <img src={article.featuredImage} alt={article.title} />
+                      ) : (
+                        <div class="placeholder">🛒</div>
+                      )}
                     </div>
-                  </div>
-                </article>
-              ))}
+                    <div class="article-content">
+                      <span class="category-badge-small ecommerce">eCommerce</span>
+                      <h2><a href={`/ecommerce/${article.slug}`}>{article.title}</a></h2>
+                      <p>{article.excerpt}</p>
+                      <div class="article-meta">
+                        <span class="author">By <a href={`/authors/${article.author?.slug?.current || 'anonymous'}`} class="author-link">{article.author?.name || 'Anonymous'}</a></span>
+                        <span class="date">{new Date(article.publishedAt || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                      </div>
+                    </div>
+                  </article>
+                ))
+              ) : (
+                <div class="no-articles">
+                  <h3>No eCommerce Articles Found</h3>
+                  <p>We're working on bringing you the latest in AI for eCommerce. Check back soon!</p>
+                </div>
+              )}
             </div>
           </div>
-          <CategorySidebar categorySlug="business" />
+          <CategorySidebar categorySlug="ecommerce" />
         </div>
       </div>
     </div>
   </main>
-  
   <Footer />
   
   <style>
@@ -97,9 +90,9 @@ const pageDescription = "Discover how AI is transforming business. Get insights 
     }
     
     .category-hero {
-      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.1) 100%);
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(249, 115, 22, 0.1) 100%);
       padding: 2.5rem 0;
-      border-bottom: 2px solid rgba(34, 197, 94, 0.2);
+      border-bottom: 2px solid rgba(249, 115, 22, 0.2);
     }
     
     .category-header {
@@ -116,7 +109,7 @@ const pageDescription = "Discover how AI is transforming business. Get insights 
     .category-title {
       font-size: 2.5rem;
       font-weight: 700;
-      color: #22c55e;
+      color: #f97316;
       margin-bottom: 0.75rem;
     }
     
@@ -159,8 +152,8 @@ const pageDescription = "Discover how AI is transforming business. Get insights 
     
     .category-article:hover {
       transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(34, 197, 94, 0.2);
-      border-color: rgba(34, 197, 94, 0.3);
+      box-shadow: 0 20px 40px rgba(249, 115, 22, 0.2);
+      border-color: rgba(249, 115, 22, 0.3);
     }
     
     .article-image {
@@ -181,7 +174,7 @@ const pageDescription = "Discover how AI is transforming business. Get insights 
       align-items: center;
       justify-content: center;
       font-size: 3rem;
-      background: rgba(34, 197, 94, 0.1);
+      background: rgba(249, 115, 22, 0.1);
     }
     
     .article-content {
@@ -199,7 +192,7 @@ const pageDescription = "Discover how AI is transforming business. Get insights 
       margin-bottom: 1.25rem;
     }
     
-    .category-badge-small.business { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+    .category-badge-small.ecommerce { background: rgba(249, 115, 22, 0.2); color: #f97316; }
     
     .article-content h2 {
       font-size: 1.25rem;
@@ -264,6 +257,26 @@ const pageDescription = "Discover how AI is transforming business. Get insights 
       opacity: 0.8;
     }
     
+    .no-articles {
+      text-align: center;
+      padding: 3rem;
+      background: #1a1a1b;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      grid-column: 1 / -1;
+    }
+    
+    .no-articles h3 {
+      color: #ffffff;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .no-articles p {
+      color: #cccccc;
+      font-size: 1.1rem;
+    }
+    
     @media (max-width: 768px) {
       .category-layout {
         grid-template-columns: 1fr;
@@ -288,8 +301,8 @@ const pageDescription = "Discover how AI is transforming business. Get insights 
     }
     
     .category-badge {
-      background: rgba(34, 197, 94, 0.2);
-      color: #22c55e;
+      background: rgba(249, 115, 22, 0.2);
+      color: #f97316;
       padding: 0.2rem 0.5rem;
       border-radius: 12px;
       font-size: 0.65rem;
@@ -298,11 +311,11 @@ const pageDescription = "Discover how AI is transforming business. Get insights 
       letter-spacing: 0.5px;
       transition: all 0.3s ease;
     }
-
+    
     .category-badge:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4);
-      background: rgba(34, 197, 94, 0.3);
+      box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
+      background: rgba(249, 115, 22, 0.3);
       color: #ffffff;
     }
   </style>

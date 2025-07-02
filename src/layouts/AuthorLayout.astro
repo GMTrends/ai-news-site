@@ -90,7 +90,7 @@ const description = `Read articles by ${author.data.name}, expert in AI and tech
 						"name": "AI Buzz Media",
 						"url": "https://aibuzzmedia.com"
 					},
-					"url": `https://aibuzzmedia.com/${article.data.category || 'ai-news'}/${article.slug}`
+					"url": `https://aibuzzmedia.com/${article.data.category || 'marketing'}/${article.slug}`
 				}
 			}))
 		})} />
@@ -162,7 +162,7 @@ const description = `Read articles by ${author.data.name}, expert in AI and tech
 									<a href={getCategoryUrl(article.data.category || 'AI News')} class="category-badge-small category-link-safe">
 										{article.data.category || 'AI News'}
 									</a>
-									<h3><a href={`/${article.data.category || 'ai-news'}/${article.slug}`}>{article.data.title}</a></h3>
+									<h3><a href={`/${article.data.category || 'marketing'}/${article.slug}`}>{article.data.title}</a></h3>
 									<p>{article.data.excerpt}</p>
 									<div class="article-meta">
 										<span class="date">{new Date(article.data.publishedAt || Date.now()).toLocaleDateString()}</span>
