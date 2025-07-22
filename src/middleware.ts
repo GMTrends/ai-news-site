@@ -16,10 +16,12 @@ const securityHeaders = {
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
   'Content-Security-Policy': `
     default-src 'self'; 
-    script-src 'self' 'unsafe-inline' 'unsafe-eval'; 
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://www.googletagmanager.com https://www.google-analytics.com https://static.ads-twitter.com http://static.ads-twitter.com https://cdn.jsdelivr.net; 
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
     font-src 'self' https://fonts.gstatic.com; 
-    img-src 'self' data: https: blob:; 
+    img-src 'self' data: https: blob: https://www.facebook.com http://www.facebook.com https://www.google-analytics.com https://*.facebook.com; 
+    connect-src 'self' https://www.facebook.com http://www.facebook.com https://*.facebook.com https://www.google-analytics.com https://www.googletagmanager.com https://static.ads-twitter.com http://static.ads-twitter.com;
+    frame-src 'self' https://www.facebook.com;
   `.replace(/\s+/g, ' ').trim()
 }
 
@@ -94,21 +96,21 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   // Check rate limit
   if (isRateLimited(rateLimitKey, maxRequests)) {
-    console.warn(`Rate limit exceeded for ${rateLimitKey} on ${url.pathname}`)
-    
-    return new Response('Too Many Requests', {
-      status: 429,
-      headers: {
-        'Retry-After': '900', // 15 minutes
-        'Content-Type': 'text/plain',
-        ...securityHeaders
-      }
-    })
-  }
+    // Continue to the next middleware or route
+    const response = await next()
 
-  // Log suspicious activity
-  if (isAdminRoute) {
-    console.log(`Admin access attempt: ${rateLimitKey} -> ${url.pathname}`)
+    // Add security headers to all responses
+    Object.entries(securityHeaders).forEach(([key, value]) => {
+      response.headers.set(key, value)
+    })
+
+    // Add additional security headers for admin routes
+    if (isAdminRoute) {
+      response.headers.set('X-Admin-Access', 'true')
+      response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+    }
+
+    return response
   }
 
   // Continue to the next middleware or route

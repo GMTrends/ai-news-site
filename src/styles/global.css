@@ -358,11 +358,17 @@
   button:focus,
   input:focus,
   textarea:focus,
-  select:focus,
-  a:focus {
+  select:focus {
 	outline: 2px solid var(--accent-cyan);
 	outline-offset: 2px;
 	border-radius: 4px;
+  }
+
+  /* Remove focus outline from all article title links */
+  h2 a:focus,
+  h3 a:focus,
+  h4 a:focus {
+	outline: none !important;
   }
   
   /* Skip link for accessibility */
@@ -389,9 +395,9 @@
   }
   
   .gpu-accelerated {
-	transform: translateZ(0);
-	will-change: transform;
-  }
+  /* Removed transform: translateZ(0); to prevent stacking context issues for position: fixed elements */
+  will-change: transform;
+}
   
   /* Optimized image loading */
   img {
@@ -485,7 +491,28 @@
   .grid-article-content h3 a,
   .article-card h3 a,
   .insight-small h4 a,
-  .article-content h2 a {
+  .article-content h2 a,
+  /* Hero section article titles */
+  .hero h2 a,
+  .hero h3 a,
+  .hero h4 a,
+  .article-content-main h2 a,
+  .article-content-small h3 a,
+  /* Category main grid article titles */
+  .category-main h2 a,
+  .category-main h3 a,
+  .category-main h4 a,
+  .main-content h2 a,
+  .main-content h3 a,
+  .main-content h4 a,
+  /* AIBuzzLayout specific selectors */
+  .large-card h3 a,
+  .stacked-card h4 a,
+  .card-content h3 a,
+  .stacked-content h4 a,
+  /* Additional article title selectors */
+  .article-grid h3 a,
+  .articles-section h3 a {
 	/* Override global link layout properties */
 	min-height: auto !important;
 	min-width: auto !important;
@@ -495,6 +522,8 @@
 	justify-content: unset !important;
 	/* Don't override color - let the component styles handle it */
 	transition: all 0.3s ease !important;
+	/* Remove focus outline */
+	outline: none !important;
   }
   
   /* Remove the problematic hover override that was causing issues */
@@ -512,6 +541,22 @@
   .articles-grid-mixed h3 a,
   .article-content-main h2 a,
   .article-content-small h3 a,
+  /* Hero section article titles */
+  .hero h2 a,
+  .hero h3 a,
+  .hero h4 a,
+  /* Category main grid article titles */
+  .category-main h2 a,
+  .category-main h3 a,
+  .category-main h4 a,
+  .main-content h2 a,
+  .main-content h3 a,
+  .main-content h4 a,
+  /* Additional article title selectors */
+  .large-card h3 a,
+  .stacked-card h4 a,
+  .article-grid h3 a,
+  .articles-section h3 a,
   /* Catch-all for future article grid/card titles */
   [class*="article"] h2 a,
   [class*="article"] h3 a,
@@ -528,6 +573,8 @@
     display: inline-block;
     position: relative;
     transition: text-shadow 0.3s cubic-bezier(0.4,0,0.2,1), background 0.3s cubic-bezier(0.4,0,0.2,1);
+    /* Remove focus outline */
+    outline: none !important;
   }
   .card-content h3 a:hover,
   .stacked-content h4 a:hover,
@@ -557,21 +604,21 @@
       0 0 16px #0066ff66;
   }
   
-  .category-layout {
+  /* .category-layout {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     gap: 2rem;
-  }
+  } */
   
-  .category-main {
+  /* .category-main {
     flex: 1 1 0%;
   }
   
   .category-sidebar {
     width: 340px;
     flex-shrink: 0;
-  }
+  } */
   
   @media (max-width: 900px) {
     .category-layout {
@@ -794,4 +841,73 @@
   .genspark-content .rating-display {
     will-change: transform, box-shadow;
   }
+  
+  .main-content {
+    width: 100%;
+    /* Performance optimizations */
+    will-change: auto;
+    /* Ensure footer is visible */
+    display: flex;
+    flex-direction: column;
+    /* Removed margin-bottom that was previously set to prevent overlap with the floating widget */
+  }
+  
+  .footer-spacer {
+    height: 2rem;
+    background: #1a1a1b !important;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+  }
+  
+  .footer-homepage-spacer {
+    height: 3rem;
+    background: var(--bg-primary);
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+  }
+  
+html, body {
+  height: 100%;
+  min-height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.main-content {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+.ai-footer {
+  flex-shrink: 0;
+}
+
+.desktop-nav a.active {
+  background: var(--gradient-text) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+.desktop-nav > a.active,
+.desktop-nav .active {
+  background: linear-gradient(90deg, #00e0ff 0%, #ff00cc 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+  font-weight: bold !important;
+  text-decoration: underline !important;
+}
+
+a.active {
+  border: 2px solid blue !important;
+}
   

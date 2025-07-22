@@ -39,55 +39,54 @@ const pageDescription = "Discover how AI is transforming business. Get insights 
 </head>
 <body>
   <Header />
-  
-  <main class="category-page">
-    <div class="category-hero">
-      <div class="container">
-        <div class="category-header">
-          <div class="category-icon">💼</div>
-          <h1 class="category-title">AI Business</h1>
-          <p class="category-description">Discover how AI is transforming business and driving growth in the modern economy.</p>
-        </div>
-      </div>
-    </div>
-    
-    <div class="category-content">
-      <div class="container">
-        <div class="category-layout">
-          <div class="category-main">
-            <div class="articles-grid">
-              {businessArticles.map((article: any) => (
-                <article class="category-article">
-                  <div class="article-image">
-                    {article.featuredImage ? (
-                      <img src={article.featuredImage} alt={article.title} />
-                    ) : (
-                      <div class="placeholder">💼</div>
-                    )}
-                  </div>
-                  <div class="article-content">
-                    <span class="category-badge-small business">Business</span>
-                    <h2><a href={`/business/${article.slug}`}>{article.title}</a></h2>
-                    <p>{article.excerpt}</p>
-                    <div class="article-meta">
-                      <span class="author">By <a href={`/authors/${article.author?.slug?.current || 'anonymous'}`} class="author-link">{article.author?.name || 'Anonymous'}</a></span>
-                      <span class="date">{new Date(article.publishedAt || Date.now()).toLocaleDateString('en-US', { 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                      })}</span>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
+  <div class="main-content">
+    <main class="category-page">
+      <div class="category-hero">
+        <div class="container">
+          <div class="category-header">
+            <div class="category-icon">💼</div>
+            <h1 class="category-title">AI Business</h1>
+            <p class="category-description">Discover how AI is transforming business and driving growth in the modern economy.</p>
           </div>
-          <CategorySidebar categorySlug="business" />
         </div>
       </div>
-    </div>
-  </main>
-  
+      
+      <div class="category-content">
+          <div class="category-layout">
+            <div class="category-main">
+              <div class="articles-grid">
+                {businessArticles.map((article: any) => (
+                  <article class="category-article">
+                    <div class="article-image">
+                      {article.featuredImage ? (
+                        <img src={article.featuredImage} alt={article.title} />
+                      ) : (
+                        <div class="placeholder">💼</div>
+                      )}
+                    </div>
+                    <div class="article-content">
+                      <a href="/categories/business" class="category-badge-small business">Business</a>
+                      <h2><a href={`/business/${article.slug}`}>{article.title}</a></h2>
+                      <p>{article.excerpt}</p>
+                      <div class="article-meta">
+                        <span class="author">By <a href={`/authors/${article.author?.slug?.current || 'anonymous'}`} class="author-link">{article.author?.name || 'Anonymous'}</a></span>
+                        <span class="date">{new Date(article.publishedAt || Date.now()).toLocaleDateString('en-US', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })}</span>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+            <CategorySidebar categorySlug="business" />
+          </div>
+      </div>
+    </main>
+    <div class="footer-padding-spacer"></div>
+  </div>
   <Footer />
   
   <style>
@@ -131,16 +130,27 @@ const pageDescription = "Discover how AI is transforming business. Get insights 
     }
     
     .category-layout {
-      display: grid;
+      display: grid !important;
       grid-template-columns: 1fr 340px;
       gap: 2rem;
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 1rem;
+      align-items: start;
     }
     
     .category-main {
       min-width: 0;
+      overflow: visible;
+      z-index: 1;
+      position: relative;
+    }
+    
+    .category-sidebar {
+      min-width: 0;
+      overflow: visible;
+      z-index: 2;
+      position: relative;
     }
     
     .articles-grid {

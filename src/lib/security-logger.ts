@@ -273,10 +273,6 @@ class SecurityLogger {
       if (event.details) {
         console.error(`${color}Details:${reset}`, event.details);
       }
-    } else if (event.severity === 'medium') {
-      console.warn(logMessage);
-    } else {
-      console.log(logMessage);
     }
   }
 
@@ -401,7 +397,4 @@ export const securityLogger = new SecurityLogger({
   enableFile: false, // Enable when file logging is implemented
   enableExternal: false, // Enable when external logging is implemented
   logLevel: 'info'
-});
-
-// Export class for testing
-export { SecurityLogger }; 
+}); 

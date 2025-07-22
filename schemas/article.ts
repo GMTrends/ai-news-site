@@ -43,10 +43,6 @@ export default defineType({
         type: 'reference',
         to: [{ type: 'category' }],
         validation: (Rule) => Rule.required(),
-        options: {
-          filter: 'featured == true',
-          // This ensures only featured categories appear in the dropdown
-      },
     }),
     defineField({
       name: 'excerpt',

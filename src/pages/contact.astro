@@ -28,147 +28,146 @@ import Footer from '../components/Footer.astro';
   <link rel="canonical" href={Astro.url} />
 </head>
 <body>
-  <MainLayout title="Contact Us - AI Buzz Media" description="Get in touch with the AI Buzz Media team. We'd love to hear from you about AI news, partnerships, or any questions you might have.">
-    <Header />
-    
-    <main class="contact-page">
-      <div class="contact-hero">
-        <div class="container">
-          <h1 class="page-title">Get In Touch</h1>
-          <p class="page-subtitle">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+  <MainLayout title="Contact Us - AI Buzz Media" description="Get in touch with the AI Buzz Media team. We'd love to hear from you about AI news, partnerships, or any questions you might have." bodyClass="contact-body">
+    <div class="main-content">
+      <main class="contact-page">
+        <div class="contact-hero">
+          <div class="container">
+            <h1 class="page-title">Get In Touch</h1>
+            <p class="page-subtitle">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+          </div>
         </div>
-      </div>
-      
-      <section class="contact-section">
-        <div class="container">
-          <div class="contact-grid">
-            <!-- Left Column - Contact Info -->
-            <div class="contact-info">
-              <h2 class="section-title">Let's Connect</h2>
-              <p class="section-description">
-                Whether you have a question about AI news, want to partner with us, or just want to say hello, we're here to help.
-              </p>
-              
-              <div class="contact-details">
-                <div class="contact-item">
-                  <div class="contact-icon">📧</div>
-                  <div class="contact-text">
-                    <h3>Email Us</h3>
-                    <p>hello@aibuzzmedia.com</p>
-                    <p>We typically respond within 24 hours</p>
-                  </div>
-                </div>
+        
+        <section class="contact-section">
+          <div class="container">
+            <div class="contact-grid">
+              <!-- Left Column - Contact Info -->
+              <div class="contact-info">
+                <h2 class="section-title">Let's Connect</h2>
+                <p class="section-description">
+                  Whether you have a question about AI news, want to partner with us, or just want to say hello, we're here to help.
+                </p>
                 
-                <div class="contact-item">
-                  <div class="contact-icon">🌐</div>
-                  <div class="contact-text">
-                    <h3>Follow Us</h3>
-                    <p>Stay updated with the latest AI news</p>
-                    <div class="social-links">
-                      <a href="#" class="social-link">Twitter</a>
-                      <a href="#" class="social-link">LinkedIn</a>
-                      <a href="#" class="social-link">Newsletter</a>
+                <div class="contact-details">
+                  <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-text">
+                      <h3>Email Us</h3>
+                      <p>hello@aibuzzmedia.com</p>
+                      <p>We typically respond within 24 hours</p>
+                    </div>
+                  </div>
+                  
+                  <div class="contact-item">
+                    <div class="contact-icon">🌐</div>
+                    <div class="contact-text">
+                      <h3>Follow Us</h3>
+                      <p>Stay updated with the latest AI news</p>
+                      <div class="social-links">
+                        <a href="#" class="social-link">Twitter</a>
+                        <a href="#" class="social-link">LinkedIn</a>
+                        <a href="#" class="social-link">Newsletter</a>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="contact-item">
+                    <div class="contact-icon">💼</div>
+                    <div class="contact-text">
+                      <h3>Partnerships</h3>
+                      <p>Interested in collaborating?</p>
+                      <p>We're always open to discussing new opportunities</p>
                     </div>
                   </div>
                 </div>
-                
-                <div class="contact-item">
-                  <div class="contact-icon">💼</div>
-                  <div class="contact-text">
-                    <h3>Partnerships</h3>
-                    <p>Interested in collaborating?</p>
-                    <p>We're always open to discussing new opportunities</p>
-                  </div>
+              </div>
+              
+              <!-- Right Column - Contact Form -->
+              <div class="contact-form-container">
+                <div class="form-card">
+                  <h2 class="form-title">Send us a Message</h2>
+                  <form class="contact-form" id="contactForm">
+                    <!-- Honeypot field (hidden from users) -->
+                    <div class="honeypot-field" style="display: none;">
+                      <input type="text" name="honeypot" id="honeypot" tabindex="-1" autocomplete="off" />
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="name" class="form-label">Full Name *</label>
+                      <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        class="form-input" 
+                        required
+                        placeholder="Enter your full name"
+                        autocomplete="name"
+                      />
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="email" class="form-label">Email Address *</label>
+                      <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="form-input" 
+                        required
+                        placeholder="Enter your email address"
+                        autocomplete="email"
+                      />
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="subject" class="form-label">Subject *</label>
+                      <select id="subject" name="subject" class="form-select" required>
+                        <option value="">Select a subject</option>
+                        <option value="general">General Inquiry</option>
+                        <option value="partnership">Partnership Opportunity</option>
+                        <option value="content">Content Suggestion</option>
+                        <option value="technical">Technical Support</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="message" class="form-label">Message *</label>
+                      <textarea 
+                        id="message" 
+                        name="message" 
+                        class="form-textarea" 
+                        rows="5" 
+                        required
+                        placeholder="Tell us how we can help you..."
+                      ></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                      <label class="checkbox-label">
+                        <input type="checkbox" name="newsletter" class="form-checkbox" />
+                        <span class="checkmark"></span>
+                        Subscribe to our newsletter for the latest AI news
+                      </label>
+                    </div>
+                    
+                    <button type="submit" class="submit-button" id="submitButton">
+                      <span class="button-text">Send Message</span>
+                      <span class="button-icon">📤</span>
+                    </button>
+                    
+                    <!-- Form Messages -->
+                    <div class="form-message-container" id="messageContainer" style="display: none;">
+                      <div class="form-message" id="formMessage"></div>
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
-            
-            <!-- Right Column - Contact Form -->
-            <div class="contact-form-container">
-              <div class="form-card">
-                <h2 class="form-title">Send us a Message</h2>
-                <form class="contact-form" id="contactForm">
-                  <!-- Honeypot field (hidden from users) -->
-                  <div class="honeypot-field" style="display: none;">
-                    <input type="text" name="honeypot" id="honeypot" tabindex="-1" autocomplete="off" />
-                  </div>
-                  
-                  <div class="form-group">
-                    <label for="name" class="form-label">Full Name *</label>
-                    <input 
-                      type="text" 
-                      id="name" 
-                      name="name" 
-                      class="form-input" 
-                      required
-                      placeholder="Enter your full name"
-                      autocomplete="name"
-                    />
-                  </div>
-                  
-                  <div class="form-group">
-                    <label for="email" class="form-label">Email Address *</label>
-                    <input 
-                      type="email" 
-                      id="email" 
-                      name="email" 
-                      class="form-input" 
-                      required
-                      placeholder="Enter your email address"
-                      autocomplete="email"
-                    />
-                  </div>
-                  
-                  <div class="form-group">
-                    <label for="subject" class="form-label">Subject *</label>
-                    <select id="subject" name="subject" class="form-select" required>
-                      <option value="">Select a subject</option>
-                      <option value="general">General Inquiry</option>
-                      <option value="partnership">Partnership Opportunity</option>
-                      <option value="content">Content Suggestion</option>
-                      <option value="technical">Technical Support</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-                  
-                  <div class="form-group">
-                    <label for="message" class="form-label">Message *</label>
-                    <textarea 
-                      id="message" 
-                      name="message" 
-                      class="form-textarea" 
-                      rows="5" 
-                      required
-                      placeholder="Tell us how we can help you..."
-                    ></textarea>
-                  </div>
-                  
-                  <div class="form-group">
-                    <label class="checkbox-label">
-                      <input type="checkbox" name="newsletter" class="form-checkbox" />
-                      <span class="checkmark"></span>
-                      Subscribe to our newsletter for the latest AI news
-                    </label>
-                  </div>
-                  
-                  <button type="submit" class="submit-button" id="submitButton">
-                    <span class="button-text">Send Message</span>
-                    <span class="button-icon">📤</span>
-                  </button>
-                  
-                  <!-- Form Messages -->
-                  <div class="form-message-container" id="messageContainer" style="display: none;">
-                    <div class="form-message" id="formMessage"></div>
-                  </div>
-                </form>
-              </div>
-            </div>
           </div>
-        </div>
-      </section>
-    </main>
-    
-    <Footer />
+        </section>
+      </main>
+      <div class="footer-padding-spacer"></div>
+    </div>
   </MainLayout>
 
   <style>
@@ -182,6 +181,14 @@ import Footer from '../components/Footer.astro';
     }
     .contact-page {
       min-height: 100vh;
+    }
+    /* Match the background of the section above the footer for the spacer */
+    .footer-padding-spacer {
+      height: 0 !important;
+      min-height: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      background: var(--color-bg) !important;
     }
     
     .contact-hero {
@@ -495,6 +502,22 @@ import Footer from '../components/Footer.astro';
         transform: rotate(1turn);
       }
     }
+
+    .main-content {
+      min-height: calc(100vh - 400px); /* Adjust 400px if your footer is taller/shorter */
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    /* Make the floating widget fixed at the bottom center only on the Contact page */
+    body.contact-body .floating-card {
+      position: fixed !important;
+      left: 50% !important;
+      bottom: 2rem !important;
+      transform: translateX(-50%) !important;
+      z-index: 9999 !important;
+    }
   </style>
 
   <script>
@@ -566,7 +589,6 @@ import Footer from '../components/Footer.astro';
               showMessage(result.error || 'Failed to send message. Please try again.', 'error');
             }
           } catch (error) {
-            console.error('Form submission error:', error);
             showMessage('Network error. Please check your connection and try again.', 'error');
           } finally {
             setLoadingState(false);

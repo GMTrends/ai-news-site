@@ -39,55 +39,54 @@ const pageDescription = "Discover AI agents, autonomous systems, and intelligent
 </head>
 <body>
   <Header />
-  
-  <main class="category-page">
-    <div class="category-hero">
-      <div class="container">
-        <div class="category-header">
-          <div class="category-icon">🤖</div>
-          <h1 class="category-title">AI Agents</h1>
-          <p class="category-description">Explore AI agents, autonomous systems, and intelligent automation technologies.</p>
-        </div>
-      </div>
-    </div>
-    
-    <div class="category-content">
-      <div class="container">
-        <div class="category-layout">
-          <div class="category-main">
-            <div class="articles-grid">
-              {aiAgentsArticles.map((article: any) => (
-                <article class="category-article">
-                  <div class="article-image">
-                    {article.featuredImage ? (
-                      <img src={article.featuredImage} alt={article.title} />
-                    ) : (
-                      <div class="placeholder">🤖</div>
-                    )}
-                  </div>
-                  <div class="article-content">
-                    <span class="category-badge-small ai-agents">AI Agents</span>
-                    <h2><a href={`/ai-agents/${article.slug}`}>{article.title}</a></h2>
-                    <p>{article.excerpt}</p>
-                    <div class="article-meta">
-                      <span class="author">By <a href={`/authors/${article.author?.slug?.current || 'anonymous'}`} class="author-link">{article.author?.name || 'Anonymous'}</a></span>
-                      <span class="date">{new Date(article.publishedAt || Date.now()).toLocaleDateString('en-US', { 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                      })}</span>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
+  <div class="main-content">
+    <main class="category-page">
+      <div class="category-hero">
+        <div class="container">
+          <div class="category-header">
+            <div class="category-icon">🤖</div>
+            <h1 class="category-title">AI Agents</h1>
+            <p class="category-description">Explore AI agents, autonomous systems, and intelligent automation technologies.</p>
           </div>
-          <CategorySidebar categorySlug="ai-agents" />
         </div>
       </div>
-    </div>
-  </main>
-  
+      
+      <div class="category-content">
+          <div class="category-layout">
+            <div class="category-main">
+              <div class="articles-grid">
+                {aiAgentsArticles.map((article: any) => (
+                  <article class="category-article">
+                    <div class="article-image">
+                      {article.featuredImage ? (
+                        <img src={article.featuredImage} alt={article.title} />
+                      ) : (
+                        <div class="placeholder">🤖</div>
+                      )}
+                    </div>
+                    <div class="article-content">
+                      <a href="/categories/ai-agents" class="category-badge-small ai-agents">AI Agents</a>
+                      <h2><a href={`/ai-agents/${article.slug}`}>{article.title}</a></h2>
+                      <p>{article.excerpt}</p>
+                      <div class="article-meta">
+                        <span class="author">By <a href={`/authors/${article.author?.slug?.current || 'anonymous'}`} class="author-link">{article.author?.name || 'Anonymous'}</a></span>
+                        <span class="date">{new Date(article.publishedAt || Date.now()).toLocaleDateString('en-US', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })}</span>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+            <CategorySidebar categorySlug="ai-agents" />
+          </div>
+      </div>
+    </main>
+    <div class="footer-padding-spacer"></div>
+  </div>
   <Footer />
   
   <style>
@@ -131,16 +130,27 @@ const pageDescription = "Discover AI agents, autonomous systems, and intelligent
     }
     
     .category-layout {
-      display: grid;
+      display: grid !important;
       grid-template-columns: 1fr 340px;
       gap: 2rem;
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 1rem;
+      align-items: start;
     }
     
     .category-main {
       min-width: 0;
+      overflow: visible;
+      z-index: 1;
+      position: relative;
+    }
+    
+    .category-sidebar {
+      min-width: 0;
+      overflow: visible;
+      z-index: 2;
+      position: relative;
     }
     
     .articles-grid {

@@ -47,7 +47,9 @@ export default defineConfig({
           manualChunks: {
             'react-vendor': ['react', 'react-dom'],
             'sanity-vendor': ['@sanity/client', '@sanity/image-url'],
-            'utils-vendor': ['date-fns', 'clsx']
+            'utils-vendor': ['date-fns', 'clsx'],
+            'analytics-vendor': ['@sanity/astro'],
+            'ui-vendor': ['clsx', 'date-fns']
           }
         }
       },

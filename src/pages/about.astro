@@ -1,35 +1,9 @@
 ---
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import MainLayout from '../layouts/MainLayout.astro';
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About Us | AI Buzz Media</title>
-  <meta name="description" content="Learn about AI Buzz Media - your trusted source for the latest AI news, insights, and analysis. Meet our team and discover our mission." />
-  
-  <!-- Open Graph -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content={Astro.url} />
-  <meta property="og:title" content="About Us | AI Buzz Media" />
-  <meta property="og:description" content="Learn about AI Buzz Media - your trusted source for the latest AI news, insights, and analysis." />
-  <meta property="og:site_name" content="AI Buzz Media" />
-  
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary" />
-  <meta property="twitter:url" content={Astro.url} />
-  <meta property="twitter:title" content="About Us | AI Buzz Media" />
-  <meta property="twitter:description" content="Learn about AI Buzz Media - your trusted source for the latest AI news, insights, and analysis." />
-  
-  <link rel="canonical" href={Astro.url} />
-</head>
-<body>
-  <Header />
-  
-  <main class="about-page">
+<MainLayout title="About Us | AI Buzz Media" description="Learn about AI Buzz Media - your trusted source for the latest AI news, insights, and analysis. Meet our team and discover our mission.">
+  <div class="main-content">
     <!-- Hero Section -->
     <section class="about-hero">
       <div class="container">
@@ -180,11 +154,9 @@ import Footer from '../components/Footer.astro';
         </div>
       </div>
     </section>
-  </main>
-  
-  <Footer />
-</body>
-</html>
+    <div class="footer-padding-spacer"></div>
+  </div>
+</MainLayout>
 
 <style>
   html, body {
@@ -490,6 +462,16 @@ import Footer from '../components/Footer.astro';
     background: rgba(0, 212, 255, 0.1);
     transform: translateY(-2px);
   }
+
+  .cta-section::before,
+  .cta-section::after {
+    display: none !important;
+    content: none !important;
+    animation: none !important;
+    background: none !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+  }
   
   /* Responsive Design */
   @media (max-width: 768px) {
@@ -524,5 +506,19 @@ import Footer from '../components/Footer.astro';
     .container {
       padding: 0 1rem;
     }
+  }
+
+  /* Match the gradient background of the CTA section for the footer spacer */
+  .footer-padding-spacer {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 102, 255, 0.1) 100%) !important;
+  }
+
+  body::before {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    animation: none !important;
+    background: none !important;
+    content: none !important;
   }
 </style>

@@ -140,23 +140,7 @@ declare module 'astro:content' {
 	>;
 
 	type ContentEntryMap = {
-		"articles": {
-"2024-01-20-gpt-5-breakthrough-analysis.md": {
-	id: "2024-01-20-gpt-5-breakthrough-analysis.md";
-  slug: "gpt-5-breakthrough-analysis";
-  body: string;
-  collection: "articles";
-  data: any
-} & { render(): Render[".md"] };
-"simple-test.md": {
-	id: "simple-test.md";
-  slug: "simple-test";
-  body: string;
-  collection: "articles";
-  data: any
-} & { render(): Render[".md"] };
-};
-"authors": {
+		"authors": {
 "john-doe.md": {
 	id: "john-doe.md";
   slug: "john-doe";
@@ -210,37 +194,9 @@ declare module 'astro:content' {
   collection: "categories";
   data: any
 } & { render(): Render[".md"] };
-"ai-news.md": {
-	id: "ai-news.md";
-  slug: "ai-news";
-  body: string;
-  collection: "categories";
-  data: any
-} & { render(): Render[".md"] };
 "business.md": {
 	id: "business.md";
   slug: "business";
-  body: string;
-  collection: "categories";
-  data: any
-} & { render(): Render[".md"] };
-"finance.md": {
-	id: "finance.md";
-  slug: "finance";
-  body: string;
-  collection: "categories";
-  data: any
-} & { render(): Render[".md"] };
-"reviews.md": {
-	id: "reviews.md";
-  slug: "reviews";
-  body: string;
-  collection: "categories";
-  data: any
-} & { render(): Render[".md"] };
-"tutorials.md": {
-	id: "tutorials.md";
-  slug: "tutorials";
   body: string;
   collection: "categories";
   data: any
@@ -259,7 +215,12 @@ declare module 'astro:content' {
 	};
 
 	type DataEntryMap = {
-		"newsletter": Record<string, {
+		"articles": Record<string, {
+  id: string;
+  collection: "articles";
+  data: any;
+}>;
+"newsletter": Record<string, {
   id: string;
   collection: "newsletter";
   data: any;

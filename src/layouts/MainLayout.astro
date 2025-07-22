@@ -32,6 +32,7 @@ interface Props {
 	noindex?: boolean;
 	nofollow?: boolean;
 	structuredData?: object;
+	bodyClass?: string;
 }
 
 const { 
@@ -49,7 +50,8 @@ const {
 	canonicalUrl,
 	noindex = false,
 	nofollow = false,
-	structuredData
+	structuredData,
+	bodyClass = 'gpu-accelerated',
 } = Astro.props;
 
 const canonicalURL = canonicalUrl || Astro.url.href;
@@ -187,6 +189,11 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link rel="dns-prefetch" href="https://cdn.sanity.io">
 		<link rel="preconnect" href="https://cdn.sanity.io">
+		<link rel="dns-prefetch" href="https://www.google-analytics.com">
+		<link rel="dns-prefetch" href="https://www.googletagmanager.com">
+		<link rel="dns-prefetch" href="https://connect.facebook.net">
+		<link rel="dns-prefetch" href="https://static.ads-twitter.com">
+		<link rel="preload" as="image" href="/favicon.ico">
 		
 		<!-- Critical CSS inlined -->
 		<style>
@@ -205,7 +212,7 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 			}
 		</style>
 	</head>
-	<body class="gpu-accelerated">
+	<body>
 		<!-- Skip link for accessibility -->
 		<a href="#main-content" class="skip-link">Skip to main content</a>
 		
@@ -214,7 +221,6 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 		<main id="main-content" class="main-content">
 			<slot />
 		</main>
-		
 		<Footer />
 		
 		<!-- Performance monitoring -->
@@ -238,13 +244,17 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 			// Preload critical resources
 			if ('requestIdleCallback' in window) {
 				requestIdleCallback(() => {
-					// Preload next likely page
+					// Preload next likely page - only if it's a valid route
 					const links = document.querySelectorAll('a[href^="/"]');
 					if (links.length > 0) {
-						const link = document.createElement('link');
-						link.rel = 'prefetch';
-						link.href = links[0].getAttribute('href') ?? '';
-						document.head.appendChild(link);
+						const href = links[0].getAttribute('href') ?? '';
+						// Only preload if it's a valid route (not an author page that might not exist)
+						if (href && !href.includes('/authors/') && !href.includes('/admin/')) {
+							const link = document.createElement('link');
+							link.rel = 'prefetch';
+							link.href = href;
+							document.head.appendChild(link);
+						}
 					}
 				});
 			}

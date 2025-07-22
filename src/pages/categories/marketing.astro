@@ -34,18 +34,18 @@ const pageDescription = "Discover the latest in AI marketing, content creation, 
 </head>
 <body>
   <Header />
-  <main class="category-page">
-    <div class="category-hero">
-      <div class="container">
-        <div class="category-header">
-          <div class="category-icon">📈</div>
-          <h1 class="category-title">AI Marketing & Content Creation</h1>
-          <p class="category-description">Discover the latest in AI marketing, content creation, and digital strategy. Stay ahead with news, guides, and tools for marketers and creators.</p>
+  <div class="main-content">
+    <main class="category-page">
+      <div class="category-hero">
+        <div class="container">
+          <div class="category-header">
+            <div class="category-icon">📈</div>
+            <h1 class="category-title">AI Marketing & Content Creation</h1>
+            <p class="category-description">Discover the latest in AI marketing, content creation, and digital strategy. Stay ahead with news, guides, and tools for marketers and creators.</p>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="category-content">
-      <div class="container">
+      <div class="category-content">
         <div class="category-layout">
           <div class="category-main">
             <div class="articles-grid">
@@ -60,7 +60,7 @@ const pageDescription = "Discover the latest in AI marketing, content creation, 
                       )}
                     </div>
                     <div class="article-content">
-                      <span class="category-badge-small marketing">Marketing</span>
+                      <a href="/categories/marketing" class="category-badge-small marketing">Marketing</a>
                       <h2><a href={`/marketing/${article.slug}`}>{article.title}</a></h2>
                       <p>{article.excerpt}</p>
                       <div class="article-meta">
@@ -81,8 +81,9 @@ const pageDescription = "Discover the latest in AI marketing, content creation, 
           <CategorySidebar categorySlug="marketing" />
         </div>
       </div>
-    </div>
-  </main>
+    </main>
+    <div class="footer-padding-spacer"></div>
+  </div>
   <Footer />
   
   <style>
@@ -126,16 +127,20 @@ const pageDescription = "Discover the latest in AI marketing, content creation, 
     }
     
     .category-layout {
-      display: grid;
+      display: grid !important;
       grid-template-columns: 1fr 340px;
       gap: 2rem;
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 1rem;
+      align-items: start;
     }
     
     .category-main {
       min-width: 0;
+      overflow: visible;
+      z-index: 1;
+      position: relative;
     }
     
     .articles-grid {
@@ -319,6 +324,20 @@ const pageDescription = "Discover the latest in AI marketing, content creation, 
       box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
       background: rgba(59, 130, 246, 0.3);
       color: #ffffff;
+    }
+
+    .category-main,
+    .articles-grid {
+      min-width: 0;
+      overflow: visible;
+      z-index: 1;
+      position: relative;
+    }
+
+    .category-layout,
+    .category-content,
+    .container {
+      overflow: visible !important;
     }
   </style>
 </body>

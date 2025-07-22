@@ -34,13 +34,13 @@ export const CATEGORIES = [
     slug: 'ecommerce',
     displayName: 'eCommerce',
     fullName: 'AI for eCommerce & Online Business',
-    homepagePriority: undefined,
+    // No homepagePriority
   },
   {
     slug: 'coding',
     displayName: 'Coding',
     fullName: 'AI Coding & Development Tools',
-    homepagePriority: undefined,
+    // No homepagePriority
   },
 ];
 

@@ -22,7 +22,7 @@ const crypto = require('crypto');
 // Configuration
 const CONFIG = {
   backupDir: './backups',
-  maxBackups: 10, // Keep last 10 backups
+  maxBackups: 4, // Keep last 4 backups
   includeFiles: [
     'src/content/**/*',
     'src/components/**/*',
@@ -140,7 +140,7 @@ class BackupSystem {
           path: relativePath,
           size: stats.size,
           modified: stats.mtime.toISOString(),
-          checksum: this.calculateChecksum(filePath)
+          // checksum: this.calculateChecksum(filePath) // Skipped for speed
         });
         
         totalSize += stats.size;
@@ -291,25 +291,28 @@ class BackupSystem {
     console.log('');
 
     try {
-      // Step 1: Create backup directory
+      console.log('Step 1: Create backup directory');
       this.createBackupDir();
 
-      // Step 2: Create manifest
+      console.log('Step 2: Create manifest');
       const manifest = this.createManifest();
 
-      // Step 3: Copy files
+      console.log('Step 3: Copy files');
       await this.copyFiles(manifest);
+      console.log('Step 3 complete: Files copied');
 
       // Step 4: Update manifest with final info
-      manifest.checksum = this.calculateChecksum(this.backupPath);
+      // manifest.checksum = this.calculateChecksum(this.backupPath); // Skipped for speed
       const manifestPath = path.join(this.backupPath, 'backup-manifest.json');
       fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
 
-      // Step 5: Create compressed archive
+      console.log('Step 5: Create compressed archive');
       const archivePath = await this.createArchive();
+      console.log('Step 5 complete: Archive created');
 
-      // Step 6: Clean old backups
+      console.log('Step 6: Clean old backups');
       this.cleanOldBackups();
+      console.log('Step 6 complete: Old backups cleaned');
 
       // Step 7: Final summary
       console.log('');

@@ -1,12 +1,20 @@
 ---
 import { getArticlesByCategory } from '../lib/sanity';
-import { generateWebPUrl, generateResponsiveSrcSet } from '../utils/imageOptimization'
+import { generateWebPUrl, generateResponsiveSrcSet, generateThumbnail } from '../utils/imageOptimization'
 import CategorySidebar from './CategorySidebar.astro';
 import BaseHead from './BaseHead.astro';
 import Header from './Header.astro';
 import Footer from './Footer.astro';
 import { getCategoryUrl } from '../utils/urlHelpers';
 import { HOMEPAGE_CATEGORIES } from '../consts.ts';
+
+// Type for homepage categories
+interface HomepageCategory {
+	slug: string;
+	displayName: string;
+}
+
+const homepageCategories: HomepageCategory[] = HOMEPAGE_CATEGORIES as HomepageCategory[];
 
 // Helper functions
 function getArticleUrl(article: any) {
@@ -22,9 +30,36 @@ function formatDate(dateString: string) {
 	})
 }
 
+// Helper to flatten Portable Text array to plain text
+function portableTextToPlainText(content: any[]): string {
+	if (!Array.isArray(content)) return '';
+	return content
+		.map((block: any) => {
+			if (block._type === 'block' && Array.isArray(block.children)) {
+				return block.children.map((child: any) => child.text).join(' ');
+			}
+			// Handle custom HTML blocks
+			if (block._type === 'htmlBlock' && typeof block.html === 'string') {
+				// Strip HTML tags and return text
+				return block.html.replace(/<[^>]*>/g, ' ');
+			}
+			return '';
+		})
+		.join(' ');
+}
+
+// Helper: Unified magazine card renderer
+interface MagazineCardProps {
+	article: any;
+	category: string;
+	displayName: string;
+	badge?: string;
+	minimal?: boolean;
+}
+
 // Fetch articles for each homepage category
 const categoryArticles: Record<string, any[]> = {};
-for (const category of HOMEPAGE_CATEGORIES) {
+for (const category of homepageCategories) {
 	categoryArticles[category.slug] = await getArticlesByCategory(category.slug, 8);
 }
 
@@ -59,132 +94,365 @@ for (const category in finalArticles) {
 }
 
 // Debug logging
-console.log('🔍 Debug: Article counts for homepage sections');
-for (const category in mainArticles) {
-	console.log(`${category} - Main: ${mainArticles[category].length}, Sidebar: ${sidebarArticles[category].length}`);
-}
+// console.log('🔍 Debug: Article counts for homepage sections');
+// for (const category in mainArticles) {
+// 	console.log(`${category} - Main: ${mainArticles[category].length}, Sidebar: ${sidebarArticles[category].length}`);
+// }
 
 // Log first few articles to check for duplicates
-for (const category in mainArticles) {
-	console.log(`🔍 Debug: First 2 main ${category} articles:`, mainArticles[category].slice(0, 2).map((a: any) => a.title));
-	console.log(`🔍 Debug: First 2 sidebar ${category} articles:`, sidebarArticles[category].slice(0, 2).map((a: any) => a.title));
-}
+// for (const category in mainArticles) {
+// 	console.log(`🔍 Debug: First 2 main ${category} articles:`, mainArticles[category].slice(0, 2).map((a: any) => a.title));
+// 	console.log(`🔍 Debug: First 2 sidebar ${category} articles:`, sidebarArticles[category].slice(0, 2).map((a: any) => a.title));
+// }
 
 // Debug author data structure
-for (const category in mainArticles) {
-	if (mainArticles[category].length > 0 && mainArticles[category][0].author) {
-		console.log(`🔍 Debug: Author data structure for ${category}:`, JSON.stringify(mainArticles[category][0].author, null, 2));
-	}
-}
+// for (const category in mainArticles) {
+// 	if (mainArticles[category].length > 0 && mainArticles[category][0].author) {
+// 		console.log(`🔍 Debug: Author data structure for ${category}:`, JSON.stringify(mainArticles[category][0].author, null, 2));
+// 	}
+// }
 ---
 
 <section class="aibuzz-layout">
 	<div class="layout-container">
-		{HOMEPAGE_CATEGORIES.map((category) => {
-			const articles = categoryArticles[category.slug] || [];
+		{homepageCategories.map((cat: HomepageCategory) => {
+			const articles = categoryArticles[cat.slug] || [];
 			const mainArticles = articles.slice(0, 4);
-			const sidebarArticles = articles.slice(4, 8);
-			return (
-				<section class="content-section" id={category.slug}>
-					<div class="section-header">
-						<h2 class="section-title">{category.displayName}</h2>
-						<a href={`/categories/${category.slug}`} class="view-all-link">View All →</a>
-					</div>
-					<div class="section-layout">
-						<div class="main-content">
-							<div class="grid-layout-special">
-								<div class="top-row">
-									{mainArticles.slice(0, 2).map((article: any) => (
-										<article class="large-card">
-											<a href={getArticleUrl(article)} class="card-image-link">
-												<div class="card-image">
-													{article.featuredImage ? (
-														<img src={article.featuredImage} alt={article.title} />
-													) : (
-														<div class="placeholder-image">📰</div>
-													)}
-												</div>
-											</a>
-											<div class="card-content">
-												<a href={getCategoryUrl(category.displayName)} class="category-tag category-link-safe">
-													{category.displayName}
+			const sidebar = sidebarArticles[cat.slug] || [];
+
+			// MARKETING SECTION: Use Business section layout and markup
+			if (cat.slug === 'marketing') {
+				return (
+					<section class="content-section" id={cat.slug}>
+						<div class="section-header">
+							<h2 class="section-title"><a href={`/categories/${cat.slug}`}>{cat.displayName}</a></h2>
+							<a href={`/categories/${cat.slug}`} class="view-all-link">View All →</a>
+						</div>
+						<div class="section-layout marketing-section-layout">
+							<div class="main-content">
+								<div class="grid-layout-special">
+									<div class="top-row">
+										{mainArticles.slice(0, 2).map((article: any) => (
+											<article class="large-card">
+												<a href={getArticleUrl(article)} class="card-image-link">
+													<div class="card-image" style="aspect-ratio: 16/9; height: 250px;">
+														{article.featuredImage ? (
+															<img src={article.featuredImage} alt={article.title} loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" />
+														) : (
+															<div class="placeholder-image">📰</div>
+														)}
+														<div class="card-image-gradient" style="position:absolute;left:0;bottom:0;width:100%;height:40%;background:linear-gradient(180deg,rgba(24,25,26,0) 0%,rgba(24,25,26,0.7) 100%);"></div>
+													</div>
 												</a>
-												<div style="height: 16px;"></div>
-												<h3><a href={getArticleUrl(article)}>{article.title}</a></h3>
-												<p>{article.excerpt}</p>
-												<div class="card-meta">
-													<span class="author">
-														By <a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>
-															{article.author?.name || 'Anonymous'}
-														</a>
-													</span>
-													<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
+												<div class="card-content">
+													<a href={`/categories/${cat.slug}`} class="category-tag category-link-safe">{cat.displayName}</a>
+													<div style="height: 16px;"></div>
+													<h3 style="font-weight:800;"><a href={getArticleUrl(article)}>{article.title}</a></h3>
+													<p>{article.excerpt}</p>
+													<div class="card-meta">
+														<span class="author">
+															By <a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>{article.author?.name || 'Anonymous'}</a>
+														</span>
+														<span class="date">{formatDate(article.publishedAt)}</span>
+														<span class="read-time">{Math.max(1, Math.ceil(((article.excerpt ? article.excerpt.split(/\s+/).length : 0) + (article.content ? portableTextToPlainText(article.content).split(/\s+/).length : 0)) / 200))} min read</span>
+													</div>
 												</div>
-											</div>
-										</article>
-									))}
-								</div>
-								<div class="bottom-row">
-									{mainArticles.slice(2, 4).map((article: any) => (
-										<article class="stacked-card">
-											<a href={getArticleUrl(article)} class="stacked-image-link">
-												<div class="stacked-image">
-													{article.featuredImage ? (
-														<img src={article.featuredImage} alt={article.title} />
-													) : (
-														<div class="placeholder-small">📰</div>
-													)}
+											</article>
+										))}
+									</div>
+									<div class="business-bottom-row">
+										{mainArticles.slice(2, 4).map((article: any) => (
+											<article class="business-stacked-card">
+												<div class="business-stacked-image-wrapper">
+													<a href={getArticleUrl(article)} class="business-stacked-image-link">
+														{article.featuredImage ? (
+															<img src={article.featuredImage} alt={article.title} loading="lazy" />
+														) : (
+															<div class="placeholder-small">📰</div>
+														)}
+													</a>
 												</div>
-											</a>
-											<div class="stacked-content">
-												<a href={getCategoryUrl(category.displayName)} class="category-tag category-link-safe">
-													{category.displayName}
-												</a>
-												<div style="height: 16px;"></div>
-												<h4><a href={getArticleUrl(article)}>{article.title}</a></h4>
-												<div class="stacked-meta">
-													<span class="author">
-														<a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>
-															{article.author?.name || 'Anonymous'}
-														</a>
-													</span>
-													<span class="date">{formatDate(article.publishedAt || Date.now())}</span>
+												<div class="business-stacked-content">
+													<a href={`/categories/${cat.slug}`} class="category-tag category-link-safe">{cat.displayName}</a>
+													<h4><a href={getArticleUrl(article)}>{article.title}</a></h4>
+													<p>{article.excerpt}</p>
+													<div class="business-stacked-meta">
+														<span class="author">
+															By <a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>{article.author?.name || 'Anonymous'}</a>
+														</span>
+														<span class="date">{formatDate(article.publishedAt)}</span>
+														<span class="read-time">{Math.max(1, Math.ceil(((article.excerpt ? article.excerpt.split(/\s+/).length : 0) + (article.content ? portableTextToPlainText(article.content).split(/\s+/).length : 0)) / 200))} min read</span>
+													</div>
 												</div>
-											</div>
-										</article>
-									))}
+											</article>
+										))}
+									</div>
 								</div>
 							</div>
+							<div class="sidebar marketing-sidebar">
+								<CategorySidebar categorySlug={cat.slug} articles={sidebar} />
+							</div>
 						</div>
-						<CategorySidebar categorySlug={category.slug} articles={sidebarArticles} />
-					</div>
-				</section>
-			);
+					</section>
+				);
+			}
+
+			// AI AGENTS SECTION: Use Business section layout and markup
+			if (cat.slug === 'ai-agents') {
+				return (
+					<section class="content-section" id={cat.slug}>
+						<div class="section-header">
+							<h2 class="section-title"><a href={`/categories/${cat.slug}`}>{cat.displayName}</a></h2>
+							<a href={`/categories/${cat.slug}`} class="view-all-link">View All →</a>
+						</div>
+						<div class="section-layout ai-agents-section-layout">
+							<div class="main-content">
+								<div class="grid-layout-special">
+									<div class="top-row">
+										{mainArticles.slice(0, 2).map((article: any) => (
+											<article class="large-card">
+												<a href={getArticleUrl(article)} class="card-image-link">
+													<div class="card-image" style="aspect-ratio: 16/9; height: 250px;">
+														{article.featuredImage ? (
+															<img src={article.featuredImage} alt={article.title} loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" />
+														) : (
+															<div class="placeholder-image">📰</div>
+														)}
+														<div class="card-image-gradient" style="position:absolute;left:0;bottom:0;width:100%;height:40%;background:linear-gradient(180deg,rgba(24,25,26,0) 0%,rgba(24,25,26,0.7) 100%);"></div>
+													</div>
+												</a>
+												<div class="card-content">
+													<a href={`/categories/${cat.slug}`} class="category-tag category-link-safe">{cat.displayName}</a>
+													<div style="height: 16px;"></div>
+													<h3 style="font-weight:800;"><a href={getArticleUrl(article)}>{article.title}</a></h3>
+													<p>{article.excerpt}</p>
+													<div class="card-meta">
+														<span class="author">
+															By <a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>{article.author?.name || 'Anonymous'}</a>
+														</span>
+														<span class="date">{formatDate(article.publishedAt)}</span>
+														<span class="read-time">{Math.max(1, Math.ceil(((article.excerpt ? article.excerpt.split(/\s+/).length : 0) + (article.content ? portableTextToPlainText(article.content).split(/\s+/).length : 0)) / 200))} min read</span>
+													</div>
+												</div>
+											</article>
+										))}
+									</div>
+									<div class="business-bottom-row">
+										{mainArticles.slice(2, 4).map((article: any) => (
+											<article class="business-stacked-card">
+												<div class="business-stacked-image-wrapper">
+													<a href={getArticleUrl(article)} class="business-stacked-image-link">
+														{article.featuredImage ? (
+															<img src={article.featuredImage} alt={article.title} loading="lazy" />
+														) : (
+															<div class="placeholder-small">📰</div>
+														)}
+													</a>
+												</div>
+												<div class="business-stacked-content">
+													<a href={`/categories/${cat.slug}`} class="category-tag category-link-safe">{cat.displayName}</a>
+													<h4><a href={getArticleUrl(article)}>{article.title}</a></h4>
+													<p>{article.excerpt}</p>
+													<div class="business-stacked-meta">
+														<span class="author">
+															By <a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>{article.author?.name || 'Anonymous'}</a>
+														</span>
+														<span class="date">{formatDate(article.publishedAt)}</span>
+														<span class="read-time">{Math.max(1, Math.ceil(((article.excerpt ? article.excerpt.split(/\s+/).length : 0) + (article.content ? portableTextToPlainText(article.content).split(/\s+/).length : 0)) / 200))} min read</span>
+													</div>
+												</div>
+											</article>
+										))}
+									</div>
+								</div>
+							</div>
+							<div class="sidebar ai-agents-sidebar">
+								<CategorySidebar categorySlug={cat.slug} articles={sidebar} />
+							</div>
+						</div>
+					</section>
+				);
+			}
+
+			// CREATIVE SECTION: Use Business section layout and markup
+			if (cat.slug === 'creative') {
+				return (
+					<section class="content-section" id={cat.slug}>
+						<div class="section-header">
+							<h2 class="section-title"><a href={`/categories/${cat.slug}`}>{cat.displayName}</a></h2>
+							<a href={`/categories/${cat.slug}`} class="view-all-link">View All →</a>
+						</div>
+						<div class="section-layout creative-section-layout">
+							<div class="main-content">
+								<div class="grid-layout-special">
+									<div class="top-row">
+										{mainArticles.slice(0, 2).map((article: any) => (
+											<article class="large-card">
+												<a href={getArticleUrl(article)} class="card-image-link">
+													<div class="card-image" style="aspect-ratio: 16/9; height: 250px;">
+														{article.featuredImage ? (
+															<img src={article.featuredImage} alt={article.title} loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" />
+														) : (
+															<div class="placeholder-image">📰</div>
+														)}
+														<div class="card-image-gradient" style="position:absolute;left:0;bottom:0;width:100%;height:40%;background:linear-gradient(180deg,rgba(24,25,26,0) 0%,rgba(24,25,26,0.7) 100%);"></div>
+													</div>
+												</a>
+												<div class="card-content">
+													<a href={`/categories/${cat.slug}`} class="category-tag category-link-safe">{cat.displayName}</a>
+													<div style="height: 16px;"></div>
+													<h3 style="font-weight:800;"><a href={getArticleUrl(article)}>{article.title}</a></h3>
+													<p>{article.excerpt}</p>
+													<div class="card-meta">
+														<span class="author">
+															By <a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>{article.author?.name || 'Anonymous'}</a>
+														</span>
+														<span class="date">{formatDate(article.publishedAt)}</span>
+														<span class="read-time">{Math.max(1, Math.ceil(((article.excerpt ? article.excerpt.split(/\s+/).length : 0) + (article.content ? portableTextToPlainText(article.content).split(/\s+/).length : 0)) / 200))} min read</span>
+													</div>
+												</div>
+											</article>
+										))}
+									</div>
+									<div class="business-bottom-row">
+										{mainArticles.slice(2, 4).map((article: any) => (
+											<article class="business-stacked-card">
+												<div class="business-stacked-image-wrapper">
+													<a href={getArticleUrl(article)} class="business-stacked-image-link">
+														{article.featuredImage ? (
+															<img src={article.featuredImage} alt={article.title} loading="lazy" />
+														) : (
+															<div class="placeholder-small">📰</div>
+														)}
+													</a>
+												</div>
+												<div class="business-stacked-content">
+													<a href={`/categories/${cat.slug}`} class="category-tag category-link-safe">{cat.displayName}</a>
+													<h4><a href={getArticleUrl(article)}>{article.title}</a></h4>
+													<p>{article.excerpt}</p>
+													<div class="business-stacked-meta">
+														<span class="author">
+															By <a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>{article.author?.name || 'Anonymous'}</a>
+														</span>
+														<span class="date">{formatDate(article.publishedAt)}</span>
+														<span class="read-time">{Math.max(1, Math.ceil(((article.excerpt ? article.excerpt.split(/\s+/).length : 0) + (article.content ? portableTextToPlainText(article.content).split(/\s+/).length : 0)) / 200))} min read</span>
+													</div>
+												</div>
+											</article>
+										))}
+									</div>
+								</div>
+							</div>
+							<div class="sidebar creative-sidebar">
+								<CategorySidebar categorySlug={cat.slug} articles={sidebar} />
+							</div>
+						</div>
+					</section>
+				);
+			}
+
+			// BUSINESS SECTION: restore original layout and card markup
+			if (cat.slug === 'business') {
+				return (
+					<section class="content-section" id={cat.slug}>
+						<div class="section-header">
+							<h2 class="section-title"><a href={`/categories/${cat.slug}`}>{cat.displayName}</a></h2>
+							<a href={`/categories/${cat.slug}`} class="view-all-link">View All →</a>
+						</div>
+						<div class="section-layout">
+							<div class="main-content">
+								<div class="grid-layout-special">
+									<div class="top-row">
+										{mainArticles.slice(0, 2).map((article: any) => (
+											<article class="large-card">
+												<a href={getArticleUrl(article)} class="card-image-link">
+													<div class="card-image" style="aspect-ratio: 16/9;">
+														{article.featuredImage ? (
+															<img src={article.featuredImage} alt={article.title} loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" />
+														) : (
+															<div class="placeholder-image">📰</div>
+														)}
+														<div class="card-image-gradient" style="position:absolute;left:0;bottom:0;width:100%;height:40%;background:linear-gradient(180deg,rgba(24,25,26,0) 0%,rgba(24,25,26,0.7) 100%);"></div>
+													</div>
+												</a>
+												<div class="card-content">
+													<a href="/categories/business" class="category-tag category-link-safe">Business</a>
+													<div style="height: 16px;"></div>
+													<h3 style="font-weight:800;"><a href={getArticleUrl(article)}>{article.title}</a></h3>
+													<p>{article.excerpt}</p>
+													<div class="card-meta">
+														<span class="author">
+															By <a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>{article.author?.name || 'Anonymous'}</a>
+														</span>
+														<span class="date">{formatDate(article.publishedAt)}</span>
+														<span class="read-time">{Math.max(1, Math.ceil(((article.excerpt ? article.excerpt.split(/\s+/).length : 0) + (article.content ? portableTextToPlainText(article.content).split(/\s+/).length : 0)) / 200))} min read</span>
+													</div>
+												</div>
+											</article>
+										))}
+									</div>
+									<div class="business-bottom-row">
+										{mainArticles.slice(2, 4).map((article: any) => (
+											<article class="business-stacked-card">
+												<div class="business-stacked-image-wrapper">
+													<a href={getArticleUrl(article)} class="business-stacked-image-link">
+														{article.featuredImage ? (
+															<img src={article.featuredImage} alt={article.title} loading="lazy" />
+														) : (
+															<div class="placeholder-small">📰</div>
+														)}
+													</a>
+												</div>
+												<div class="business-stacked-content">
+													<a href="/categories/business" class="category-tag category-link-safe">Business</a>
+													<h4><a href={getArticleUrl(article)}>{article.title}</a></h4>
+													<p>{article.excerpt}</p>
+													<div class="business-stacked-meta">
+														<span class="author">
+															By <a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>{article.author?.name || 'Anonymous'}</a>
+														</span>
+														<span class="date">{formatDate(article.publishedAt)}</span>
+														<span class="read-time">{Math.max(1, Math.ceil(((article.excerpt ? article.excerpt.split(/\s+/).length : 0) + (article.content ? portableTextToPlainText(article.content).split(/\s+/).length : 0)) / 200))} min read</span>
+													</div>
+												</div>
+											</article>
+										))}
+									</div>
+								</div>
+							</div>
+							<div class="sidebar">
+								<CategorySidebar categorySlug={cat.slug} articles={sidebar} />
+							</div>
+						</div>
+					</section>
+				);
+			}
+
+			// Default fallback (should not be hit)
+			return null;
 		})}
 	</div>
 </section>
+<div class="footer-padding-spacer"></div>
 
 <style>
 	.aibuzz-layout {
-		padding: 2rem 0;
+		padding: 2rem 0 2rem 0;
 		background: var(--bg-primary);
-		/* Natural document flow */
 		position: relative;
-		/* Remove z-index that might cause issues */
 		z-index: 1;
-		/* Ensure proper spacing for footer */
-		margin-bottom: 0;
+		/* margin-bottom: 2rem; */
+		overflow: visible;
 	}
 
 	.layout-container {
 		max-width: 1200px;
 		margin: 0 auto;
 		padding: 0 2rem;
-		/* Natural document flow */
 		position: relative;
 		z-index: 1;
-		/* Remove bottom padding that might interfere */
 		padding-bottom: 0;
+		overflow: visible;
 	}
 
 	.content-section {
@@ -212,6 +480,44 @@ for (const category in mainArticles) {
 		margin: 0;
 	}
 
+	.section-title a {
+		position: relative;
+		z-index: 1;
+		background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		text-decoration: none;
+		transition: text-decoration 0.2s, color 0.2s;
+		cursor: pointer;
+	}
+
+	.section-title a::after {
+		content: "";
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: 120%;
+		height: 70%;
+		transform: translate(-50%, -50%);
+		background: radial-gradient(circle, rgba(0,212,255,0.35) 0%, rgba(0,212,255,0.10) 80%, transparent 100%);
+		filter: blur(12px);
+		opacity: 0;
+		transition: opacity 0.3s;
+		z-index: -1;
+		pointer-events: none;
+	}
+
+	.section-title a:hover {
+		text-decoration: underline;
+		-webkit-text-fill-color: unset;
+		color: #00d4ff;
+	}
+
+	.section-title a:hover::after {
+		opacity: 1;
+	}
+
 	.view-all-link {
 		color: #00d4ff;
 		text-decoration: none;
@@ -232,21 +538,24 @@ for (const category in mainArticles) {
 	/* Section Layout */
 	.section-layout {
 		display: grid;
-		grid-template-columns: 1fr 340px;
+		grid-template-columns: minmax(0, 1fr) 340px;
 		gap: 2rem;
-		align-items: start;
+		align-items: stretch;
 	}
 
 	.main-content {
-		min-width: 0;
+		width: 100%;
+		max-width: none;
+		flex: none;
 	}
 
 	/* Grid Layout for Main Content */
 	.grid-layout-special {
+		width: 100%;
+		max-width: none;
 		display: flex;
 		flex-direction: column;
-		gap: 2rem;
-		height: 100%;
+		gap: 1.5rem;
 	}
 
 	/* Top Row: 2 Large Cards Side by Side */
@@ -369,6 +678,7 @@ for (const category in mainArticles) {
 		text-decoration: none;
 		display: inline-block;
 		transition: transform 0.1s ease;
+		outline: none;
 	}
 
 	.card-content h3 a:hover {
@@ -430,6 +740,13 @@ for (const category in mainArticles) {
 		margin-top: auto;
 	}
 
+	.card-meta .read-time {
+		color: #00d4ff;
+		font-weight: 600;
+		font-size: 0.85rem;
+		margin-left: 0.5em;
+	}
+
 	/* Bottom Row: 2 Large Cards Side by Side */
 	.bottom-row {
 		display: grid;
@@ -486,6 +803,7 @@ for (const category in mainArticles) {
 		text-decoration: none;
 		display: inline-block;
 		transition: transform 0.1s ease;
+		outline: none;
 	}
 
 	.medium-card .card-content h3 a:hover {
@@ -618,6 +936,7 @@ for (const category in mainArticles) {
 		text-decoration: none;
 		display: inline-block;
 		transition: transform 0.1s ease;
+		outline: none;
 	}
 
 	.stacked-content h4 a:hover {
@@ -1016,6 +1335,535 @@ for (const category in mainArticles) {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.25rem;
+	}
+
+	/* Business Category Special Layout */
+	.business-stacked-layout {
+		display: flex !important;
+		flex-direction: column !important;
+		width: 100% !important;
+		max-width: 100% !important;
+		gap: 1.5rem !important;
+	}
+
+	/* Override bottom-row grid for Business category */
+	.business-bottom-row {
+		display: flex !important;
+		flex-direction: column !important;
+		width: 100% !important;
+		max-width: 100% !important;
+		gap: 1.5rem !important;
+		grid-template-columns: none !important;
+	}
+
+	/* Ensure business cards take full width */
+	.business-bottom-row .business-stacked-card {
+		width: 100% !important;
+		max-width: 100% !important;
+		margin: 0 !important;
+	}
+
+	.business-stacked-card {
+		display: flex !important;
+		flex-direction: row !important;
+		align-items: stretch !important;
+		width: 100% !important;
+		max-width: 100% !important;
+		background: #18191a;
+		border-radius: 16px;
+		box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+		border: 1px solid rgba(255,255,255,0.08);
+		overflow: hidden;
+		transition: all 0.2s ease;
+	}
+
+	.business-stacked-image-wrapper {
+		display: flex;
+		align-items: stretch;
+		justify-content: center;
+		width: 140px;
+		min-width: 140px;
+		flex: 0 0 140px;
+		align-self: stretch;
+		background: #232425;
+		overflow: hidden;
+		margin: 0;
+	}
+
+	.business-stacked-image-link {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	.business-stacked-image-link img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		transition: transform 0.2s ease;
+	}
+
+	.business-stacked-content {
+		flex: 1 1 0%;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		padding: 1.3rem 1.5rem 1.3rem 1.2rem;
+		min-width: 0;
+	}
+
+	.business-stacked-content h4 {
+		font-size: 1.08rem;
+		font-weight: 600;
+		margin: 0 0 0.45rem 0;
+		line-height: 1.3;
+	}
+
+	.business-stacked-content h4 a {
+		color: #fff;
+		text-decoration: none;
+		display: inline-block;
+		transition: color 0.15s, transform 0.1s;
+		outline: none;
+	}
+
+	.business-stacked-content h4 a:hover {
+		color: #00d4ff;
+		transform: translateX(2px);
+	}
+
+	.business-stacked-content p {
+		color: #b3b3b3;
+		line-height: 1.5;
+		margin: 0 0 0.7rem 0;
+		font-size: 0.93rem;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.business-stacked-meta {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 1.2em;
+		font-size: 0.85rem;
+		color: #666666;
+		border-top: 1px solid rgba(255,255,255,0.1);
+		padding-top: 1rem;
+		margin-top: auto;
+	}
+
+	.business-stacked-meta .author {
+		color: #666666;
+		font-weight: 500;
+	}
+
+	.business-stacked-meta .date {
+		color: #666666;
+	}
+
+	@media (max-width: 900px) {
+		.business-stacked-card {
+			flex-direction: column;
+			align-items: stretch !important;
+		}
+		.business-stacked-image-wrapper {
+			width: 100%;
+			height: 180px;
+			min-width: 0;
+		}
+		.business-stacked-image-link img {
+			border-radius: 16px 16px 0 0;
+		}
+		.business-stacked-content {
+			padding: 1rem;
+		}
+	}
+
+	.business-stacked-content .category-tag {
+		display: inline-block !important;
+		width: auto !important;
+		max-width: 100% !important;
+		align-self: flex-start !important;
+		flex-shrink: 0 !important;
+		margin-bottom: 0.5rem !important;
+	}
+
+	.business-stacked-card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 15px 30px rgba(0, 212, 255, 0.15);
+		border-color: rgba(0, 212, 255, 0.3);
+	}
+
+	.business-stacked-card:hover .business-stacked-image-link img {
+		transform: scale(1.02);
+	}
+
+	.magazine-card {
+		display: flex !important;
+		flex-direction: row !important;
+		align-items: stretch !important;
+		width: 100% !important;
+		max-width: 100% !important;
+		background: #18191a;
+		border-radius: 16px;
+		box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+		border: 1px solid rgba(255,255,255,0.08);
+		overflow: hidden;
+		/* Hover effects are inherited from .business-stacked-card */
+	}
+
+	.magazine-image-wrapper {
+		width: 220px;
+		min-width: 220px;
+		height: auto;
+		aspect-ratio: 16/9;
+		flex: 0 0 220px;
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+		background: #232425;
+		position: relative;
+		overflow: hidden;
+		margin: 0;
+	}
+
+	.magazine-image-container {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+	}
+
+	.magazine-image-container img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		border: none;
+	}
+
+	.magazine-image-gradient {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		height: 40%;
+		background: linear-gradient(180deg, rgba(24,25,26,0) 0%, rgba(24,25,26,0.7) 100%);
+		pointer-events: none;
+		z-index: 2;
+	}
+
+	.magazine-content {
+		flex: 1 1 0%;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		padding: 1.3rem 1.5rem 1.3rem 1.0rem;
+		min-width: 0;
+		margin-left: 1.0rem;
+	}
+
+	.magazine-title {
+		font-size: 1.25rem;
+		font-weight: 800;
+		margin: 0 0 0.6rem 0;
+		line-height: 1.25;
+		letter-spacing: -0.01em;
+	}
+
+	.magazine-title a {
+		color: #fff;
+		text-decoration: none;
+		display: inline-block;
+		transition: color 0.15s, transform 0.1s;
+		outline: none;
+	}
+
+	.magazine-title a:hover {
+		color: #00d4ff;
+		transform: translateX(2px);
+	}
+
+	.magazine-excerpt {
+		color: #b3b3b3;
+		line-height: 1.5;
+		margin: 0 0 0.7rem 0;
+		font-size: 0.97rem;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.magazine-meta {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 1.2em;
+		font-size: 0.85rem;
+		color: #666666;
+		border-top: 1px solid rgba(255,255,255,0.1);
+		padding-top: 1rem;
+		margin-top: auto;
+	}
+
+	.magazine-meta .author {
+		color: #666666;
+		font-weight: 500;
+	}
+
+	.magazine-meta .date {
+		color: #666666;
+	}
+
+	.magazine-meta .read-time {
+		color: #00d4ff;
+		font-weight: 600;
+		font-size: 0.85rem;
+		margin-left: 0.5em;
+	}
+
+	@media (max-width: 900px) {
+		.magazine-card {
+			flex-direction: column;
+		}
+		.magazine-image-wrapper {
+			width: 100%;
+			min-width: 0;
+			height: auto;
+			aspect-ratio: 16/9;
+			flex: none;
+		}
+		.magazine-image-container {
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	/* Remove or reduce min-height for sticky sidebar */
+	.category-sidebar {
+		width: 340px;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		position: sticky;
+		top: 6.5rem;
+		z-index: 10;
+		background: rgba(15, 23, 42, 0.3);
+		padding: 0.75rem;
+		border-radius: 12px;
+		border: 1px solid rgba(71, 85, 105, 0.2);
+		will-change: transform;
+		transform: translateZ(0);
+	}
+
+	.sidebar {
+		/* Ensure no overflow property interferes with sticky */
+		overflow: visible !important;
+	}
+
+	.section-layout {
+		overflow: visible !important;
+	}
+
+	.layout-container {
+		overflow: visible !important;
+	}
+
+	.aibuzz-layout {
+		overflow: visible !important;
+	}
+
+	/* --- Editorial Enhancements for Homepage Sections --- */
+
+	/* 3x2 Grid Layout for AI Agents (if >4 articles) */
+	.grid-layout-3x2 {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-rows: 1fr 1fr;
+		gap: 2rem;
+		height: 100%;
+	}
+	@media (max-width: 900px) {
+		.grid-layout-3x2 {
+			grid-template-columns: 1fr;
+			grid-template-rows: auto;
+			gap: 1rem;
+		}
+	}
+
+	/* Trending Badge for AI Agents */
+	.badge.trending-badge {
+		position: absolute;
+		top: 12px;
+		left: 12px;
+		background: linear-gradient(90deg, #00d4ff 0%, #0066ff 100%);
+		color: #fff;
+		font-size: 0.78rem;
+		font-weight: 700;
+		padding: 0.3em 0.9em;
+		border-radius: 16px;
+		box-shadow: 0 2px 8px rgba(0,212,255,0.12);
+		z-index: 3;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		pointer-events: none;
+	}
+
+	/* Creative Section: Minimal, image-focused cards */
+	.creative-grid {
+		gap: 2.2rem;
+	}
+	.creative-card {
+		background: #18191a;
+		border-radius: 16px;
+		border: 1px solid rgba(255,255,255,0.07);
+		box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+		display: flex;
+		flex-direction: row;
+		align-items: stretch;
+		transition: box-shadow 0.2s, border-color 0.2s;
+		/* Remove overlays, keep image sharp */
+	}
+	.creative-card:hover {
+		box-shadow: 0 8px 32px rgba(0,212,255,0.10);
+		border-color: #00d4ff;
+	}
+	.creative-card .magazine-image-wrapper {
+		box-shadow: none;
+		background: #232425;
+	}
+	.creative-meta {
+		background: none;
+		box-shadow: none;
+		padding-left: 1.2rem;
+	}
+	.creative-meta-row {
+		border-top: 1px solid rgba(255,255,255,0.07);
+		color: #888;
+		font-size: 0.82rem;
+		padding-top: 0.7rem;
+		margin-top: auto;
+	}
+	.creative-meta-row .author,
+	.creative-meta-row .date {
+		color: #888;
+	}
+	.creative-meta-row .read-time {
+		color: #00d4ff;
+		font-weight: 600;
+	}
+	.creative-card .magazine-title a {
+		color: #fff;
+		font-weight: 700;
+		font-size: 1.08rem;
+		letter-spacing: -0.01em;
+	}
+	.creative-card .magazine-title a:hover {
+		color: #00d4ff;
+	}
+	.creative-card .magazine-excerpt {
+		color: #b3b3b3;
+		font-size: 0.93rem;
+		margin-bottom: 0.5rem;
+	}
+
+	/* Ensure all meta rows are visually consistent (except Creative is lighter) */
+	.card-meta {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 1.2em;
+		font-size: 0.85rem;
+		color: #666666;
+		border-top: 1px solid rgba(255,255,255,0.1);
+		padding-top: 1rem;
+		margin-top: auto;
+	}
+	.card-meta .author {
+		color: #666666;
+		font-weight: 500;
+	}
+	.card-meta .date {
+		color: #666666;
+	}
+	.card-meta .read-time {
+		color: #00d4ff;
+		font-weight: 600;
+		font-size: 0.85rem;
+		margin-left: 0.5em;
+	}
+
+	/* Marketing Section Layout */
+	.marketing-section-layout {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 340px;
+		gap: 2rem;
+		align-items: stretch;
+	}
+	.marketing-featured-card {
+		grid-column: 1;
+		grid-row: 1;
+		background: #18191a;
+		border-radius: 16px;
+		box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+		border: 1px solid rgba(255,255,255,0.08);
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		transition: box-shadow 0.2s, border-color 0.2s;
+	}
+	.marketing-featured-card:hover {
+		box-shadow: 0 15px 30px rgba(0, 212, 255, 0.15);
+		border-color: #00d4ff;
+	}
+	.marketing-stacked-cards {
+		grid-column: 2;
+		grid-row: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		max-width: 340px;
+	}
+	.marketing-stacked-card {
+		background: #18191a;
+		border-radius: 16px;
+		box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+		border: 1px solid rgba(255,255,255,0.08);
+		display: flex;
+		flex-direction: row;
+		align-items: stretch;
+		overflow: hidden;
+		transition: box-shadow 0.2s, border-color 0.2s;
+	}
+	.marketing-stacked-card:hover {
+		box-shadow: 0 15px 30px rgba(0, 212, 255, 0.15);
+		border-color: #00d4ff;
+	}
+	.magazine-title a {
+		color: #fff;
+		text-decoration: none;
+		display: inline-block;
+		transition: color 0.15s, transform 0.1s;
+		outline: none;
+	}
+	.magazine-title a:hover {
+		color: #00d4ff;
+		transform: translateX(2px);
+	}
+
+	/* Remove margin-top from bottom rows for uniform gap */
+	.grid-layout-special > .business-bottom-row,
+	.grid-layout-special > .marketing-bottom-row,
+	.grid-layout-special > .ai-agents-bottom-row,
+	.grid-layout-special > .creative-bottom-row {
+		margin-top: 0;
 	}
 </style>
 
