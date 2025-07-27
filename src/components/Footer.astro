@@ -52,35 +52,17 @@ const today = new Date();
 						</div>
 				</div>
 				
-				<!-- Floating AI Elements -->
+				<!-- Simplified AI Elements (Performance Optimized) -->
 				<div class="newsletter-visual">
-					<div class="floating-card ai-card">
-						<div class="card-glow"></div>
-						<div class="particle-trail">
-							<div class="particle"></div>
-							<div class="particle"></div>
-							<div class="particle"></div>
-						</div>
+					<div class="ai-icon-card">
 						<div class="card-icon">🧠</div>
 						<div class="card-text">Neural Networks</div>
 					</div>
-					<div class="floating-card ai-card">
-						<div class="card-glow"></div>
-						<div class="particle-trail">
-							<div class="particle"></div>
-							<div class="particle"></div>
-							<div class="particle"></div>
-						</div>
+					<div class="ai-icon-card">
 						<div class="card-icon">⚡</div>
 						<div class="card-text">AI Processing</div>
 					</div>
-					<div class="floating-card ai-card">
-						<div class="card-glow"></div>
-						<div class="particle-trail">
-							<div class="particle"></div>
-							<div class="particle"></div>
-							<div class="particle"></div>
-						</div>
+					<div class="ai-icon-card">
 						<div class="card-icon">🔬</div>
 						<div class="card-text">AI Research</div>
 					</div>
@@ -469,386 +451,58 @@ const today = new Date();
 		height: 200px;
 	}
 
-	/* Floating Visual Cards - AI Technology with Neon Effects */
-	.floating-card {
+	/* Simplified AI Visual Cards (Performance Optimized) */
+	.ai-icon-card {
 		position: absolute;
-		width: 90px;
-		height: 90px;
-		background: rgba(6, 182, 212, 0.08);
-		border: 1px solid rgba(6, 182, 212, 0.4);
-		border-radius: 16px;
-		backdrop-filter: blur(15px);
-		animation: floatRandom 15s infinite ease-in-out;
-		/* Performance optimizations */
-		will-change: transform, box-shadow;
-		transform: translateZ(0);
-		/* Content layout */
+		width: 80px;
+		height: 80px;
+		background: rgba(6, 182, 212, 0.1);
+		border: 1px solid rgba(6, 182, 212, 0.3);
+		border-radius: 12px;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		padding: 0.75rem;
+		padding: 0.5rem;
 		text-align: center;
-		/* Neon glow base */
-		box-shadow: 
-			0 0 20px rgba(6, 182, 212, 0.3),
-			inset 0 0 20px rgba(6, 182, 212, 0.1);
-		transition: all 0.3s ease;
-		overflow: hidden;
+		transition: transform 0.2s ease, box-shadow 0.2s ease;
+		/* Remove will-change for better performance */
 	}
 
-	/* Neon Glow Effect */
-	.card-glow {
-		position: absolute;
-		top: -2px;
-		left: -2px;
-		right: -2px;
-		bottom: -2px;
-		background: linear-gradient(45deg, 
-			rgba(6, 182, 212, 0.8), 
-			rgba(168, 85, 247, 0.8), 
-			rgba(6, 182, 212, 0.8)
-		);
-		border-radius: 18px;
-		z-index: -1;
-		animation: neonPulse 3s ease-in-out infinite;
-		filter: blur(8px);
+	.ai-icon-card:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 6px 20px rgba(6, 182, 212, 0.2);
+		border-color: rgba(6, 182, 212, 0.5);
 	}
 
-	@keyframes neonPulse {
-		0%, 100% {
-			opacity: 0.6;
-			transform: scale(1);
-		}
-		50% {
-			opacity: 1;
-			transform: scale(1.05);
-		}
+	.ai-icon-card:nth-child(1) {
+		top: 20%;
+		left: 15%;
 	}
 
-	/* Particle Trail Effect - Random Magic Dust */
-	.particle-trail {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		pointer-events: none;
-		overflow: visible;
+	.ai-icon-card:nth-child(2) {
+		top: 60%;
+		right: 20%;
 	}
 
-	.particle-trail::before,
-	.particle-trail::after,
-	.particle-trail .particle {
-		content: '';
-		position: absolute;
-		width: 2px;
-		height: 2px;
-		background: radial-gradient(circle, rgba(6, 182, 212, 0.9) 0%, rgba(6, 182, 212, 0.4) 50%, transparent 100%);
-		border-radius: 50%;
-		box-shadow: 0 0 4px rgba(6, 182, 212, 0.6);
+	.ai-icon-card:nth-child(3) {
+		bottom: 25%;
+		left: 40%;
 	}
 
-	/* Random particle animations with different paths */
-	.particle-trail::before {
-		top: 50%;
-		left: 50%;
-		animation: randomParticle1 8s linear infinite;
+	.ai-icon-card .card-icon {
+		font-size: 1.8rem;
+		margin-bottom: 0.2rem;
+		filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.4));
 	}
 
-	.particle-trail::after {
-		top: 50%;
-		left: 50%;
-		animation: randomParticle2 6s linear infinite;
-		animation-delay: 1s;
-	}
-
-	.particle-trail .particle:nth-child(1) {
-		top: 50%;
-		left: 50%;
-		animation: randomParticle3 7s linear infinite;
-		animation-delay: 2s;
-	}
-
-	.particle-trail .particle:nth-child(2) {
-		top: 50%;
-		left: 50%;
-		animation: randomParticle4 9s linear infinite;
-		animation-delay: 0.5s;
-	}
-
-	.particle-trail .particle:nth-child(3) {
-		top: 50%;
-		left: 50%;
-		animation: randomParticle5 5s linear infinite;
-		animation-delay: 3s;
-	}
-
-	/* Multiple random particle paths */
-	@keyframes randomParticle1 {
-		0% {
-			opacity: 0;
-			transform: translate(0, 0) scale(0);
-		}
-		10% {
-			opacity: 1;
-			transform: translate(-15px, -8px) scale(1);
-		}
-		30% {
-			opacity: 1;
-			transform: translate(-35px, 12px) scale(0.8);
-		}
-		50% {
-			opacity: 0.8;
-			transform: translate(-20px, 35px) scale(0.6);
-		}
-		70% {
-			opacity: 0.5;
-			transform: translate(15px, 25px) scale(0.4);
-		}
-		90% {
-			opacity: 0.2;
-			transform: translate(40px, -15px) scale(0.2);
-		}
-		100% {
-			opacity: 0;
-			transform: translate(60px, -40px) scale(0);
-		}
-	}
-
-	@keyframes randomParticle2 {
-		0% {
-			opacity: 0;
-			transform: translate(0, 0) scale(0);
-		}
-		15% {
-			opacity: 1;
-			transform: translate(12px, -20px) scale(1);
-		}
-		35% {
-			opacity: 1;
-			transform: translate(30px, -10px) scale(0.8);
-		}
-		55% {
-			opacity: 0.8;
-			transform: translate(45px, 20px) scale(0.6);
-		}
-		75% {
-			opacity: 0.5;
-			transform: translate(25px, 40px) scale(0.4);
-		}
-		95% {
-			opacity: 0.2;
-			transform: translate(-10px, 30px) scale(0.2);
-		}
-		100% {
-			opacity: 0;
-			transform: translate(-35px, 15px) scale(0);
-		}
-	}
-
-	@keyframes randomParticle3 {
-		0% {
-			opacity: 0;
-			transform: translate(0, 0) scale(0);
-		}
-		20% {
-			opacity: 1;
-			transform: translate(-8px, 15px) scale(1);
-		}
-		40% {
-			opacity: 1;
-			transform: translate(-25px, 30px) scale(0.8);
-		}
-		60% {
-			opacity: 0.8;
-			transform: translate(-45px, 15px) scale(0.6);
-		}
-		80% {
-			opacity: 0.5;
-			transform: translate(-30px, -10px) scale(0.4);
-		}
-		100% {
-			opacity: 0;
-			transform: translate(-50px, -25px) scale(0);
-		}
-	}
-
-	@keyframes randomParticle4 {
-		0% {
-			opacity: 0;
-			transform: translate(0, 0) scale(0);
-		}
-		12% {
-			opacity: 1;
-			transform: translate(20px, -12px) scale(1);
-		}
-		32% {
-			opacity: 1;
-			transform: translate(40px, 8px) scale(0.8);
-		}
-		52% {
-			opacity: 0.8;
-			transform: translate(25px, 25px) scale(0.6);
-		}
-		72% {
-			opacity: 0.5;
-			transform: translate(-5px, 35px) scale(0.4);
-		}
-		92% {
-			opacity: 0.2;
-			transform: translate(-25px, 20px) scale(0.2);
-		}
-		100% {
-			opacity: 0;
-			transform: translate(-45px, -5px) scale(0);
-		}
-	}
-
-	@keyframes randomParticle5 {
-		0% {
-			opacity: 0;
-			transform: translate(0, 0) scale(0);
-		}
-		25% {
-			opacity: 1;
-			transform: translate(-18px, -25px) scale(1);
-		}
-		45% {
-			opacity: 1;
-			transform: translate(-35px, -15px) scale(0.8);
-		}
-		65% {
-			opacity: 0.8;
-			transform: translate(-20px, 5px) scale(0.6);
-		}
-		85% {
-			opacity: 0.5;
-			transform: translate(10px, 20px) scale(0.4);
-		}
-		100% {
-			opacity: 0;
-			transform: translate(30px, 35px) scale(0);
-		}
-	}
-
-	.card-icon {
-		font-size: 2rem;
-		margin-bottom: 0.25rem;
-		line-height: 1;
-		filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.6));
-		animation: iconGlow 2s ease-in-out infinite alternate;
-	}
-
-	@keyframes iconGlow {
-		0% {
-			filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.6));
-		}
-		100% {
-			filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.9));
-		}
-	}
-
-	.card-text {
-		font-size: 0.75rem;
+	.ai-icon-card .card-text {
+		font-size: 0.65rem;
 		color: #e2e8f0;
 		font-weight: 600;
-		line-height: 1.2;
+		line-height: 1.1;
 		text-align: center;
-		text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
-		letter-spacing: 0.5px;
-	}
-
-	/* Hover Effects */
-	.floating-card:hover {
-		transform: translateY(-5px) scale(1.05) translateZ(0);
-		box-shadow: 
-			0 0 30px rgba(6, 182, 212, 0.5),
-			0 0 60px rgba(168, 85, 247, 0.3),
-			inset 0 0 30px rgba(6, 182, 212, 0.2);
-	}
-
-	.floating-card:hover .card-glow {
-		animation: neonPulse 1s ease-in-out infinite;
-	}
-
-	.floating-card:nth-child(1) {
-		top: 15%;
-		left: 10%;
-		animation-delay: 0s;
-		animation-duration: 18s;
-	}
-
-	.floating-card:nth-child(2) {
-		top: 65%;
-		right: 15%;
-		animation-delay: -5s;
-		animation-duration: 22s;
-	}
-
-	.floating-card:nth-child(3) {
-		bottom: 20%;
-		left: 35%;
-		animation-delay: -10s;
-		animation-duration: 20s;
-	}
-
-	.floating-card:hover .card-glow {
-		animation: neonPulse 1s ease-in-out infinite;
-	}
-
-	.floating-card:nth-child(1) {
-		top: 15%;
-		left: 10%;
-		animation-delay: 0s;
-		animation-duration: 18s;
-	}
-
-	.floating-card:nth-child(2) {
-		top: 65%;
-		right: 15%;
-		animation-delay: -5s;
-		animation-duration: 22s;
-	}
-
-	.floating-card:nth-child(3) {
-		bottom: 20%;
-		left: 35%;
-		animation-delay: -10s;
-		animation-duration: 20s;
-	}
-
-	@keyframes floatRandom {
-		0%, 100% {
-			transform: translate(0, 0) rotate(0deg) translateZ(0);
-		}
-		10% {
-			transform: translate(30px, -20px) rotate(36deg) translateZ(0);
-		}
-		20% {
-			transform: translate(-15px, 25px) rotate(72deg) translateZ(0);
-		}
-		30% {
-			transform: translate(40px, 10px) rotate(108deg) translateZ(0);
-		}
-		40% {
-			transform: translate(-25px, -30px) rotate(144deg) translateZ(0);
-		}
-		50% {
-			transform: translate(20px, 35px) rotate(180deg) translateZ(0);
-		}
-		60% {
-			transform: translate(-35px, 15px) rotate(216deg) translateZ(0);
-		}
-		70% {
-			transform: translate(25px, -25px) rotate(252deg) translateZ(0);
-		}
-		80% {
-			transform: translate(-20px, 30px) rotate(288deg) translateZ(0);
-		}
-		90% {
-			transform: translate(35px, -15px) rotate(324deg) translateZ(0);
-		}
+		letter-spacing: 0.3px;
 	}
 
 	/* Main Footer Content */
