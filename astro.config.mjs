@@ -30,7 +30,9 @@ export default defineConfig({
     // Performance optimizations
     inlineStylesheets: 'auto',
     split: true,
-    assets: '_astro'
+    assets: '_astro',
+    // Force cache busting for all assets
+    assetsPrefix: undefined
   },
   vite: {
     ssr: {
@@ -38,7 +40,13 @@ export default defineConfig({
     },
     server: {
       port: 4321,
-      strictPort: true
+      strictPort: true,
+      // Disable caching in development
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
     },
     build: {
       // Performance optimizations

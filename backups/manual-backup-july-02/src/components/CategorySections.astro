@@ -1,0 +1,592 @@
+---
+import { getNews, getReviews, getBusiness, formatDate } from '../lib/sanity'
+import { getCategoryUrl } from '../utils/urlHelpers'
+
+// Fetch real articles for each category
+const news = await getNews(3)
+const reviews = await getReviews(3)
+const business = await getBusiness(3)
+
+// Fallback content for each category
+const fallbackNews = [
+	{ title: "Breaking AI News", excerpt: "Latest developments in artificial intelligence", slug: "breaking-news", category: "AI News", author: { name: "AI Reporter" }, publishedAt: new Date().toISOString() },
+	{ title: "AI Technology Update", excerpt: "New AI technologies and breakthroughs", slug: "tech-update", category: "AI News", author: { name: "Tech Writer" }, publishedAt: new Date().toISOString() },
+	{ title: "Industry News Roundup", excerpt: "Weekly roundup of AI industry news", slug: "roundup", category: "AI News", author: { name: "News Editor" }, publishedAt: new Date().toISOString() }
+]
+
+const fallbackReviews = [
+	{ title: "AI Tool Review", excerpt: "Comprehensive review of latest AI tools", slug: "tool-review", category: "Reviews", author: { name: "Reviewer" }, publishedAt: new Date().toISOString() },
+	{ title: "Platform Analysis", excerpt: "Deep analysis of AI platforms", slug: "platform-analysis", category: "Reviews", author: { name: "Analyst" }, publishedAt: new Date().toISOString() },
+	{ title: "Product Comparison", excerpt: "Comparing top AI products", slug: "comparison", category: "Reviews", author: { name: "Expert" }, publishedAt: new Date().toISOString() }
+]
+
+const fallbackBusiness = [
+	{ title: "AI Business Strategy", excerpt: "How AI is transforming business strategies", slug: "business-strategy", category: "Business", author: { name: "Business Analyst" }, publishedAt: new Date().toISOString() },
+	{ title: "Enterprise AI Solutions", excerpt: "AI solutions for enterprise businesses", slug: "enterprise-solutions", category: "Business", author: { name: "Enterprise Expert" }, publishedAt: new Date().toISOString() },
+	{ title: "AI ROI Analysis", excerpt: "Return on investment analysis for AI", slug: "roi-analysis", category: "Business", author: { name: "Financial Analyst" }, publishedAt: new Date().toISOString() }
+]
+
+// Use real data or fallbacks
+const newsToShow = news.length > 0 ? news : fallbackNews
+const reviewsToShow = reviews.length > 0 ? reviews : fallbackReviews
+const businessToShow = business.length > 0 ? business : fallbackBusiness
+---
+
+<section class="categories">
+	<div class="categories-container">
+		
+		<!-- Breaking News Section -->
+		<section class="category-section news homepage-category-section">
+			<div class="category-header">
+				<h2 class="category-title">📰 AI News</h2>
+				<a href="/categories/ai-news" class="view-all">View All →</a>
+			</div>
+			<div class="articles-grid-horizontal">
+				{newsToShow.map((article: any) => (
+					<article class="article-card horizontal">
+						<a href={`/${typeof article.category?.slug === 'object' ? article.category.slug.current : article.category?.slug || 'ai-news'}/${typeof article.slug === 'object' ? article.slug.current : article.slug}`} class="article-image-small-link">
+							<div class="article-image-small">
+								{article.featuredImage ? (
+									<img src={article.featuredImage} alt={article.title} />
+								) : (
+									<span class="emoji-placeholder">🤖</span>
+								)}
+							</div>
+						</a>
+						<div class="category-article-content">
+							<span class="category-badge-small news">
+								{article.category}
+							</span>
+							<div class="spacer" style="height: 3rem; width: 100%; background: red; border: 2px solid yellow;"></div>
+							<h3 style="margin: 0.75rem 0 0.5rem 0 !important; background: blue; color: white;"><a href={`/${typeof article.category?.slug === 'object' ? article.category.slug.current : article.category?.slug || 'ai-news'}/${typeof article.slug === 'object' ? article.slug.current : article.slug}`}>{article.title}</a></h3>
+							<p>{article.excerpt}</p>
+							<div class="article-meta">
+								<span class="author">
+									By <a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>
+										{article.author?.name || 'Anonymous'}
+									</a>
+								</span>
+								<span class="date">{formatDate(article.publishedAt)}</span>
+							</div>
+						</div>
+					</article>
+				))}
+			</div>
+		</section>
+
+		<!-- Reviews Section -->
+		<section class="category-section reviews homepage-category-section">
+			<div class="category-header">
+				<h2 class="category-title">📊 AI Reviews & Analysis</h2>
+				<a href="/categories/reviews" class="view-all">View All →</a>
+			</div>
+			<div class="articles-grid-cards">
+				{reviewsToShow.map((article: any) => (
+					<article class="article-card review-card">
+						<div class="review-score">{article.seoScore || '9.2'}</div>
+						<div class="category-review-content">
+							<span class="category-badge-small review">
+								{article.category}
+							</span>
+							<div class="spacer" style="height: 1rem; width: 100%;"></div>
+							<h3 style="margin: 0.75rem 0 0.5rem 0 !important;"><a href={`/${typeof article.category?.slug === 'object' ? article.category.slug.current : article.category?.slug || 'reviews'}/${typeof article.slug === 'object' ? article.slug.current : article.slug}`}>{article.title}</a></h3>
+							<p>{article.excerpt}</p>
+							<div class="review-metrics">
+								<span class="metric">Quality: ⭐⭐⭐⭐⭐</span>
+								<span class="metric">Impact: ⭐⭐⭐⭐</span>
+							</div>
+							<div class="article-meta">
+								<span class="author">
+									By <a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>
+										{article.author?.name || 'Anonymous'}
+									</a>
+								</span>
+								<span class="date">{formatDate(article.publishedAt)}</span>
+							</div>
+						</div>
+					</article>
+				))}
+			</div>
+		</section>
+
+		<!-- Business Insights -->
+		<section class="category-section business homepage-category-section">
+			<div class="category-header">
+				<h2 class="category-title">💡 Business Insights</h2>
+				<a href="/categories/business" class="view-all">View All →</a>
+			</div>
+			<div class="articles-grid-mixed">
+				{businessToShow[0] && (
+					<article class="article-card insight-large">
+						<div class="insight-icon">📈</div>
+						<div class="category-insight-content">
+							<span class="category-badge-small business">
+								{businessToShow[0].category}
+							</span>
+							<div class="spacer" style="height: 1rem; width: 100%;"></div>
+							<h3 style="margin: 0.75rem 0 0.5rem 0 !important;"><a href={`/${typeof businessToShow[0].category?.slug === 'object' ? businessToShow[0].category.slug.current : businessToShow[0].category?.slug || 'business'}/${typeof businessToShow[0].slug === 'object' ? businessToShow[0].slug.current : businessToShow[0].slug}`}>{businessToShow[0].title}</a></h3>
+							<p>{businessToShow[0].excerpt}</p>
+							<div class="insight-stats">
+								<span class="stat-item">Trending</span>
+								<span class="stat-item">Popular</span>
+							</div>
+							<div class="article-meta">
+								<span class="author">
+									By <a href={`/authors/${typeof businessToShow[0].author?.slug === 'object' ? businessToShow[0].author.slug.current : businessToShow[0].author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${businessToShow[0].author?.name || 'Anonymous'}`}>
+										{businessToShow[0].author?.name || 'Anonymous'}
+									</a>
+								</span>
+								<span class="date">{formatDate(businessToShow[0].publishedAt)}</span>
+							</div>
+						</div>
+					</article>
+				)}
+				<div class="insight-sidebar">
+					{businessToShow.slice(1, 3).map((article: any) => (
+						<article class="article-card insight-small">
+							<span class="category-badge-small business">
+								{article.category}
+							</span>
+							<div class="spacer" style="height: 1rem; width: 100%;"></div>
+							<h4 style="margin: 0.75rem 0 0.3rem 0 !important;"><a href={`/${typeof article.category?.slug === 'object' ? article.category.slug.current : article.category?.slug || 'business'}/${typeof article.slug === 'object' ? article.slug.current : article.slug}`}>{article.title}</a></h4>
+							<div class="trend-indicator">📊 {formatDate(article.publishedAt)}</div>
+							<div class="article-meta">
+								<span class="author">
+									By <a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${article.author?.name || 'Anonymous'}`}>
+										{article.author?.name || 'Anonymous'}
+									</a>
+								</span>
+							</div>
+						</article>
+					))}
+				</div>
+			</div>
+		</section>
+
+	</div>
+</section>
+
+<!-- Keep all the existing styles, just add this new one -->
+<style>
+/* All existing styles remain the same, just add: */
+
+.emoji-placeholder {
+	font-size: 2rem;
+}
+
+.article-content-small h3 a, 
+.article-content-review h3 a,
+.article-content-insight h3 a,
+.insight-small h4 a {
+	color: #ffffff;
+	text-decoration: none;
+	transition: all 0.3s ease;
+}
+
+.article-content-small h3 a:hover,
+.article-content-review h3 a:hover, 
+.article-content-insight h3 a:hover,
+.insight-small h4 a:hover {
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	transform: translateX(2px);
+}
+
+/* Update article title spacing for homepage category sections */
+.category-section .article-content-small h3 {
+	color: #ffffff;
+	margin: 0.75rem 0 0.5rem 0 !important;
+	font-size: 1.1rem;
+}
+
+.category-section .article-content-review h3 {
+	color: #ffffff;
+	margin: 0.75rem 0 0.5rem 0 !important;
+	font-size: 1.1rem;
+}
+
+.category-section .article-content-insight h3 {
+	color: #ffffff;
+	margin: 0.75rem 0 0.5rem 0 !important;
+	font-size: 1.1rem;
+}
+
+.category-section .insight-small h4 {
+	color: #ffffff;
+	margin: 0.75rem 0 0.3rem 0 !important;
+	font-size: 0.9rem;
+	font-weight: 600;
+}
+
+/* Keep all existing styles below this */
+.categories {
+	padding: 4rem 0;
+	background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 255, 0.02) 100%);
+}
+
+.categories-container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 2rem;
+	display: flex;
+	flex-direction: column;
+	gap: 4rem;
+}
+
+.category-section {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	--category-spacing: 1rem;
+	--title-spacing: 0.75rem;
+}
+
+.category-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+	padding-bottom: 1rem;
+}
+
+.category-title {
+	font-size: 1.8rem;
+	font-weight: 600;
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	margin: 0;
+}
+
+.view-all {
+	color: #00d4ff;
+	text-decoration: none;
+	font-weight: 500;
+	transition: color 0.3s ease;
+}
+
+.view-all:hover {
+	color: #0066ff;
+}
+
+/* Breaking News Layout */
+.articles-grid-horizontal {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.horizontal {
+	display: flex;
+	gap: 1rem;
+	background: #1a1a1b;
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 8px;
+	padding: 1rem;
+}
+
+.article-image-small {
+	width: 80px;
+	height: 80px;
+	background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 102, 255, 0.2) 100%);
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 2rem;
+	flex-shrink: 0;
+}
+
+.article-image-small-link {
+	display: block;
+	text-decoration: none;
+	color: inherit;
+	cursor: pointer;
+	flex-shrink: 0;
+}
+
+.article-image-small img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 8px;
+}
+
+.article-content-small p {
+	color: #b3b3b3;
+	font-size: 0.9rem;
+	margin-bottom: 0.5rem;
+}
+
+/* Reviews Layout */
+.articles-grid-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 1.5rem;
+}
+
+.review-card {
+	background: #1a1a1b;
+	backdrop-filter: blur(15px);
+	border: 1px solid rgba(0, 212, 255, 0.2);
+	border-radius: 12px;
+	padding: 1.5rem;
+	position: relative;
+}
+
+.review-score {
+	position: absolute;
+	top: -10px;
+	right: 15px;
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	color: white;
+	padding: 0.5rem 1rem;
+	border-radius: 20px;
+	font-weight: 700;
+	font-size: 1.1rem;
+}
+
+.review-metrics {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	margin-top: 1rem;
+}
+
+.metric {
+	font-size: 0.8rem;
+	color: #b3b3b3;
+}
+
+/* Insights Layout */
+.articles-grid-mixed {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	gap: 1.5rem;
+}
+
+.insight-large {
+	display: flex;
+	gap: 1.5rem;
+	background: #1a1a1b;
+	backdrop-filter: blur(15px);
+	border: 1px solid rgba(0, 212, 255, 0.1);
+	border-radius: 12px;
+	padding: 2rem;
+}
+
+.insight-icon {
+	font-size: 3rem;
+	flex-shrink: 0;
+}
+
+.insight-stats {
+	display: flex;
+	gap: 1rem;
+	margin-top: 1rem;
+}
+
+.stat-item {
+	background: rgba(0, 212, 255, 0.1);
+	padding: 0.25rem 0.75rem;
+	border-radius: 15px;
+	font-size: 0.8rem;
+	border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.insight-sidebar {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.insight-small {
+	background: linear-gradient(135deg, rgba(0, 212, 255, 0.08) 0%, rgba(0, 102, 255, 0.08) 100%);
+	border: 1.5px solid rgba(0, 212, 255, 0.18);
+	border-radius: 18px;
+	padding: 1rem;
+	box-shadow: 0 4px 16px rgba(0, 212, 255, 0.10);
+}
+
+.trend-indicator {
+	font-size: 0.8rem;
+	color: #00d4ff;
+	font-weight: 500;
+}
+
+/* Category Tags */
+.category-badge-small {
+	font-size: 0.7rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	padding: 0.4rem 0.9rem;
+	border-radius: 15px;
+	display: inline-block;
+	margin-bottom: 1.25rem;
+}
+
+.category-badge-small.news { background: rgba(0, 212, 255, 0.2); color: #00d4ff; }
+.category-badge-small.review { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+.category-badge-small.business { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+.category-badge-small.finance { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+.category-badge-small.tutorials { background: rgba(168, 85, 247, 0.2); color: #a855f7; }
+.category-badge-small.ai-agents { background: rgba(20, 184, 166, 0.2); color: #14b8a6; }
+
+.article-meta {
+	font-size: 0.8rem;
+	color: #666666;
+	display: flex;
+	gap: 1rem;
+	margin-top: 0.5rem;
+}
+
+/* Author link styles */
+.author-link {
+	color: #666666;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	border-radius: 4px;
+	padding: 2px 4px;
+	margin: -2px -4px;
+}
+
+.author-link:hover {
+	color: #00d4ff;
+	text-decoration: none;
+	transform: translateY(-1px);
+}
+
+.author-link:focus {
+	outline: 2px solid #00d4ff;
+	outline-offset: 2px;
+	background: rgba(0, 212, 255, 0.1);
+}
+
+/* Ensure author text maintains proper spacing */
+.author {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+}
+
+@media (max-width: 768px) {
+	.category-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.5rem;
+	}
+	
+	.articles-grid-mixed {
+		grid-template-columns: 1fr;
+	}
+	
+	.horizontal {
+		flex-direction: column;
+		text-align: center;
+	}
+	
+	.insight-large {
+		flex-direction: column;
+		text-align: center;
+	}
+}
+
+.category-badge {
+	background: rgba(0, 212, 255, 0.2);
+	color: #00d4ff;
+	padding: 0.2rem 0.5rem;
+	border-radius: 12px;
+	font-size: 0.65rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	transition: all 0.3s ease;
+}
+
+.category-badge:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 16px rgba(0, 212, 255, 0.4);
+	background: rgba(0, 212, 255, 0.3);
+	color: #ffffff;
+}
+
+.article-card h3 a:hover {
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	transform: translateX(2px);
+}
+
+/* Additional specific overrides for category badges */
+.category-section .category-badge-small {
+	margin-bottom: 1.25rem !important;
+}
+
+/* Force spacing with pseudo-elements as backup */
+.category-section .category-badge-small::after {
+	content: '';
+	display: block;
+	height: 0.75rem;
+	width: 100%;
+}
+
+/* Category Sections with Unique Class Names */
+.category-section {
+    --category-spacing: 1rem;
+    --title-spacing: 0.75rem;
+}
+
+/* Override universal margin reset for category badges */
+.category-section .category-badge-small,
+.homepage-category-section .category-badge-small,
+.category-section .category-tag,
+.category-section .category-link-safe {
+    margin: 0 0 var(--category-spacing) 0 !important;
+    display: inline-block !important;
+}
+
+/* Target new unique class names for article titles */
+.category-article-content h3,
+.category-review-content h3,
+.category-insight-content h3 {
+    margin: var(--title-spacing) 0 0.5rem 0 !important;
+    color: #ffffff;
+    font-size: 1.1rem;
+}
+
+.category-section .insight-small h4 {
+    margin: var(--title-spacing) 0 0.3rem 0 !important;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Force spacing with pseudo-elements as backup */
+.category-section .category-badge-small::after,
+.category-section .category-tag::after,
+.category-section .category-link-safe::after {
+    content: '';
+    display: block;
+    height: var(--category-spacing);
+    width: 100%;
+}
+
+/* Additional specific overrides for category badges */
+.category-section .category-badge-small {
+    margin-bottom: 1.25rem !important;
+}
+
+/* Force spacing with pseudo-elements as backup */
+.category-section .category-badge-small::after {
+	content: '';
+	display: block;
+	height: 0.75rem;
+	width: 100%;
+}
+</style>

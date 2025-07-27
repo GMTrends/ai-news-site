@@ -1,0 +1,136 @@
+---
+import BlogPost from '../../layouts/BlogPost.astro';
+import { sanityClient, getImageUrl } from '../../lib/sanity';
+import CategorySidebar from '../../components/CategorySidebar.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { getCategoryUrl } from '../../utils/urlHelpers';
+import '../../styles/article.css';
+import '../../styles/global.css';
+
+// Enable static generation for this page
+export const prerender = true;
+
+export async function getStaticPaths() {
+  try {
+    // Fetch all articles from Sanity
+    const articles = await sanityClient.fetch(`
+      *[_type == "article" && 
+        (status == "published" || 
+         (status == "scheduled" && publishedAt <= now())
+        )] {
+        _id,
+        title,
+        slug,
+        category->{
+          name,
+          slug
+        },
+        excerpt,
+        content,
+        featuredImage,
+        publishedAt,
+        author->{
+          name,
+          slug,
+          bio,
+          image
+        },
+        tags
+      }
+    `);
+    
+    console.log(`📄 Found ${articles.length} articles for static generation`);
+    
+    if (!articles || articles.length === 0) {
+      console.log('⚠️ No articles found, returning empty paths');
+      return [];
+    }
+    
+    return articles.map((article: any) => {
+      // Ensure we have the required data
+      if (!article || !article.title || !article.slug?.current) {
+        console.log('⚠️ Skipping article with missing required fields:', article);
+        return null;
+      }
+      
+      return {
+        params: { 
+          category: article.category?.slug?.current || 'marketing',
+          slug: article.slug.current
+        },
+        props: { article },
+      };
+    }).filter(Boolean); // Remove any null entries
+  } catch (error) {
+    console.error('❌ Error in getStaticPaths:', error);
+    return [];
+  }
+}
+
+interface Props {
+  article: any;
+}
+
+const { article }: Props = Astro.props;
+
+// Safety check - if no article is found, return a 404 page
+if (!article || !article.title) {
+  return Astro.redirect('/404');
+}
+
+// Convert Sanity content to HTML for rendering
+function renderContent(content: any[]): string {
+  if (!content || !Array.isArray(content)) return '';
+  
+  return content.map((block: any) => {
+    if (block._type === 'block') {
+      // Handle rich text blocks
+      let text = block.children?.map((child: any) => {
+        let result = child.text || '';
+        if (child.marks?.includes('strong')) result = `<strong>${result}</strong>`;
+        if (child.marks?.includes('em')) result = `<em>${result}</em>`;
+        if (child.marks?.includes('code')) result = `<code>${result}</code>`;
+        return result;
+      }).join('') || '';
+      
+      const style = block.style || 'normal';
+      if (style === 'h2') return `<h2>${text}</h2>`;
+      if (style === 'h3') return `<h3>${text}</h3>`;
+      if (style === 'h4') return `<h4>${text}</h4>`;
+      if (style === 'blockquote') return `<blockquote>${text}</blockquote>`;
+      return `<p>${text}</p>`;
+    } else if (block._type === 'image') {
+      // Handle image blocks
+      const alt = block.alt || '';
+      const caption = block.caption ? `<figcaption>${block.caption}</figcaption>` : '';
+      return `<figure><img src="${block.asset?.url || ''}" alt="${alt}" />${caption}</figure>`;
+    }
+    return '';
+  }).join('');
+}
+
+const articleContent = renderContent(article.content);
+const heroImage = getImageUrl(article.featuredImage);
+
+console.log('DEBUG featuredImage:', JSON.stringify(article.featuredImage));
+console.log('DEBUG categorySlug:', {categorySlug: article.category?.slug?.current});
+---
+
+<BlogPost
+	title={article.title}
+	description={article.excerpt}
+	pubDate={article.publishedAt}
+	updatedDate={article.updatedAt}
+	heroImage={heroImage}
+	authorName={article.author?.name}
+	authorSlug={article.author?.slug?.current}
+>
+	<Fragment set:html={articleContent} />
+	<CategorySidebar 
+		categorySlug={article.category?.slug?.current} 
+		currentArticleSlug={article.slug?.current}
+		slot="sidebar"
+	/>
+</BlogPost>

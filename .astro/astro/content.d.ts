@@ -148,6 +148,13 @@ declare module 'astro:content' {
   collection: "authors";
   data: any
 } & { render(): Render[".md"] };
+"raf-velazquez.md": {
+	id: "raf-velazquez.md";
+  slug: "raf-velazquez";
+  body: string;
+  collection: "authors";
+  data: any
+} & { render(): Render[".md"] };
 "sarah-chen.md": {
 	id: "sarah-chen.md";
   slug: "sarah-chen";

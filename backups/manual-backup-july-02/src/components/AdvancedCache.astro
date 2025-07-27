@@ -1,0 +1,456 @@
+---
+// Advanced Caching Component
+// Implements intelligent caching strategies for optimal performance
+
+interface Props {
+  enableServiceWorker?: boolean;
+  enablePreload?: boolean;
+  enablePrefetch?: boolean;
+  enableBackgroundSync?: boolean;
+}
+
+const { 
+  enableServiceWorker = true, 
+  enablePreload = true, 
+  enablePrefetch = true, 
+  enableBackgroundSync = true 
+} = Astro.props;
+---
+
+<script is:inline define:vars={{ enableServiceWorker, enablePreload, enablePrefetch, enableBackgroundSync }}>
+  // Advanced Caching Strategies
+  class AdvancedCache {
+    constructor(options = {}) {
+      this.enableServiceWorker = options.enableServiceWorker ?? true;
+      this.enablePreload = options.enablePreload ?? true;
+      this.enablePrefetch = options.enablePrefetch ?? true;
+      this.enableBackgroundSync = options.enableBackgroundSync ?? true;
+      
+      this.cache = new Map();
+      this.preloadQueue = [];
+      this.prefetchQueue = [];
+      
+      this.init();
+    }
+    
+    init() {
+      if (typeof window === 'undefined') return;
+      
+      this.registerServiceWorker();
+      this.setupIntersectionObserver();
+      this.setupPreloadStrategy();
+      this.setupPrefetchStrategy();
+      this.setupBackgroundSync();
+    }
+    
+    async registerServiceWorker() {
+      if (!this.enableServiceWorker || !('serviceWorker' in navigator)) return;
+      
+      try {
+        const registration = await navigator.serviceWorker.register('/sw.js');
+        console.log('Service Worker registered:', registration);
+        
+        // Handle updates
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          if (newWorker) {
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                this.showUpdateNotification();
+              }
+            });
+          }
+        });
+      } catch (error) {
+        console.error('Service Worker registration failed:', error);
+      }
+    }
+    
+    setupIntersectionObserver() {
+      // Lazy load images and components
+      const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            const dataSrc = img.dataset.src;
+            
+            if (dataSrc) {
+              img.src = dataSrc;
+              img.classList.remove('lazy');
+              observer.unobserve(img);
+            }
+          }
+        });
+      }, {
+        rootMargin: '50px 0px',
+        threshold: 0.01
+      });
+      
+      // Observe all lazy images
+      document.querySelectorAll('img[data-src]').forEach(img => {
+        imageObserver.observe(img);
+      });
+      
+      // Lazy load components
+      const componentObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const component = entry.target;
+            const componentType = component.dataset.component;
+            
+            if (componentType) {
+              this.loadComponent(component, componentType);
+              observer.unobserve(component);
+            }
+          }
+        });
+      }, {
+        rootMargin: '100px 0px',
+        threshold: 0.1
+      });
+      
+      document.querySelectorAll('[data-component]').forEach(component => {
+        componentObserver.observe(component);
+      });
+    }
+    
+    loadComponent(component, componentType) {
+      // Dynamic component loading logic
+      console.log('Loading component:', componentType);
+      // Implementation would go here
+    }
+    
+    setupPreloadStrategy() {
+      if (!this.enablePreload) return;
+      
+      // Preload critical resources
+      this.preloadCriticalResources();
+      
+      // Preload based on user behavior
+      this.setupUserBehaviorPreload();
+    }
+    
+    preloadCriticalResources() {
+      const criticalResources = [
+        '/styles/global.css',
+        '/fonts/atkinson-regular.woff',
+        '/fonts/atkinson-bold.woff'
+      ];
+      
+      criticalResources.forEach(resource => {
+        this.preloadResource(resource);
+      });
+    }
+    
+    preloadResource(url) {
+      if (this.cache.has(url)) return;
+      
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.href = url;
+      link.as = this.getResourceType(url);
+      document.head.appendChild(link);
+      
+      this.cache.set(url, true);
+      this.preloadQueue.push(url);
+    }
+    
+    getResourceType(url) {
+      if (url.endsWith('.css')) return 'style';
+      if (url.endsWith('.js')) return 'script';
+      if (url.endsWith('.woff2') || url.endsWith('.woff') || url.endsWith('.ttf')) return 'font';
+      if (url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.png') || url.endsWith('.webp')) return 'image';
+      return 'fetch';
+    }
+    
+    setupUserBehaviorPreload() {
+      // Preload based on hover
+      document.addEventListener('mouseover', (event) => {
+        const link = event.target.closest('a');
+        if (link && link.href && !this.cache.has(link.href)) {
+          this.prefetchResource(link.href);
+        }
+      });
+      
+      // Preload based on scroll position
+      let scrollTimeout;
+      window.addEventListener('scroll', () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          this.preloadVisibleContent();
+        }, 100);
+      });
+    }
+    
+    setupPrefetchStrategy() {
+      if (!this.enablePrefetch) return;
+      
+      // Prefetch likely next pages
+      this.prefetchLikelyPages();
+      
+      // Prefetch based on time spent on page
+      setTimeout(() => {
+        this.prefetchRelatedContent();
+      }, 3000);
+    }
+    
+    prefetchLikelyPages() {
+      const likelyPages = [
+        '/ai-news',
+        '/reviews',
+        '/tutorials',
+        '/about'
+      ];
+      
+      likelyPages.forEach(page => {
+        this.prefetchResource(page);
+      });
+    }
+    
+    prefetchResource(url) {
+      if (this.cache.has(url)) return;
+      
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = url;
+      document.head.appendChild(link);
+      
+      this.cache.set(url, true);
+      this.prefetchQueue.push(url);
+    }
+    
+    prefetchRelatedContent() {
+      // Get current page category
+      const currentCategory = this.getCurrentCategory();
+      if (currentCategory) {
+        this.prefetchResource(`/${currentCategory}`);
+      }
+    }
+    
+    setupBackgroundSync() {
+      if (!this.enableBackgroundSync || !('serviceWorker' in navigator)) return;
+      
+      // Queue offline actions
+      this.queueOfflineActions();
+      
+      // Sync when online
+      window.addEventListener('online', () => {
+        this.syncOfflineActions();
+      });
+    }
+    
+    preloadVisibleContent() {
+      // Preload content that's about to become visible
+      const viewportHeight = window.innerHeight;
+      
+      document.querySelectorAll('[data-preload]').forEach(element => {
+        const rect = element.getBoundingClientRect();
+        const isNearViewport = rect.top < viewportHeight + 200;
+        
+        if (isNearViewport) {
+          const preloadUrl = element.getAttribute('data-preload');
+          if (preloadUrl) {
+            this.preloadResource(preloadUrl);
+          }
+        }
+      });
+    }
+    
+    getCurrentCategory() {
+      const path = window.location.pathname;
+      const categoryMatch = path.match(/^\/([^\/]+)/);
+      return categoryMatch ? categoryMatch[1] : null;
+    }
+    
+    queueOfflineActions() {
+      // Queue form submissions, analytics, etc.
+      const offlineActions = JSON.parse(localStorage.getItem('offlineActions') || '[]');
+      
+      // Add current action if needed
+      if (this.hasOfflineAction()) {
+        offlineActions.push({
+          type: 'form_submission',
+          data: this.getFormData(),
+          timestamp: Date.now()
+        });
+        
+        localStorage.setItem('offlineActions', JSON.stringify(offlineActions));
+      }
+    }
+    
+    async syncOfflineActions() {
+      const offlineActions = JSON.parse(localStorage.getItem('offlineActions') || '[]');
+      
+      for (const action of offlineActions) {
+        try {
+          await this.processOfflineAction(action);
+        } catch (error) {
+          console.error('Failed to sync offline action:', error);
+        }
+      }
+      
+      // Clear processed actions
+      localStorage.removeItem('offlineActions');
+    }
+    
+    hasOfflineAction() {
+      // Check if there are pending form submissions
+      return document.querySelector('form[data-offline]') !== null;
+    }
+    
+    getFormData() {
+      const form = document.querySelector('form[data-offline]');
+      if (!form) return null;
+      
+      const formData = new FormData(form);
+      const data = {};
+      
+      for (const [key, value] of formData.entries()) {
+        data[key] = value;
+      }
+      
+      return data;
+    }
+    
+    async processOfflineAction(action) {
+      switch (action.type) {
+        case 'form_submission':
+          await fetch('/.netlify/functions/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(action.data)
+          });
+          break;
+          
+        case 'analytics':
+          await fetch('/api/analytics', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(action.data)
+          });
+          break;
+      }
+    }
+    
+    showUpdateNotification() {
+      // Show update notification
+      const notification = document.createElement('div');
+      notification.className = 'update-notification';
+      notification.innerHTML = `
+        <div class="update-content">
+          <p>🔄 New version available!</p>
+          <button onclick="window.location.reload()">Update Now</button>
+        </div>
+      `;
+      
+      notification.style.cssText = `
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: #00d4ff;
+        color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 1000;
+        animation: slideIn 0.3s ease;
+        pointer-events: auto;
+      `;
+      
+      // Create a fixed container if it doesn't exist
+      let notificationContainer = document.getElementById('notification-container');
+      if (!notificationContainer) {
+        notificationContainer = document.createElement('div');
+        notificationContainer.id = 'notification-container';
+        notificationContainer.style.cssText = `
+          position: fixed;
+          top: 0;
+          right: 0;
+          width: 400px;
+          height: 100px;
+          pointer-events: none;
+          z-index: 1000;
+        `;
+        document.body.appendChild(notificationContainer);
+      }
+      
+      notificationContainer.appendChild(notification);
+      
+      // Auto-hide after 10 seconds
+      setTimeout(() => {
+        notification.remove();
+      }, 10000);
+    }
+    
+    // Cache management
+    clearCache() {
+      this.cache.clear();
+      this.preloadQueue = [];
+      this.prefetchQueue = [];
+      
+      if ('caches' in window) {
+        caches.keys().then(cacheNames => {
+          cacheNames.forEach(cacheName => {
+            caches.delete(cacheName);
+          });
+        });
+      }
+    }
+    
+    getCacheStats() {
+      return {
+        cacheSize: this.cache.size,
+        preloadQueue: this.preloadQueue.length,
+        prefetchQueue: this.prefetchQueue.length
+      };
+    }
+  }
+  
+  // Initialize advanced caching
+  const advancedCache = new AdvancedCache({
+    enableServiceWorker: enableServiceWorker,
+    enablePreload: enablePreload,
+    enablePrefetch: enablePrefetch,
+    enableBackgroundSync: enableBackgroundSync
+  });
+  
+  // Expose for debugging
+  window.advancedCache = advancedCache;
+</script>
+
+<style>
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  .update-notification {
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .update-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .update-content button {
+    background: white;
+    color: #00d4ff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  .update-content button:hover {
+    background: #f0f0f0;
+  }
+</style> 

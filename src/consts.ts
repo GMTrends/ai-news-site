@@ -25,22 +25,22 @@ export const CATEGORIES = [
     homepagePriority: 3,
   },
   {
+    slug: 'productivity',
+    displayName: 'Productivity',
+    fullName: 'AI Productivity & Automation',
+    homepagePriority: 4,
+  },
+  {
     slug: 'creative',
     displayName: 'Creative',
     fullName: 'AI Video & Image Generation',
-    homepagePriority: 4,
+    homepagePriority: 5,
   },
   {
     slug: 'ecommerce',
     displayName: 'eCommerce',
     fullName: 'AI for eCommerce & Online Business',
-    // No homepagePriority
-  },
-  {
-    slug: 'coding',
-    displayName: 'Coding',
-    fullName: 'AI Coding & Development Tools',
-    // No homepagePriority
+    homepagePriority: 6,
   },
 ];
 

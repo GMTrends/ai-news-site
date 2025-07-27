@@ -1,0 +1,263 @@
+---
+// Mobile navigation menu
+import { CATEGORIES } from '../consts.ts';
+---
+
+<div class="mobile-nav-container">
+	<button class="mobile-menu-toggle" id="mobileMenuToggle">
+		<span class="hamburger-line"></span>
+		<span class="hamburger-line"></span>
+		<span class="hamburger-line"></span>
+	</button>
+	
+	<div class="mobile-nav-overlay" id="mobileNavOverlay">
+		<div class="mobile-nav-content">
+			<div class="mobile-nav-header">
+				<h3 class="mobile-nav-title">AI Buzz Media</h3>
+				<button class="mobile-nav-close" id="mobileNavClose">✕</button>
+			</div>
+			
+			<nav class="mobile-nav-links">
+				{CATEGORIES.map(cat => (
+					<a href={`/categories/${cat.slug}`} class="mobile-nav-link">{cat.displayName}</a>
+				))}
+				<a href="/about" class="mobile-nav-link">About</a>
+				<a href="/contact" class="mobile-nav-link">Contact</a>
+			</nav>
+			
+			<div class="mobile-nav-footer">
+				<div class="quick-stats">
+					<div class="stat">
+						<span class="stat-number">1.2K+</span>
+						<span class="stat-label">Articles</span>
+					</div>
+					<div class="stat">
+						<span class="stat-number">50K+</span>
+						<span class="stat-label">Readers</span>
+					</div>
+					<div class="stat">
+						<span class="stat-number">24/7</span>
+						<span class="stat-label">Updates</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+.mobile-nav-container {
+	display: none;
+}
+
+.mobile-menu-toggle {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	z-index: 1001;
+}
+
+.hamburger-line {
+	width: 24px;
+	height: 2px;
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	border-radius: 2px;
+	transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle.active .hamburger-line:nth-child(1) {
+	transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobile-menu-toggle.active .hamburger-line:nth-child(2) {
+	opacity: 0;
+}
+
+.mobile-menu-toggle.active .hamburger-line:nth-child(3) {
+	transform: rotate(-45deg) translate(6px, -6px);
+}
+
+.mobile-nav-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.8);
+	backdrop-filter: blur(10px);
+	z-index: 1000;
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.3s ease;
+}
+
+.mobile-nav-overlay.active {
+	opacity: 1;
+	visibility: visible;
+}
+
+.mobile-nav-content {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 300px;
+	height: 100%;
+	background: rgba(26, 26, 27, 0.95);
+	backdrop-filter: blur(20px);
+	border-left: 1px solid rgba(0, 212, 255, 0.2);
+	padding: 2rem;
+	transform: translateX(100%);
+	transition: transform 0.3s ease;
+	overflow-y: auto;
+}
+
+.mobile-nav-overlay.active .mobile-nav-content {
+	transform: translateX(0);
+}
+
+.mobile-nav-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 2rem;
+	padding-bottom: 1rem;
+	border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.mobile-nav-title {
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	margin: 0;
+	font-size: 1.2rem;
+}
+
+.mobile-nav-close {
+	background: none;
+	border: none;
+	color: #ffffff;
+	font-size: 1.5rem;
+	cursor: pointer;
+	padding: 0.5rem;
+}
+
+.mobile-nav-links {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	margin-bottom: 2rem;
+}
+
+.mobile-nav-link {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 1rem;
+	color: #ffffff;
+	text-decoration: none;
+	border-radius: 8px;
+	transition: all 0.3s ease;
+	border: 1px solid transparent;
+}
+
+.mobile-nav-link:hover {
+	background: rgba(0, 212, 255, 0.1);
+	border-color: rgba(0, 212, 255, 0.3);
+	transform: translateX(4px);
+}
+
+.mobile-nav-footer {
+	margin-top: auto;
+	padding-top: 2rem;
+	border-top: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.quick-stats {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1rem;
+	text-align: center;
+}
+
+.stat {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.stat-number {
+	font-size: 1.2rem;
+	font-weight: 700;
+	color: #00d4ff;
+}
+
+.stat-label {
+	font-size: 0.8rem;
+	color: #666666;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+	.mobile-nav-container {
+		display: block;
+	}
+	
+	.mobile-nav-content {
+		width: 280px;
+	}
+}
+
+@media (max-width: 480px) {
+	.mobile-nav-content {
+		width: 100%;
+		padding: 1rem;
+	}
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+	const mobileMenuToggle = document.getElementById('mobileMenuToggle') as HTMLButtonElement;
+	const mobileNavOverlay = document.getElementById('mobileNavOverlay') as HTMLElement;
+	const mobileNavClose = document.getElementById('mobileNavClose') as HTMLButtonElement;
+
+	if (!mobileMenuToggle || !mobileNavOverlay || !mobileNavClose) {
+		return;
+	}
+
+	function openMobileNav() {
+		mobileNavOverlay.classList.add('active');
+		mobileMenuToggle.classList.add('active');
+		document.body.style.overflow = 'hidden';
+	}
+
+	function closeMobileNav() {
+		mobileNavOverlay.classList.remove('active');
+		mobileMenuToggle.classList.remove('active');
+		document.body.style.overflow = '';
+	}
+
+	mobileMenuToggle.addEventListener('click', openMobileNav);
+	mobileNavClose.addEventListener('click', closeMobileNav);
+
+	// Close when clicking overlay
+	mobileNavOverlay.addEventListener('click', function(e) {
+		if (e.target === mobileNavOverlay) {
+			closeMobileNav();
+		}
+	});
+
+	// Close on escape key
+	document.addEventListener('keydown', function(e) {
+		if (e.key === 'Escape') {
+			closeMobileNav();
+		}
+	});
+});
+</script>
