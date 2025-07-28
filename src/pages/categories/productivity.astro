@@ -3,7 +3,7 @@ import { getArticlesByCategory } from '../../lib/sanity';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import CategorySidebar from '../../components/CategorySidebar.astro';
-import '../../styles/global.css';
+// CSS included via BaseHead
 
 const productivityArticles = await getArticlesByCategory('productivity', 20);
 

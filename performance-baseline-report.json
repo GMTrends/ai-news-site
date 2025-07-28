@@ -1,14 +1,14 @@
 {
-  "timestamp": "2025-07-28T00:03:03.077Z",
-  "cssSize": 79639,
+  "timestamp": "2025-07-28T00:04:12.624Z",
+  "cssSize": 7449,
   "componentSize": 251769,
   "animations": {
-    "keyframes": 2,
-    "willChange": 13,
-    "transforms": 29
+    "keyframes": 1,
+    "willChange": 0,
+    "transforms": 3
   },
   "files": {
-    "css": 4,
+    "css": 1,
     "components": 27
   }
 }
