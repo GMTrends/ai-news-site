@@ -124,25 +124,11 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 					document.head.appendChild(link);
 				});
 				
-				// Optimize images
-				document.addEventListener('DOMContentLoaded', () => {
-					const images = document.querySelectorAll('img');
-					images.forEach(img => {
-						if (!img.loading) {
-							img.loading = 'lazy';
-						}
-						if (!img.decoding) {
-							img.decoding = 'async';
-						}
-					});
-				});
+				// Removed image optimization to prevent layout shifting
+				// Images now use static attributes in HTML instead of JavaScript manipulation
 				
-				// Optimize fonts
-				if ('fonts' in document) {
-					document.fonts.ready.then(() => {
-						document.documentElement.classList.add('fonts-loaded');
-					});
-				}
+				// Removed font loading JavaScript to prevent layout shifting
+				// Fonts now use font-display: swap in CSS for stable loading
 			}
 		</script>
 		
@@ -197,13 +183,6 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 		<!-- Critical CSS inlined -->
 		<style>
 			/* Critical rendering path optimizations */
-			body { 
-				opacity: 0; 
-				transition: opacity 0.1s ease-in;
-			}
-			body.loaded { 
-				opacity: 1; 
-			}
 			/* Prevent layout shift */
 			img { 
 				max-width: 100%; 
@@ -231,13 +210,19 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 		
 		<!-- Performance optimization script -->
 		<script>
-			// Initialize performance optimizations
-			import { initializePerformanceOptimizations } from '../utils/performance.js';
-			
-			// Mark body as loaded for smooth fade-in
+			// Initialize basic performance optimizations
 			document.addEventListener('DOMContentLoaded', () => {
-				document.body.classList.add('loaded');
-				initializePerformanceOptimizations();
+				
+				// Initialize basic performance optimizations
+				try {
+					// Basic performance monitoring
+					if (typeof performance !== 'undefined') {
+						const loadTime = performance.now();
+						console.log('📊 Page Load Time:', loadTime);
+					}
+				} catch (error) {
+					console.warn('Performance monitoring failed:', error);
+				}
 			});
 			
 			// Preload critical resources
@@ -259,16 +244,67 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 			}
 		</script>
 		
-		<!-- Service Worker Registration -->
+		<!-- Development Cache-Killing Service Worker -->
 		<script>
+			// TypeScript declaration for custom window property
+			declare global {
+				interface Window {
+					clearAllDevelopmentCaches?: () => Promise<void>;
+				}
+			}
+			
+			// Global cache clearing function for development
+			window.clearAllDevelopmentCaches = async function() {
+				console.log('🔥 Manual cache clearing initiated...');
+				
+				// Clear service worker caches
+				if ('serviceWorker' in navigator) {
+					const registrations = await navigator.serviceWorker.getRegistrations();
+					for (let registration of registrations) {
+						if (registration.active) {
+							registration.active.postMessage({ type: 'CLEAR_CACHE' });
+						}
+					}
+				}
+				
+				// Clear browser caches
+				if ('caches' in window) {
+					const cacheNames = await caches.keys();
+					for (let cacheName of cacheNames) {
+						await caches.delete(cacheName);
+						console.log('🗑️ Cleared cache:', cacheName);
+					}
+				}
+				
+				// Clear storage
+				localStorage.clear();
+				sessionStorage.clear();
+				
+				console.log('✅ All caches cleared! Reloading page...');
+				setTimeout(() => window.location.reload(), 1000);
+			};
+			
 			if ('serviceWorker' in navigator) {
+				console.log('🔥 Registering cache-killing service worker for development');
 				window.addEventListener('load', () => {
 					navigator.serviceWorker.register('/sw.js')
 						.then(registration => {
-							console.log('SW registered: ', registration);
+							console.log('🔥 Cache-killer SW registered: ', registration);
+							
+							// Force immediate activation
+							if (registration.waiting) {
+								registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+							}
+							
+							// Listen for messages from SW
+							navigator.serviceWorker.addEventListener('message', (event) => {
+								if (event.data.type === 'CACHE_CLEARED') {
+									console.log('✅ Service Worker cleared caches');
+								}
+							});
 						})
 						.catch(registrationError => {
-							console.log('SW registration failed: ', registrationError);
+							console.log('❌ Cache-killer SW registration failed: ', registrationError);
 						});
 				});
 			}
@@ -309,6 +345,8 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 		width: 100%;
 	}
 
+	/* Body styles handled by global.css to prevent conflicts */
+
 	/* Main content flows naturally */
 	main {
 		width: 100%;
@@ -340,9 +378,7 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 	}
 
 	/* Performance optimizations */
-	.fonts-loaded {
-		font-display: swap;
-	}
+	/* Removed fonts-loaded class - no longer needed since JavaScript was removed to prevent layout shifting */
 
 	/* Reduce layout shift */
 	img {
@@ -398,13 +434,7 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 		z-index: 1;
 	}
 	
-	/* Optimized body styles */
-	body {
-		/* Performance optimizations */
-		will-change: auto;
-		/* Remove conflicting flexbox layout - let content flow naturally */
-		min-height: 100vh;
-	}
+	/* Body styles handled by global.css to prevent conflicts */
 	
 	/* GPU acceleration for smooth animations */
 	.gpu-accelerated {
@@ -417,10 +447,7 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 		/* Additional performance optimizations */
 	}
 	
-	/* Optimized loading states */
-	body:not(.loaded) {
-		overflow: hidden;
-	}
+	/* Optimized loading states removed - incompatible with client-side navigation */
 	
 	/* Prevent layout shift during loading */
 	img {
@@ -446,12 +473,9 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 	
 	/* Reduced motion support */
 	@media (prefers-reduced-motion: reduce) {
-		body {
+		* {
 			transition: none !important;
-		}
-		
-		body.loaded {
-			opacity: 1 !important;
+			animation: none !important;
 		}
 	}
 </style> 

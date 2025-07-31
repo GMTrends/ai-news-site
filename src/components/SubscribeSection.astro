@@ -73,9 +73,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Newsletter script loaded');
     
-    const emailInput = document.getElementById('emailInput');
-    const subscribeBtn = document.getElementById('subscribeBtn');
-    const message = document.getElementById('subscribeMessage');
+    const emailInput = document.getElementById('emailInput') as HTMLInputElement;
+    const subscribeBtn = document.getElementById('subscribeBtn') as HTMLButtonElement;
+    const message = document.getElementById('subscribeMessage') as HTMLElement;
     
     if (!emailInput || !subscribeBtn || !message) {
         console.error('Required elements not found');
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    function showMessage(text, type) {
+    function showMessage(text: string, type: string) {
         message.textContent = text;
         message.className = `form-message ${type}`;
         message.style.display = 'block';
@@ -137,18 +137,18 @@ document.addEventListener('DOMContentLoaded', function() {
         if (type === 'success' || type === 'error') {
             setTimeout(() => {
                 message.style.display = 'none';
-            }, 5000);
+            }, 12000);
         }
     }
     
-    function isValidEmail(email) {
+    function isValidEmail(email: string) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
     
     // Ensure floating elements are visible
     setTimeout(() => {
-        const floatingElements = document.querySelectorAll('.floating-element');
+        const floatingElements = document.querySelectorAll('.floating-element') as NodeListOf<HTMLElement>;
         console.log('Found floating elements:', floatingElements.length);
         floatingElements.forEach((el, index) => {
             console.log(`Element ${index + 1}:`, el);

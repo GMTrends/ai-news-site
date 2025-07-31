@@ -1,12 +1,14 @@
 ---
-import { getArticlesByCategory } from '../../lib/sanity';
+import { getArticlesByCategory } from '../../lib/sanity.ts';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import CategorySidebar from '../../components/CategorySidebar.astro';
-// CSS included via BaseHead
+import CategoryHero from '../../components/CategoryHero.astro';
+import { getCategoryData } from '../../data/categoryData.ts';
+import '../../styles/global.css';
 
-// Fetch all AI agents articles from Sanity CMS
 const aiAgentsArticles = await getArticlesByCategory('ai-agents', 20);
+const categoryData = getCategoryData('ai-agents');
 
 // SEO metadata
 const pageTitle = "AI Agents - Autonomous AI Systems and Intelligent Agents";
@@ -41,15 +43,20 @@ const pageDescription = "Discover AI agents, autonomous systems, and intelligent
   <Header />
   <div class="main-content">
     <main class="category-page">
-      <div class="category-hero">
-        <div class="container">
-          <div class="category-header">
-            <div class="category-icon">🤖</div>
-            <h1 class="category-title">AI Agents</h1>
-            <p class="category-description">Explore AI agents, autonomous systems, and intelligent automation technologies.</p>
-          </div>
-        </div>
-      </div>
+      {categoryData && (
+        <CategoryHero 
+          category={categoryData.slug}
+          title={categoryData.title}
+          description={categoryData.description}
+          icon={categoryData.icon}
+          toolsCount={categoryData.toolsCount}
+          lastUpdated={categoryData.lastUpdated}
+          breadcrumbs={[
+            { name: "Home", url: "/" },
+            { name: "Categories", url: "/categories" }
+          ]}
+        />
+      )}
       
       <div class="category-content">
           <div class="category-layout">
@@ -90,9 +97,18 @@ const pageDescription = "Discover AI agents, autonomous systems, and intelligent
   <Footer />
   
   <style>
-    .category-page {
+    .main-content {
       min-height: 100vh;
+      position: relative;
+    }
+    
+    .category-page {
       background: var(--bg-primary);
+      padding-bottom: 2rem;
+    }
+    
+    .footer-padding-spacer {
+      height: 100px;
     }
     
     .category-hero {

@@ -698,14 +698,16 @@ for (const category in finalArticles) {
 
 	.main-content {
 		width: 100%;
-		max-width: none;
+		max-width: 1200px;
+		margin: 0 auto;
 		flex: none;
 	}
 
 	/* Grid Layout for Main Content */
 	.grid-layout-special {
 		width: 100%;
-		max-width: none;
+		max-width: 1200px;
+		margin: 0 auto;
 		display: flex;
 		flex-direction: column;
 		gap: 1.5rem;
@@ -1816,14 +1818,31 @@ for (const category in finalArticles) {
 		transform: translateZ(0);
 	}
 
-	.sidebar {
-		/* Ensure no overflow property interferes with sticky */
-		overflow: visible !important;
-	}
+  .sidebar {
+ overflow: visible !important;
+ padding: 0 !important;
+  }
 
-	.section-layout {
-		overflow: visible !important;
-	}
+ /* Restore the beautiful blue sidebar styling */
+ .category-sidebar {
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  position: sticky;
+  top: 6.5rem;
+  z-index: 10;
+  background: rgba(15, 23, 42, 0.3);
+  padding: 0.75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(71, 85, 105, 0.2);
+  will-change: transform;
+  transform: translateZ(0);
+ }
+
+ .section-layout {
+  overflow: visible !important;
+ }
 
 	.layout-container {
 		overflow: visible !important;
@@ -2042,41 +2061,58 @@ for (const category in finalArticles) {
 
 
 <script>
-	// Initialize lazy loading and image optimization
+	// Initialize lazy loading and image optimization with error handling
 	document.addEventListener('DOMContentLoaded', function() {
-		// Setup intersection observer for lazy loading
-		const imageObserver = new IntersectionObserver((entries, observer) => {
-			entries.forEach(entry => {
-				if (entry.isIntersecting) {
-					const img = entry.target as HTMLImageElement;
-					const dataSrc = img.dataset.src;
-					
-					if (dataSrc) {
-						img.src = dataSrc;
-						img.classList.remove('lazy');
-						observer.unobserve(img);
-					}
+		try {
+			// Setup intersection observer for lazy loading
+			if ('IntersectionObserver' in window) {
+				const imageObserver = new IntersectionObserver((entries, observer) => {
+					entries.forEach(entry => {
+						if (entry.isIntersecting) {
+							const img = entry.target as HTMLImageElement;
+							const dataSrc = img.dataset.src;
+							
+							if (dataSrc) {
+								img.src = dataSrc;
+								img.classList.remove('lazy');
+								observer.unobserve(img);
+							}
+						}
+					});
+				}, {
+					rootMargin: '50px 0px',
+					threshold: 0.01
+				});
+				
+				// Observe all lazy images with error handling
+				const lazyImages = document.querySelectorAll('img[data-src]');
+				if (lazyImages.length > 0) {
+					lazyImages.forEach(img => {
+						if (img) imageObserver.observe(img);
+					});
 				}
-			});
-		}, {
-			rootMargin: '50px 0px',
-			threshold: 0.01
-		});
-		
-		// Observe all lazy images
-		document.querySelectorAll('img[data-src]').forEach(img => {
-			imageObserver.observe(img);
-		});
-		
-		// Preload critical images
-		const criticalImages = document.querySelectorAll('img[fetchpriority="high"]');
-		criticalImages.forEach(img => {
-			const imgElement = img as HTMLImageElement;
-			const link = document.createElement('link');
-			link.rel = 'preload';
-			link.as = 'image';
-			link.href = imgElement.src;
-			document.head.appendChild(link);
-		});
+			}
+			
+			// Preload critical images with error handling
+			const criticalImages = document.querySelectorAll('img[fetchpriority="high"]');
+			if (criticalImages.length > 0 && document.head) {
+				criticalImages.forEach(img => {
+					try {
+						const imgElement = img as HTMLImageElement;
+						if (imgElement && imgElement.src) {
+							const link = document.createElement('link');
+							link.rel = 'preload';
+							link.as = 'image';
+							link.href = imgElement.src;
+							document.head.appendChild(link);
+						}
+					} catch (e) {
+						console.warn('Failed to preload image:', e);
+					}
+				});
+			}
+		} catch (error) {
+			console.warn('Image optimization initialization failed:', error);
+		}
 	});
 </script>

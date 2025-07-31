@@ -46,7 +46,7 @@ const aiAgentsToShow = aiAgentsArticles.length > 0 ? aiAgentsArticles.slice(0, 4
 						<a href={`/${typeof article.category?.slug === 'object' ? article.category.slug.current : article.category?.slug || 'ai-news'}/${typeof article.slug === 'object' ? article.slug.current : article.slug}`} class="grid-article-image-link">
 							<div class="grid-article-image">
 								{article.featuredImage ? (
-									<img src={article.featuredImage} alt={article.title} />
+									<img src={article.featuredImage} alt={article.title} width="400" height="240" loading="lazy" decoding="async" />
 								) : (
 									<div class="grid-placeholder">📰</div>
 								)}
@@ -82,7 +82,7 @@ const aiAgentsToShow = aiAgentsArticles.length > 0 ? aiAgentsArticles.slice(0, 4
 						<a href={`/${typeof article.category?.slug === 'object' ? article.category.slug.current : article.category?.slug || 'reviews'}/${typeof article.slug === 'object' ? article.slug.current : article.slug}`} class="grid-article-image-link">
 							<div class="grid-article-image">
 								{article.featuredImage ? (
-									<img src={article.featuredImage} alt={article.title} />
+									<img src={article.featuredImage} alt={article.title} width="400" height="240" loading="lazy" decoding="async" />
 								) : (
 									<div class="grid-placeholder">📊</div>
 								)}
@@ -125,7 +125,7 @@ const aiAgentsToShow = aiAgentsArticles.length > 0 ? aiAgentsArticles.slice(0, 4
 						<a href={`/${typeof article.category?.slug === 'object' ? article.category.slug.current : article.category?.slug || 'tutorials'}/${typeof article.slug === 'object' ? article.slug.current : article.slug}`} class="grid-article-image-link">
 							<div class="grid-article-image">
 								{article.featuredImage ? (
-									<img src={article.featuredImage} alt={article.title} />
+									<img src={article.featuredImage} alt={article.title} width="400" height="240" loading="lazy" decoding="async" />
 								) : (
 									<div class="grid-placeholder">📖</div>
 								)}
@@ -165,7 +165,7 @@ const aiAgentsToShow = aiAgentsArticles.length > 0 ? aiAgentsArticles.slice(0, 4
 						<a href={`/${typeof article.category?.slug === 'object' ? article.category.slug.current : article.category?.slug || 'business'}/${typeof article.slug === 'object' ? article.slug.current : article.slug}`} class="grid-article-image-link">
 							<div class="grid-article-image">
 								{article.featuredImage ? (
-									<img src={article.featuredImage} alt={article.title} />
+									<img src={article.featuredImage} alt={article.title} width="400" height="240" loading="lazy" decoding="async" />
 								) : (
 									<div class="grid-placeholder">💼</div>
 								)}
@@ -205,7 +205,7 @@ const aiAgentsToShow = aiAgentsArticles.length > 0 ? aiAgentsArticles.slice(0, 4
 						<a href={`/${typeof article.category?.slug === 'object' ? article.category.slug.current : article.category?.slug || 'finance'}/${typeof article.slug === 'object' ? article.slug.current : article.slug}`} class="grid-article-image-link">
 							<div class="grid-article-image">
 								{article.featuredImage ? (
-									<img src={article.featuredImage} alt={article.title} />
+									<img src={article.featuredImage} alt={article.title} width="400" height="240" loading="lazy" decoding="async" />
 								) : (
 									<div class="grid-placeholder">💰</div>
 								)}
@@ -245,7 +245,7 @@ const aiAgentsToShow = aiAgentsArticles.length > 0 ? aiAgentsArticles.slice(0, 4
 						<a href={`/${typeof article.category?.slug === 'object' ? article.category.slug.current : article.category?.slug || 'ai-agents'}/${typeof article.slug === 'object' ? article.slug.current : article.slug}`} class="grid-article-image-link">
 							<div class="grid-article-image">
 								{article.featuredImage ? (
-									<img src={article.featuredImage} alt={article.title} />
+									<img src={article.featuredImage} alt={article.title} width="400" height="240" loading="lazy" decoding="async" />
 								) : (
 									<div class="grid-placeholder">🤖</div>
 								)}

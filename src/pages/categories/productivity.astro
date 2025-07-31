@@ -1,14 +1,18 @@
 ---
-import { getArticlesByCategory } from '../../lib/sanity';
+import { getArticlesByCategory } from '../../lib/sanity.ts';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import CategorySidebar from '../../components/CategorySidebar.astro';
-// CSS included via BaseHead
+import CategoryHero from '../../components/CategoryHero.astro';
+import { getCategoryData } from '../../data/categoryData.ts';
+import '../../styles/global.css'; // RESTORED: Essential global CSS for category pages
 
 const productivityArticles = await getArticlesByCategory('productivity', 20);
+const categoryData = getCategoryData('productivity');
 
-const pageTitle = "AI Productivity & Automation - Tools & Workflows";
-const pageDescription = "Discover AI-powered productivity tools, automation workflows, and efficiency systems. Learn how AI can streamline your work and boost performance.";
+const pageTitle = categoryData?.title + " - Tools & Workflows" || "AI Productivity & Automation - Tools & Workflows";
+const pageDescription = categoryData?.metaDescription || "Discover AI-powered productivity tools, automation workflows, and efficiency systems. Learn how AI can streamline your work and boost performance.";
+const keywords = categoryData?.keywords.join(', ') || "AI productivity, automation tools, workflow optimization, AI efficiency, business automation";
 ---
 
 <!DOCTYPE html>
@@ -18,7 +22,7 @@ const pageDescription = "Discover AI-powered productivity tools, automation work
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{pageTitle}</title>
   <meta name="description" content={pageDescription} />
-  <meta name="keywords" content="AI productivity, automation tools, workflow optimization, AI efficiency, business automation" />
+  <meta name="keywords" content={keywords} />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={Astro.url} />
   <meta property="og:title" content={pageTitle} />
@@ -34,15 +38,20 @@ const pageDescription = "Discover AI-powered productivity tools, automation work
   <Header />
   <div class="main-content">
     <main class="category-page">
-      <div class="category-hero">
-        <div class="container">
-          <div class="category-header">
-            <div class="category-icon">⚡</div>
-            <h1 class="category-title">AI Productivity & Automation</h1>
-            <p class="category-description">Discover AI-powered productivity tools, automation workflows, and efficiency systems. Learn how AI can streamline your work and boost performance.</p>
-          </div>
-        </div>
-      </div>
+      {categoryData && (
+        <CategoryHero 
+          category={categoryData.slug}
+          title={categoryData.title}
+          description={categoryData.description}
+          icon={categoryData.icon}
+          toolsCount={categoryData.toolsCount}
+          lastUpdated={categoryData.lastUpdated}
+          breadcrumbs={[
+            { name: "Home", url: "/" },
+            { name: "Categories", url: "/categories" }
+          ]}
+        />
+      )}
       <div class="category-content">
         <div class="category-layout">
           <div class="category-main">
@@ -79,15 +88,25 @@ const pageDescription = "Discover AI-powered productivity tools, automation work
           <CategorySidebar categorySlug="productivity" />
         </div>
       </div>
-    </main>
-    <div class="footer-padding-spacer"></div>
-  </div>
-  <Footer />
+    </div>
+  </main>
+  <div class="footer-padding-spacer"></div>
+</div>
+<Footer />
   
   <style>
-    .category-page {
+    .main-content {
       min-height: 100vh;
+      position: relative;
+    }
+    
+    .category-page {
       background: var(--bg-primary);
+      padding-bottom: 2rem;
+    }
+    
+    .footer-padding-spacer {
+      height: 100px;
     }
     
     .category-hero {
@@ -121,7 +140,7 @@ const pageDescription = "Discover AI-powered productivity tools, automation work
     }
     
     .category-content {
-      padding: 3rem 0;
+      padding: 3rem 0 4rem 0;
     }
     
     .category-layout {

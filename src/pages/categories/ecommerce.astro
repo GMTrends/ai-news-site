@@ -1,14 +1,19 @@
 ---
-import { getArticlesByCategory } from '../../lib/sanity';
+import { getArticlesByCategory } from '../../lib/sanity.ts';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import CategorySidebar from '../../components/CategorySidebar.astro';
-// CSS included via BaseHead
+import CategoryHero from '../../components/CategoryHero.astro';
+import { getCategoryData } from '../../data/categoryData.ts';
+import '../../styles/global.css';
 
 const ecommerceArticles = await getArticlesByCategory('ecommerce', 20);
+const categoryData = getCategoryData('ecommerce');
 
-const pageTitle = "AI for eCommerce & Online Business - Tools & Strategies";
-const pageDescription = "Learn how AI is transforming eCommerce and online business. Get the latest news, strategies, and tools for digital commerce success.";
+const pageTitle = categoryData?.title + " - Tools & Strategies" || "AI E-commerce & Sales - Tools & Strategies";
+const pageDescription = categoryData?.metaDescription || "Revolutionize your online business with AI-powered e-commerce tools, sales optimization, and customer experience enhancement.";
+const keywords = categoryData?.keywords.join(', ') || "AI ecommerce, sales optimization, customer experience, online business, AI retail";
+
 ---
 
 <!DOCTYPE html>
@@ -18,7 +23,7 @@ const pageDescription = "Learn how AI is transforming eCommerce and online busin
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{pageTitle}</title>
   <meta name="description" content={pageDescription} />
-  <meta name="keywords" content="AI ecommerce, online business, AI commerce, digital commerce, ecommerce tools" />
+  <meta name="keywords" content={keywords} />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={Astro.url} />
   <meta property="og:title" content={pageTitle} />
@@ -34,15 +39,20 @@ const pageDescription = "Learn how AI is transforming eCommerce and online busin
   <Header />
   <div class="main-content">
     <main class="category-page">
-      <div class="category-hero">
-        <div class="container">
-          <div class="category-header">
-            <div class="category-icon">🛒</div>
-            <h1 class="category-title">AI for eCommerce & Online Business</h1>
-            <p class="category-description">Learn how AI is transforming eCommerce and online business. Get the latest news, strategies, and tools for digital commerce success.</p>
-          </div>
-        </div>
-      </div>
+      {categoryData && (
+        <CategoryHero 
+          category={categoryData.slug}
+          title={categoryData.title}
+          description={categoryData.description}
+          icon={categoryData.icon}
+          toolsCount={categoryData.toolsCount}
+          lastUpdated={categoryData.lastUpdated}
+          breadcrumbs={[
+            { name: "Home", url: "/" },
+            { name: "Categories", url: "/categories" }
+          ]}
+        />
+      )}
       <div class="category-content">
         <div class="category-layout">
           <div class="category-main">
@@ -85,9 +95,18 @@ const pageDescription = "Learn how AI is transforming eCommerce and online busin
   <Footer />
   
   <style>
-    .category-page {
+    .main-content {
       min-height: 100vh;
+      position: relative;
+    }
+    
+    .category-page {
       background: var(--bg-primary);
+      padding-bottom: 2rem;
+    }
+    
+    .footer-padding-spacer {
+      height: 100px;
     }
     
     .category-hero {

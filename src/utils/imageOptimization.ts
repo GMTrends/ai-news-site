@@ -130,6 +130,8 @@ export function generateHeroImage(
   src: string;
   srcset: string;
   sizes: string;
+  width: string;
+  height: string;
   loading: 'eager';
   fetchpriority: 'high';
   decoding: 'async';
@@ -139,6 +141,8 @@ export function generateHeroImage(
     src: generateWebPUrl(imageUrl, width, height, options),
     srcset: generateResponsiveSrcSet(imageUrl, [800, 1200, 1600], options),
     sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px',
+    width: width.toString(),
+    height: height.toString(),
     loading: 'eager',
     fetchpriority: 'high',
     decoding: 'async',

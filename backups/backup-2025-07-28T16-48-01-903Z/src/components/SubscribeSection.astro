@@ -1,0 +1,606 @@
+---
+// Newsletter subscription section - REBUILT
+---
+
+<section class="subscribe-section">
+	<div class="subscribe-container">
+		<div class="subscribe-content">
+			<div class="subscribe-text">
+				<h2 class="subscribe-title">Stay Ahead in AI</h2>
+				<p class="subscribe-subtitle">Get the latest AI news, reviews, and insights delivered to your inbox. Join 50,000+ professionals who trust AI Buzz Media.</p>
+				<div class="subscribe-benefits">
+					<div class="benefit">
+						<span class="benefit-icon">📧</span>
+						<span>Weekly newsletter</span>
+					</div>
+					<div class="benefit">
+						<span class="benefit-icon">🚀</span>
+						<span>Breaking news alerts</span>
+					</div>
+					<div class="benefit">
+						<span class="benefit-icon">🎯</span>
+						<span>Exclusive insights</span>
+					</div>
+				</div>
+			</div>
+			
+			<div class="subscribe-form-wrapper">
+				<div class="subscribe-form">
+					<div class="form-group">
+						<input 
+							type="email" 
+							id="emailInput"
+							class="subscribe-input" 
+							placeholder="Enter your email address"
+							autocomplete="email"
+						/>
+						<button type="button" class="subscribe-button" id="subscribeBtn">
+							<span class="button-text">Subscribe</span>
+							<span class="button-icon">📧</span>
+						</button>
+					</div>
+					
+					<div class="form-message-container">
+						<div class="form-message" id="subscribeMessage" style="display: none;"></div>
+					</div>
+				</div>
+				
+				<!-- Floating AI Elements -->
+				<div class="floating-elements" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999;">
+					<div class="floating-element element-1" style="position: absolute; top: 10%; right: 8%; z-index: 1000;">
+						<div class="ai-chip">
+							<span class="chip-text">AI</span>
+						</div>
+					</div>
+					<div class="floating-element element-2" style="position: absolute; top: 65%; right: 3%; z-index: 1000;">
+						<div class="brain-icon">
+							🧠
+						</div>
+					</div>
+					<div class="floating-element element-3" style="position: absolute; top: 40%; right: 20%; z-index: 1000;">
+						<div class="rocket-badge">
+							<span class="badge-emoji">🚀</span>
+							<span class="badge-text">NEW</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Newsletter script loaded');
+    
+    const emailInput = document.getElementById('emailInput');
+    const subscribeBtn = document.getElementById('subscribeBtn');
+    const message = document.getElementById('subscribeMessage');
+    
+    if (!emailInput || !subscribeBtn || !message) {
+        console.error('Required elements not found');
+        return;
+    }
+    
+    subscribeBtn.addEventListener('click', async function() {
+        console.log('Subscribe button clicked');
+        
+        const email = emailInput.value.trim();
+        
+        if (!email) {
+            showMessage('Please enter your email address', 'error');
+            return;
+        }
+        
+        if (!isValidEmail(email)) {
+            showMessage('Please enter a valid email address', 'error');
+            return;
+        }
+        
+        // Show loading state
+        showMessage('Submitting...', 'loading');
+        subscribeBtn.disabled = true;
+        emailInput.disabled = true;
+        
+        try {
+            const response = await fetch('/api/subscribe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: email })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok && data.success) {
+                showMessage('Registration Successful! Welcome to AI Buzz Media.', 'success');
+                emailInput.value = '';
+            } else {
+                showMessage(data.error || 'Subscription failed. Please try again.', 'error');
+            }
+            
+        } catch (error) {
+            console.error('Subscription error:', error);
+            showMessage('Network error. Please try again.', 'error');
+        } finally {
+            subscribeBtn.disabled = false;
+            emailInput.disabled = false;
+        }
+    });
+    
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.className = `form-message ${type}`;
+        message.style.display = 'block';
+        
+        if (type === 'success' || type === 'error') {
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 12000);
+        }
+    }
+    
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
+    // Ensure floating elements are visible
+    setTimeout(() => {
+        const floatingElements = document.querySelectorAll('.floating-element');
+        console.log('Found floating elements:', floatingElements.length);
+        floatingElements.forEach((el, index) => {
+            console.log(`Element ${index + 1}:`, el);
+            el.style.display = 'block';
+            el.style.visibility = 'visible';
+            el.style.opacity = '1';
+            el.style.zIndex = '1000';
+        });
+    }, 100);
+});
+</script>
+
+<style>
+.subscribe-section {
+	padding: 6rem 0;
+	background: linear-gradient(135deg, 
+		rgba(0, 212, 255, 0.1) 0%, 
+		rgba(0, 102, 255, 0.05) 50%, 
+		rgba(168, 85, 247, 0.1) 100%
+	);
+	position: relative;
+	overflow: hidden;
+	/* Prevent layout shifts */
+	contain: layout style paint;
+}
+
+.subscribe-section::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: 
+		radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+		radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
+	animation: float 20s ease-in-out infinite;
+	pointer-events: none;
+	/* Prevent layout shifts */
+	will-change: transform;
+	transform: translateZ(0);
+	/* Ensure animation doesn't affect layout */
+	transform-origin: center center;
+}
+
+@keyframes float {
+	0%, 100% { 
+		transform: translateY(0px) rotate(0deg) translateZ(0); 
+	}
+	50% { 
+		transform: translateY(-10px) rotate(90deg) translateZ(0); 
+	}
+}
+
+.subscribe-container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 2rem;
+	position: relative;
+	z-index: 2;
+}
+
+.subscribe-content {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 4rem;
+	align-items: center;
+	background: rgba(26, 26, 27, 0.8);
+	backdrop-filter: blur(20px);
+	border: 1px solid rgba(0, 212, 255, 0.2);
+	border-radius: 24px;
+	padding: 4rem;
+	box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+}
+
+.subscribe-title {
+	font-size: 3rem;
+	font-weight: 700;
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	margin-bottom: 1.5rem;
+	line-height: 1.1;
+}
+
+.subscribe-subtitle {
+	font-size: 1.2rem;
+	color: #b3b3b3;
+	line-height: 1.6;
+	margin-bottom: 2rem;
+}
+
+.subscribe-benefits {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.benefit {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	color: #ffffff;
+	font-weight: 500;
+}
+
+.benefit-icon {
+	background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 102, 255, 0.2) 100%);
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.2rem;
+}
+
+.subscribe-form-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	position: relative;
+}
+
+.subscribe-form {
+	background: rgba(0, 0, 0, 0.3);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 16px;
+	padding: 2rem;
+	position: relative;
+	z-index: 5;
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+
+.subscribe-input {
+	padding: 1rem 1.5rem;
+	background: rgba(255, 255, 255, 0.05);
+	border: 2px solid rgba(255, 255, 255, 0.1);
+	border-radius: 12px;
+	color: #ffffff;
+	font-size: 1rem;
+	transition: all 0.3s ease;
+}
+
+.subscribe-input:focus {
+	outline: none;
+	border-color: #00d4ff;
+	box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+	background: rgba(255, 255, 255, 0.08);
+}
+
+.subscribe-input::placeholder {
+	color: #666666;
+}
+
+.subscribe-button {
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	color: white;
+	border: none;
+	padding: 1rem 2rem;
+	border-radius: 12px;
+	font-size: 1.1rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	position: relative;
+	overflow: hidden;
+}
+
+.subscribe-button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.subscribe-button:hover:not(:disabled) {
+	transform: translateY(-3px);
+	box-shadow: 0 15px 40px rgba(0, 212, 255, 0.4);
+}
+
+.form-message-container {
+	margin-top: 1rem;
+}
+
+.form-message {
+	padding: 1rem;
+	border-radius: 8px;
+	text-align: center;
+	font-weight: 500;
+	animation: slideIn 0.3s ease;
+}
+
+.form-message.success {
+	background: rgba(34, 197, 94, 0.15);
+	border: 1px solid rgba(34, 197, 94, 0.3);
+	color: #22c55e;
+}
+
+.form-message.error {
+	background: rgba(239, 68, 68, 0.15);
+	border: 1px solid rgba(239, 68, 68, 0.3);
+	color: #ef4444;
+}
+
+.form-message.loading {
+	background: rgba(59, 130, 246, 0.15);
+	border: 1px solid rgba(59, 130, 246, 0.3);
+	color: #3b82f6;
+}
+
+@keyframes slideIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+	.subscribe-content {
+		grid-template-columns: 1fr;
+		gap: 3rem;
+		padding: 3rem;
+		text-align: center;
+	}
+	
+	.subscribe-title {
+		font-size: 2.5rem;
+	}
+	
+	.subscribe-benefits {
+		justify-content: center;
+		align-items: center;
+	}
+}
+
+@media (max-width: 768px) {
+	.subscribe-section {
+		padding: 4rem 0;
+	}
+	
+	.subscribe-content {
+		padding: 2rem;
+		gap: 2rem;
+	}
+	
+	.subscribe-title {
+		font-size: 2rem;
+	}
+	
+	.subscribe-subtitle {
+		font-size: 1rem;
+	}
+	
+	.form-group {
+		gap: 0.75rem;
+	}
+	
+	.subscribe-input,
+	.subscribe-button {
+		padding: 0.75rem 1rem;
+	}	
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	.subscribe-section::before {
+		animation: none;
+	}
+	
+	.floating-element {
+		animation: none !important;
+	}
+	
+	@keyframes slideIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+}
+
+/* Floating AI Elements */
+.floating-elements {
+	position: absolute !important;
+	top: 0 !important;
+	left: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	pointer-events: none !important;
+	z-index: 999 !important;
+	overflow: visible !important;
+}
+
+.floating-element {
+	position: absolute !important;
+	animation-duration: 8s !important;
+	animation-iteration-count: infinite !important;
+	animation-timing-function: ease-in-out !important;
+	z-index: 1000 !important;
+	display: block !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+}
+
+.element-1 {
+	top: 10% !important;
+	right: 8% !important;
+	animation-name: float-rotate-1 !important;
+	animation-delay: 0s !important;
+}
+
+.element-2 {
+	top: 65% !important;
+	right: 3% !important;
+	animation-name: float-rotate-2 !important;
+	animation-delay: 2s !important;
+}
+
+.element-3 {
+	top: 40% !important;
+	right: 20% !important;
+	animation-name: float-rotate-3 !important;
+	animation-delay: 4s !important;
+}
+
+.ai-chip {
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%) !important;
+	border-radius: 20px !important;
+	padding: 8px 16px !important;
+	font-size: 12px !important;
+	font-weight: 700 !important;
+	color: white !important;
+	text-transform: uppercase !important;
+	letter-spacing: 1px !important;
+	box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4) !important;
+	border: 1px solid rgba(0, 212, 255, 0.3) !important;
+	display: block !important;
+	visibility: visible !important;
+}
+
+.brain-icon {
+	font-size: 2rem !important;
+	background: rgba(168, 85, 247, 0.3) !important;
+	border-radius: 50% !important;
+	width: 60px !important;
+	height: 60px !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	backdrop-filter: blur(10px) !important;
+	border: 2px solid rgba(168, 85, 247, 0.5) !important;
+	box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3) !important;
+	visibility: visible !important;
+}
+
+.rocket-badge {
+	background: linear-gradient(135deg, rgba(34, 197, 94, 0.3) 0%, rgba(59, 130, 246, 0.3) 100%) !important;
+	border-radius: 25px !important;
+	padding: 8px 12px !important;
+	display: flex !important;
+	align-items: center !important;
+	gap: 6px !important;
+	backdrop-filter: blur(10px) !important;
+	border: 2px solid rgba(34, 197, 94, 0.5) !important;
+	box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3) !important;
+	visibility: visible !important;
+}
+
+.badge-emoji {
+	font-size: 16px;
+}
+
+.badge-text {
+	font-size: 10px;
+	font-weight: 700;
+	color: #22c55e;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+/* Floating Animations */
+@keyframes float-rotate-1 {
+	0% { 
+		transform: translateY(0px) translateX(0px) rotate(0deg);
+		opacity: 0.7;
+	}
+	25% { 
+		transform: translateY(-15px) translateX(10px) rotate(90deg);
+		opacity: 1;
+	}
+	50% { 
+		transform: translateY(-20px) translateX(0px) rotate(180deg);
+		opacity: 0.8;
+	}
+	75% { 
+		transform: translateY(-10px) translateX(-10px) rotate(270deg);
+		opacity: 1;
+	}
+	100% { 
+		transform: translateY(0px) translateX(0px) rotate(360deg);
+		opacity: 0.7;
+	}
+}
+
+@keyframes float-rotate-2 {
+	0% { 
+		transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+		opacity: 0.6;
+	}
+	33% { 
+		transform: translateY(-10px) translateX(-15px) rotate(120deg) scale(1.1);
+		opacity: 1;
+	}
+	66% { 
+		transform: translateY(-5px) translateX(15px) rotate(240deg) scale(0.9);
+		opacity: 0.8;
+	}
+	100% { 
+		transform: translateY(0px) translateX(0px) rotate(360deg) scale(1);
+		opacity: 0.6;
+	}
+}
+
+@keyframes float-rotate-3 {
+	0% { 
+		transform: translateY(0px) translateX(0px) rotate(0deg);
+		opacity: 0.8;
+	}
+	40% { 
+		transform: translateY(-18px) translateX(8px) rotate(144deg);
+		opacity: 1;
+	}
+	60% { 
+		transform: translateY(-12px) translateX(-8px) rotate(216deg);
+		opacity: 0.9;
+	}
+	100% { 
+		transform: translateY(0px) translateX(0px) rotate(360deg);
+		opacity: 0.8;
+	}
+}
+</style>

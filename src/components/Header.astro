@@ -19,6 +19,7 @@ import { SITE_TITLE, CATEGORIES } from '../consts';
 				{CATEGORIES.map(cat => (
 					<HeaderLink href={`/categories/${cat.slug}`}>{cat.displayName}</HeaderLink>
 				))}
+				<HeaderLink href="/ai-tools-comparison">AI Tools</HeaderLink>
 				<HeaderLink href="/about">About</HeaderLink>
 				<HeaderLink href="/contact">Contact</HeaderLink>
 				<AdminLink />
@@ -30,7 +31,7 @@ import { SITE_TITLE, CATEGORIES } from '../consts';
 				</div>
 				<button class="header-search-btn" id="headerSearchBtn" aria-label="Search" tabindex="0">
 					<svg id="searchIcon" class="search-icon-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
-					<svg id="closeIcon" class="close-icon-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="display:none"><line x1="18" y1="6" x2="6" y2="18" stroke-width="2" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke-width="2" stroke-linecap="round"/></svg>
+					<svg id="closeIcon" class="close-icon-svg search-hidden" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="6" x2="6" y2="18" stroke-width="2" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke-width="2" stroke-linecap="round"/></svg>
 				</button>
 			</div>
 		</div>
@@ -111,21 +112,23 @@ import { SITE_TITLE, CATEGORIES } from '../consts';
 
 	function openSearch() {
 		searchActive = true;
-		nav && (nav.style.display = 'none');
-		mobileNav && (mobileNav.style.display = 'none');
-		overlay && (overlay.style.display = 'block');
-		searchIcon && (searchIcon.style.display = 'none');
-		closeIcon && (closeIcon.style.display = 'block');
+		// Use CSS classes instead of style.display to prevent layout shifting
+		nav && nav.classList.add('search-hidden');
+		mobileNav && mobileNav.classList.add('search-hidden');
+		overlay && overlay.classList.add('search-active');
+		searchIcon && searchIcon.classList.add('search-hidden');
+		closeIcon && closeIcon.classList.add('search-active');
 		setTimeout(() => { input && input.focus(); }, 100);
 		document.body.classList.add('header-search-active');
 	}
 	function closeSearch() {
 		searchActive = false;
-		nav && (nav.style.display = '');
-		mobileNav && (mobileNav.style.display = '');
-		overlay && (overlay.style.display = 'none');
-		searchIcon && (searchIcon.style.display = 'block');
-		closeIcon && (closeIcon.style.display = 'none');
+		// Use CSS classes instead of style.display to prevent layout shifting
+		nav && nav.classList.remove('search-hidden');
+		mobileNav && mobileNav.classList.remove('search-hidden');
+		overlay && overlay.classList.remove('search-active');
+		searchIcon && searchIcon.classList.remove('search-hidden');
+		closeIcon && closeIcon.classList.remove('search-active');
 		resultsBox && resultsBox.classList.remove('active');
 		selectedIdx = -1;
 		document.body.classList.remove('header-search-active');
@@ -191,6 +194,7 @@ import { SITE_TITLE, CATEGORIES } from '../consts';
 </script>
 
 <style>
+/* Header Styles - Cache Bust v3 - TESTING UPDATE VISIBILITY */
 :root {
   --gradient-primary: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
   --gradient-secondary: linear-gradient(135deg, rgba(0, 212, 255, 0.8) 0%, rgba(0, 102, 255, 0.8) 100%);
@@ -202,21 +206,75 @@ import { SITE_TITLE, CATEGORIES } from '../consts';
   --glow-secondary: 0 0 30px rgba(0, 212, 255, 0.5);
 }
 
+/* CRITICAL: Ultra-specific header selector to override any conflicts */
+header.ai-header,
 .ai-header {
-	background: rgba(10, 10, 11, 0.95);
-	/* Removed CPU-intensive backdrop-filter for performance */
-	border-bottom: 1.5px solid rgba(0, 212, 255, 0.35);
+	/* CRITICAL: Maximum specificity positioning to prevent conflicts */
+	position: fixed !important;
+	top: 0 !important;
+	left: 0 !important;
+	right: 0 !important;
+	width: 100% !important;
+	max-width: 100% !important;
+	min-width: 100% !important;
+	z-index: 2147483647 !important; /* Maximum possible z-index */
+	
+	/* Visual styling */
+	background: rgba(10, 10, 11, 0.95) !important;
+	border-bottom: 1.5px solid rgba(0, 212, 255, 0.35) !important;
 	box-shadow:
 		0 4px 12px rgba(0, 212, 255, 0.15),
-		0 2px 8px rgba(0, 0, 0, 0.1);
-	padding: 1.2rem 0 1.2rem 0;
-	position: sticky;
-	top: 0;
-	z-index: 100;
-	transition: all 0.2s ease;
-	width: 100%;
-	box-sizing: border-box;
-	margin: 0;
+		0 2px 8px rgba(0, 0, 0, 0.1) !important;
+	padding: 1.2rem 0 1.2rem 0 !important;
+	
+	/* CRITICAL: Anti-conflict and stability rules */
+	box-sizing: border-box !important;
+	margin: 0 !important;
+	transform: none !important;
+	transition: none !important;
+	contain: none !important;
+	overflow: visible !important;
+	
+	/* CRITICAL: Force visibility and prevent detachment */
+	display: block !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	pointer-events: auto !important;
+	
+	/* CRITICAL: Prevent layout shifts and shaking */
+	will-change: auto !important;
+	backface-visibility: hidden !important;
+	-webkit-backface-visibility: hidden !important;
+	
+	/* Search state classes to prevent layout shifting */
+	.search-hidden {
+		display: none !important;
+	}
+	
+	.search-active {
+		display: block !important;
+	}
+	
+	#closeIcon.search-active {
+		display: block !important;
+	}
+	
+	.header-search-overlay.search-active {
+		display: block !important;
+	}
+	transform3d: none !important;
+	-webkit-transform3d: none !important;
+	
+	/* CRITICAL: Stable dimensions */
+	min-height: 90px !important;
+	max-height: none !important;
+	height: auto !important;
+	
+	/* CRITICAL: Prevent any external interference */
+	float: none !important;
+	clear: none !important;
+	position-anchor: none !important;
+	inset: 0 auto auto 0 !important;
 }
 
 .ai-header::before {
@@ -248,8 +306,8 @@ import { SITE_TITLE, CATEGORIES } from '../consts';
 .header-content-wrapper {
 	display: flex;
 	align-items: center;
-	gap: 2rem;
-	max-width: 1200px;
+	gap: 2rem; /* FIXED: Normal spacing between logo, nav, and search */
+	max-width: 1400px; /* ALIGNED: Updated from 1200px to match Hero width */
 	margin: 0 auto;
 }
 
@@ -257,7 +315,7 @@ import { SITE_TITLE, CATEGORIES } from '../consts';
 	flex: 0 0 auto;
 	display: flex;
 	flex-direction: column;
-	gap: 0.1rem;
+	gap: 0.3rem;
 }
 
 .desktop-nav {
@@ -282,13 +340,14 @@ import { SITE_TITLE, CATEGORIES } from '../consts';
 }
 
 .site-title {
-	margin: 0;
-	margin-bottom: -0.3rem;
+	margin: 0 !important;
+	margin-bottom: 0 !important;
+	padding: 0 !important;
 	font-size: 1.6rem;
 	font-weight: 700;
 	letter-spacing: 0.5px;
 	font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-	line-height: 1.1;
+	line-height: 1.1 !important;
 	white-space: nowrap;
 }
 
@@ -301,31 +360,16 @@ import { SITE_TITLE, CATEGORIES } from '../consts';
 	transition: all 0.2s ease;
 	position: relative;
 	display: inline-block;
-	/* Removed expensive text-shadow and filter effects */
-}
-
-.site-title a::before {
-	content: '';
-	position: absolute;
-	top: -2px;
-	left: -2px;
-	right: -2px;
-	bottom: -2px;
-	background: var(--gradient-primary);
-	opacity: 0;
-	/* Removed expensive blur filter */
-	transition: opacity 0.2s ease;
-	z-index: -1;
 }
 
 .site-title a:hover {
-	transform: translateY(-2px);
-	/* Simplified hover effects for performance */
-	opacity: 0.9;
-}
-
-.site-title a:hover::before {
-	opacity: 0.15;
+	transform: translateY(-2px) scale(1.02);
+	/* Text-only glow effect without background */
+	filter: 
+		drop-shadow(0 4px 16px rgba(0, 212, 255, 0.4))
+		brightness(1.2)
+		saturate(1.15);
+	text-shadow: 0 0 16px rgba(0, 212, 255, 0.6);
 }
 
 .site-title a:focus {
@@ -333,24 +377,25 @@ import { SITE_TITLE, CATEGORIES } from '../consts';
 }
 
 .tagline {
-	margin: 0;
-	margin-top: -0.3rem;
-	margin-bottom: 0;
+	margin: 0 !important;
+	margin-top: -0.1rem !important;
+	margin-bottom: 0 !important;
+	padding: 0 !important;
 	font-size: 0.7rem;
-	color: #888888;
+	color: #9dd1f1;
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	font-weight: 600;
 	opacity: 0.8;
 	transition: all 0.3s ease;
-	line-height: 1.1;
+	line-height: 1.1 !important;
 	white-space: nowrap;
 }
 
 .site-title:hover + .tagline {
 	color: #00d4ff;
-	opacity: 0.9;  /* Slightly less bright than title */
-	text-shadow: 0 0 8px rgba(0, 212, 255, 0.2);  /* Subtle glow */
+	opacity: 0.9;
+	text-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
 }
 
 .desktop-nav :global(a) {
@@ -414,24 +459,54 @@ import { SITE_TITLE, CATEGORIES } from '../consts';
   display: none !important;
 }
 
+/* Ultra-specific active state selector with enhanced visibility */
+.ai-header .nav-container .header-content-wrapper .desktop-nav :global(a.active),
 .desktop-nav :global(a.active) {
-	color: var(--color-text);
-	background: rgba(0, 212, 255, 0.1);
-	border-color: rgba(0, 212, 255, 0.3);
-	box-shadow: 
-		0 4px 15px rgba(0, 212, 255, 0.15),
-		inset 0 1px 0 rgba(255, 255, 255, 0.1);
+	/* Bright, highly visible gradient text */
+	background: linear-gradient(135deg, #00d4ff 0%, #0099ff 50%, #00d4ff 100%) !important;
+	-webkit-background-clip: text !important;
+	-webkit-text-fill-color: transparent !important;
+	background-clip: text !important;
+	
+	/* Balanced glow effects - visible but not overwhelming */
+	filter: 
+		drop-shadow(0 0 8px rgba(0, 212, 255, 0.5))
+		brightness(1.1) !important;
+	text-shadow: 
+		0 0 12px rgba(0, 212, 255, 0.4),
+		0 0 6px rgba(0, 212, 255, 0.6) !important;
+	
+	/* Remove background effects that create unwanted shapes */
+	/* box-shadow removed to eliminate background shape */
+	
+	/* Subtle but noticeable transform */
+	transform: translateY(-1px) scale(1.03) !important;
+	position: relative !important;
+	z-index: 10 !important;
+	
+	/* Font weight for extra emphasis */
+	font-weight: 700 !important;
+	
+	/* Smooth transition */
+	transition: all 0.3s ease !important;
+	
+	/* Clean base */
+	background-color: transparent !important;
+	border: none !important;
+	border-radius: 0 !important;
 }
 
-.desktop-nav :global(a.active)::before {
-	opacity: 0.2;
-}
+
 
 .mobile-nav {
 	display: none;
 }
 
 @media (max-width: 1400px) {
+	.header-content-wrapper {
+		gap: 1.5rem; /* FIXED: Responsive spacing for smaller screens */
+	}
+	
 	.desktop-nav {
 		gap: 0.6rem;
 	}
@@ -443,6 +518,10 @@ import { SITE_TITLE, CATEGORIES } from '../consts';
 }
 
 @media (max-width: 1200px) {
+	.header-content-wrapper {
+		gap: 1.2rem; /* FIXED: Normal responsive spacing */
+	}
+	
 	.desktop-nav {
 		gap: 0.4rem;
 	}
@@ -454,6 +533,10 @@ import { SITE_TITLE, CATEGORIES } from '../consts';
 }
 
 @media (max-width: 1100px) {
+	.header-content-wrapper {
+		gap: 1rem; /* FIXED: Normal responsive spacing */
+	}
+	
 	.desktop-nav {
 		gap: 0.25rem;
 	}
@@ -550,7 +633,7 @@ import { SITE_TITLE, CATEGORIES } from '../consts';
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 100vw;
+	width: 100%;
 	height: 100%;
 	background: rgba(10, 10, 11, 0.98);
 	/* Removed backdrop-filter for performance */
@@ -652,7 +735,7 @@ import { SITE_TITLE, CATEGORIES } from '../consts';
 }
 @media (max-width: 600px) {
 	.header-search-bar-container, .header-search-results {
-		max-width: 100vw;
+		max-width: 100%;
 		border-radius: 0;
 	}
 	.header-search-input {

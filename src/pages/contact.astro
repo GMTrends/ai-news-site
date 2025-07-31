@@ -176,12 +176,23 @@ import Footer from '../components/Footer.astro';
       min-height: 100vh;
       margin: 0;
       padding: 0;
-      width: 100vw;
+      width: 100%;
       box-sizing: border-box;
     }
     .contact-page {
       min-height: 100vh;
     }
+    
+    .contact-hero {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 102, 255, 0.1) 100%);
+      padding: 4rem 0;
+      /* Add top padding to account for fixed header */
+      padding-top: calc(4rem + 90px);
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+      margin: 0;
+    }
+    
     /* Match the background of the section above the footer for the spacer */
     .footer-padding-spacer {
       height: 0 !important;
@@ -189,14 +200,6 @@ import Footer from '../components/Footer.astro';
       padding: 0 !important;
       margin: 0 !important;
       background: var(--color-bg) !important;
-    }
-    
-    .contact-hero {
-      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 102, 255, 0.1) 100%);
-      padding: 5rem 0;
-      text-align: center;
-      border-bottom: 1px solid rgba(0, 212, 255, 0.2);
-      margin: 0;
     }
     
     .container {

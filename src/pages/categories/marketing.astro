@@ -1,16 +1,27 @@
 ---
-import { getArticlesByCategory } from '../../lib/sanity';
+import { getArticlesByCategory } from '../../lib/sanity.ts';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import CategorySidebar from '../../components/CategorySidebar.astro';
-// CSS included via BaseHead
+import CategoryHero from '../../components/CategoryHero.astro';
+import { getCategoryData } from '../../data/categoryData.ts';
+import '../../styles/global.css'; // RESTORED: Essential global CSS for category pages
 
-// Fetch all Marketing articles from Sanity CMS
 const marketingArticles = await getArticlesByCategory('marketing', 20);
+const categoryData = getCategoryData('marketing');
+
+// Debug logging
+console.log('Marketing Articles:', marketingArticles?.length || 0, 'articles found');
+console.log('Category Data:', categoryData ? 'Found' : 'Missing');
+if (marketingArticles?.length > 0) {
+  console.log('First article:', marketingArticles[0]);
+}
+
+const pageTitle = categoryData?.title + " - Tools & Strategies" || "AI Marketing & Growth - Tools & Strategies";
+const pageDescription = categoryData?.metaDescription || "Explore cutting-edge AI marketing tools, growth strategies, and customer engagement solutions. Transform your marketing with intelligent automation.";
+const keywords = categoryData?.keywords.join(', ') || "AI marketing, growth tools, customer engagement, marketing automation, AI analytics";
 
 // SEO metadata
-const pageTitle = "AI Marketing & Content Creation - Latest News & Insights";
-const pageDescription = "Discover the latest in AI marketing, content creation, and digital strategy. Stay ahead with news, guides, and tools for marketers and creators.";
 ---
 
 <!DOCTYPE html>
@@ -20,7 +31,7 @@ const pageDescription = "Discover the latest in AI marketing, content creation, 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{pageTitle}</title>
   <meta name="description" content={pageDescription} />
-  <meta name="keywords" content="AI marketing, content creation, AI tools, digital marketing, AI content" />
+  <meta name="keywords" content={keywords} />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={Astro.url} />
   <meta property="og:title" content={pageTitle} />
@@ -36,15 +47,21 @@ const pageDescription = "Discover the latest in AI marketing, content creation, 
   <Header />
   <div class="main-content">
     <main class="category-page">
-      <div class="category-hero">
-        <div class="container">
-          <div class="category-header">
-            <div class="category-icon">📈</div>
-            <h1 class="category-title">AI Marketing & Content Creation</h1>
-            <p class="category-description">Discover the latest in AI marketing, content creation, and digital strategy. Stay ahead with news, guides, and tools for marketers and creators.</p>
-          </div>
-        </div>
-      </div>
+      
+      {categoryData && (
+        <CategoryHero 
+          category={categoryData.slug}
+          title={categoryData.title}
+          description={categoryData.description}
+          icon={categoryData.icon}
+          toolsCount={categoryData.toolsCount}
+          lastUpdated={categoryData.lastUpdated}
+          breadcrumbs={[
+            { name: "Home", url: "/" },
+            { name: "Categories", url: "/categories" }
+          ]}
+        />
+      )}
       <div class="category-content">
         <div class="category-layout">
           <div class="category-main">
@@ -54,7 +71,7 @@ const pageDescription = "Discover the latest in AI marketing, content creation, 
                   <article class="category-article">
                     <div class="article-image">
                       {article.featuredImage ? (
-                        <img src={article.featuredImage} alt={article.title} />
+                        <img src={article.featuredImage} alt={article.title} width="400" height="240" loading="lazy" decoding="async" />
                       ) : (
                         <div class="placeholder">📈</div>
                       )}
@@ -87,9 +104,18 @@ const pageDescription = "Discover the latest in AI marketing, content creation, 
   <Footer />
   
   <style>
-    .category-page {
+    .main-content {
       min-height: 100vh;
+      position: relative;
+    }
+    
+    .category-page {
       background: var(--bg-primary);
+      padding-bottom: 2rem;
+    }
+    
+    .footer-padding-spacer {
+      height: 100px;
     }
     
     .category-hero {
@@ -123,11 +149,11 @@ const pageDescription = "Discover the latest in AI marketing, content creation, 
     }
     
     .category-content {
-      padding: 3rem 0;
+      padding: 3rem 0 4rem 0;
     }
     
     .category-layout {
-      display: grid !important;
+      display: grid;
       grid-template-columns: 1fr 340px;
       gap: 2rem;
       max-width: 1200px;
@@ -138,9 +164,6 @@ const pageDescription = "Discover the latest in AI marketing, content creation, 
     
     .category-main {
       min-width: 0;
-      overflow: visible;
-      z-index: 1;
-      position: relative;
     }
     
     .articles-grid {
@@ -197,9 +220,18 @@ const pageDescription = "Discover the latest in AI marketing, content creation, 
       border-radius: 15px;
       display: inline-block;
       margin-bottom: 1.25rem;
+      color: #3b82f6;
+      background: rgba(59, 130, 246, 0.2);
+      text-decoration: none;
+      transition: all 0.3s ease;
     }
     
-    .category-badge-small.marketing { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+    .category-badge-small:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+      background: rgba(59, 130, 246, 0.3);
+      color: #ffffff;
+    }
     
     .article-content h2 {
       font-size: 1.25rem;
@@ -305,39 +337,10 @@ const pageDescription = "Discover the latest in AI marketing, content creation, 
       .category-content {
         padding: 2rem 0;
       }
-    }
-    
-    .category-badge {
-      background: rgba(59, 130, 246, 0.2);
-      color: #3b82f6;
-      padding: 0.2rem 0.5rem;
-      border-radius: 12px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      transition: all 0.3s ease;
-    }
-    
-    .category-badge:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
-      background: rgba(59, 130, 246, 0.3);
-      color: #ffffff;
-    }
-
-    .category-main,
-    .articles-grid {
-      min-width: 0;
-      overflow: visible;
-      z-index: 1;
-      position: relative;
-    }
-
-    .category-layout,
-    .category-content,
-    .container {
-      overflow: visible !important;
+      
+      .footer-padding-spacer {
+        height: 50px;
+      }
     }
   </style>
 </body>

@@ -11,6 +11,7 @@
     "security-audit": "npm run security-check && npm audit"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^3.0.0",
     "@astrojs/netlify": "^5.0.0",
     "@astrojs/node": "^8.0.0",

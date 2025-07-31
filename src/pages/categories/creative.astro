@@ -1,14 +1,19 @@
 ---
-import { getArticlesByCategory } from '../../lib/sanity';
+import { getArticlesByCategory } from '../../lib/sanity.ts';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import CategorySidebar from '../../components/CategorySidebar.astro';
-// CSS included via BaseHead
+import CategoryHero from '../../components/CategoryHero.astro';
+import { getCategoryData } from '../../data/categoryData.ts';
+import '../../styles/global.css'; // RESTORED: Essential global CSS for category pages
 
 const creativeArticles = await getArticlesByCategory('creative', 20);
+const categoryData = getCategoryData('creative');
 
-const pageTitle = "AI Video & Image Generation - Creative Tools & Inspiration";
-const pageDescription = "Explore the latest in AI-powered video and image generation. Get creative inspiration, tool reviews, and guides for artists and creators.";
+const pageTitle = categoryData?.title + " - Tools & Inspiration" || "AI Creative & Design - Tools & Inspiration";
+const pageDescription = categoryData?.metaDescription || "Unleash your creativity with AI-powered design tools, content generation, and artistic solutions. Create stunning visuals and content effortlessly.";
+const keywords = categoryData?.keywords.join(', ') || "AI design, creative tools, content generation, AI art, design automation";
+
 ---
 
 <!DOCTYPE html>
@@ -18,7 +23,7 @@ const pageDescription = "Explore the latest in AI-powered video and image genera
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{pageTitle}</title>
   <meta name="description" content={pageDescription} />
-  <meta name="keywords" content="AI creative, video generation, image generation, AI art, creative tools" />
+  <meta name="keywords" content={keywords} />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={Astro.url} />
   <meta property="og:title" content={pageTitle} />
@@ -34,15 +39,20 @@ const pageDescription = "Explore the latest in AI-powered video and image genera
   <Header />
   <div class="main-content">
     <main class="category-page">
-      <div class="category-hero">
-        <div class="container">
-          <div class="category-header">
-            <div class="category-icon">🎨</div>
-            <h1 class="category-title">AI Video & Image Generation</h1>
-            <p class="category-description">Explore the latest in AI-powered video and image generation. Get creative inspiration, tool reviews, and guides for artists and creators.</p>
-          </div>
-        </div>
-      </div>
+      {categoryData && (
+        <CategoryHero 
+          category={categoryData.slug}
+          title={categoryData.title}
+          description={categoryData.description}
+          icon={categoryData.icon}
+          toolsCount={categoryData.toolsCount}
+          lastUpdated={categoryData.lastUpdated}
+          breadcrumbs={[
+            { name: "Home", url: "/" },
+            { name: "Categories", url: "/categories" }
+          ]}
+        />
+      )}
       <div class="category-content">
         <div class="category-layout">
           <div class="category-main">
@@ -85,9 +95,18 @@ const pageDescription = "Explore the latest in AI-powered video and image genera
   <Footer />
   
   <style>
-    .category-page {
+    .main-content {
       min-height: 100vh;
+      position: relative;
+    }
+    
+    .category-page {
       background: var(--bg-primary);
+      padding-bottom: 2rem;
+    }
+    
+    .footer-padding-spacer {
+      height: 100px;
     }
     
     .category-hero {
@@ -121,31 +140,20 @@ const pageDescription = "Explore the latest in AI-powered video and image genera
     }
     
     .category-content {
-      padding: 3rem 0;
+      padding: 3rem 0 4rem 0;
     }
     
     .category-layout {
-      display: grid !important;
+      display: grid;
       grid-template-columns: 1fr 340px;
       gap: 2rem;
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 1rem;
-      align-items: start;
     }
     
     .category-main {
       min-width: 0;
-      overflow: visible;
-      z-index: 1;
-      position: relative;
-    }
-    
-    .category-sidebar {
-      min-width: 0;
-      overflow: visible;
-      z-index: 2;
-      position: relative;
     }
     
     .articles-grid {
