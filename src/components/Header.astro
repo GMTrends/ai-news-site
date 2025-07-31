@@ -462,19 +462,19 @@ header.ai-header,
 /* Ultra-specific active state selector with enhanced visibility */
 .ai-header .nav-container .header-content-wrapper .desktop-nav :global(a.active),
 .desktop-nav :global(a.active) {
-	/* Bright, highly visible gradient text */
-	background: linear-gradient(135deg, #00d4ff 0%, #0099ff 50%, #00d4ff 100%) !important;
+	/* Brighter, whiter gradient text for better visibility */
+	background: linear-gradient(135deg, #ffffff 0%, #e6f7ff 30%, #ffffff 100%) !important;
 	-webkit-background-clip: text !important;
 	-webkit-text-fill-color: transparent !important;
 	background-clip: text !important;
 	
-	/* Balanced glow effects - visible but not overwhelming */
+	/* Enhanced glow effects - brighter to complement white font */
 	filter: 
-		drop-shadow(0 0 8px rgba(0, 212, 255, 0.5))
-		brightness(1.1) !important;
+		drop-shadow(0 0 10px rgba(0, 212, 255, 0.7))
+		brightness(1.15) !important;
 	text-shadow: 
-		0 0 12px rgba(0, 212, 255, 0.4),
-		0 0 6px rgba(0, 212, 255, 0.6) !important;
+		0 0 15px rgba(0, 212, 255, 0.6),
+		0 0 8px rgba(0, 212, 255, 0.8) !important;
 	
 	/* Remove background effects that create unwanted shapes */
 	/* box-shadow removed to eliminate background shape */
