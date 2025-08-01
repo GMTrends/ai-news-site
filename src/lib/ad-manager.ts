@@ -7,7 +7,7 @@ export interface AdSlotConfig {
   id: string;
   name: string; // Never use "Ad" in names
   size: '300x250' | '336x280' | '728x90' | '320x50' | '300x600' | '970x250';
-  position: 'hero-sidebar' | 'article-top' | 'article-middle' | 'article-bottom' | 'category-sidebar' | 'footer-banner';
+  position: 'hero-sidebar' | 'article-top' | 'article-middle' | 'article-bottom' | 'category-sidebar' | 'footer-banner' | 'homepage-leaderboard';
   priority: 'premium' | 'high' | 'medium' | 'low';
   cpmRange: string;
   targeting: string[];
@@ -46,6 +46,18 @@ export class AdManager {
   }
 
   private initializeAdSlots(): void {
+    // Hero premium placement - highest CPM slot
+    this.addAdSlot({
+      id: 'hero-premium-top',
+      name: 'Hero Premium Spotlight',
+      size: '300x250',
+      position: 'hero-sidebar',
+      priority: 'premium',
+      cpmRange: '$20-30',
+      targeting: ['ai-tools', 'entrepreneurs', 'saas', 'premium'],
+      isActive: true
+    });
+
     // Premium sidebar slots - highest CPM
     this.addAdSlot({
       id: 'premium-sidebar-1',
@@ -101,6 +113,18 @@ export class AdManager {
       priority: 'medium',
       cpmRange: '$5-12',
       targeting: ['mobile-ai', 'apps', 'tools'],
+      isActive: true
+    });
+
+    // Homepage leaderboard - after category shortcuts
+    this.addAdSlot({
+      id: 'homepage-leaderboard',
+      name: 'AI Journey Accelerator Banner',
+      size: '728x90',
+      position: 'homepage-leaderboard',
+      priority: 'premium',
+      cpmRange: '$15-25',
+      targeting: ['ai-tools', 'entrepreneurs', 'business-growth', 'saas'],
       isActive: true
     });
 

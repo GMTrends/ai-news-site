@@ -10,12 +10,29 @@ interface Props {
 
 const { categorySlug, currentArticleSlug, className = '', articles = [] } = Astro.props;
 
-// Compute filteredArticles for related articles
+// Smart related articles logic - avoid duplicating main grid articles
 let filteredArticles: any[] = [];
 if (Array.isArray(articles) && articles.length > 0) {
-  filteredArticles = currentArticleSlug
-    ? articles.filter((a: any) => a.slug !== currentArticleSlug).slice(0, 3)
-    : articles.slice(0, 3);
+  // For category pages: skip first 8 articles (main grid), show next 3 for sidebar
+  // For article pages: exclude current article, show first 3
+  if (currentArticleSlug) {
+    // Article page logic - exclude current article
+    filteredArticles = articles.filter((a: any) => a.slug !== currentArticleSlug).slice(0, 3);
+  } else {
+    // Category page logic - skip main grid articles (first 8), show next 3
+    const mainGridCount = 8; // Number of articles shown in main grid
+    const sidebarArticles = articles.slice(mainGridCount, mainGridCount + 3);
+    
+    // Fallback: if not enough articles after main grid, show older articles
+    if (sidebarArticles.length < 3) {
+      // Mix: some from after main grid + some from beginning (marked as "More from category")
+      const remaining = 3 - sidebarArticles.length;
+      const fallbackArticles = articles.slice(0, remaining);
+      filteredArticles = [...sidebarArticles, ...fallbackArticles];
+    } else {
+      filteredArticles = sidebarArticles;
+    }
+  }
 }
 
 // Ad content based on type
@@ -191,7 +208,7 @@ function getAdContent(adType: string, position: number) {
             <span class="stars">⭐⭐⭐⭐⭐</span>
             <span class="rating-text">4.9/5 (2.1k reviews)</span>
           </div>
-          <a href="#" class="spotlight-cta">Try Free →</a>
+          <a href="#" class="spotlight-cta">Get Started →</a>
         </div>
       </div>
     </div>
@@ -207,7 +224,7 @@ function getAdContent(adType: string, position: number) {
           <h4>Claude AI</h4>
           <span class="tool-price">$20/mo</span>
         </div>
-        <a href="#" class="tool-link">Try Free</a>
+        <a href="#" class="tool-link">Get Started</a>
       </div>
       <div class="tool-card">
         <div class="tool-icon">✨</div>
@@ -215,7 +232,7 @@ function getAdContent(adType: string, position: number) {
           <h4>ChatGPT Plus</h4>
           <span class="tool-price">$20/mo</span>
         </div>
-        <a href="#" class="tool-link">Try Free</a>
+        <a href="#" class="tool-link">Get Started</a>
       </div>
     </div>
   </div>

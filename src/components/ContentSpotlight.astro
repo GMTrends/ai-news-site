@@ -8,7 +8,7 @@ import { adManager, AdBlockerEvasion, RevenueTracker } from '../lib/ad-manager.t
 
 interface Props {
   slotId: string;
-  position?: 'hero-sidebar' | 'article-top' | 'article-middle' | 'article-bottom' | 'category-sidebar' | 'footer-banner';
+  position?: 'hero-sidebar' | 'article-top' | 'article-middle' | 'article-bottom' | 'category-sidebar' | 'footer-banner' | 'homepage-leaderboard';
   customTargeting?: string[];
   className?: string;
   priority?: 'premium' | 'high' | 'medium' | 'low';
@@ -43,7 +43,7 @@ const revenueMultiplier = {
   'high': 1.2,
   'medium': 1.0,
   'low': 0.8
-}[priority];
+}[priority] || 1.0;
 
 const positionMultiplier = {
   'hero-sidebar': 1.4,
@@ -51,8 +51,9 @@ const positionMultiplier = {
   'article-middle': 1.1,
   'category-sidebar': 1.2,
   'article-bottom': 0.9,
-  'footer-banner': 1.0
-}[position];
+  'footer-banner': 1.0,
+  'homepage-leaderboard': 1.5
+}[position] || 1.0;
 
 const estimatedCPM = Math.round(15 * revenueMultiplier * positionMultiplier);
 ---

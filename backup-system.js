@@ -22,7 +22,7 @@ const crypto = require('crypto');
 // Configuration
 const CONFIG = {
   backupDir: './backups',
-  maxBackups: 4, // Keep last 4 backups
+  maxBackups: 5, // Keep last 5 backups
   includeFiles: [
     'src/content/**/*',
     'src/components/**/*',

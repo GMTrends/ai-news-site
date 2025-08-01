@@ -4,7 +4,7 @@
 
 # CONFIGURATION
 $BackupDir = "backups"
-$BackupLimit = 7
+$BackupLimit = 5
 $Include = @("src", "netlify", "schemas", "astro.config.mjs", "package.json", "package-lock.json", "env.example", "README.md")
 
 # Ensure backup directory exists

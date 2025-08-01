@@ -4,6 +4,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
+import RelatedArticlesSimple from '../components/RelatedArticlesSimple.astro';
 import { Image } from 'astro:assets';
 
 type Props = CollectionEntry<'blog'>['data'];
@@ -21,12 +22,27 @@ const updatedDateObj = typeof updatedDate === 'string' ? new Date(updatedDate) :
 <html lang="en">
 	<head>
 		<BaseHead title={title} description={description} image={heroImage} />
+		{heroImage && heroImage !== '' && (
+			<link
+				rel="preload"
+				as="image"
+				href={`${heroImage}?w=1200&q=85&f=webp`}
+				imagesrcset={`
+					${heroImage}?w=480&q=85&f=webp 480w,
+					${heroImage}?w=768&q=85&f=webp 768w,
+					${heroImage}?w=1200&q=85&f=webp 1200w,
+					${heroImage}?w=1920&q=80&f=webp 1920w
+				`}
+				imagesizes="100vw"
+				fetchpriority="high"
+			/>
+		)}
 		<style>
 			/* Modern Article Layout Styles */
 			:root {
-				--content-max-width: 1400px; /* Increased for better layout */
-				--content-width: 70%; /* Optimized for content readability */
-				--sidebar-width: 380px; /* Fixed width for optimal ad placement */
+				--content-max-width: 1440px; /* Optimized for modern wide screens */
+				--content-width: 68%; /* Balanced for rich content like tables/charts */
+				--sidebar-width: 350px; /* Perfect width for ads and widgets */
 				--content-padding: 2rem;
 				--mobile-padding: 1rem;
 				--line-height: 1.7;
@@ -57,7 +73,7 @@ const updatedDateObj = typeof updatedDate === 'string' ? new Date(updatedDate) :
 			}
 
 			.article-wrapper {
-				max-width: 1200px;
+				max-width: var(--content-max-width);
 				margin: 0 auto;
 				width: 100%;
 				padding: 0 1rem;
@@ -92,12 +108,16 @@ const updatedDateObj = typeof updatedDate === 'string' ? new Date(updatedDate) :
 				z-index: 10;
 			}
 
-			/* Full-width hero image */
+			/* Optimized full-width hero image with performance enhancements */
 			.hero-image {
 				width: 100%;
 				max-width: 100%;
 				margin: 0;
 				position: relative;
+				/* Prevent layout shift during image loading */
+				aspect-ratio: 16/5;
+				background: linear-gradient(135deg, #1a1a1b 0%, #2d2d30 100%);
+				overflow: hidden;
 				left: 50%;
 				right: 50%;
 				transform: translateX(-50%);
@@ -110,6 +130,30 @@ const updatedDateObj = typeof updatedDate === 'string' ? new Date(updatedDate) :
 				margin-bottom: 50px; /* Set to exactly 50px for desktop */
 			}
 
+			/* Optimized hero image with performance enhancements */
+			.hero-img-optimized {
+				position: absolute;
+				top: 0; left: 0; width: 100%; height: 100%;
+				object-fit: cover;
+				/* Smooth loading transition */
+				opacity: 0;
+				transition: opacity 0.3s ease-in-out;
+				/* Performance optimizations */
+				transform: translateZ(0);
+				will-change: opacity;
+				/* Prevent image dragging */
+				user-select: none;
+				-webkit-user-drag: none;
+				pointer-events: none;
+			}
+			
+			/* Show image when loaded */
+			.hero-img-optimized.loaded,
+			.hero-img-optimized:not([src=""]) {
+				opacity: 1;
+			}
+			
+			/* Legacy support for existing images */
 			.hero-image img {
 				position: absolute;
 				top: 0; left: 0; width: 100%; height: 100%;
@@ -123,8 +167,26 @@ const updatedDateObj = typeof updatedDate === 'string' ? new Date(updatedDate) :
 				position: absolute;
 				top: 0; left: 0; width: 100%; height: 100%;
 				z-index: 1;
-				background: linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.10) 100%);
+				/* Enhanced overlay with stronger gradient for better readability */
+				background: linear-gradient(180deg, 
+					rgba(0,0,0,0.15) 0%, 
+					rgba(0,0,0,0.35) 25%, 
+					rgba(0,0,0,0.75) 65%, 
+					rgba(0,0,0,0.85) 85%, 
+					rgba(0,0,0,0.75) 100%
+				);
 				pointer-events: none;
+			}
+
+			/* Dynamic overlay enhancement when text is present */
+			.hero-image:has(.hero-text) .hero-overlay {
+				background: linear-gradient(180deg, 
+					rgba(0,0,0,0.25) 0%, 
+					rgba(0,0,0,0.45) 25%, 
+					rgba(0,0,0,0.80) 60%, 
+					rgba(0,0,0,0.90) 85%, 
+					rgba(0,0,0,0.85) 100%
+				);
 			}
 
 			.hero-header-bar-container {
@@ -150,67 +212,181 @@ const updatedDateObj = typeof updatedDate === 'string' ? new Date(updatedDate) :
 			}
 
 			.hero-category-label {
-				background: none;
+				/* Enhanced background for better visual separation */
+				background: linear-gradient(135deg, rgba(0, 224, 255, 0.15), rgba(49, 130, 206, 0.15));
+				backdrop-filter: blur(8px);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				
+				/* Improved typography */
 				color: #fff;
-				font-size: 1.02rem;
-				font-weight: 600;
-				border-radius: 6px;
-				padding: 0.18rem 0.7rem;
+				font-size: 1.15rem; /* Increased from 1.02rem for better prominence */
+				font-weight: 700; /* Increased from 600 for stronger presence */
+				letter-spacing: 0.025em; /* Improved from 0.01em for better readability */
+				text-transform: uppercase;
+				
+				/* Enhanced spacing and shape */
+				border-radius: 8px; /* Increased from 6px for modern look */
+				padding: 0.35rem 1rem; /* Increased from 0.18rem 0.7rem for better presence */
+				margin-right: 0.75rem; /* Increased from 0.5rem for better spacing */
+				
+				/* Enhanced effects */
 				text-decoration: none;
-				letter-spacing: 0.01em;
-				border: none;
-				box-shadow: none;
 				pointer-events: auto;
-				transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-				margin-right: 0.5rem;
-				background-clip: padding-box;
+				transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+				
+				/* Professional text shadows for maximum readability */
+				text-shadow: 
+					0 1px 3px rgba(0,0,0,0.9),
+					0 2px 6px rgba(0,0,0,0.7),
+					0 4px 12px rgba(0,0,0,0.4);
+				
+				/* Enhanced text stroke for extreme cases */
+				-webkit-text-stroke: 0.5px rgba(0,0,0,0.3);
+				text-stroke: 0.5px rgba(0,0,0,0.3);
+				
+				/* Subtle glow effect */
+				box-shadow: 
+					0 2px 8px rgba(0, 224, 255, 0.1),
+					0 4px 16px rgba(0, 0, 0, 0.2),
+					inset 0 1px 0 rgba(255, 255, 255, 0.1);
 			}
 
 			.hero-category-label:hover {
-				background: none;
+				/* Enhanced hover background */
+				background: linear-gradient(135deg, rgba(0, 224, 255, 0.25), rgba(49, 130, 206, 0.25));
+				border: 1px solid rgba(0, 224, 255, 0.4);
+				backdrop-filter: blur(12px);
+				
+				/* Gradient text effect */
 				color: #00e0ff;
-				background-image: linear-gradient(90deg, #00e0ff 0%, #3182ce 100%);
+				background-image: linear-gradient(135deg, #00e0ff 0%, #ffffff 50%, #3182ce 100%);
 				-webkit-background-clip: text;
 				-webkit-text-fill-color: transparent;
 				background-clip: text;
 				text-fill-color: transparent;
-				filter: brightness(1.25) saturate(1.2);
-				text-shadow: 0 0 10px rgba(255,255,255,0.7);
-				transform: translateY(-1px) scale(1.08);
+				
+				/* Enhanced hover effects */
+				filter: brightness(1.3) saturate(1.3);
+				transform: translateY(-2px) scale(1.05);
+				
+				/* Professional glow effects */
+				text-shadow: 
+					0 0 8px rgba(0, 224, 255, 0.6),
+					0 0 16px rgba(0, 224, 255, 0.4),
+					0 2px 4px rgba(0,0,0,0.8);
+				
+				box-shadow: 
+					0 4px 16px rgba(0, 224, 255, 0.2),
+					0 8px 32px rgba(0, 224, 255, 0.1),
+					0 2px 8px rgba(0, 0, 0, 0.3),
+					inset 0 1px 0 rgba(255, 255, 255, 0.2);
 			}
 
 			.hero-social-icons {
 				display: flex;
-				gap: 0.38rem;
+				gap: 0.75rem; /* Increased from 0.38rem for better accessibility */
 				pointer-events: auto;
+				align-items: center;
 			}
 
 			.hero-social-icon {
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				width: 1.45rem;
-				height: 1.45rem;
+				
+				/* Enhanced size for better accessibility (44px minimum touch target) */
+				width: 2.75rem; /* Increased from 1.45rem (44px) */
+				height: 2.75rem; /* Increased from 1.45rem (44px) */
+				min-width: 44px; /* Accessibility requirement */
+				min-height: 44px; /* Accessibility requirement */
+				
+				/* Professional glassmorphism background */
+				background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+				backdrop-filter: blur(8px);
+				border: 1px solid rgba(255, 255, 255, 0.15);
 				border-radius: 50%;
-				background: none;
+				
+				/* Enhanced typography and colors */
 				color: #fff;
-				font-size: 1.02rem;
-				transition: color 0.18s;
+				font-size: 1.1rem; /* Increased from 1.02rem */
 				text-decoration: none;
-				border: none;
+				
+				/* Smooth transitions */
+				transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+				
+				/* Professional text shadows for readability */
+				text-shadow: 
+					0 1px 2px rgba(0,0,0,0.8),
+					0 2px 4px rgba(0,0,0,0.6);
+				
+				/* Subtle shadow for depth */
+				box-shadow: 
+					0 2px 8px rgba(0, 0, 0, 0.15),
+					0 4px 16px rgba(0, 0, 0, 0.1),
+					inset 0 1px 0 rgba(255, 255, 255, 0.1);
 			}
 
 			.hero-social-icon:hover {
-				background: none;
+				/* Enhanced hover background */
+				background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+				border: 1px solid rgba(255, 255, 255, 0.3);
+				backdrop-filter: blur(12px);
+				
+				/* Default hover color (will be overridden by platform-specific styles) */
 				color: #00e0ff;
-				background-image: linear-gradient(90deg, #00e0ff 0%, #3182ce 100%);
-				-webkit-background-clip: text;
-				-webkit-text-fill-color: transparent;
-				background-clip: text;
-				text-fill-color: transparent;
-				filter: brightness(1.25) saturate(1.2);
-				text-shadow: 0 0 10px rgba(255,255,255,0.7);
-				transform: translateY(-1px) scale(1.08);
+				
+				/* Enhanced hover effects */
+				filter: brightness(1.2) saturate(1.1);
+				transform: translateY(-3px) scale(1.1);
+				
+				/* Professional glow effects */
+				text-shadow: 
+					0 0 8px currentColor,
+					0 0 16px rgba(255, 255, 255, 0.4),
+					0 2px 4px rgba(0,0,0,0.8);
+				
+				box-shadow: 
+					0 6px 20px rgba(0, 0, 0, 0.2),
+					0 12px 40px rgba(0, 0, 0, 0.1),
+					0 0 20px currentColor,
+					inset 0 1px 0 rgba(255, 255, 255, 0.2);
+			}
+			
+			/* Platform-specific hover colors for brand recognition */
+			.hero-social-icon[title*="LinkedIn"]:hover {
+				color: #0077b5; /* LinkedIn brand blue */
+				box-shadow: 
+					0 6px 20px rgba(0, 119, 181, 0.3),
+					0 12px 40px rgba(0, 119, 181, 0.15),
+					0 0 20px rgba(0, 119, 181, 0.4),
+					inset 0 1px 0 rgba(255, 255, 255, 0.2);
+			}
+			
+			.hero-social-icon[title*="Twitter"]:hover {
+				color: #1da1f2; /* Twitter brand blue */
+				box-shadow: 
+					0 6px 20px rgba(29, 161, 242, 0.3),
+					0 12px 40px rgba(29, 161, 242, 0.15),
+					0 0 20px rgba(29, 161, 242, 0.4),
+					inset 0 1px 0 rgba(255, 255, 255, 0.2);
+			}
+			
+			.hero-social-icon[title*="Facebook"]:hover {
+				color: #1877f2; /* Facebook brand blue */
+				box-shadow: 
+					0 6px 20px rgba(24, 119, 242, 0.3),
+					0 12px 40px rgba(24, 119, 242, 0.15),
+					0 0 20px rgba(24, 119, 242, 0.4),
+					inset 0 1px 0 rgba(255, 255, 255, 0.2);
+			}
+			
+			.hero-social-icon[title*="Copy"]:hover {
+				color: #10b981; /* Green for copy link action */
+				box-shadow: 
+					0 6px 20px rgba(16, 185, 129, 0.3),
+					0 12px 40px rgba(16, 185, 129, 0.15),
+					0 0 20px rgba(16, 185, 129, 0.4),
+					inset 0 1px 0 rgba(255, 255, 255, 0.2);
 			}
 
 			.hero-text {
@@ -227,19 +403,53 @@ const updatedDateObj = typeof updatedDate === 'string' ? new Date(updatedDate) :
 				text-align: center;
 			}
 
-			.hero-title {
-				font-size: 2.8rem;
-				font-weight: 800;
-				line-height: 1.15;
-				margin: 0 0 1.2rem 0;
-				text-shadow: 0 2px 8px rgba(0,0,0,0.18);
-				background: linear-gradient(90deg, #00e0ff 0%, #3182ce 100%);
-				-webkit-background-clip: text;
-				-webkit-text-fill-color: transparent;
-				background-clip: text;
-				color: transparent;
-				display: block;
-				text-align: center;
+			/* BEAUTIFUL CYAN GRADIENT HERO TITLE: Perfect visibility with stunning gradient */
+			.hero-title,
+			h1.hero-title,
+			.hero-text .hero-title,
+			.hero-image .hero-text .hero-title,
+			.article-page .hero-text .hero-title,
+			body.article-page .hero-text .hero-title,
+			body.article-page .hero-image .hero-text h1.hero-title,
+			body.article-page .hero-image .hero-header-bar-container .hero-text .hero-title {
+				/* Bright cyan-blue gradient with enhanced visibility */
+				background: linear-gradient(90deg, #40f8ff 0%, #20b8ff 50%, #4da6ff 100%) !important;
+				-webkit-background-clip: text !important;
+				-webkit-text-fill-color: transparent !important;
+				background-clip: text !important;
+				color: transparent !important;
+				
+				/* Typography */
+				font-size: 2.8rem !important;
+				font-weight: 800 !important;
+				line-height: 1.15 !important;
+				margin: 0 0 1.2rem 0 !important;
+				display: block !important;
+				text-align: center !important;
+				
+				/* Very subtle shadows for clean, professional appearance */
+				text-shadow: 
+					0 1px 2px rgba(0,0,0,0.3),
+					0 2px 4px rgba(0,0,0,0.15),
+					0 0 8px rgba(0,240,255,0.2) !important;
+				
+				/* No text stroke for cleanest appearance */
+				-webkit-text-stroke: none !important;
+				text-stroke: none !important;
+				
+				/* Positioning and layering */
+				position: relative !important;
+				z-index: 999 !important;
+				
+				/* Boosted brightness for vibrant gradient */
+				filter: brightness(1.5) saturate(1.3) drop-shadow(0 0 12px rgba(0,240,255,0.4)) !important;
+				
+				/* Fallback for browsers that don't support background-clip */
+				@supports not (-webkit-background-clip: text) {
+					color: #00f0ff !important;
+					-webkit-text-fill-color: #00f0ff !important;
+					background: none !important;
+				}
 			}
 
 			.hero-meta {
@@ -248,7 +458,14 @@ const updatedDateObj = typeof updatedDate === 'string' ? new Date(updatedDate) :
 				align-items: center;
 				font-size: 1.08rem;
 				color: #e2e8f0;
-				text-shadow: 0 2px 8px rgba(0,0,0,0.45);
+				/* Enhanced text shadows for meta text */
+				text-shadow: 
+					0 1px 2px rgba(0,0,0,0.8),
+					0 2px 4px rgba(0,0,0,0.6),
+					0 4px 8px rgba(0,0,0,0.4);
+				/* Backup text stroke for meta text */
+				-webkit-text-stroke: 0.25px rgba(0,0,0,0.2);
+				text-stroke: 0.25px rgba(0,0,0,0.2);
 				margin-bottom: 0.2rem;
 				flex-wrap: wrap;
 			}
@@ -263,7 +480,7 @@ const updatedDateObj = typeof updatedDate === 'string' ? new Date(updatedDate) :
 
 			/* Centered content container */
 			.centered-container {
-				max-width: 1200px;
+				max-width: var(--content-max-width);
 				margin: 0 auto;
 				width: 100%;
 				display: flex;
@@ -674,6 +891,15 @@ const updatedDateObj = typeof updatedDate === 'string' ? new Date(updatedDate) :
 				height: 56px;
 			}
 
+			/* Sidebar Override - Ensure proper width for ads */
+			.centered-container .article-sidebar {
+				width: var(--sidebar-width) !important;
+				min-width: var(--sidebar-width) !important;
+				max-width: var(--sidebar-width) !important;
+				flex: 0 0 var(--sidebar-width) !important;
+				flex-shrink: 0 !important;
+			}
+
 			/* Responsive Design */
 			@media (max-width: 1200px) {
 				.centered-container {
@@ -736,14 +962,21 @@ const updatedDateObj = typeof updatedDate === 'string' ? new Date(updatedDate) :
 			{heroImage && heroImage !== '' ? (
 				<div class="hero-image">
 					<img
-						src={heroImage}
+						src={`${heroImage}?w=1200&q=85&f=webp`}
 						alt={title || 'Featured image'}
 						width="1920"
 						height="600"
 						loading="eager"
-						srcset={`${heroImage}?w=600 600w, ${heroImage}?w=1200 1200w, ${heroImage}?w=1920 1920w`}
+						fetchpriority="high"
+						decoding="async"
+						srcset={`
+							${heroImage}?w=480&q=85&f=webp 480w,
+							${heroImage}?w=768&q=85&f=webp 768w,
+							${heroImage}?w=1200&q=85&f=webp 1200w,
+							${heroImage}?w=1920&q=80&f=webp 1920w
+						`}
 						sizes="100vw"
-						class="fade-img"
+						class="hero-img-optimized"
 						id="featured-hero-img"
 					/>
 					<div class="hero-overlay"></div>
@@ -796,9 +1029,34 @@ const updatedDateObj = typeof updatedDate === 'string' ? new Date(updatedDate) :
 			</div>
 			<div class="article-footer-spacer"></div>
 		</div>
+		
+		<!-- Related Articles Section -->
+		<RelatedArticlesSimple currentSlug={Astro.url.pathname.split('/').pop()?.replace('.html', '') || ''} currentCategory={categoryName} />
+		
 		<Footer />
 		<script is:inline>
 		(function() {
+			// Hero image optimization for instant loading
+			function optimizeHeroImage() {
+				var heroImg = document.getElementById('featured-hero-img');
+				if (!heroImg) return;
+				
+				// Show image immediately when loaded
+				if (heroImg.complete && heroImg.naturalHeight !== 0) {
+					heroImg.classList.add('loaded');
+				} else {
+					heroImg.addEventListener('load', function() {
+						this.classList.add('loaded');
+					});
+				}
+				
+				// Error handling - show fallback
+				heroImg.addEventListener('error', function() {
+					this.style.opacity = '0.5';
+					console.warn('Hero image failed to load:', this.src);
+				});
+			}
+			
 			function alignHeroBarToTitle() {
 				var titleRow = document.getElementById('hero-title-row');
 				var bar = document.getElementById('hero-header-bar');
@@ -813,7 +1071,18 @@ const updatedDateObj = typeof updatedDate === 'string' ? new Date(updatedDate) :
 				bar.style.width = width + 'px';
 				bar.style.margin = '0 auto 0.8rem auto';
 			}
-			window.addEventListener('DOMContentLoaded', alignHeroBarToTitle);
+			
+			// Initialize optimizations as early as possible
+			if (document.readyState === 'loading') {
+				document.addEventListener('DOMContentLoaded', function() {
+					optimizeHeroImage();
+					alignHeroBarToTitle();
+				});
+			} else {
+				optimizeHeroImage();
+				alignHeroBarToTitle();
+			}
+			
 			window.addEventListener('resize', alignHeroBarToTitle);
 		})();
 		</script>

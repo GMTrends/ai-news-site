@@ -7,7 +7,8 @@ import CategoryHero from '../../components/CategoryHero.astro';
 import { getCategoryData } from '../../data/categoryData.ts';
 import '../../styles/global.css'; // RESTORED: Essential global CSS for category pages
 
-const marketingArticles = await getArticlesByCategory('marketing', 20);
+const allMarketingArticles = await getArticlesByCategory('marketing', 20);
+const marketingArticles = allMarketingArticles.slice(0, 8); // Show 8 articles in main grid
 const categoryData = getCategoryData('marketing');
 
 // Debug logging
@@ -65,10 +66,10 @@ const keywords = categoryData?.keywords.join(', ') || "AI marketing, growth tool
       <div class="category-content">
         <div class="category-layout">
           <div class="category-main">
-            <div class="articles-grid">
+            <div class="articles-grid" id="articles-grid">
               {marketingArticles.length > 0 ? (
                 marketingArticles.map((article: any) => (
-                  <article class="category-article">
+                  <article class="category-article" data-article-index="0">
                     <div class="article-image">
                       {article.featuredImage ? (
                         <img src={article.featuredImage} alt={article.title} width="400" height="240" loading="lazy" decoding="async" />
@@ -94,8 +95,18 @@ const keywords = categoryData?.keywords.join(', ') || "AI marketing, growth tool
                 </div>
               )}
             </div>
+            
+            <!-- Load More Button -->
+            {allMarketingArticles.length > 8 && (
+              <div class="load-more-container">
+                <button id="load-more-btn" class="load-more-btn">
+                  <span class="load-more-text">Load More Articles</span>
+                  <span class="load-more-count">({allMarketingArticles.length - 8} more)</span>
+                </button>
+              </div>
+            )}
           </div>
-          <CategorySidebar categorySlug="marketing" />
+          <CategorySidebar categorySlug="marketing" articles={allMarketingArticles} />
         </div>
       </div>
     </main>
@@ -342,6 +353,182 @@ const keywords = categoryData?.keywords.join(', ') || "AI marketing, growth tool
         height: 50px;
       }
     }
+    
+    /* Load More Button Styling */
+    .load-more-container {
+      display: flex;
+      justify-content: center;
+      margin: 2rem 0;
+      padding: 1rem;
+    }
+    
+    .load-more-btn {
+      background: linear-gradient(135deg, #00c4ef 0%, #0056ef 100%);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0, 196, 239, 0.3);
+    }
+    
+    .load-more-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 196, 239, 0.4);
+      background: linear-gradient(135deg, #00b4df 0%, #0046df 100%);
+    }
+    
+    .load-more-btn:active {
+      transform: translateY(0);
+    }
+    
+    .load-more-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .load-more-count {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+    
+    .loading-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top: 2px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Article fade-in animation */
+    .category-article.fade-in {
+      animation: fadeInUp 0.6s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
+  
+  <script define:vars={{ allMarketingArticles }}>
+    // Load More Articles Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const loadMoreBtn = document.getElementById('load-more-btn');
+      const articlesGrid = document.getElementById('articles-grid');
+      let currentPage = 0;
+      const articlesPerPage = 8;
+      const allArticles = allMarketingArticles;
+      
+      if (!loadMoreBtn || !articlesGrid) return;
+      
+      function createArticleHTML(article, index) {
+        const authorSlug = typeof article.author?.slug === 'object' 
+          ? article.author.slug.current 
+          : article.author?.slug || 'anonymous';
+        
+        const publishedDate = new Date(article.publishedAt || Date.now())
+          .toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+          });
+        
+        return `
+          <article class="category-article fade-in" data-article-index="${index}">
+            <div class="article-image">
+              ${article.featuredImage 
+                ? `<img src="${article.featuredImage}" alt="${article.title}" width="400" height="240" loading="lazy" decoding="async" />`
+                : '<div class="placeholder">📈</div>'
+              }
+            </div>
+            <div class="article-content">
+              <a href="/categories/marketing" class="category-badge-small marketing">Marketing</a>
+              <h2><a href="/marketing/${article.slug}">${article.title}</a></h2>
+              <p>${article.excerpt}</p>
+              <div class="article-meta">
+                <span class="author">By <a href="/authors/${authorSlug}" class="author-link">${article.author?.name || 'Anonymous'}</a></span>
+                <span class="date">${publishedDate}</span>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+      
+      function loadMoreArticles() {
+        const startIndex = (currentPage + 1) * articlesPerPage;
+        const endIndex = Math.min(startIndex + articlesPerPage, allArticles.length);
+        const articlesToLoad = allArticles.slice(startIndex, endIndex);
+        
+        if (articlesToLoad.length === 0) {
+          loadMoreBtn.style.display = 'none';
+          return;
+        }
+        
+        // Show loading state
+        const originalHTML = loadMoreBtn.innerHTML;
+        loadMoreBtn.innerHTML = '<span class="loading-spinner"></span> Loading...';
+        loadMoreBtn.disabled = true;
+        
+        // Simulate loading delay for better UX
+        setTimeout(() => {
+          // Add new articles to grid
+          articlesToLoad.forEach((article, index) => {
+            const articleHTML = createArticleHTML(article, startIndex + index);
+            articlesGrid.insertAdjacentHTML('beforeend', articleHTML);
+          });
+          
+          currentPage++;
+          
+          // Update button state
+          const remainingArticles = allArticles.length - ((currentPage + 1) * articlesPerPage);
+          
+          if (remainingArticles <= 0) {
+            loadMoreBtn.style.display = 'none';
+          } else {
+            loadMoreBtn.innerHTML = `
+              <span class="load-more-text">Load More Articles</span>
+              <span class="load-more-count">(${remainingArticles} more)</span>
+            `;
+            loadMoreBtn.disabled = false;
+          }
+          
+          // Smooth scroll to first new article
+          const firstNewArticle = articlesGrid.querySelector(`[data-article-index="${startIndex}"]`);
+          if (firstNewArticle) {
+            firstNewArticle.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'start',
+              inline: 'nearest'
+            });
+          }
+        }, 500);
+      }
+      
+      // Add click event listener
+      loadMoreBtn.addEventListener('click', loadMoreArticles);
+    });
+  </script>
 </body>
-</html> 
+</html>

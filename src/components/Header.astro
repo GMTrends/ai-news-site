@@ -832,9 +832,11 @@ header.ai-header,
   z-index: 130;
   display: none;
   padding: 0.5rem 0;
+  flex-direction: column;
+  align-items: stretch;
 }
 #search-results.active {
-  display: block;
+  display: flex;
 }
 #search-results .search-result-link {
   display: block;
@@ -850,6 +852,9 @@ header.ai-header,
   line-height: 1.28;
   width: 100%;
   background: transparent;
+  box-sizing: border-box;
+  clear: both;
+  float: none;
 }
 #search-results .search-result-link:last-child {
   border-bottom: none;

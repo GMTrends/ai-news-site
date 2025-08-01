@@ -2,6 +2,7 @@
 import { getFeaturedArticles } from '../lib/sanity';
 import { getCategoryUrl } from '../utils/urlHelpers';
 import { generateHeroImage, generateThumbnail } from '../utils/imageOptimization';
+import HeroPremiumAd from './HeroPremiumAd.astro';
 
 
 // Fetch more than 5 to allow for filtering/prioritization
@@ -241,10 +242,12 @@ function getCategoryKey(category: any) {
 
 			<!-- Revenue-Optimized Sidebar -->
 			<div class="hero-sidebar">
-	
-				<!-- Secondary Articles Grid -->
+				<!-- Secondary Articles Grid with Premium Ad -->
 				<div class="secondary-grid">
-					{showSecondary.map((article: any) => (
+					<!-- Premium Ad Placement -->
+					<HeroPremiumAd />
+					
+					{showSecondary.slice(0, 3).map((article: any) => (
 						<article class="secondary-article">
 							<a href={getArticleUrl(article)} class="article-image-small-link">
 								<div class="article-image-small">

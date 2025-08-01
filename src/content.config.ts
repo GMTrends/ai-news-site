@@ -97,6 +97,11 @@ const blog = defineCollection({
 		pubDate: z.string().optional(),
 		updatedDate: z.string().optional(),
 		heroImage: z.string().optional(),
+		category: z.string().optional(),
+		authorName: z.string().optional(),
+		authorSlug: z.string().optional(),
+		categoryName: z.string().optional(),
+		categorySlug: z.string().optional(),
 	}),
 });
 

@@ -10,7 +10,10 @@ try {
   const result = await sanityClient.fetch(`*[_type == "article"][0..2] {
     _id,
     title,
-    "slug": slug.current
+    "slug": slug.current,
+    heroImage {
+      asset->
+    }
   }`);
   
   sanityStatus = "Connected ✅";

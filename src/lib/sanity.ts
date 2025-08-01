@@ -434,6 +434,9 @@ export async function getAllArticles() {
         publishedAt,
         status,
         featured,
+        featuredImage {
+          asset->
+        },
         "author": author->{name, slug},
         "category": category->{name, displayName, slug, icon, color},
         body,
