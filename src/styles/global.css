@@ -38,14 +38,13 @@
   }
   
   /* Simplified font optimization to prevent layout shift */
-  body, * {
+  html, body {
 	font-variant-ligatures: none;
 	text-size-adjust: 100%;
-	box-sizing: border-box;
   }
   
   /* Reset and base styles */
-  * {
+  *, *::before, *::after {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
@@ -53,21 +52,17 @@
   
 
   
+  /* Primary html declaration (consolidated) */
   html {
 	font-family: var(--font-body);
 	background: var(--bg-primary);
 	color: var(--text-primary);
 	line-height: 1.6;
-	/* Simplified scroll behavior - removed will-change that can interfere with native scrolling */
 	scroll-behavior: smooth;
-	/* Remove conflicting height declarations */
 	height: 100%;
-	/* Prevent zoom on iOS when focusing inputs */
 	-webkit-text-size-adjust: 100%;
 	-ms-text-size-adjust: 100%;
-	/* Prevent horizontal overflow */
 	overflow-x: hidden;
-	/* Allow natural vertical scrolling */
 	overflow-y: auto;
   }
   
@@ -96,8 +91,7 @@
   img, video, iframe {
 	max-width: 100%;
 	height: auto;
-	/* Prevent layout shift during loading */
-	aspect-ratio: attr(width) / attr(height);
+	/* Replace unsupported attr() with explicit aspect ratios where needed in components */
   }
   
   /* Container stability */
@@ -111,11 +105,7 @@
 	min-width: 0;
   }
   
-  /* Clean, simple overflow handling without conflicts */
-  html {
-	overflow-x: hidden;
-	overflow-y: auto;
-  }
+  /* Clean, simple overflow handling without conflicts - removed duplicate html block */
   
   /* Remove conflicting body declarations - let the main body rule handle styling */
   
@@ -159,9 +149,8 @@
 	color: var(--accent-cyan);
 	text-decoration: none;
 	transition: color var(--transition-duration) ease;
-	/* Simplified link styling to prevent layout shift */
+	/* Keep inline display to avoid layout shifts, avoid padding/min-size globally */
 	display: inline;
-	/* Remove flex properties and will-change that can cause layout shifts */
   }
   
   a:hover {
@@ -177,7 +166,7 @@
 	will-change: auto;
   }
   
-  /* Responsive container class */
+  /* Responsive container class (will be consolidated later) */
   .container {
 	width: 100%;
 	max-width: 1200px;
@@ -216,19 +205,7 @@
 	box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
   }
   
-  /* Responsive container class */
-  .container {
-	width: 100%;
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 0 1rem;
-  }
-  
-  @media (min-width: 768px) {
-	.container {
-	  padding: 0 2rem;
-	}
-  }
+  /* Duplicate container block removed (will keep a single unified definition below) */
   
   /* Performance-optimized mobile-first responsive design */
   @media (max-width: 768px) {
@@ -247,13 +224,11 @@
 	  padding: 0 1rem;
 	}
 	
-	/* Improve touch targets on mobile */
+	/* Improve touch targets on mobile - do not force global min size to avoid layout conflicts */
 	button, 
 	input[type="button"], 
 	input[type="submit"], 
 	input[type="reset"] {
-	  min-height: 44px;
-	  min-width: 44px;
 	  padding: 0.75rem 1rem;
 	  font-size: 1rem;
 	}
@@ -267,18 +242,11 @@
 	input[type="tel"],
 	textarea,
 	select {
-	  min-height: 44px;
 	  font-size: 16px; /* Prevents zoom on iOS */
 	  padding: 0.75rem 1rem;
 	}
 	
-	/* Improve link touch targets */
-	a {
-	  min-height: 44px;
-	  min-width: 44px;
-	  padding: 0.5rem;
-	}
-	
+	/* Avoid global link padding/min dimensions to prevent card/grid shifts */
 	/* Optimize card spacing on mobile */
 	.card {
 	  padding: 1rem;
@@ -292,23 +260,16 @@
 	
 	/* Mobile scrollbar optimizations */
 	html {
-	  /* Ensure smooth scrolling on mobile */
 	  -webkit-overflow-scrolling: touch;
-	  /* Optimize scrollbar for mobile */
 	  scrollbar-width: none; /* Firefox */
 	  -ms-overflow-style: none; /* IE/Edge */
 	}
 	
-	/* Hide scrollbar on mobile for cleaner look */
 	html::-webkit-scrollbar {
 	  display: none; /* Chrome, Safari, Opera */
 	}
 	
 	body {
-	  /* FIXED: Ensure body doesn't interfere with mobile scrolling while preventing horizontal overflow */
-	  overflow-x: hidden;
-	  overflow-y: auto;
-	  /* Maintain touch scrolling */
 	  -webkit-overflow-scrolling: touch;
 	}
   }
@@ -415,7 +376,8 @@
 	border-radius: 4px;
   }
 
-  /* Remove focus outline from all article title links */
+  /* Keep gradient titles as requested; retain focus outlines for accessibility elsewhere */
+  /* Note: Do not remove outlines globally for headings/links to maintain accessibility */
   h2 a:focus,
   h3 a:focus,
   h4 a:focus {
@@ -442,10 +404,11 @@
   
   /* Performance optimization classes removed - empty ruleset */
   
+  /* Minimized will-change usage */
   .gpu-accelerated {
-  /* Removed transform: translateZ(0); to prevent stacking context issues for position: fixed elements */
-  will-change: transform;
-}
+    /* Only keep transform hint if element is animated frequently */
+    will-change: auto;
+  }
   
   /* Optimized image loading */
   img {
@@ -480,11 +443,8 @@
 	will-change: auto;
   }
   
-  /* Prevent any element from causing layout shifts */
-  * {
-	/* Prevent unexpected height changes */
-	box-sizing: border-box;
-  }
+  /* Prevent any element from causing layout shifts - keep consolidated with reset */
+  /* (box-sizing already set above on *, *::before, *::after) */
   
   /* Category Link Safety Rules - Preserves existing styling */
   .category-link-safe {
@@ -525,87 +485,22 @@
 	transition: all 0.3s ease !important;
   }
   
-  /* Article title link overrides - Fix layout without affecting hover effects */
-  .card-content h3 a,
-  .stacked-content h4 a,
-  .article-content-main h2 a,
-  .article-content-small h3 a,
-  .grid-article-content h3 a,
-  .article-card h3 a,
-  .insight-small h4 a,
-  .article-content h2 a,
-  /* Hero section article titles */
-  .hero h2 a,
-  .hero h3 a,
-  .hero h4 a,
-  .article-content-main h2 a,
-  .article-content-small h3 a,
-  /* Category main grid article titles */
-  .category-main h2 a,
-  .category-main h3 a,
-  .category-main h4 a,
-  .main-content h2 a,
-  .main-content h3 a,
-  .main-content h4 a,
-  /* AIBuzzLayout specific selectors */
-  .large-card h3 a,
-  .stacked-card h4 a,
-  .card-content h3 a,
-  .stacked-content h4 a,
-  /* Additional article title selectors */
-  .article-grid h3 a,
-  .articles-section h3 a {
-	/* Override global link layout properties */
+  /* Article title link overrides - consolidated via utility */
+  .title-link-reset {
 	min-height: auto !important;
 	min-width: auto !important;
 	padding: 0 !important;
 	display: inline !important;
 	align-items: unset !important;
 	justify-content: unset !important;
-	/* Don't override color - let the component styles handle it */
 	transition: all 0.3s ease !important;
-	/* Remove focus outline */
 	outline: none !important;
   }
   
   /* Remove the problematic hover override that was causing issues */
   
-  /* Global: Gradient font and text-shadow glow for all article card/grid titles */
-  .card-content h3 a,
-  .stacked-content h4 a,
-  .grid-article-content h3 a,
-  .article-card h3 a,
-  .insight-small h4 a,
-  .category-review-content h3 a,
-  .category-insight-content h3 a,
-  .category-section h3 a,
-  .articles-grid-cards h3 a,
-  .articles-grid-mixed h3 a,
-  .article-content-main h2 a,
-  .article-content-small h3 a,
-  /* Hero section article titles */
-  .hero h2 a,
-  .hero h3 a,
-  .hero h4 a,
-  /* Category main grid article titles */
-  .category-main h2 a,
-  .category-main h3 a,
-  .category-main h4 a,
-  .main-content h2 a,
-  .main-content h3 a,
-  .main-content h4 a,
-  /* Additional article title selectors */
-  .large-card h3 a,
-  .stacked-card h4 a,
-  .article-grid h3 a,
-  .articles-section h3 a,
-  /* Catch-all for future article grid/card titles */
-  [class*="article"] h2 a,
-  [class*="article"] h3 a,
-  [class*="article"] h4 a,
-  [class*="grid"] h2 a,
-  [class*="grid"] h3 a,
-  [class*="grid"] h4 a {
+  /* Global: Gradient font and text-shadow glow for article titles - consolidated via utility */
+  .title-link-gradient {
     background: linear-gradient(90deg, #00d4ff 0%, #0066ff 100%) !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
@@ -615,27 +510,9 @@
     display: inline-block;
     position: relative;
     transition: text-shadow 0.3s cubic-bezier(0.4,0,0.2,1), background 0.3s cubic-bezier(0.4,0,0.2,1);
-    /* Remove focus outline */
     outline: none !important;
   }
-  .card-content h3 a:hover,
-  .stacked-content h4 a:hover,
-  .grid-article-content h3 a:hover,
-  .article-card h3 a:hover,
-  .insight-small h4 a:hover,
-  .category-review-content h3 a:hover,
-  .category-insight-content h3 a:hover,
-  .category-section h3 a:hover,
-  .articles-grid-cards h3 a:hover,
-  .articles-grid-mixed h3 a:hover,
-  .article-content-main h2 a:hover,
-  .article-content-small h3 a:hover,
-  [class*="article"] h2 a:hover,
-  [class*="article"] h3 a:hover,
-  [class*="article"] h4 a:hover,
-  [class*="grid"] h2 a:hover,
-  [class*="grid"] h3 a:hover,
-  [class*="grid"] h4 a:hover {
+  .title-link-gradient:hover {
     background: linear-gradient(90deg, #00e0ff 0%, #0050ff 100%) !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
@@ -971,13 +848,18 @@ body {
   text-decoration: underline !important;
 }
 
-/* CLEAN: Proper container constraints without aggressive overrides */
+/* CLEAN: Proper container constraints - unified single definition */
 .container {
   width: 100%;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
   box-sizing: border-box;
+}
+@media (min-width: 768px) {
+  .container {
+    padding: 0 2rem;
+  }
 }
 
 /* CLEAN: Targeted container and overflow fixes */
@@ -1005,5 +887,3 @@ section {
   margin-left: 0;
   margin-right: 0;
 }
-
-
