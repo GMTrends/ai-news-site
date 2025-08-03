@@ -5,6 +5,83 @@ import sitemap from '@astrojs/sitemap';
 import sanity from '@sanity/astro';
 
 export default defineConfig({
+  // Serve static CSS from /styles in dev; also avoids false dynamic-route matches
+  vite: {
+    server: {
+      fs: { strict: false },
+      port: 4321,
+      strictPort: true,
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0'
+      },
+      hmr: { overlay: true },
+      middlewareMode: false
+    },
+    ssr: {
+      external: []
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: (id) => {
+            if (id.includes('@sanity/vision') || id.includes('sanity-studio') || id.includes('studio-component')) return 'admin-studio';
+            if (id.includes('@sanity/ui') || id.includes('@sanity/desk-tool') || id.includes('@sanity/default-layout') || id.includes('@sanity/default-login')) return 'admin-sanity';
+            if (id.includes('react-dom/client') || id.includes('react-dom/server')) return 'react-dom-vendor';
+            if (id.includes('react/') || id.includes('react/jsx')) return 'react-core';
+            if (id.includes('react-dom') && !id.includes('client') && !id.includes('server')) return 'react-dom-vendor';
+            if (id.includes('scheduler') || id.includes('react-reconciler')) return 'react-internals';
+            if (id.includes('framer-motion') || id.includes('motion-dom')) return 'animation-vendor';
+            if (id.includes('date-fns')) return 'date-vendor';
+            if (id.includes('clsx') || id.includes('classnames')) return 'styling-vendor';
+            if (id.includes('@sanity/client') || id.includes('@sanity/image-url')) return 'sanity-client';
+            if (id.includes('lodash')) return 'lodash-vendor';
+            if (id.includes('json-2-csv') || id.includes('csv') || id.includes('json')) return 'data-vendor';
+            if (id.includes('refractor') || id.includes('prism') || id.includes('highlight')) return 'text-vendor';
+            if (id.includes('node_modules')) return 'vendor';
+          }
+        }
+      },
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+          pure_funcs: ['console.log', 'console.warn', 'console.info'],
+          unused: true,
+          dead_code: true,
+          side_effects: false,
+          pure_getters: true,
+          unsafe: true,
+          unsafe_comps: true,
+          unsafe_Function: true,
+          unsafe_math: true,
+          unsafe_symbols: true,
+          unsafe_methods: true,
+          unsafe_proto: true,
+          unsafe_regexp: true,
+          unsafe_undefined: true,
+          toplevel: true,
+          keep_infinity: true,
+          passes: 3
+        },
+        mangle: { safari10: true, toplevel: true, properties: { regex: /^_/ } },
+        format: { comments: false }
+      },
+      target: 'es2020',
+      treeshake: { moduleSideEffects: false, propertyReadSideEffects: false, tryCatchDeoptimization: false, preset: 'smallest' }
+    },
+    css: { devSourcemap: false },
+    optimizeDeps: { include: ['react', 'react-dom', '@sanity/client'], exclude: ['@sanity/vision', '@sanity/ui', '@sanity/desk-tool'] },
+    external: [
+      'styled-components/macro',
+      '@fontsource/inter/latin.css',
+      '@fontsource/jetbrains-mono/latin.css',
+      '@fontsource/space-grotesk/latin.css'
+    ]
+  },
+
   site: process.env.SITE_URL || 'http://localhost:4321', // Use environment variable
   output: 'server',
   integrations: [
