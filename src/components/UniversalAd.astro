@@ -324,13 +324,15 @@ const trackingCode = `
 <script is:inline set:html={trackingCode}></script>
 
 <style is:global>
+/* CSS audit - reduce global aggressiveness while keeping ads active */
   /* Universal Promo Styles - Original Polished Design Restored */
   .universal-promo {
     position: relative;
     margin: 1rem 0;
     padding: 0;
     box-sizing: border-box;
-    contain: layout style;
+    /* Avoid creating new stacking contexts that can interfere with headers/menus */
+    contain: layout;
     z-index: 1;
   }
 
@@ -353,6 +355,7 @@ const trackingCode = `
 
   /* Hero promo styles - Ad Manager specified 300x200 dimensions */
   /* Hero Sidebar Premium Ad - Perfectly Matches Secondary Articles - HIGHEST SPECIFICITY */
+  /* Reduce !important footprint; keep key dimensions and spacing */
   .hero-sidebar .secondary-grid .universal-promo .sidebar-promo,
   .hero-sidebar .secondary-grid div.universal-promo a.sidebar-promo {
     /* Exact match to .secondary-article styling */
@@ -362,21 +365,21 @@ const trackingCode = `
     align-items: center !important;
     
     /* EXACT match to secondary article background with required Ad Management dimensions */
-    background: #1A1A1B !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 16px !important;
-    box-shadow: none !important;
-    position: relative !important;
-    overflow: hidden !important;
-    transition: all 0.3s ease !important;
-    cursor: pointer !important;
-    text-decoration: none !important;
-    color: inherit !important;
+    background: #1A1A1B;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
     /* CRITICAL: Full width container like secondary articles, but maintain 300x200 content area */
-    height: 200px !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 300px !important;
+    height: 200px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 300px;
   }
 
   .hero-sidebar .secondary-grid .universal-promo .sidebar-promo:hover,
@@ -555,31 +558,31 @@ const trackingCode = `
   .universal-promo .sidebar-promo,
   .category-sidebar .universal-promo .sidebar-promo,
   div.universal-promo a.sidebar-promo {
-    background: rgba(26, 26, 27, 0.95) !important;
-    border: 1px solid rgba(0, 212, 255, 0.2) !important;
-    border-radius: 12px !important;
-    overflow: hidden !important;
-    position: relative !important;
-    backdrop-filter: blur(10px) !important;
-    transition: all 0.3s ease !important;
-    text-decoration: none !important;
-    color: inherit !important;
-    display: block !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.1), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
-    will-change: transform !important;
-    transform: translateZ(0) !important;
-    height: 250px !important;
+    background: rgba(26, 26, 27, 0.95);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.1), 0 2px 8px rgba(0, 0, 0, 0.1);
+    will-change: transform;
+    transform: translateZ(0);
+    height: 250px;
   }
 
   .universal-promo .sidebar-promo:hover,
   .category-sidebar .universal-promo .sidebar-promo:hover,
   div.universal-promo a.sidebar-promo:hover {
-    border-color: rgba(0, 212, 255, 0.4) !important;
-    box-shadow: 0 8px 25px rgba(0, 212, 255, 0.15) !important;
-    transform: translateY(-2px) !important;
+    border-color: rgba(0, 212, 255, 0.4);
+    box-shadow: 0 8px 25px rgba(0, 212, 255, 0.15);
+    transform: translateY(-2px);
   }
 
   .universal-promo .sidebar-promo .promo-badge {
@@ -624,37 +627,37 @@ const trackingCode = `
   .universal-promo .sidebar-promo .promo-content,
   .category-sidebar .universal-promo .sidebar-promo .promo-content,
   div.universal-promo a.sidebar-promo .promo-content {
-    padding: 1rem !important;
-    height: 248px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    width: 100% !important;
-    flex-direction: column !important;
-    text-align: center !important;
-    gap: 0.5rem !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-    position: relative !important;
-    z-index: 2 !important;
+    padding: 1rem;
+    height: 248px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+    overflow: hidden;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
   }
 
   /* Icon styling - Compact Design for 250px Height */
   .universal-promo .sidebar-promo .promo-icon,
   .category-sidebar .universal-promo .sidebar-promo .promo-icon,
   div.universal-promo a.sidebar-promo .promo-icon {
-    font-size: 2.5rem !important;
-    background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%) !important;
-    background-clip: text !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    filter: drop-shadow(0 2px 8px rgba(0, 212, 255, 0.3)) !important;
-    margin-bottom: 0.5rem !important;
-    display: block !important;
-    text-align: center !important;
-    position: relative !important;
-    z-index: 2 !important;
-    line-height: 1 !important;
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 8px rgba(0, 212, 255, 0.3));
+    margin-bottom: 0.5rem;
+    display: block;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    line-height: 1;
   }
 
   /* Fix for icon-emoji span inside sidebar promo-icon */
