@@ -1,0 +1,549 @@
+---
+const FACEBOOK_PIXEL_ID = '733228089122455'
+const GOOGLE_ADS_ID = 'YOUR_GOOGLE_ADS_ID'
+const TWITTER_PIXEL_ID = 'YOUR_TWITTER_PIXEL_ID'
+---
+
+<!-- Meta Pixel Code -->
+<script>
+declare global {
+  interface Window {
+    fbq: any;
+    _fbq: any;
+  }
+}
+
+// Initialize Facebook Pixel
+(function(f: any,b: Document,e: string,v: string,n: any,t: HTMLScriptElement,s: Element) {
+  if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e) as HTMLScriptElement;t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  if (s.parentNode) {
+    s.parentNode.insertBefore(t,s);
+  }
+})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js', null as any, null as any, null as any);
+
+// Initialize tracking
+window.fbq('init', '733228089122455');
+window.fbq('track', 'PageView');
+
+// Track events only if Facebook Pixel is loaded
+if (typeof window !== 'undefined') {
+  // Debounce function for performance
+  const debounce = (fn: Function, delay: number) => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+    return (...args: any[]) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => fn(...args), delay);
+    };
+  };
+
+  // Track scroll depth with debounce
+  const scrollDepthTracked: Record<number, boolean> = { 25: false, 50: false, 75: false, 100: false };
+  const trackScrollDepth = debounce(() => {
+    const scrollPercent = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100;
+    Object.keys(scrollDepthTracked).forEach(depth => {
+      const depthNum = parseInt(depth);
+      if (scrollPercent >= depthNum && !scrollDepthTracked[depthNum]) {
+        window.fbq('track', 'ScrollDepth', {
+          content_type: 'article',
+          content_name: document.title,
+          depth: depthNum
+        });
+        scrollDepthTracked[depthNum] = true;
+      }
+    });
+  }, 250);
+
+  window.addEventListener('scroll', trackScrollDepth, { passive: true });
+
+  // Track article engagement
+  let engagementTracked = false;
+  const engagementTimeout = setTimeout(() => {
+    if (!engagementTracked) {
+      window.fbq('track', 'ViewContent', {
+        content_type: 'article',
+        content_category: window.location.pathname.split('/')[1] || 'general'
+      });
+      engagementTracked = true;
+    }
+  }, 30000);
+
+  // Unified event tracking
+  const trackEvent = (eventName: string, params: Record<string, any> = {}) => {
+    if (typeof window.fbq !== 'undefined') {
+      window.fbq('track', eventName, params);
+    }
+  };
+
+  // Track user interactions
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (!target) return;
+
+    // Track shares
+    const shareButton = target.closest('[data-share]');
+    if (shareButton) {
+      trackEvent('Share', {
+        content_type: 'article',
+        content_name: document.title,
+        content_category: window.location.pathname.split('/')[1] || 'general'
+      });
+      return;
+    }
+
+    // Track video plays
+    const video = target.closest('video');
+    if (video) {
+      trackEvent('VideoPlay', {
+        content_type: 'video',
+        content_name: video.getAttribute('title') || 'Video'
+      });
+      return;
+    }
+
+    // Track product interactions
+    const product = target.closest('[data-product]');
+    if (product) {
+      const action = product.getAttribute('data-action');
+      if (action === 'add-to-cart') {
+        trackEvent('AddToCart', {
+          content_ids: [product.getAttribute('data-product')],
+          content_name: product.getAttribute('data-name'),
+          value: product.getAttribute('data-price'),
+          currency: 'USD'
+        });
+      } else if (action === 'preview') {
+        trackEvent('ViewContent', {
+          content_type: 'product',
+          content_ids: [product.getAttribute('data-product')],
+          content_name: product.getAttribute('data-name'),
+          value: product.getAttribute('data-price'),
+          currency: 'USD'
+        });
+      }
+    }
+  }, { passive: true });
+
+  // Track form submissions
+  document.addEventListener('submit', (e) => {
+    const form = e.target as HTMLFormElement;
+    if (!form) return;
+
+    // Track newsletter signups
+    if (form.className?.includes('subscribe-form')) {
+      trackEvent('Lead', {
+        content_category: 'newsletter_signup',
+        content_name: 'Newsletter Subscription',
+        content_type: 'subscription',
+        content_value: 0
+      });
+      return;
+    }
+
+    // Track searches
+    const searchInput = form.querySelector('input[type="search"]') as HTMLInputElement;
+    if (searchInput) {
+      trackEvent('Search', {
+        search_string: searchInput.value,
+        content_category: window.location.pathname.split('/')[1] || 'general'
+      });
+    }
+  }, { passive: true });
+
+  // Track purchases on thank you page
+  if (window.location.pathname.includes('/thank-you')) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get('order_id');
+    const value = urlParams.get('value');
+    
+    if (orderId && value) {
+      trackEvent('Purchase', {
+        content_ids: [orderId],
+        value: value,
+        currency: 'USD',
+        content_type: 'digital_product'
+      });
+    }
+  }
+
+  // Track category views
+  const category = window.location.pathname.split('/')[1];
+  if (category && !['thank-you', 'cart', 'checkout'].includes(category)) {
+    trackEvent('ViewCategory', {
+      content_category: category
+    });
+  }
+
+  // Cleanup on page unload
+  window.addEventListener('unload', () => {
+    clearTimeout(engagementTimeout);
+    window.removeEventListener('scroll', trackScrollDepth);
+  });
+}
+</script>
+
+<!-- Meta Pixel NoScript -->
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=733228089122455&ev=PageView&noscript=1"
+/></noscript>
+
+<!-- Google Ads Conversion Tracking -->
+<script async src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`}></script>
+<script define:vars={{ GOOGLE_ADS_ID }}>
+  if (typeof window !== 'undefined') {
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){window.dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', GOOGLE_ADS_ID);
+  }
+</script>
+
+<!-- Twitter Pixel -->
+<script define:vars={{ TWITTER_PIXEL_ID }}>
+  if (typeof window !== 'undefined') {
+    !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments)
+    },s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='//static.ads-twitter.com/uwt.js',
+    a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+    window.twq('init', TWITTER_PIXEL_ID);
+    window.twq('track', 'PageView');
+  }
+</script>
+
+<!-- Facebook Pixel - Manual Tracking (CSP-Free) -->
+<script>
+// Manual Facebook Pixel implementation that bypasses CSP
+(function() {
+  // Constants
+  const PIXEL_ID = '733228089122455';
+  const BASE_URL = 'https://www.facebook.com/tr';
+  const ENGAGEMENT_DELAY = 30000; // 30 seconds
+
+  // Debug flag - only true in development
+  const DEBUG = import.meta.env.DEV;
+
+  // Utility functions
+  const encodeParams = (params: Record<string, any>): string => {
+    return Object.entries(params)
+      .map(([key, value]) => `&cd[${key}]=${encodeURIComponent(value)}`)
+      .join('');
+  };
+
+  const createTrackingPixel = (url: string): void => {
+    try {
+      // Create image element
+      const img = new Image();
+      img.style.display = 'none';
+      
+      // Add error and load handlers for debugging
+      if (DEBUG) {
+        img.onerror = (e) => {
+          // Only log in development or when explicitly debugging
+          if (import.meta.env.DEV) {
+            console.warn('Tracking pixel blocked by CSP:', url);
+          }
+        };
+        img.onload = () => {
+          if (DEBUG && import.meta.env.DEV) {
+            console.log('Successfully loaded tracking pixel:', url);
+          }
+        };
+      }
+
+      // Set source and append to document
+      img.src = url;
+      document.body.appendChild(img);
+
+      // Clean up after request
+      setTimeout(() => {
+        if (img.parentNode) {
+          img.parentNode.removeChild(img);
+        }
+      }, 1000);
+
+      // Alternative method using fetch - only in development
+      if (DEBUG && import.meta.env.DEV) {
+        fetch(url, { mode: 'no-cors' })
+          .then(() => console.log('Fetch tracking pixel sent:', url))
+          .catch(e => console.warn('Fetch tracking pixel failed (expected in production):', url));
+      }
+    } catch (error) {
+      // Only log in development
+      if (import.meta.env.DEV) {
+        console.warn('Error creating tracking pixel (CSP may be blocking):', error);
+      }
+    }
+  };
+
+  // Main tracking function
+  const sendFBEvent = (eventName: string, params: Record<string, any> = {}): void => {
+    try {
+      const url = `${BASE_URL}?id=${PIXEL_ID}&ev=${eventName}&noscript=1${encodeParams(params)}`;
+      
+      if (DEBUG && import.meta.env.DEV) {
+        console.log('Sending Facebook event:', {
+          eventName,
+          params,
+          url
+        });
+      }
+      
+      createTrackingPixel(url);
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.warn('Error sending FB event:', error);
+      }
+    }
+  };
+
+  // Track page view immediately
+  sendFBEvent('PageView', {
+    url: window.location.href,
+    content_category: window.location.pathname.split('/')[1] || 'general',
+    content_name: document.title
+  });
+
+  // Track content engagement with debounce
+  let engagementTracked = false;
+  const trackEngagement = () => {
+    if (!engagementTracked) {
+      sendFBEvent('ViewContent', {
+        content_type: 'article',
+        content_category: window.location.pathname.split('/')[1] || 'general',
+        content_name: document.title,
+        content_value: 0, // Free content
+        content_author: document.querySelector('meta[name="author"]')?.getAttribute('content') || 'Unknown'
+      });
+      engagementTracked = true;
+    }
+  };
+
+  // Track scroll depth
+  const scrollDepths: Record<number, boolean> = { 25: false, 50: false, 75: false, 100: false };
+  const trackScrollDepth = () => {
+    const scrollPercent = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100;
+    
+    Object.entries(scrollDepths).forEach(([depth, tracked]) => {
+      const depthNum = parseInt(depth);
+      if (scrollPercent >= depthNum && !scrollDepths[depthNum]) {
+        sendFBEvent('ScrollDepth', {
+          content_type: 'article',
+          content_name: document.title,
+          depth: depthNum,
+          content_category: window.location.pathname.split('/')[1] || 'general'
+        });
+        scrollDepths[depthNum] = true;
+      }
+    });
+  };
+
+  // Track article category views
+  const trackCategoryView = () => {
+    const category = window.location.pathname.split('/')[1];
+    if (category && !['thank-you', 'cart', 'checkout'].includes(category)) {
+      sendFBEvent('ViewCategory', {
+        content_category: category,
+        content_name: `${category.charAt(0).toUpperCase() + category.slice(1)} Articles`
+      });
+    }
+  };
+
+  // Track AI tool interactions
+  const trackAIToolInteraction = (toolName: string, action: string) => {
+    sendFBEvent('AIToolInteraction', {
+      content_type: 'ai_tool',
+      content_name: toolName,
+      content_action: action,
+      content_category: 'ai_tools'
+    });
+  };
+
+  // Track product views and interactions
+  const trackProductView = (product: HTMLElement) => {
+    const productId = product.getAttribute('data-product');
+    const productName = product.getAttribute('data-name');
+    const productPrice = product.getAttribute('data-price');
+    const productCategory = product.getAttribute('data-category') || 'digital_product';
+
+    sendFBEvent('ViewContent', {
+      content_type: 'product',
+      content_ids: [productId],
+      content_name: productName,
+      value: productPrice,
+      currency: 'USD',
+      content_category: productCategory
+    });
+  };
+
+  // Event handlers
+  const handleFormSubmit = (e: Event) => {
+    const form = e.target as HTMLFormElement;
+    if (!form) return;
+
+    if (DEBUG && import.meta.env.DEV) {
+      console.log('Form submitted:', {
+        formClass: form.className,
+        isNewsletter: form.className?.includes('subscribe-form')
+      });
+    }
+
+    // Track newsletter signups
+    if (form.className?.includes('subscribe-form')) {
+      if (DEBUG && import.meta.env.DEV) {
+        console.log('Newsletter form detected, sending Lead event');
+      }
+      sendFBEvent('Lead', {
+        content_category: 'newsletter_signup',
+        content_name: 'Newsletter Subscription',
+        content_type: 'subscription',
+        content_value: 0
+      });
+      return;
+    }
+
+    // Track searches
+    const searchInput = form.querySelector('input[type="search"]') as HTMLInputElement;
+    if (searchInput) {
+      sendFBEvent('Search', {
+        search_string: searchInput.value,
+        content_category: window.location.pathname.split('/')[1] || 'general',
+        content_type: 'search'
+      });
+    }
+  };
+
+  const handleClick = (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (!target) return;
+
+    // Track shares
+    const shareButton = target.closest('[data-share]');
+    if (shareButton) {
+      sendFBEvent('Share', {
+        content_type: 'article',
+        content_name: document.title,
+        content_category: window.location.pathname.split('/')[1] || 'general',
+        content_action: shareButton.getAttribute('data-share-platform') || 'unknown'
+      });
+      return;
+    }
+
+    // Track AI tool interactions
+    const aiTool = target.closest('[data-ai-tool]');
+    if (aiTool) {
+      trackAIToolInteraction(
+        aiTool.getAttribute('data-ai-tool') || 'Unknown Tool',
+        aiTool.getAttribute('data-action') || 'view'
+      );
+      return;
+    }
+
+    // Track product interactions
+    const product = target.closest('[data-product]');
+    if (product) {
+      const action = product.getAttribute('data-action');
+      if (action === 'view') {
+        trackProductView(product as HTMLElement);
+      } else if (action === 'add-to-cart') {
+        sendFBEvent('AddToCart', {
+          content_ids: [product.getAttribute('data-product')],
+          content_name: product.getAttribute('data-name'),
+          value: product.getAttribute('data-price'),
+          currency: 'USD',
+          content_category: product.getAttribute('data-category') || 'digital_product'
+        });
+      } else if (action === 'purchase') {
+        sendFBEvent('Purchase', {
+          content_ids: [product.getAttribute('data-product')],
+          content_name: product.getAttribute('data-name'),
+          value: product.getAttribute('data-price'),
+          currency: 'USD',
+          content_category: product.getAttribute('data-category') || 'digital_product',
+          transaction_id: product.getAttribute('data-transaction-id')
+        });
+      }
+    }
+  };
+
+  // Initialize tracking
+  const init = () => {
+    if (DEBUG && import.meta.env.DEV) {
+      console.log('Initializing manual Facebook tracking...');
+      
+      // Debug form listeners
+      document.querySelectorAll('form').forEach(form => {
+        console.log('Found form:', {
+          className: form.className,
+          isNewsletter: form.className?.includes('subscribe-form')
+        });
+      });
+    }
+
+    // Set up event listeners
+    document.addEventListener('submit', handleFormSubmit, { passive: true });
+    document.addEventListener('click', handleClick, { passive: true });
+    window.addEventListener('scroll', trackScrollDepth, { passive: true });
+
+    // Track initial events
+    trackCategoryView();
+    setTimeout(trackEngagement, ENGAGEMENT_DELAY);
+
+    // Track purchases on thank you page
+    if (window.location.pathname.includes('/thank-you')) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderId = urlParams.get('order_id');
+      const value = urlParams.get('value');
+      const productId = urlParams.get('product_id');
+      const productName = urlParams.get('product_name');
+      
+      if (orderId && value) {
+        sendFBEvent('Purchase', {
+          content_ids: [productId || orderId],
+          content_name: productName || 'Digital Product',
+          value: value,
+          currency: 'USD',
+          content_type: 'digital_product',
+          transaction_id: orderId
+        });
+      }
+    }
+  };
+
+  // Start tracking
+  init();
+})();
+</script>
+
+<!-- Manual Google Analytics (CSP-Free) -->
+<script>
+// Simple Google Analytics tracking without external script
+(function() {
+  const GA_ID = 'YOUR_GOOGLE_ADS_ID';
+  const BASE_URL = 'https://www.google-analytics.com/mp/collect';
+
+  const sendGAEvent = (action: string, category: string = 'engagement', params: Record<string, any> = {}) => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('GA Event:', { action, category, ...params });
+      return;
+    }
+
+    const img = document.createElement('img');
+    img.height = 1;
+    img.width = 1;
+    img.style.display = 'none';
+    
+    const url = `${BASE_URL}?measurement_id=${GA_ID}&api_secret=YOUR_API_SECRET`;
+    img.src = url;
+    document.body.appendChild(img);
+  };
+
+  // Track page view
+  sendGAEvent('page_view', 'navigation', {
+    page_title: document.title,
+    page_location: window.location.href,
+    page_path: window.location.pathname
+  });
+})();
+</script>

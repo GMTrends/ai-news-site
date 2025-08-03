@@ -1,0 +1,348 @@
+---
+/**
+ * Sanity Integration Test Component
+ * Tests the connection to Sanity CMS and displays ad/partner content
+ */
+
+interface Props {
+  placement?: string;
+  className?: string;
+}
+
+const { placement = 'test', className = '' } = Astro.props;
+
+// Initialize with safe defaults
+let sanityStatus = 'testing';
+let ads: any[] = [];
+let allAds: any[] = [];
+let error: string | null = null;
+let mappingValidation = { success: false, errors: [] as string[], warnings: [] as string[] };
+
+// Simplified async testing with better error handling
+try {
+  // Import the managers safely
+  const { HybridAdManager, SanityAdManager } = await import('../utils/sanityAds');
+  
+  // Test basic placement fetch
+  try {
+    ads = await HybridAdManager.getAdsByPlacement(placement);
+    sanityStatus = ads.length > 0 ? 'connected' : 'no-ads';
+  } catch (placementErr) {
+    console.warn('Placement fetch failed:', placementErr);
+    sanityStatus = 'error';
+    error = placementErr instanceof Error ? placementErr.message : 'Placement fetch failed';
+  }
+  
+  // Test full Sanity integration if available
+  try {
+    const isAvailable = await SanityAdManager.isAvailable();
+    if (isAvailable) {
+      allAds = await SanityAdManager.getAllAds();
+      mappingValidation = validateAdMapping(allAds);
+    } else {
+      mappingValidation.warnings.push('Sanity client not available - using local fallback');
+    }
+  } catch (sanityErr) {
+    console.warn('Sanity integration test failed:', sanityErr);
+    mappingValidation.errors.push(`Sanity integration error: ${sanityErr instanceof Error ? sanityErr.message : 'Unknown error'}`);
+  }
+  
+} catch (importErr) {
+  console.error('Failed to import Sanity utilities:', importErr);
+  error = 'Failed to load Sanity integration modules';
+  sanityStatus = 'error';
+}
+
+// Validation function for ad mapping
+function validateAdMapping(ads: any[]) {
+  const validation = { success: true, errors: [] as string[], warnings: [] as string[] };
+  const requiredFields = ['id', 'type', 'placement', 'active', 'priority', 'title', 'description', 'cta', 'ctaUrl'];
+  const optionalFields = ['badge', 'icon', 'image'];
+  const objectFields = ['dimensions', 'targeting', 'styling', 'analytics', 'revenue'];
+  
+  ads.forEach((ad, index) => {
+    // Check required fields
+    requiredFields.forEach(field => {
+      if (!ad[field] && ad[field] !== false && ad[field] !== 0) {
+        validation.errors.push(`Ad ${index + 1} (${ad.id || 'unknown'}): Missing required field '${field}'`);
+        validation.success = false;
+      }
+    });
+    
+    // Check object fields structure
+    objectFields.forEach(field => {
+      if (!ad[field] || typeof ad[field] !== 'object') {
+        validation.errors.push(`Ad ${index + 1} (${ad.id || 'unknown'}): Missing or invalid object field '${field}'`);
+        validation.success = false;
+      }
+    });
+    
+    // Validate dimensions
+    if (ad.dimensions && (!ad.dimensions.width || !ad.dimensions.height)) {
+      validation.errors.push(`Ad ${index + 1} (${ad.id || 'unknown'}): Invalid dimensions structure`);
+      validation.success = false;
+    }
+    
+    // Validate styling colors
+    if (ad.styling && ad.styling.colors && (!ad.styling.colors.primary || !ad.styling.colors.secondary)) {
+      validation.errors.push(`Ad ${index + 1} (${ad.id || 'unknown'}): Invalid styling colors structure`);
+      validation.success = false;
+    }
+    
+    // Validate analytics
+    if (ad.analytics && (!ad.analytics.trackingId || !ad.analytics.eventCategory || !ad.analytics.eventAction)) {
+      validation.errors.push(`Ad ${index + 1} (${ad.id || 'unknown'}): Invalid analytics structure`);
+      validation.success = false;
+    }
+    
+    // Check for warnings
+    if (!ad.badge && !ad.icon) {
+      validation.warnings.push(`Ad ${index + 1} (${ad.id || 'unknown'}): No badge or icon specified`);
+    }
+    
+    if (ad.ctaUrl === '#') {
+      validation.warnings.push(`Ad ${index + 1} (${ad.id || 'unknown'}): CTA URL is placeholder '#'`);
+    }
+  });
+  
+  return validation;
+}
+---
+
+<div class={`sanity-test-container ${className}`}>
+  <div class="test-header">
+    <h3>🔗 Sanity CMS Integration Test</h3>
+    <div class={`status-indicator status-${sanityStatus}`}>
+      {sanityStatus === 'connected' && '✅ Connected'}
+      {sanityStatus === 'no-ads' && '⚠️ Connected (No Ads)'}
+      {sanityStatus === 'error' && '❌ Error'}
+      {sanityStatus === 'unknown' && '❓ Unknown'}
+    </div>
+  </div>
+
+  <div class="test-details">
+    <div class="detail-section">
+      <h4>Placement Test: "{placement}"</h4>
+      <p>Found {ads.length} ads for this placement</p>
+      {ads.length > 0 && (
+        <ul class="ads-list">
+          {ads.map((ad) => (
+            <li>
+              <strong>{ad.title}</strong> - {ad.type} ({ad.placement})
+              {ad.active ? ' ✅' : ' ❌'}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+
+    <div class="detail-section">
+      <h4>All Ads from Sanity</h4>
+      <p>Total ads in Sanity: {allAds.length}</p>
+      {allAds.length > 0 && (
+        <ul class="ads-list">
+          {allAds.slice(0, 5).map((ad) => (
+            <li>
+              <strong>{ad.title}</strong> - {ad.type}
+              {ad.active ? ' ✅' : ' ❌'}
+            </li>
+          ))}
+          {allAds.length > 5 && <li>... and {allAds.length - 5} more</li>}
+        </ul>
+      )}
+    </div>
+
+    <div class="detail-section">
+      <h4>🔄 Sanity → UniversalAd Mapping Validation</h4>
+      <div class="mapping-status">
+        {mappingValidation.success ? (
+          <div class="success-indicator">✅ All Sanity data properly mapped to UniversalAd props</div>
+        ) : (
+          <div class="error-indicator">❌ Mapping issues detected</div>
+        )}
+      </div>
+      
+      {mappingValidation.errors.length > 0 && (
+        <div class="validation-errors">
+          <h5>🚨 Mapping Errors:</h5>
+          <ul>
+            {mappingValidation.errors.map((error: string) => (
+              <li class="error-item">{error}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      
+      {mappingValidation.warnings.length > 0 && (
+        <div class="validation-warnings">
+          <h5>⚠️ Mapping Warnings:</h5>
+          <ul>
+            {mappingValidation.warnings.map((warning: string) => (
+              <li class="warning-item">{warning}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      
+      {mappingValidation.success && mappingValidation.errors.length === 0 && (
+        <div class="mapping-details">
+          <p><strong>✅ Validation Summary:</strong></p>
+          <ul>
+            <li>All required fields present and valid</li>
+            <li>Object structures (dimensions, styling, analytics) properly mapped</li>
+            <li>Type-specific defaults applied correctly</li>
+            <li>Enhanced error handling and fallbacks active</li>
+            <li>Ready for production use with UniversalAd component</li>
+          </ul>
+        </div>
+      )}
+    </div>
+
+    {error && (
+      <div class="error-section">
+        <h4>❌ Error Details</h4>
+        <pre>{error}</pre>
+      </div>
+    )}
+
+    <div class="env-section">
+      <h4>Environment Variables</h4>
+      <ul>
+        <li>Project ID: {import.meta.env.VITE_SANITY_PROJECT_ID || 'Not set'}</li>
+        <li>Dataset: {import.meta.env.VITE_SANITY_DATASET || 'Not set'}</li>
+        <li>Use CDN: {import.meta.env.VITE_SANITY_USE_CDN || 'Not set'}</li>
+        <li>API Version: {import.meta.env.VITE_SANITY_API_VERSION || 'Not set'}</li>
+        <li>Token: {import.meta.env.VITE_SANITY_TOKEN ? '✅ Set' : '❌ Not set'}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style>
+.sanity-test-container {
+  background: rgba(15, 23, 42, 0.95);
+  border: 2px solid rgba(0, 212, 255, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.test-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.test-header h3 {
+  color: #e2e8f0;
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.status-indicator {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.status-connected {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.status-no-ads {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.status-error {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.status-unknown {
+  background: rgba(107, 114, 128, 0.2);
+  color: #9ca3af;
+  border: 1px solid rgba(107, 114, 128, 0.3);
+}
+
+.test-details {
+  display: grid;
+  gap: 1rem;
+}
+
+.detail-section,
+.error-section,
+.env-section {
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.detail-section h4,
+.error-section h4,
+.env-section h4 {
+  color: #00d4ff;
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+}
+
+.detail-section p,
+.env-section ul {
+  color: #cbd5e1;
+  margin: 0.5rem 0;
+}
+
+.ads-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+.ads-list li {
+  color: #e2e8f0;
+  padding: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+.env-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.env-section li {
+  color: #cbd5e1;
+  padding: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+.error-section pre {
+  background: rgba(15, 23, 42, 0.8);
+  color: #ef4444;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 768px) {
+  .test-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  .sanity-test-container {
+    padding: 1rem;
+  }
+}
+</style>

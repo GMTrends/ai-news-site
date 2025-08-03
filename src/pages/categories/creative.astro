@@ -111,7 +111,6 @@ const keywords = categoryData?.keywords.join(', ') || "AI design, creative tools
   
   <style>
     .main-content {
-      min-height: 100vh;
       position: relative;
     }
     
@@ -156,6 +155,8 @@ const keywords = categoryData?.keywords.join(', ') || "AI design, creative tools
     
     .category-content {
       padding: 3rem 0 4rem 0;
+      /* Ensure sticky context */
+      min-height: calc(100vh + 200px);
     }
     
     .category-layout {
@@ -165,6 +166,10 @@ const keywords = categoryData?.keywords.join(', ') || "AI design, creative tools
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 1rem;
+      align-items: start;
+      /* Ensure sticky positioning works */
+      position: relative;
+      overflow: visible;
     }
     
     .category-main {

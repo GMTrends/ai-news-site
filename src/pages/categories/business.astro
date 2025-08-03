@@ -94,18 +94,18 @@ const keywords = categoryData?.keywords.join(', ') || "AI business, business int
                   <p>We're working on bringing you the latest in AI business insights. Check back soon!</p>
                 </div>
               )}
+              
+              <!-- Load More Button -->
+              {allBusinessArticles.length > 8 && (
+                <div class="load-more-container">
+                  <button id="load-more-btn" class="load-more-btn">
+                    <span class="load-more-text">Load More Articles</span>
+                    <span class="load-more-count">({allBusinessArticles.length - 8} more)</span>
+                  </button>
+                </div>
+              )}
             </div>
-            
-            <!-- Load More Button -->
-            {allBusinessArticles.length > 8 && (
-              <div class="load-more-container">
-                <button id="load-more-btn" class="load-more-btn">
-                  <span class="load-more-text">Load More Articles</span>
-                  <span class="load-more-count">({allBusinessArticles.length - 8} more)</span>
-                </button>
-              </div>
-            )}
-          </div>
+            <CategorySidebar categorySlug="business" articles={allBusinessArticles} />
         </div>
       </div>
     </div>
@@ -116,7 +116,6 @@ const keywords = categoryData?.keywords.join(', ') || "AI business, business int
   
   <style>
     .main-content {
-      min-height: 100vh;
       position: relative;
     }
     
@@ -161,6 +160,8 @@ const keywords = categoryData?.keywords.join(', ') || "AI business, business int
     
     .category-content {
       padding: 3rem 0 4rem 0;
+      /* Ensure sticky context */
+      min-height: calc(100vh + 200px);
     }
     
     .category-layout {
@@ -171,6 +172,9 @@ const keywords = categoryData?.keywords.join(', ') || "AI business, business int
       margin: 0 auto;
       padding: 0 1rem;
       align-items: start;
+      /* Ensure sticky positioning works */
+      position: relative;
+      overflow: visible;
     }
     
     .category-main {

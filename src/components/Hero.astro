@@ -2,7 +2,7 @@
 import { getFeaturedArticles } from '../lib/sanity';
 import { getCategoryUrl } from '../utils/urlHelpers';
 import { generateHeroImage, generateThumbnail } from '../utils/imageOptimization';
-import HeroPremiumAd from './HeroPremiumAd.astro';
+import UniversalAd from './UniversalAd.astro';
 
 
 // Fetch more than 5 to allow for filtering/prioritization
@@ -245,7 +245,7 @@ function getCategoryKey(category: any) {
 				<!-- Secondary Articles Grid with Premium Ad -->
 				<div class="secondary-grid">
 					<!-- Premium Ad Placement -->
-					<HeroPremiumAd />
+					<UniversalAd adId="hero-premium-top" />
 					
 					{showSecondary.slice(0, 3).map((article: any) => (
 						<article class="secondary-article">

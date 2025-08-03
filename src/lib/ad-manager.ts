@@ -18,7 +18,7 @@ export interface AdSlotConfig {
 export interface RevenueConfig {
   displayRevenue: number; // Monthly target from display ads
   affiliateRevenue: number; // Monthly target from affiliate marketing
-  sponsoredRevenue: number; // Monthly target from sponsored content
+  partnerRevenue: number; // Monthly target from partner content
   newsletterRevenue: number; // Monthly target from newsletter monetization
 }
 
@@ -32,7 +32,7 @@ export class AdManager {
     this.revenueTargets = {
       displayRevenue: 2000, // $800-2000/month
       affiliateRevenue: 3000, // $1500-4000/month
-      sponsoredRevenue: 1000, // $500-1500/month
+      partnerRevenue: 1000, // $500-1500/month
       newsletterRevenue: 350   // $200-500/month
     };
     this.initializeAdSlots();
@@ -175,7 +175,7 @@ export class AdManager {
     return `
       <!-- Strategic Content Placement: ${slot.name} -->
       <div class="content-spotlight" data-slot="${slotId}" data-targeting="${targetingString}">
-        <div class="sponsor-label">Partner Content</div>
+        <div class="partner-label">Partner Content</div>
         <div class="content-area" data-size="${slot.size}">
           <!-- Revenue-optimized placement -->
         </div>
@@ -261,7 +261,7 @@ export const AdBlockerEvasion = {
     ad: 'content',
     advertisement: 'partner showcase',
     banner: 'feature highlight',
-    sponsored: 'partner content',
+    featured: 'partner content',
     promotion: 'featured solution'
   })
 };

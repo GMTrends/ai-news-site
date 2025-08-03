@@ -1,5 +1,7 @@
 
 ---
+import UniversalAd from './UniversalAd.astro';
+
 interface Props {
   categorySlug: string;
   currentArticleSlug?: string;
@@ -189,29 +191,10 @@ function getAdContent(adType: string, position: number) {
   return adContents[adType as keyof typeof adContents] || adContents.general;
 }
 ---
-<aside class={`category-sidebar gpu-accelerated ${className}`}>
+<aside class={`category-sidebar ${className}`}>
   <!-- Premium Spotlight Zone (300x250) -->
-  <div class="sidebar-section premium-spotlight">
-    <div class="spotlight-container">
-      <div class="spotlight-header">
-        <span class="spotlight-badge">Featured</span>
-        <h3 class="spotlight-title">AI Tool Spotlight</h3>
-      </div>
-      <div class="spotlight-content">
-        <div class="spotlight-image">
-          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='140' viewBox='0 0 300 140'%3E%3Crect width='300' height='140' fill='%231a1a2e'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23eeeeee' font-family='Arial, sans-serif' font-size='16'%3EFeatured AI Tool%3C/text%3E%3C/svg%3E" alt="Featured AI Tool" width="100%" height="140" loading="lazy" />
-        </div>
-        <div class="spotlight-details">
-          <h4 class="tool-name">ChatGPT Pro</h4>
-          <p class="tool-description">Advanced AI assistant for professionals</p>
-          <div class="tool-rating">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <span class="rating-text">4.9/5 (2.1k reviews)</span>
-          </div>
-          <a href="#" class="spotlight-cta">Get Started →</a>
-        </div>
-      </div>
-    </div>
+  <div class="sidebar-section ad-section">
+    <UniversalAd adId="sidebar-premium-spotlight" />
   </div>
 
   <!-- AI Tool Comparison Widget - Streamlined -->
@@ -253,83 +236,180 @@ function getAdContent(adType: string, position: number) {
     </div>
   </div>
 
-  <!-- Premium Promo Zone (300x250) - Revenue Generator -->
-  <div class="sidebar-section premium-promo-zone">
-    <div class="promo-container">
-      <div class="promo-badge">Premium</div>
-      <div class="promo-content">
-        <div class="promo-visual">
-          <div class="promo-icon">🚀</div>
-          <h4 class="promo-headline">Boost Your AI Workflow</h4>
-        </div>
-        <p class="promo-description">Discover enterprise-grade AI tools trusted by 10,000+ professionals</p>
-        <div class="promo-features">
-          <span class="feature-tag">✨ Free Trial</span>
-          <span class="feature-tag">📊 Analytics</span>
-        </div>
-        <a href="#" class="promo-cta">Start Free Trial</a>
-      </div>
-    </div>
+  <!-- Newsletter Promo Zone -->
+  <div class="sidebar-section ad-section">
+    <UniversalAd adId="sidebar-newsletter-promo" />
   </div>
 
-  <!-- Sponsored Content Section - Revenue Generator -->
-  <div class="sidebar-section sponsored-content">
-    <div class="sponsored-header">
-      <span class="sponsored-badge">Sponsored</span>
-      <h3 class="sponsored-title">Partner Spotlight</h3>
-    </div>
-    <div class="sponsored-card">
-      <div class="sponsored-image">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Crect width='60' height='60' fill='%231a1a2e'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23eeeeee' font-family='Arial, sans-serif' font-size='14'%3EAI%3C/text%3E%3C/svg%3E" alt="Partner" width="60" height="60" loading="lazy" />
-      </div>
-      <div class="sponsored-details">
-        <h4 class="partner-name">AI Business Suite</h4>
-        <p class="partner-description">Complete AI automation for small businesses</p>
-        <a href="#" class="sponsored-cta">Learn More</a>
-      </div>
-    </div>
+  <!-- Trending AI News Section -->
+  <div class="sidebar-section ad-section">
+    <UniversalAd adId="sidebar-trending-news" />
   </div>
-
-  <!-- Removed: Newsletter signup, Live AI Insights metrics, and Social Proof sections for cleaner UX -->
 </aside>
 
 <style>
+/* CLEAN STICKY POSITIONING - No Conflicting Transforms */
+aside.category-sidebar,
 .category-sidebar {
-  width: 100%;
-  max-width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem; /* Reduced from 1.5rem for tighter spacing */
-  /* Remove conflicting sticky positioning - handled by parent container */
-  position: static;
-  align-self: flex-start;
-  min-height: fit-content;
-  z-index: 10;
-  background: rgba(15, 23, 42, 0.3);
-  padding: 0.75rem; /* Reduced from 1rem */
-  border-radius: 12px;
-  border: 1px solid rgba(71, 85, 105, 0.2);
-  box-sizing: border-box;
-  overflow: visible; /* Allow content to be visible */
-  /* Performance optimizations */
-  will-change: transform;
-  transform: translateZ(0);
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 100px !important;
+  width: 340px !important;
+  max-width: 340px !important;
+  height: fit-content !important;
+  align-self: flex-start !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.5rem !important;
+  padding: 1rem !important;
+  background: rgba(15, 23, 42, 0.3) !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(71, 85, 105, 0.2) !important;
+  z-index: 9999 !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  /* Clean sticky positioning without transforms */
+  contain: none !important;
+  will-change: auto !important;
+  transform: none !important;
 }
 
 .sidebar-section {
-  margin-bottom: 0; /* Removed margin - using gap instead */
-  padding: 0.75rem; /* Reduced from 1rem */
+  padding: 1rem;
   background: rgba(15, 23, 42, 0.8);
-  border-radius: 8px; /* Slightly smaller radius */
+  border-radius: 8px;
   border: 1px solid rgba(71, 85, 105, 0.3);
-  transition: all var(--transition-duration) ease;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 100%;
+  min-height: 120px;
+}
+
+.sidebar-section.ad-section {
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  min-height: auto !important;
+  margin-bottom: 0 !important;
+  margin: 0 !important;
+}
+
+.ad-section {
+  padding: 0;
+  background: transparent;
+  border: none;
+  min-height: auto;
+  margin-bottom: 0 !important;
+}
+
+.section-title {
+  color: #e2e8f0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  display: block;
+}
+
+/* Tool Comparison Section */
+.comparison-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tool-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(71, 85, 105, 0.2);
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.tool-icon {
+  font-size: 1.5rem;
+}
+
+.tool-info {
+  flex: 1;
+}
+
+.tool-info h4 {
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+
+.tool-price {
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+.tool-link {
+  background: none;
+  color: #06d6a0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  text-decoration: none;
+  font-weight: 700;
+  border: 1px solid rgba(6, 214, 160, 0.3);
+  transition: all 0.2s ease;
+}
+
+.tool-link:hover {
+  color: #00f5c4;
+  border-color: rgba(0, 245, 196, 0.5);
+  background: rgba(6, 214, 160, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Related Articles Section */
+.related-articles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.related-article-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(71, 85, 105, 0.2);
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.related-article-item:hover {
+  background: rgba(6, 182, 212, 0.1);
+}
+
+.related-article-thumbnail {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.related-article-content {
+  flex: 1;
+}
+
+.related-article-title {
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  /* Performance optimizations */
-  will-change: transform, background-color, border-color, box-shadow;
-  transform: translateZ(0);
+}
+
+.related-article-date {
+  color: #94a3b8;
+  font-size: 0.8rem;
 }
 
 /* Premium Spotlight Section (300x250) */
@@ -650,20 +730,20 @@ function getAdContent(adType: string, position: number) {
   display: inline-block;
 }
 
-/* Sponsored Content Section */
-.sponsored-content {
+/* Partner Content Section */
+.partner-content {
   background: rgba(15, 23, 42, 0.9);
   border: 1px solid rgba(251, 191, 36, 0.3);
 }
 
-.sponsored-header {
+.partner-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1rem;
 }
 
-.sponsored-badge {
+.partner-badge {
   background: linear-gradient(45deg, #f59e0b, #d97706);
   color: white;
   padding: 0.25rem 0.75rem;
@@ -674,29 +754,29 @@ function getAdContent(adType: string, position: number) {
   letter-spacing: 0.5px;
 }
 
-.sponsored-title {
+.partner-title {
   color: #e2e8f0;
   font-size: 1rem;
   font-weight: 600;
   margin: 0;
 }
 
-.sponsored-card {
+.partner-card {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.sponsored-image {
+.partner-image {
   flex-shrink: 0;
 }
 
-.sponsored-image img {
+.partner-image img {
   border-radius: 8px;
   border: 1px solid rgba(71, 85, 105, 0.3);
 }
 
-.sponsored-details {
+.partner-details {
   flex: 1;
 }
 
@@ -714,7 +794,7 @@ function getAdContent(adType: string, position: number) {
   line-height: 1.4;
 }
 
-.sponsored-cta {
+.partner-cta {
   color: #f59e0b;
   text-decoration: none;
   font-weight: 600;
@@ -722,7 +802,7 @@ function getAdContent(adType: string, position: number) {
   transition: color 0.3s ease;
 }
 
-.sponsored-cta:hover {
+.partner-cta:hover {
   color: #d97706;
 }
 
@@ -1686,8 +1766,44 @@ function getAdContent(adType: string, position: number) {
   font-size: 0.8rem;
 }
 
-.sidebar-section { margin-bottom: 0.75rem; }
-.sidebar-section:last-child { margin-bottom: 0; }
+/* NUCLEAR MARGIN OVERRIDE - Maximum Specificity to Override UniversalAd Rules */
+aside.category-sidebar .sidebar-section,
+.category-sidebar .sidebar-section,
+.sidebar-section { 
+  margin-bottom: 1rem !important; 
+}
+
+aside.category-sidebar .sidebar-section:last-child,
+.category-sidebar .sidebar-section:last-child,
+.sidebar-section:last-child { 
+  margin-bottom: 0 !important; 
+}
+
+/* AD SECTIONS - ZERO MARGIN TO ELIMINATE GAPS */
+aside.category-sidebar .sidebar-section.ad-section,
+.category-sidebar .sidebar-section.ad-section,
+.sidebar-section.ad-section { 
+  margin-bottom: 0 !important; 
+  margin-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* OVERRIDE UNIVERSALAD COMPONENT AGGRESSIVE MARGINS */
+aside.category-sidebar .universal-promo,
+.category-sidebar .universal-promo,
+aside.category-sidebar .sidebar-section .universal-promo,
+.category-sidebar .sidebar-section .universal-promo {
+  margin: 0 !important;
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* TINY GAP ONLY BETWEEN AD SECTIONS FOR VISUAL SEPARATION */
+aside.category-sidebar .sidebar-section.ad-section:not(:last-child),
+.category-sidebar .sidebar-section.ad-section:not(:last-child) { 
+  margin-bottom: 0.25rem !important; 
+}
 .affiliate-ad-card {
   background: linear-gradient(135deg, #00d4ff22 0%, #0066ff22 100%);
   border-radius: 12px;
@@ -1697,20 +1813,20 @@ function getAdContent(adType: string, position: number) {
   gap: 1rem;
   box-shadow: 0 2px 12px rgba(0,212,255,0.08);
 }
-.affiliate-ad-icon {
+.affiliate-promo-icon {
   font-size: 2rem;
   color: #00d4ff;
 }
-.affiliate-ad-title {
+.affiliate-promo-title {
   font-weight: 700;
   font-size: 1.1rem;
   margin: 0 0 0.2rem 0;
 }
-.affiliate-ad-subtitle {
+.affiliate-promo-subtitle {
   color: #3182ce;
   font-size: 0.95rem;
 }
-.affiliate-ad-cta {
+.affiliate-promo-cta {
   display: inline-block;
   margin-top: 0.7rem;
   padding: 0.4rem 1.1rem;
@@ -1721,7 +1837,7 @@ function getAdContent(adType: string, position: number) {
   text-decoration: none;
   transition: background 0.2s;
 }
-.affiliate-ad-cta:hover {
+.affiliate-promo-cta:hover {
   background: #3182ce;
 }
 </style>

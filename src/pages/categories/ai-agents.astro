@@ -108,7 +108,6 @@ const pageDescription = "Discover AI agents, autonomous systems, and intelligent
   
   <style>
     .main-content {
-      min-height: 100vh;
       position: relative;
     }
     
@@ -152,17 +151,21 @@ const pageDescription = "Discover AI agents, autonomous systems, and intelligent
     }
     
     .category-content {
-      padding: 3rem 0;
+      padding: 3rem 0 4rem 0;
+      /* Ensure sticky context */
+      min-height: calc(100vh + 200px);
     }
     
     .category-layout {
-      display: grid !important;
+      display: grid;
       grid-template-columns: 1fr 340px;
       gap: 2rem;
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 1rem;
       align-items: start;
+      position: relative;
+      overflow: visible;
     }
     
     .category-main {

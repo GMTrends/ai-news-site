@@ -907,6 +907,11 @@
     margin-left: 0;
   }
   
+/* Global Sticky Sidebar Utility - Removed to prevent conflicts */
+/* Component-specific CSS handles sticky positioning directly */
+
+/* Removed sticky-sidebar utility class references */
+
 /* CONSOLIDATED: Single body declaration to prevent scroll bar conflicts */
 html {
   height: 100%;

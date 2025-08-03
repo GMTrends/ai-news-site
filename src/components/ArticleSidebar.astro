@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { getArticlesByCategory } from '../lib/sanity';
 import { generateWebPUrl, generateResponsiveSrcSet } from '../utils/imageOptimization';
+import UniversalAd from './UniversalAd.astro';
 
 interface Props {
   categorySlug: string;
@@ -18,12 +19,8 @@ const filteredArticles = relatedArticles.filter((a: any) => a.slug !== currentAr
 
 <aside class="article-right-sidebar">
 
-  <!-- First Image Box -->
-  <div class="ad-space">
-    <div class="ad-placeholder">
-      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='250' viewBox='0 0 300 250'%3E%3Crect width='300' height='250' fill='%23f0f0f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23666666' font-family='Arial, sans-serif' font-size='14'%3EAd Placeholder%3C/text%3E%3C/svg%3E" alt="Ad Placeholder 1" class="ad-image" />
-    </div>
-  </div>
+  <!-- Article Sidebar Ad -->
+  <UniversalAd adId="sidebar-premium-spotlight" />
 
   <div class="sidebar-section sidebar-related">
     <h3 class="sidebar-title">Related in {categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1)}</h3>
@@ -155,16 +152,16 @@ const filteredArticles = relatedArticles.filter((a: any) => a.slug !== currentAr
       </div>
     </div>
 
-    <!-- Sponsored Content -->
-    <div class="mobile-section mobile-sponsored">
-      <div class="mobile-ad-label">Sponsored</div>
-      <div class="mobile-ad-content">
-        <span class="mobile-ad-icon">💡</span>
-        <div class="mobile-ad-text">
+    <!-- Partner Content -->
+    <div class="mobile-section mobile-partner">
+      <div class="mobile-promo-label">Featured</div>
+      <div class="mobile-promo-content">
+        <span class="mobile-promo-icon">💡</span>
+        <div class="mobile-promo-text">
           <strong>AI Tools Directory</strong><br />
-          <span class="mobile-ad-subtitle">Promote your AI product here!</span>
+          <span class="mobile-promo-subtitle">Promote your AI product here!</span>
         </div>
-        <a href="/contact" class="mobile-ad-cta">Advertise</a>
+        <a href="/contact" class="mobile-promo-cta">Advertise</a>
       </div>
     </div>
   </div>
@@ -179,16 +176,25 @@ const filteredArticles = relatedArticles.filter((a: any) => a.slug !== currentAr
 </button>
 
 <style>
-.article-right-sidebar {
-  width: 340px;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  position: sticky;
-  top: 6.5rem;
-  align-self: flex-start;
-  min-height: 80vh;
-  z-index: 10;
+.article-sidebar {
+  width: 100% !important;
+  max-width: 100% !important;
+  position: sticky !important;
+  top: 100px !important;
+  height: fit-content !important;
+  max-height: calc(100vh - 120px) !important;
+  overflow-y: auto !important;
+  scroll-behavior: smooth !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+  align-self: flex-start !important;
+  z-index: 10 !important;
+  background: rgba(15, 23, 42, 0.3) !important;
+  padding: 0.75rem !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(71, 85, 105, 0.2) !important;
+  box-sizing: border-box !important;
 }
 .sidebar-section {
   background: var(--color-bg);
@@ -201,14 +207,14 @@ const filteredArticles = relatedArticles.filter((a: any) => a.slug !== currentAr
   box-shadow: 0 4px 16px rgba(0, 212, 255, 0.10);
   padding: 0.75rem 1rem 0.75rem 1rem;
 }
-.sidebar-ad {
+.sidebar-promo {
   background: linear-gradient(135deg, rgba(0, 212, 255, 0.08) 0%, rgba(0, 102, 255, 0.08) 100%);
   border: 1.5px solid rgba(0, 212, 255, 0.18);
   box-shadow: 0 8px 32px rgba(0, 212, 255, 0.10);
   align-items: center;
   text-align: center;
 }
-.ad-label {
+.promo-label {
   font-size: 0.8rem;
   color: #00d4ff;
   font-weight: 700;
@@ -216,21 +222,21 @@ const filteredArticles = relatedArticles.filter((a: any) => a.slug !== currentAr
   margin-bottom: 0.5rem;
   text-transform: uppercase;
 }
-.ad-content {
+.promo-content {
   display: flex;
   align-items: center;
   gap: 1rem;
   justify-content: center;
 }
-.ad-icon {
+.promo-icon {
   font-size: 2.2rem;
   filter: drop-shadow(0 0 8px #00d4ff33);
 }
-.ad-text {
+.promo-text {
   font-size: 1rem;
   color: var(--color-text-secondary);
 }
-.ad-cta {
+.promo-cta {
   display: inline-block;
   margin-top: 0.5rem;
   background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
@@ -243,7 +249,7 @@ const filteredArticles = relatedArticles.filter((a: any) => a.slug !== currentAr
   box-shadow: 0 2px 8px rgba(0, 212, 255, 0.10);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.ad-cta:hover {
+.promo-cta:hover {
   filter: brightness(1.2) saturate(1.2);
   transform: translateY(-2px) scale(1.04);
   box-shadow: 0 4px 16px rgba(0, 212, 255, 0.18);
@@ -563,7 +569,7 @@ const filteredArticles = relatedArticles.filter((a: any) => a.slug !== currentAr
   font-size: 1.1rem;
 }
 
-.mobile-sponsored {
+.mobile-partner {
   background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 102, 255, 0.1) 100%);
   border: 1.5px solid rgba(0, 212, 255, 0.2);
 }
@@ -578,31 +584,31 @@ const filteredArticles = relatedArticles.filter((a: any) => a.slug !== currentAr
   text-align: center;
 }
 
-.mobile-ad-content {
+.mobile-promo-content {
   display: flex;
   align-items: center;
   gap: 1rem;
   justify-content: space-between;
 }
 
-.mobile-ad-icon {
+.mobile-promo-icon {
   font-size: 1.8rem;
   filter: drop-shadow(0 0 8px #00d4ff33);
 }
 
-.mobile-ad-text {
+.mobile-promo-text {
   flex: 1;
   font-size: 0.9rem;
   color: #b3b3b3;
 }
 
-.mobile-ad-subtitle {
+.mobile-promo-subtitle {
   font-size: 0.8rem;
   color: #888;
   margin-top: 0.2rem;
 }
 
-.mobile-ad-cta {
+.mobile-promo-cta {
   display: inline-block;
   background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
   color: #fff;
@@ -615,7 +621,7 @@ const filteredArticles = relatedArticles.filter((a: any) => a.slug !== currentAr
   transition: all 0.2s ease;
 }
 
-.mobile-ad-cta:hover {
+.mobile-promo-cta:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
 }

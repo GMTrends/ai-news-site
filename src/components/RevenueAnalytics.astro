@@ -27,7 +27,7 @@ const highPerformingSlots = adManager.getHighPerformingSlots();
 const currentProgress = {
   displayRevenue: 1200, // Current month so far
   affiliateRevenue: 2100,
-  sponsoredRevenue: 650,
+  partnerRevenue: 650,
   newsletterRevenue: 280,
   totalRevenue: 4230
 };
@@ -112,21 +112,21 @@ const topSlots = [
       </div>
     </div>
 
-    <div class="revenue-card sponsored-content">
+    <div class="revenue-card partner-content">
       <div class="card-header">
-        <h3>Sponsored Content</h3>
+        <h3>Partner Content</h3>
         <span class="revenue-icon">✨</span>
       </div>
       <div class="card-metrics">
         <div class="current-metric">
-          <span class="metric-value">${currentProgress.sponsoredRevenue}</span>
+          <span class="metric-value">${currentProgress.partnerRevenue}</span>
           <span class="metric-change positive">+12%</span>
         </div>
         <div class="target-metric">
-          Target: ${revenueProjection.sponsoredRevenue}
+          Target: ${revenueProjection.partnerRevenue}
         </div>
         <div class="progress-mini">
-          <div class="progress-mini-fill" style={`width: ${(currentProgress.sponsoredRevenue / revenueProjection.sponsoredRevenue) * 100}%`}></div>
+          <div class="progress-mini-fill" style={`width: ${(currentProgress.partnerRevenue / revenueProjection.partnerRevenue) * 100}%`}></div>
         </div>
       </div>
     </div>
