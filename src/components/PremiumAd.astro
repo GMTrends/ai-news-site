@@ -75,45 +75,99 @@ const targetingString = targeting.join(',');
       </div>
     </div>
     
-    <!-- REAL AD INTEGRATION SCRIPTS -->
-    <script define:vars={{ adId, targetingString, size, priority }}>
-      // Google AdSense Integration
-      (function() {
+    <!-- REAL AD INTEGRATION SCRIPTS (hardened, client-only) -->
+    <script define:vars={{ adId, targetingString, size, priority }} is:inline>
+      (function () {
+        // Guard against SSR and missing DOM
+        if (typeof window === 'undefined' || typeof document === 'undefined') return;
         const adContainer = document.getElementById(adId);
-        
-        // High-CPM targeting for AI tools
-        window.adsbygoogle = window.adsbygoogle || [];
-        
-        // Create ad unit
-        const adSlot = document.createElement('ins');
-        adSlot.className = 'adsbygoogle';
-        adSlot.style.display = 'block';
-        adSlot.setAttribute('data-ad-client', 'ca-pub-YOUR-ADSENSE-ID');
-        adSlot.setAttribute('data-ad-slot', 'YOUR-AD-UNIT-ID');
-        adSlot.setAttribute('data-ad-format', 'rectangle');
-        adSlot.setAttribute('data-full-width-responsive', 'false');
-        
-        // Premium targeting
-        adSlot.setAttribute('data-ad-targeting', targetingString);
-        
-        // Size-specific configuration
-        if (size === '300x250') {
-          adSlot.style.width = '300px';
-          adSlot.style.height = '250px';
+        if (!adContainer) return;
+
+        // Avoid duplicate initialization
+        if (adContainer.getAttribute('data-ad-initialized') === 'true') return;
+
+        // Ensure adsbygoogle is available before proceeding
+        if (!('adsbygoogle' in window)) {
+          // Defer retry to next tick to allow AdSense script to load
+          setTimeout(() => {
+            const evt = new Event('adsbygoogle:tryInit');
+            window.dispatchEvent(evt);
+          }, 0);
+          return;
         }
-        
-        // High-priority loading for hero ads
-        if (priority === 'high') {
-          adSlot.setAttribute('data-ad-priority', 'high');
-        }
-        
-        // Replace placeholder with real ad
-        const placeholder = adContainer.querySelector('.premium-ad-placeholder');
-        if (placeholder && window.adsbygoogle) {
-          adContainer.replaceChild(adSlot, placeholder);
-          window.adsbygoogle.push({});
+
+        try {
+          // Create ad unit
+          const adSlot = document.createElement('ins');
+          adSlot.className = 'adsbygoogle';
+          adSlot.style.display = 'block';
+          adSlot.setAttribute('data-ad-client', 'ca-pub-YOUR-ADSENSE-ID');
+          adSlot.setAttribute('data-ad-slot', 'YOUR-AD-UNIT-ID');
+          adSlot.setAttribute('data-ad-format', 'rectangle');
+          adSlot.setAttribute('data-full-width-responsive', 'false');
+
+          // Premium targeting
+          if (targetingString) {
+            adSlot.setAttribute('data-ad-targeting', targetingString);
+          }
+
+          // Size-specific configuration (keep minimal and explicit)
+          if (size === '300x250') {
+            adSlot.style.width = '300px';
+            adSlot.style.height = '250px';
+          }
+
+          // Priority flag
+          if (priority === 'high') {
+            adSlot.setAttribute('data-ad-priority', 'high');
+          }
+
+          // Replace placeholder only if it still exists and container is attached
+          const placeholder = adContainer.querySelector('.premium-ad-placeholder');
+          if (placeholder && document.body.contains(adContainer)) {
+            adContainer.replaceChild(adSlot, placeholder);
+            adContainer.setAttribute('data-ad-initialized', 'true');
+            (window.adsbygoogle as any).push({});
+          }
+        } catch (e) {
+          // Fail safely without breaking layout
+          console.warn('PremiumAd: Ad initialization failed gracefully:', e);
         }
       })();
+
+      // Optional: listen for deferred init signal if AdSense loads slightly later
+      window.addEventListener && window.addEventListener('adsbygoogle:tryInit', () => {
+        // Re-run only if not initialized yet
+        try {
+          const container = document.getElementById(adId);
+          if (!container || container.getAttribute('data-ad-initialized') === 'true') return;
+          if (!('adsbygoogle' in window)) return;
+
+          const adSlot = document.createElement('ins');
+          adSlot.className = 'adsbygoogle';
+          adSlot.style.display = 'block';
+          adSlot.setAttribute('data-ad-client', 'ca-pub-YOUR-ADSENSE-ID');
+          adSlot.setAttribute('data-ad-slot', 'YOUR-AD-UNIT-ID');
+          adSlot.setAttribute('data-ad-format', 'rectangle');
+          adSlot.setAttribute('data-full-width-responsive', 'false');
+
+          if (targetingString) adSlot.setAttribute('data-ad-targeting', targetingString);
+          if (size === '300x250') {
+            adSlot.style.width = '300px';
+            adSlot.style.height = '250px';
+          }
+          if (priority === 'high') adSlot.setAttribute('data-ad-priority', 'high');
+
+          const placeholder = container.querySelector('.premium-ad-placeholder');
+          if (placeholder && document.body.contains(container)) {
+            container.replaceChild(adSlot, placeholder);
+            container.setAttribute('data-ad-initialized', 'true');
+            (window.adsbygoogle as any).push({});
+          }
+        } catch (e) {
+          console.warn('PremiumAd: Deferred init failed gracefully:', e);
+        }
+      });
     </script>
   </div>
   
