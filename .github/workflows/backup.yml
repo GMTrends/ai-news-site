@@ -10,14 +10,12 @@ on:
   
   # Run on push to main branch
   push:
-    branches: [ main ]
-  
-  # Run on content changes
-  push:
+    branches: [ main, staging/performance-optimization ] # Add your development branch here
     paths:
       - 'src/content/**'
       - 'public/**'
       - 'netlify/**'
+      - '**' # Trigger on any file change for comprehensive backup
 
 jobs:
   backup:
