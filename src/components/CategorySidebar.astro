@@ -193,8 +193,8 @@ function getAdContent(adType: string, position: number) {
 ---
 <aside class={`category-sidebar ${className}`}>
   <!-- Premium Spotlight Zone (300x250) -->
-  <div class="sidebar-section ad-section">
-    <UniversalAd adId="sidebar-premium-spotlight" />
+  <div class="sidebar-section promo-section">
+    <UniversalAd adId={`sidebar-premium-spotlight-${categorySlug}`} />
   </div>
 
   <!-- AI Tool Comparison Widget - Streamlined -->
@@ -237,41 +237,39 @@ function getAdContent(adType: string, position: number) {
   </div>
 
   <!-- Newsletter Promo Zone -->
-  <div class="sidebar-section ad-section">
-    <UniversalAd adId="sidebar-newsletter-promo" />
+  <div class="sidebar-section promo-section">
+    {categorySlug === 'marketing' ? (
+      <UniversalAd adId={`sidebar-newsletter-promo-${categorySlug}`} />
+    ) : (
+      <UniversalAd adId={`sidebar-general-ad-${categorySlug}`} />
+    )}
   </div>
 
-  <!-- Trending AI News Section -->
-  <div class="sidebar-section ad-section">
-    <UniversalAd adId="sidebar-trending-news" />
+  <!-- Trending AI News Section (now bottom gradient ad) -->
+  <div class="sidebar-section promo-section">
+    <UniversalAd adId={`sidebar-bottom-gradient-ad-${categorySlug}`} />
   </div>
 </aside>
 
 <style>
-/* CLEAN STICKY POSITIONING - No Conflicting Transforms */
+/* Sidebar visual styles only - sticky handled by parent column wrapper */
 aside.category-sidebar,
 .category-sidebar {
-  position: -webkit-sticky !important;
-  position: sticky !important;
-  top: 100px !important;
   width: 340px !important;
   max-width: 340px !important;
-  height: fit-content !important;
   align-self: flex-start !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 0.5rem !important;
-  padding: 1rem !important;
+  gap: 1rem !important;
+padding: 0 !important; /* Removed all padding to allow elements to span full width */
   background: rgba(15, 23, 42, 0.3) !important;
   border-radius: 12px !important;
   border: 1px solid rgba(71, 85, 105, 0.2) !important;
-  z-index: 9999 !important;
+  z-index: 10 !important;
   box-sizing: border-box !important;
   overflow: visible !important;
-  /* Clean sticky positioning without transforms */
   contain: none !important;
   will-change: auto !important;
-  transform: none !important;
 }
 
 .sidebar-section {
@@ -279,19 +277,19 @@ aside.category-sidebar,
   background: rgba(15, 23, 42, 0.8);
   border-radius: 8px;
   border: 1px solid rgba(71, 85, 105, 0.3);
-  min-height: 120px;
+  margin-bottom: 0; /* Remove margin-bottom to rely on parent gap */
 }
 
-.sidebar-section.ad-section {
-  padding: 0 !important;
+.sidebar-section.promo-section {
+  /* Removed padding: 0 !important; to allow inheritance from .sidebar-section */
   background: transparent !important;
   border: none !important;
-  min-height: auto !important;
-  margin-bottom: 0 !important;
-  margin: 0 !important;
+  min-height: auto !important; /* Keep this to allow ad content to define height */
+  margin-bottom: 0 !important; /* Keep this to rely on parent gap */
+  margin: 0 !important; /* Keep this to rely on parent gap */
 }
 
-.ad-section {
+.promo-section {
   padding: 0;
   background: transparent;
   border: none;
@@ -1609,10 +1607,9 @@ aside.category-sidebar,
 @media (max-width: 768px) {
   .category-sidebar {
     width: 100%;
-    position: static;
     margin-top: 1rem;
     padding: 0.5rem;
-    /* Mobile performance optimizations */
+    /* Sticky disabled on mobile by stacking layout (parent not sticky there) */
   }
   
   .sidebar-section {
@@ -1766,44 +1763,6 @@ aside.category-sidebar,
   font-size: 0.8rem;
 }
 
-/* NUCLEAR MARGIN OVERRIDE - Maximum Specificity to Override UniversalAd Rules */
-aside.category-sidebar .sidebar-section,
-.category-sidebar .sidebar-section,
-.sidebar-section { 
-  margin-bottom: 1rem !important; 
-}
-
-aside.category-sidebar .sidebar-section:last-child,
-.category-sidebar .sidebar-section:last-child,
-.sidebar-section:last-child { 
-  margin-bottom: 0 !important; 
-}
-
-/* AD SECTIONS - ZERO MARGIN TO ELIMINATE GAPS */
-aside.category-sidebar .sidebar-section.ad-section,
-.category-sidebar .sidebar-section.ad-section,
-.sidebar-section.ad-section { 
-  margin-bottom: 0 !important; 
-  margin-top: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-/* OVERRIDE UNIVERSALAD COMPONENT AGGRESSIVE MARGINS */
-aside.category-sidebar .universal-promo,
-.category-sidebar .universal-promo,
-aside.category-sidebar .sidebar-section .universal-promo,
-.category-sidebar .sidebar-section .universal-promo {
-  margin: 0 !important;
-  margin-bottom: 0 !important;
-  margin-top: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-/* TINY GAP ONLY BETWEEN AD SECTIONS FOR VISUAL SEPARATION */
-aside.category-sidebar .sidebar-section.ad-section:not(:last-child),
-.category-sidebar .sidebar-section.ad-section:not(:last-child) { 
-  margin-bottom: 0.25rem !important; 
-}
 .affiliate-ad-card {
   background: linear-gradient(135deg, #00d4ff22 0%, #0066ff22 100%);
   border-radius: 12px;
