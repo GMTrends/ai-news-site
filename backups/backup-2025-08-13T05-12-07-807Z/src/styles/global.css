@@ -1,0 +1,966 @@
+/* AI News Theme - Modern & Fast - PERFORMANCE OPTIMIZED */
+/* Restored: Balanced approach to prevent layout shifts while preserving container constraints */
+
+:root {
+	/* AI-focused color palette */
+	--bg-primary: #0a0a0b;
+	--bg-secondary: #1a1a1b;
+	--bg-card: #1e1e1f;
+	--accent-cyan: #00d4ff;
+	--accent-blue: #0066ff;
+	--text-primary: #ffffff;
+	--text-secondary: #b3b3b3;
+	--text-muted: #666666;
+	--border-color: #333333;
+	--gradient-text: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	
+	/* Modern typography with layout shift prevention */
+	--font-heading: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+	--font-body: 'Inter', system-ui, -apple-system, sans-serif;
+	--font-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+	
+	/* Performance variables */
+	--animation-duration: 0.2s;
+	--transition-duration: 0.2s;
+	--transform-distance: 2px;
+
+	/* Header offset for sticky elements */
+	--header-offset: 90px;
+	/* Header z-index to sit above sticky columns without interfering */
+  }
+  
+  /* Comprehensive layout shift prevention during navigation */
+  
+  /* Stabilize font rendering to reduce layout shift */
+  html {
+    font-synthesis: none;
+    text-rendering: optimizeSpeed;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Prevent zoom-based layout shifts */
+    text-size-adjust: 100%;
+    height: 100%;
+    min-height: 100%;
+  }
+  
+  /* Simplified font optimization to prevent layout shift */
+  html, body {
+	font-variant-ligatures: none;
+	text-size-adjust: 100%;
+  }
+  
+  /* Reset and base styles */
+  *, *::before, *::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+  }
+  
+
+  
+  /* Primary html declaration (consolidated) */
+  html {
+ font-family: var(--font-body);
+ background: var(--bg-primary);
+ color: var(--text-primary);
+ line-height: 1.6;
+ scroll-behavior: smooth;
+ height: 100%;
+ -webkit-text-size-adjust: 100%;
+ -ms-text-size-adjust: 100%;
+ overflow-x: hidden;
+ /* Ensure a single scroll container without conflicting y-overflow */
+ overflow-y: visible;
+  }
+  
+  body {
+   	background: var(--bg-primary);
+   	color: var(--text-primary);
+   	font-size: 16px;
+   	line-height: 1.6;
+   	width: 100%;
+   	min-height: 100%;
+   	/* Proper header spacing without layout shifts */
+   	padding-top: var(--header-offset, 90px);
+   	position: relative;
+   	-webkit-overflow-scrolling: touch;
+   	overflow-x: hidden;
+   	overflow-y: auto;
+  }
+  
+
+  
+  /* Prevent layout shifts from images and media */
+  img, video, iframe {
+	max-width: 100%;
+	height: auto;
+	/* Replace unsupported attr() with explicit aspect ratios where needed in components */
+  }
+  
+  /* Container stability */
+  .container, .main-container, .content-container {
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	/* Prevent width changes */
+	min-width: 0;
+  }
+  
+  /* Clean, simple overflow handling without conflicts - removed duplicate html block */
+  
+  /* Remove conflicting body declarations - let the main body rule handle styling */
+  
+  /* REMOVED: Conflicting header CSS rules that were causing shaking and detachment
+     Header positioning is now controlled entirely by the Header.astro component */
+  
+  /* Remove conflicting body padding declaration */
+  
+  /* Global background animation removed - now applied specifically to newsletter section for better design focus */
+  
+  @keyframes float {
+	0%, 100% { 
+	  transform: translateY(0px) rotate(0deg) translateZ(0); 
+	}
+	50% { 
+	  transform: translateY(-10px) rotate(90deg) translateZ(0); 
+	}
+  }
+  
+  /* Typography with performance optimizations */
+  h1, h2, h3, h4, h5, h6 {
+	font-family: var(--font-heading);
+	font-weight: 600;
+	line-height: 1.2;
+	margin-bottom: 1rem;
+	/* Clean gradient text without layout shift issues */
+	background: var(--gradient-text);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	/* Fallback for browsers that don't support background-clip */
+	color: var(--text-primary);
+  }
+  
+  p {
+	margin-bottom: 1rem;
+	color: var(--text-secondary);
+  }
+  
+  a {
+	color: var(--accent-cyan);
+	text-decoration: none;
+	transition: color var(--transition-duration) ease;
+	/* Keep inline display to avoid layout shifts, avoid padding/min-size globally */
+	display: inline;
+  }
+  
+  a:hover {
+	color: var(--accent-blue);
+  }
+  
+  /* Main content container */
+  main {
+	width: 100%;
+	max-width: 100%;
+	/* Remove overflow-x to prevent double scrollbars */
+	/* Performance optimizations */
+	will-change: auto;
+  }
+  
+  /* Responsive container class (will be consolidated later) */
+  .container {
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 1rem;
+  }
+  
+  @media (min-width: 768px) {
+	.container {
+	  padding: 0 2rem;
+	}
+  }
+  
+  /* Utility classes */
+  .gradient-text {
+	background: var(--gradient-text);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+  }
+  
+  /* Optimized cards and containers */
+  .card {
+	background: var(--bg-card);
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	padding: 1.5rem;
+	transition: transform var(--transition-duration) ease, box-shadow var(--transition-duration) ease;
+	/* Performance optimizations */
+	will-change: transform, box-shadow;
+	transform: translateZ(0);
+  }
+  
+  .card:hover {
+	transform: translateY(calc(-1 * var(--transform-distance))) translateZ(0);
+	box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+  }
+  
+  /* Duplicate container block removed (will keep a single unified definition below) */
+  
+  /* Performance-optimized mobile-first responsive design */
+  @media (max-width: 768px) {
+	body {
+	  font-size: 14px;
+	}
+	
+	h1 { font-size: 1.8rem; line-height: 1.1; }
+	h2 { font-size: 1.5rem; line-height: 1.2; }
+	h3 { font-size: 1.2rem; line-height: 1.3; }
+	h4 { font-size: 1.1rem; line-height: 1.3; }
+	h5 { font-size: 1rem; line-height: 1.4; }
+	h6 { font-size: 0.9rem; line-height: 1.4; }
+	
+	.container {
+	  padding: 0 1rem;
+	}
+	
+	/* Improve touch targets on mobile - do not force global min size to avoid layout conflicts */
+	button, 
+	input[type="button"], 
+	input[type="submit"], 
+	input[type="reset"] {
+	  padding: 0.75rem 1rem;
+	  font-size: 1rem;
+	}
+	
+	/* Improve form inputs on mobile */
+	input[type="text"],
+	input[type="email"],
+	input[type="password"],
+	input[type="search"],
+	input[type="url"],
+	input[type="tel"],
+	textarea,
+	select {
+	  font-size: 16px; /* Prevents zoom on iOS */
+	  padding: 0.75rem 1rem;
+	}
+	
+	/* Avoid global link padding/min dimensions to prevent card/grid shifts */
+	/* Optimize card spacing on mobile */
+	.card {
+	  padding: 1rem;
+	  margin-bottom: 1rem;
+	}
+	
+	/* Optimize animations for mobile */
+	.card:hover {
+	  transform: translateY(calc(-0.5 * var(--transform-distance))) translateZ(0);
+	}
+	
+	/* Mobile scrollbar optimizations */
+	html {
+	  -webkit-overflow-scrolling: touch;
+	  scrollbar-width: none; /* Firefox */
+	  -ms-overflow-style: none; /* IE/Edge */
+	}
+	
+	html::-webkit-scrollbar {
+	  display: none; /* Chrome, Safari, Opera */
+	}
+	
+	body {
+	  -webkit-overflow-scrolling: touch;
+	}
+  }
+  
+  /* Extra small devices */
+  @media (max-width: 480px) {
+	body {
+	  font-size: 13px;
+	}
+	
+	h1 { font-size: 1.6rem; }
+	h2 { font-size: 1.3rem; }
+	h3 { font-size: 1.1rem; }
+	h4 { font-size: 1rem; }
+	h5 { font-size: 0.9rem; }
+	h6 { font-size: 0.8rem; }
+	
+	.container {
+	  padding: 0 0.75rem;
+	}
+	
+	button, 
+	input[type="button"], 
+	input[type="submit"], 
+	input[type="reset"] {
+	  min-height: 48px;
+	  min-width: 48px;
+	  padding: 0.875rem 1.25rem;
+	  font-size: 1.1rem;
+	}
+	
+	input[type="text"],
+	input[type="email"],
+	input[type="password"],
+	input[type="search"],
+	input[type="url"],
+	input[type="tel"],
+	textarea,
+	select {
+	  min-height: 48px;
+	  font-size: 16px;
+	  padding: 0.875rem 1.25rem;
+	}
+	
+	a {
+	  min-height: 48px;
+	  min-width: 48px;
+	  padding: 0.75rem;
+	}
+	
+	.card {
+	  padding: 0.875rem;
+	  margin-bottom: 0.875rem;
+	}
+  }
+  
+  /* Landscape mobile optimization */
+  @media (max-width: 768px) and (orientation: landscape) {
+	body {
+	  font-size: 13px;
+	}
+	
+	.container {
+	  padding: 0 1rem;
+	}
+  }
+  
+  /* High DPI displays */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	body {
+	  -webkit-font-smoothing: antialiased;
+	  -moz-osx-font-smoothing: grayscale;
+	  text-rendering: optimizeLegibility;
+	}
+  }
+  
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+	  animation-duration: 0.01ms !important;
+	  animation-iteration-count: 1 !important;
+	  transition-duration: 0.01ms !important;
+	  scroll-behavior: auto !important;
+	}
+	
+	body::before {
+	  animation: none;
+	}
+	
+	.card:hover {
+	  transform: none;
+	}
+  }
+  
+  /* Focus styles for accessibility */
+  button:focus,
+  input:focus,
+  textarea:focus,
+  select:focus {
+	outline: 2px solid var(--accent-cyan);
+	outline-offset: 2px;
+	border-radius: 4px;
+  }
+
+  /* Keep gradient titles as requested; retain focus outlines for accessibility elsewhere */
+  /* Note: Do not remove outlines globally for headings/links to maintain accessibility */
+  h2 a:focus,
+  h3 a:focus,
+  h4 a:focus {
+	outline: none !important;
+  }
+  
+  /* Skip link for accessibility */
+  .skip-link {
+	position: absolute;
+	top: -40px;
+	left: 6px;
+	background: var(--accent-cyan);
+	color: var(--bg-primary);
+	padding: 8px;
+	text-decoration: none;
+	border-radius: 4px;
+	z-index: 1000;
+	transition: top var(--transition-duration) ease;
+  }
+  
+  .skip-link:focus {
+	top: 6px;
+  }
+  
+  /* Performance optimization classes removed - empty ruleset */
+  
+  /* Minimized will-change usage */
+  .gpu-accelerated {
+    /* Only keep transform hint if element is animated frequently */
+    will-change: auto;
+  }
+  
+  /* Optimized image loading */
+  img {
+	max-width: 100%;
+	height: auto;
+	/* Performance optimizations */
+	will-change: auto;
+	/* Prevent layout shifts */
+	display: block;
+  }
+  
+  /* Removed lazy image opacity transition to prevent layout shifting during page loads */
+  /* img.lazy and img.lazy.loaded rules removed to prevent FOUC */
+  
+  /* Optimized button styles */
+  button {
+	cursor: pointer;
+	border: none;
+	background: none;
+	font-family: inherit;
+	font-size: inherit;
+	/* Performance optimizations */
+	will-change: transform, background-color;
+	transform: translateZ(0);
+  }
+  
+  /* Optimized form styles */
+  input, textarea, select {
+	font-family: inherit;
+	font-size: inherit;
+	/* Performance optimizations */
+	will-change: auto;
+  }
+  
+  /* Prevent any element from causing layout shifts - keep consolidated with reset */
+  /* (box-sizing already set above on *, *::before, *::after) */
+  
+  /* Category Link Safety Rules - Preserves existing styling */
+  .category-link-safe {
+	text-decoration: none;
+	color: inherit;
+	transition: all 0.3s ease;
+	/* Override global link rules for category tags */
+	min-height: auto !important;
+	min-width: auto !important;
+	padding: 0 !important;
+	display: inline !important;
+	align-items: unset !important;
+	justify-content: unset !important;
+  }
+  
+  .category-link-safe:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+  }
+  
+  .category-link-safe:focus {
+	outline: 2px solid #00d4ff;
+	outline-offset: 2px;
+	background: rgba(0, 212, 255, 0.1);
+  }
+  
+  /* Compact category tag styles */
+  .category-tag,
+  .category-badge,
+  .category-badge-small {
+	padding: 0.2rem 0.5rem !important;
+	font-size: 0.65rem !important;
+	border-radius: 12px !important;
+	display: inline-block !important;
+	min-height: auto !important;
+	min-width: auto !important;
+	text-decoration: none !important;
+	transition: all 0.3s ease !important;
+  }
+  
+  /* Article title link overrides - consolidated via utility */
+  .title-link-reset {
+	min-height: auto !important;
+	min-width: auto !important;
+	padding: 0 !important;
+	display: inline !important;
+	align-items: unset !important;
+	justify-content: unset !important;
+	transition: all 0.3s ease !important;
+	outline: none !important;
+  }
+  
+  /* Remove the problematic hover override that was causing issues */
+  
+  /* Global: Gradient font and text-shadow glow for article titles - consolidated via utility */
+  .title-link-gradient {
+    background: linear-gradient(90deg, #00d4ff 0%, #0066ff 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    color: #00d4ff !important;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    transition: text-shadow 0.3s cubic-bezier(0.4,0,0.2,1), background 0.3s cubic-bezier(0.4,0,0.2,1);
+    outline: none !important;
+  }
+  .title-link-gradient:hover {
+    background: linear-gradient(90deg, #00e0ff 0%, #0050ff 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    color: #00e0ff !important;
+    text-shadow:
+      0 0 8px #00d4ff99,
+      0 0 16px #0066ff66;
+  }
+  
+  /* .category-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 2rem;
+  } */
+  
+  /* .category-main {
+    flex: 1 1 0%;
+  }
+  
+  .category-sidebar {
+    width: 340px;
+    flex-shrink: 0;
+  } */
+  
+  @media (max-width: 900px) {
+    .category-layout {
+      flex-direction: column;
+    }
+    .category-sidebar {
+      width: 100%;
+    }
+  }
+  
+  /* GenSpark Content Integration Styles - Enhanced for AI News Theme */
+  .genspark-content {
+    /* Ensure proper spacing and typography */
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .genspark-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    background: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+    border: 1px solid var(--border-color);
+    /* Performance optimization */
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .genspark-content table:hover {
+    box-shadow: 0 12px 40px rgba(0, 212, 255, 0.15);
+    transform: translateY(-2px) translateZ(0);
+    transition: transform var(--transition-duration) ease, box-shadow var(--transition-duration) ease;
+  }
+
+  .genspark-content th,
+  .genspark-content td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.95rem;
+  }
+
+  .genspark-content th {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 102, 255, 0.1) 100%);
+    color: var(--accent-cyan);
+    font-weight: 600;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+  }
+
+  .genspark-content tr:hover {
+    background: rgba(0, 212, 255, 0.05);
+  }
+
+  .genspark-content tr:last-child td {
+    border-bottom: none;
+  }
+
+  .genspark-content .comparison-chart {
+    overflow-x: auto;
+    margin: 2rem 0;
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+  }
+
+  .genspark-content .comparison-chart img,
+  .genspark-content .comparison-chart svg {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+  }
+
+  /* Enhanced feature comparison tables */
+  .genspark-content .feature-table {
+    margin: 3rem 0;
+  }
+
+  .genspark-content .feature-table th:first-child {
+    min-width: 200px;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15) 0%, rgba(0, 102, 255, 0.15) 100%);
+  }
+
+  /* Pros and Cons styling for GenSpark content */
+  .genspark-content .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+
+  .genspark-content .pros,
+  .genspark-content .cons {
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+  }
+
+  .genspark-content .pros {
+    border-left: 4px solid #00d4ff;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(0, 102, 255, 0.05) 100%);
+  }
+
+  .genspark-content .cons {
+    border-left: 4px solid #ff4757;
+    background: linear-gradient(135deg, rgba(255, 71, 87, 0.05) 0%, rgba(255, 0, 0, 0.05) 100%);
+  }
+
+  .genspark-content .pros h3 {
+    color: var(--accent-cyan);
+    margin-top: 0;
+    font-family: var(--font-heading);
+  }
+
+  .genspark-content .cons h3 {
+    color: #ff4757;
+    margin-top: 0;
+    font-family: var(--font-heading);
+  }
+
+  .genspark-content .pros ul,
+  .genspark-content .cons ul {
+    margin: 1rem 0 0 0;
+    padding-left: 1.5rem;
+  }
+
+  .genspark-content .pros li,
+  .genspark-content .cons li {
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+  }
+
+  /* Rating displays for GenSpark content */
+  .genspark-content .rating-display {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 2rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 102, 255, 0.1) 100%);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+  }
+
+  .genspark-content .rating-score {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-family: var(--font-heading);
+  }
+
+  .genspark-content .rating-details {
+    flex: 1;
+  }
+
+  .genspark-content .rating-label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+  }
+
+  .genspark-content .rating-description {
+    font-size: 1rem;
+    color: var(--text-secondary);
+  }
+
+  /* Responsive design for GenSpark content */
+  @media (max-width: 768px) {
+    .genspark-content .pros-cons {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .genspark-content .rating-display {
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+    }
+
+    .genspark-content .rating-score {
+      font-size: 3rem;
+    }
+
+    .genspark-content table {
+      font-size: 0.9rem;
+    }
+
+    .genspark-content th,
+    .genspark-content td {
+      padding: 12px 16px;
+    }
+
+    .genspark-content .comparison-chart {
+      padding: 1rem;
+    }
+  }
+
+  /* Performance optimizations for GenSpark content */
+  .genspark-content * {
+    will-change: auto;
+  }
+
+  .genspark-content table,
+  .genspark-content .comparison-chart,
+  .genspark-content .rating-display {
+    will-change: transform, box-shadow;
+  }
+  
+  .main-content {
+    /* Performance optimizations */
+    will-change: auto;
+    /* Ensure footer is visible */
+    display: flex;
+    flex-direction: column;
+    /* Removed margin-bottom that was previously set to prevent overlap with the floating widget */
+  }
+  
+  .footer-spacer {
+    height: 2rem;
+    background: #1a1a1b !important;
+    width: 100%;
+    margin-left: 0;
+  }
+  
+  .footer-homepage-spacer {
+    height: 3rem;
+    background: var(--bg-primary);
+    width: 100%;
+    margin-left: 0;
+  }
+  
+/* Note: sticky-col utility is defined below and used by all category pages */
+
+/* REMOVE duplicate/conflicting body block to keep a single scroll container definition above */
+/* If additional properties are needed, extend the primary body rule instead of redefining it */
+.main-content {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+.ai-footer {
+  flex-shrink: 0;
+}
+
+.desktop-nav a.active {
+  background: var(--gradient-text) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+.desktop-nav > a.active,
+.desktop-nav .active {
+  background: linear-gradient(90deg, #00e0ff 0%, #ff00cc 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+  font-weight: bold !important;
+  text-decoration: underline !important;
+}
+
+/* CLEAN: Proper container constraints - unified single definition */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+@media (min-width: 768px) {
+  .container {
+    padding: 0 2rem;
+  }
+}
+ 
+/* CLEAN: Targeted container and overflow fixes */
+
+/* Ensure sections can have full-width backgrounds */
+section {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Sticky utility for column wrappers (category sidebars, etc.)
+   Apply globally for all category pages. Ensure no ancestor breaks sticky. */
+/* Single source of truth for sticky column behavior */
+.sticky-col {
+  position: sticky !important;
+  top: var(--header-offset, 90px) !important;
+  align-self: flex-start !important;
+  overflow: visible !important;
+  transform: none !important;
+  contain: none !important;
+  filter: none !important;
+  perspective: none !important;
+  will-change: auto !important;
+  z-index: 2;
+}
+
+/* Ensure page body is the single scroll container and safe for sticky */
+html {
+  overflow-y: visible !important;   /* do not consume scroll */
+  height: 100% !important;
+}
+body {
+  overflow-y: auto !important;      /* the scrolling element */
+  padding-top: var(--header-offset, 90px) !important;
+  overflow-x: hidden !important;
+  min-height: 100% !important;
+}
+
+/* Hard guard: category layouts must not invalidate sticky on their sidebars */
+.category-layout {
+  overflow: visible !important;
+  transform: none !important;
+  contain: none !important;
+  filter: none !important;
+  perspective: none !important;
+  /* Ensure there is always sufficient scrollable height for sticky to engage */
+  min-height: calc(100vh + 1px) !important; /* guarantee scroll threshold crossing */
+  /* Grid/flex safety for sticky */
+  align-content: start !important;
+  /* If grid is used, ensure rows can grow naturally */
+  grid-auto-rows: minmax(min-content, auto) !important;
+}
+
+/* Highest specificity for the grid item acting as sticky column across category pages */
+/* Promote sticky sidebar to its own safe painting context without breaking sticky.
+   This helps avoid grid track/ancestor effects that can suppress sticky engagement. */
+.category-layout > .sidebar.sticky-col {
+  position: sticky !important;
+  top: var(--header-offset, 90px) !important;
+  align-self: start !important;
+  overflow: visible !important;
+  transform: none !important;
+  contain: none !important;   /* removed paint containment to fix sticky positioning */
+  filter: none !important;
+  perspective: none !important;
+  isolation: isolate !important; /* new stacking context so header/peers can't interfere */
+  will-change: auto !important;
+  z-index: 3 !important;
+  height: auto !important;
+  max-height: none !important;
+}
+
+/* Baseline sidebar (when not sticky) — IMPORTANT: never set position/top when combined with .sticky-col */
+.category-layout > .sidebar:not(.sticky-col) {
+  position: initial !important;
+  top: auto !important;
+  overflow: visible !important;
+  transform: none !important;
+  contain: none !important;
+  filter: none !important;
+  perspective: none !important;
+  isolation: auto !important;
+}
+
+/* CLEAN: Category hero styling matching backup approach */
+.category-hero {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-bottom: 1px solid #333;
+  padding: 2rem 0 3rem 0;
+  position: relative;
+  overflow: visible; /* allow sticky positioning */
+  box-sizing: border-box;
+}
+
+/* Ensure main content column provides enough scroll height */
+.category-main {
+  min-height: 120vh !important;
+}
+
+/* Fix footer spacer elements that were causing overflow */
+.footer-spacer,
+.footer-homepage-spacer {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Category pages sticky safety scope:
+   When body has .category-page-sticky-safe, neuter any potential sticky blockers. */
+body.category-page-sticky-safe header {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transform: none !important;
+  contain: none !important;
+  filter: none !important;
+  perspective: none !important;
+}
+
+body.category-page-sticky-safe main.category-page,
+body.category-page-sticky-safe .category-content,
+body.category-page-sticky-safe .category-layout {
+  position: relative !important;
+  overflow: visible !important;
+  transform: none !important;
+  contain: none !important;
+  filter: none !important;
+  perspective: none !important;
+  will-change: auto !important;
+}

@@ -1,0 +1,603 @@
+---
+import { aiTools, categories, subcategories, priceRanges, sortOptions, type AITool } from '../data/tools-data.ts';
+---
+
+<section class="tools-comparison-section">
+  <div class="comparison-container">
+    <div class="comparison-header">
+      <h2 class="comparison-title">Best AI Tools for Entrepreneurs</h2>
+      <p class="comparison-subtitle">Discover the AI tools that will accelerate your business growth and success</p>
+    </div>
+
+    <!-- Filters and Controls -->
+    <div class="comparison-controls">
+      <div class="filters-row">
+        <select id="category-filter" class="filter-select">
+          {categories.map(cat => <option value={cat.value}>{cat.label}</option>)}
+        </select>
+        <select id="subcategory-filter" class="filter-select">
+          {subcategories.map(sub => <option value={sub.value}>{sub.label}</option>)}
+        </select>
+        <select id="price-filter" class="filter-select">
+          {priceRanges.map(price => <option value={price.value}>{price.label}</option>)}
+        </select>
+        <select id="sort-select" class="filter-select">
+          {sortOptions.map(sort => <option value={sort.value}>{sort.label}</option>)}
+        </select>
+      </div>
+      <div class="search-row">
+        <input type="text" id="search-input" placeholder="Search tools..." class="search-input">
+        <button id="clear-filters" class="clear-button">Clear</button>
+      </div>
+    </div>
+
+    <!-- Comparison Table -->
+    <div class="comparison-table-wrapper">
+      <div class="comparison-table">
+        <div class="table-header">
+          <div class="header-cell">Tool</div>
+          <div class="header-cell">Pricing</div>
+          <div class="header-cell">Rating</div>
+          <div class="header-cell">Features</div>
+          <div class="header-cell">Best For</div>
+          <div class="header-cell">Actions</div>
+        </div>
+        <div class="table-body" id="table-body">
+          {aiTools.map((tool) => (
+            <div class="tool-row" data-category={tool.category} data-subcategory={tool.subcategory} data-tool-id={tool.id}>
+              <div class="cell tool-info">
+                <div class="tool-logo">
+                  <div class="logo-placeholder">{tool.name.charAt(0)}</div>
+                </div>
+                <div class="tool-details">
+                  <h3 class="tool-name">{tool.name}</h3>
+                  <p class="tool-description">{tool.description}</p>
+                  <div class="tool-category">{tool.subcategory}</div>
+                </div>
+              </div>
+              <div class="cell pricing-info">
+                <div class="pricing-tiers">
+                  {tool.pricing.free && <div class="price-tier free">Free</div>}
+                  {tool.pricing.starter && <div class="price-tier starter">${tool.pricing.starter}/mo</div>}
+                  {tool.pricing.pro && <div class="price-tier pro">${tool.pricing.pro}/mo</div>}
+                </div>
+              </div>
+              <div class="cell rating-info">
+                <div class="rating-display">
+                  <div class="rating-text">{tool.rating}/5 ⭐</div>
+                  <div class="review-count">({tool.reviewCount} reviews)</div>
+                </div>
+              </div>
+              <div class="cell features-info">
+                <div class="features-list">
+                  {tool.features.slice(0, 3).map(feature => (
+                    <span class="feature-tag">{feature}</span>
+                  ))}
+                  {tool.features.length > 3 && <span class="feature-more">+{tool.features.length - 3} more</span>}
+                </div>
+              </div>
+              <div class="cell best-for-info">
+                <div class="best-for-list">
+                  {tool.bestFor.slice(0, 2).map(use => (
+                    <span class="best-for-tag">{use}</span>
+                  ))}
+                </div>
+              </div>
+              <div class="cell actions-info">
+                <div class="action-buttons">
+                  <a href={tool.affiliateLink} class="action-btn primary">Get Started</a>
+                  <button class="action-btn secondary compare-btn" data-tool-id={tool.id}>Compare</button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="results-summary">
+      <span>Showing <span id="results-count">{aiTools.length}</span> AI tools</span>
+    </div>
+  </div>
+</section>
+
+<style>
+.tools-comparison-section {
+  width: 100%;
+  padding: 4rem 0;
+  /* Add top padding to account for fixed header */
+  padding-top: calc(4rem + 90px);
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.03) 0%, rgba(0, 102, 255, 0.03) 100%);
+}
+
+.comparison-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.comparison-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.comparison-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.comparison-subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.comparison-controls {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.filters-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.search-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.filter-select, .search-input {
+  padding: 0.75rem;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  background: rgba(30, 41, 59, 0.8);
+  color: #e2e8f0;
+  font-size: 0.9rem;
+}
+
+.search-input {
+  flex: 1;
+}
+
+.clear-button {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(45deg, #ef4444, #dc2626);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.comparison-table-wrapper {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid #334155;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.comparison-table {
+  width: 100%;
+  min-width: 1200px;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr 2fr 1.5fr 1.5fr;
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.header-cell {
+  font-weight: 700;
+  color: #f1f5f9;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.table-body {
+  max-height: 800px;
+  overflow-y: auto;
+}
+
+.tool-row {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr 2fr 1.5fr 1.5fr;
+  padding: 1.5rem 1rem;
+  gap: 1rem;
+  border-bottom: 1px solid #334155;
+  transition: all 0.3s ease;
+}
+
+.tool-row:hover {
+  background: rgba(30, 41, 59, 0.5);
+}
+
+.tool-row.hidden {
+  display: none;
+}
+
+.tool-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.logo-placeholder {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.tool-details {
+  flex: 1;
+}
+
+.tool-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 0.5rem 0;
+}
+
+.tool-description {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.tool-category {
+  font-size: 0.75rem;
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  display: inline-block;
+}
+
+.pricing-tiers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.price-tier {
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.price-tier.free {
+  background: rgba(34, 197, 94, 0.2);
+  color: #86efac;
+}
+
+.price-tier.starter {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+}
+
+.price-tier.pro {
+  background: rgba(168, 85, 247, 0.2);
+  color: #c084fc;
+}
+
+.rating-display {
+  text-align: center;
+}
+
+.rating-text {
+  font-weight: 700;
+  color: #f1f5f9;
+  font-size: 0.9rem;
+}
+
+.review-count {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.feature-tag {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(147, 197, 253, 0.1));
+  color: #e2e8f0;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  backdrop-filter: blur(4px);
+}
+
+.feature-more {
+  color: #3b82f6;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.best-for-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.best-for-tag {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(74, 222, 128, 0.15));
+  color: #bbf7d0;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  backdrop-filter: blur(4px);
+  font-weight: 500;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.action-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.action-btn.primary {
+  background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+  color: white;
+}
+
+.action-btn.secondary {
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.action-btn.secondary.selected {
+  background: linear-gradient(45deg, #10b981, #059669);
+  color: white;
+  border: 1px solid #10b981;
+}
+
+.compare-status {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 8px;
+}
+
+.compare-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #bbf7d0;
+  font-size: 0.9rem;
+}
+
+.clear-selection {
+  padding: 0.5rem 1rem;
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.results-summary {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .comparison-container {
+    padding: 0 1rem;
+  }
+  
+  .filters-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .comparison-table-wrapper {
+    overflow-x: auto;
+  }
+}
+</style>
+
+<script define:vars={{ toolsData: aiTools }}>
+document.addEventListener('DOMContentLoaded', function() {
+  const tools = toolsData;
+  let filteredTools = [...tools];
+  let selectedForComparison = [];
+  
+  function applyFilters() {
+    const category = document.getElementById('category-filter').value;
+    const subcategory = document.getElementById('subcategory-filter').value;
+    const priceRange = document.getElementById('price-filter').value;
+    const search = document.getElementById('search-input').value.toLowerCase();
+    const sort = document.getElementById('sort-select').value;
+    
+    filteredTools = tools.filter(tool => {
+      if (category !== 'all' && tool.category !== category) return false;
+      if (subcategory !== 'all' && tool.subcategory !== subcategory) return false;
+      
+      // Price range filtering
+      if (priceRange !== 'all') {
+        const hasStarter = tool.pricing.starter;
+        const starterPrice = hasStarter ? parseInt(hasStarter.toString()) : 0;
+        
+        switch(priceRange) {
+          case 'free':
+            if (!tool.pricing.free) return false;
+            break;
+          case 'under-50':
+            if (!hasStarter || starterPrice >= 50) return false;
+            break;
+          case '50-200':
+            if (!hasStarter || starterPrice < 50 || starterPrice > 200) return false;
+            break;
+          case 'over-200':
+            if (!hasStarter || starterPrice <= 200) return false;
+            break;
+        }
+      }
+      
+      if (search && !tool.name.toLowerCase().includes(search) && 
+          !tool.description.toLowerCase().includes(search)) return false;
+      return true;
+    });
+    
+    filteredTools.sort((a, b) => {
+      switch(sort) {
+        case 'rating': 
+          return b.rating - a.rating;
+        case 'price-low': 
+          const priceA = a.pricing.starter || (a.pricing.free ? 0 : 999);
+          const priceB = b.pricing.starter || (b.pricing.free ? 0 : 999);
+          return priceA - priceB;
+        case 'price-high':
+          const priceHighA = a.pricing.starter || (a.pricing.free ? 0 : 999);
+          const priceHighB = b.pricing.starter || (b.pricing.free ? 0 : 999);
+          return priceHighB - priceHighA;
+        case 'name': 
+          return a.name.localeCompare(b.name);
+        case 'popularity':
+        default: 
+          return b.popularity - a.popularity;
+      }
+    });
+    
+    renderTable();
+  }
+  
+  function renderTable() {
+    const tableBody = document.getElementById('table-body');
+    const allRows = Array.from(document.querySelectorAll('.tool-row'));
+    
+    // Hide all rows first
+    allRows.forEach(row => row.classList.add('hidden'));
+    
+    // Reorder and show filtered tools in the correct order
+    filteredTools.forEach((tool, index) => {
+      const row = allRows.find(r => r.dataset.toolId === tool.id);
+      if (row) {
+        row.classList.remove('hidden');
+        // Move the row to the correct position
+        tableBody.appendChild(row);
+      }
+    });
+    
+    document.getElementById('results-count').textContent = filteredTools.length;
+  }
+  
+  document.getElementById('category-filter').addEventListener('change', applyFilters);
+  document.getElementById('subcategory-filter').addEventListener('change', applyFilters);
+  document.getElementById('price-filter').addEventListener('change', applyFilters);
+  document.getElementById('sort-select').addEventListener('change', applyFilters);
+  document.getElementById('search-input').addEventListener('input', applyFilters);
+  
+  document.getElementById('clear-filters').addEventListener('click', () => {
+    document.getElementById('category-filter').value = 'all';
+    document.getElementById('subcategory-filter').value = 'all';
+    document.getElementById('price-filter').value = 'all';
+    document.getElementById('search-input').value = '';
+    document.getElementById('sort-select').value = 'popularity';
+    applyFilters();
+  });
+  
+  // Compare functionality
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('compare-btn')) {
+      const toolId = e.target.dataset.toolId;
+      const button = e.target;
+      
+      if (selectedForComparison.includes(toolId)) {
+        // Remove from comparison
+        selectedForComparison = selectedForComparison.filter(id => id !== toolId);
+        button.textContent = 'Compare';
+        button.classList.remove('selected');
+      } else {
+        // Add to comparison (max 3 tools)
+        if (selectedForComparison.length < 3) {
+          selectedForComparison.push(toolId);
+          button.textContent = 'Selected';
+          button.classList.add('selected');
+        } else {
+          alert('You can compare up to 3 tools at once. Remove one to add another.');
+        }
+      }
+      
+      updateCompareStatus();
+    }
+  });
+  
+  function updateCompareStatus() {
+    // Update compare status display
+    let statusDiv = document.getElementById('compare-status');
+    if (!statusDiv && selectedForComparison.length > 0) {
+      statusDiv = document.createElement('div');
+      statusDiv.id = 'compare-status';
+      statusDiv.className = 'compare-status';
+      document.querySelector('.comparison-controls').appendChild(statusDiv);
+    }
+    
+    if (selectedForComparison.length > 0) {
+      const selectedTools = tools.filter(t => selectedForComparison.includes(t.id));
+      statusDiv.innerHTML = `
+        <div class="compare-info">
+          <span>Selected for comparison: ${selectedTools.map(t => t.name).join(', ')}</span>
+          <button class="clear-selection">Clear Selection</button>
+        </div>
+      `;
+      
+      statusDiv.querySelector('.clear-selection').addEventListener('click', () => {
+        selectedForComparison = [];
+        document.querySelectorAll('.compare-btn').forEach(btn => {
+          btn.textContent = 'Compare';
+          btn.classList.remove('selected');
+        });
+        statusDiv.remove();
+      });
+    } else if (statusDiv) {
+      statusDiv.remove();
+    }
+  }
+});
+</script>

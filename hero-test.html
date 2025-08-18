@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Grid Isolation Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #0a0a0b;
+            color: white;
+            padding: 20px;
+        }
+        
+        /* Exact Hero Grid CSS from Hero.astro */
+        .hero-grid {
+            display: grid !important;
+            grid-template-columns: 2fr 1fr !important;
+            gap: 1.2rem !important;
+            margin-top: 1rem !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+            border: 2px solid red; /* Visual debugging */
+            padding: 20px;
+        }
+        
+        /* Nuclear specificity test */
+        html body .hero-grid {
+            display: grid !important;
+            grid-template-columns: 2fr 1fr !important;
+        }
+        
+        .main-featured {
+            background: #2a4a6b;
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+        
+        .hero-sidebar {
+            background: #4a2a6b;
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+        
+        /* Mobile override */
+        @media (max-width: 768px) {
+            .hero-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Hero Grid Isolation Test</h1>
+    <p>Testing if Hero grid works without any other CSS interference</p>
+    
+    <!-- Exact structure from Hero.astro -->
+    <div class="hero-grid" style="display: grid !important; grid-template-columns: 2fr 1fr !important; gap: 1.2rem !important;">
+        <article class="main-featured">
+            <h2>Main Featured Article (2fr)</h2>
+            <p>This should take up 2/3 of the width (66.67%)</p>
+            <p>If this is 50% width, there's a fundamental CSS issue</p>
+        </article>
+        
+        <aside class="hero-sidebar">
+            <h3>Hero Sidebar (1fr)</h3>
+            <p>This should take up 1/3 of the width (33.33%)</p>
+            <p>If this is 50% width, the grid is broken</p>
+        </aside>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const heroGrid = document.querySelector('.hero-grid');
+            const computedStyle = window.getComputedStyle(heroGrid);
+            
+            console.log('=== HERO GRID DEBUG ===');
+            console.log('Display:', computedStyle.display);
+            console.log('Grid Template Columns:', computedStyle.gridTemplateColumns);
+            console.log('Gap:', computedStyle.gap);
+            console.log('Width:', computedStyle.width);
+            
+            const children = heroGrid.children;
+            for (let i = 0; i < children.length; i++) {
+                const child = children[i];
+                const childStyle = window.getComputedStyle(child);
+                console.log(`Child ${i + 1} (${child.className}):`);
+                console.log(`  Width: ${childStyle.width}`);
+                console.log(`  Computed width: ${child.getBoundingClientRect().width}px`);
+            }
+            
+            // Test manual override
+            setTimeout(() => {
+                console.log('\n=== TESTING MANUAL OVERRIDE ===');
+                heroGrid.style.setProperty('grid-template-columns', '2fr 1fr', 'important');
+                
+                setTimeout(() => {
+                    const newStyle = window.getComputedStyle(heroGrid);
+                    console.log('After manual override:');
+                    console.log('Grid Template Columns:', newStyle.gridTemplateColumns);
+                    
+                    const newChildren = heroGrid.children;
+                    for (let i = 0; i < newChildren.length; i++) {
+                        const child = newChildren[i];
+                        console.log(`Child ${i + 1} new width: ${child.getBoundingClientRect().width}px`);
+                    }
+                }, 100);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

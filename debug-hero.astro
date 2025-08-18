@@ -1,0 +1,157 @@
+---
+// Minimal Hero test without any CSS imports
+const featuredArticles = [
+  {
+    title: "Test Article 1",
+    slug: "test-1",
+    excerpt: "This is a test article",
+    publishedAt: new Date(),
+    category: { title: "AI News", slug: "ai-news" },
+    mainImage: { asset: { url: "https://via.placeholder.com/400x200" } }
+  },
+  {
+    title: "Test Article 2", 
+    slug: "test-2",
+    excerpt: "This is another test",
+    publishedAt: new Date(),
+    category: { title: "Reviews", slug: "reviews" },
+    mainImage: { asset: { url: "https://via.placeholder.com/300x150" } }
+  }
+];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Debug Test</title>
+    <style>
+        /* ONLY Hero-specific CSS - no other imports */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #0a0a0b;
+            color: white;
+            padding: 20px;
+        }
+        
+        /* EXACT Hero CSS from Hero.astro */
+        .hero-grid {
+            display: grid !important;
+            grid-template-columns: 2fr 1fr !important;
+            gap: 1.2rem !important;
+            margin-top: 1rem !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+            border: 2px solid red; /* Debug border */
+            padding: 20px;
+        }
+        
+        /* Nuclear specificity */
+        html body .hero-grid {
+            display: grid !important;
+            grid-template-columns: 2fr 1fr !important;
+        }
+        
+        .main-featured {
+            background: #2a4a6b;
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+        
+        .hero-sidebar {
+            background: #4a2a6b;
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+        
+        .secondary-article {
+            background: #3a3a6b;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hero Debug Test - No CSS Imports</h1>
+    
+    <!-- Exact Hero structure -->
+    <div class="hero-grid" style="display: grid !important; grid-template-columns: 2fr 1fr !important; gap: 1.2rem !important;">
+        <!-- Main Featured Article -->
+        <article class="main-featured">
+            <h2>{featuredArticles[0].title}</h2>
+            <p>{featuredArticles[0].excerpt}</p>
+            <p><strong>Expected width: 66.67% (2fr)</strong></p>
+        </article>
+        
+        <!-- Hero Sidebar -->
+        <aside class="hero-sidebar">
+            <h3>Hero Sidebar</h3>
+            
+            <!-- Secondary Articles -->
+            {featuredArticles.slice(1).map(article => (
+                <article class="secondary-article">
+                    <h4>{article.title}</h4>
+                    <p>{article.excerpt}</p>
+                </article>
+            ))}
+            
+            <p><strong>Expected width: 33.33% (1fr)</strong></p>
+        </aside>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const heroGrid = document.querySelector('.hero-grid');
+            
+            if (!heroGrid) {
+                console.error('Hero grid element not found!');
+                return;
+            }
+            
+            const computedStyle = window.getComputedStyle(heroGrid);
+            
+            console.log('=== HERO DEBUG (NO CSS IMPORTS) ===');
+            console.log('Display:', computedStyle.display);
+            console.log('Grid Template Columns:', computedStyle.gridTemplateColumns);
+            console.log('Gap:', computedStyle.gap);
+            console.log('Width:', computedStyle.width);
+            
+            const children = heroGrid.children;
+            for (let i = 0; i < children.length; i++) {
+                const child = children[i];
+                const rect = child.getBoundingClientRect();
+                const percentage = (rect.width / heroGrid.getBoundingClientRect().width * 100).toFixed(2);
+                console.log(`Child ${i + 1} (${child.className}):`);
+                console.log(`  Width: ${rect.width}px (${percentage}%)`);
+                console.log(`  Expected: ${i === 0 ? '66.67%' : '33.33%'}`);
+            }
+            
+            // Test if the issue persists even without CSS imports
+            if (children.length === 2) {
+                const mainWidth = children[0].getBoundingClientRect().width;
+                const sidebarWidth = children[1].getBoundingClientRect().width;
+                const ratioValue = mainWidth / sidebarWidth;
+                const ratio = ratioValue.toFixed(2);
+                console.log(`Actual ratio: ${ratio}:1 (Expected: 2:1)`);
+                
+                if (Math.abs(ratioValue - 2) > 0.1) {
+                    console.error('❌ HERO GRID STILL BROKEN - Issue is fundamental!');
+                } else {
+                    console.log('✅ Hero grid works correctly without CSS imports');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

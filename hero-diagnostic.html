@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Grid Diagnostic</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: white;
+        }
+        
+        .diagnostic-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .test-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 8px;
+        }
+        
+        .test-title {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        /* TEST 1: Pure CSS Grid */
+        .test1-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.2rem;
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        /* TEST 2: CSS Grid with !important */
+        .test2-grid {
+            display: grid !important;
+            grid-template-columns: 2fr 1fr !important;
+            gap: 1.2rem !important;
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        /* TEST 3: Inline styles (matching Hero component) */
+        .test3-grid {
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        /* TEST 4: Maximum specificity (matching critical.css) */
+        .hero .hero-container .hero-grid,
+        .test4-grid {
+            display: grid !important;
+            grid-template-columns: 2fr 1fr !important;
+            gap: 1.2rem !important;
+            align-items: stretch !important;
+            width: 100% !important;
+            flex-direction: unset !important;
+            flex-wrap: unset !important;
+            grid-auto-flow: row !important;
+            contain: layout !important;
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        .test-item {
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .test-main {
+            background: #0066ff;
+            color: white;
+        }
+        
+        .test-sidebar {
+            background: #00d4ff;
+            color: black;
+        }
+        
+        .measurements {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #ccc;
+        }
+        
+        .ratio-result {
+            margin-top: 5px;
+            font-weight: bold;
+        }
+        
+        .ratio-good { color: #00ff00; }
+        .ratio-bad { color: #ff0000; }
+    </style>
+</head>
+<body>
+    <div class="diagnostic-container">
+        <h1>Hero Grid 2:1 Ratio Diagnostic</h1>
+        
+        <div class="test-section">
+            <div class="test-title">TEST 1: Pure CSS Grid (2fr 1fr)</div>
+            <div class="test1-grid" id="test1">
+                <div class="test-item test-main">Main Article (2fr)</div>
+                <div class="test-item test-sidebar">Sidebar (1fr)</div>
+            </div>
+            <div class="measurements" id="test1-measurements"></div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">TEST 2: CSS Grid with !important</div>
+            <div class="test2-grid" id="test2">
+                <div class="test-item test-main">Main Article (2fr !important)</div>
+                <div class="test-item test-sidebar">Sidebar (1fr !important)</div>
+            </div>
+            <div class="measurements" id="test2-measurements"></div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">TEST 3: Inline Styles (Hero Component Method)</div>
+            <div class="test3-grid" id="test3" style="display: grid !important; grid-template-columns: 2fr 1fr !important; gap: 1.2rem !important;">
+                <div class="test-item test-main">Main Article (Inline)</div>
+                <div class="test-item test-sidebar">Sidebar (Inline)</div>
+            </div>
+            <div class="measurements" id="test3-measurements"></div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">TEST 4: Maximum Specificity (Critical.css Method)</div>
+            <div class="test4-grid" id="test4">
+                <div class="test-item test-main">Main Article (Max Specificity)</div>
+                <div class="test-item test-sidebar">Sidebar (Max Specificity)</div>
+            </div>
+            <div class="measurements" id="test4-measurements"></div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">COMPUTED STYLES ANALYSIS</div>
+            <div id="computed-styles"></div>
+        </div>
+    </div>
+
+    <script>
+        function measureGrid(testId) {
+            const container = document.getElementById(testId);
+            const children = container.children;
+            
+            if (children.length >= 2) {
+                const mainRect = children[0].getBoundingClientRect();
+                const sidebarRect = children[1].getBoundingClientRect();
+                
+                const mainWidth = mainRect.width;
+                const sidebarWidth = sidebarRect.width;
+                const ratio = (mainWidth / sidebarWidth);
+                
+                const measurementDiv = document.getElementById(testId + '-measurements');
+                const isGoodRatio = Math.abs(ratio - 2) < 0.1;
+                
+                measurementDiv.innerHTML = `
+                    <div>Main: ${mainWidth.toFixed(1)}px | Sidebar: ${sidebarWidth.toFixed(1)}px</div>
+                    <div class="ratio-result ${isGoodRatio ? 'ratio-good' : 'ratio-bad'}">
+                        Ratio: ${ratio.toFixed(2)}:1 ${isGoodRatio ? '✅ CORRECT' : '❌ INCORRECT'}
+                    </div>
+                `;
+                
+                return { ratio, mainWidth, sidebarWidth, isGoodRatio };
+            }
+            return null;
+        }
+        
+        function analyzeComputedStyles() {
+            const tests = ['test1', 'test2', 'test3', 'test4'];
+            let analysis = '<h3>Computed Styles Analysis:</h3>';
+            
+            tests.forEach(testId => {
+                const container = document.getElementById(testId);
+                const computedStyle = window.getComputedStyle(container);
+                
+                analysis += `<div style="margin-bottom: 15px; padding: 10px; background: #333; border-radius: 4px;">
+                    <strong>${testId.toUpperCase()}:</strong><br>
+                    display: ${computedStyle.display}<br>
+                    grid-template-columns: ${computedStyle.gridTemplateColumns}<br>
+                    gap: ${computedStyle.gap}<br>
+                    width: ${computedStyle.width}<br>
+                    contain: ${computedStyle.contain}<br>
+                </div>`;
+            });
+            
+            document.getElementById('computed-styles').innerHTML = analysis;
+        }
+        
+        // Run measurements after page loads
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                console.log('=== HERO GRID DIAGNOSTIC RESULTS ===');
+                
+                ['test1', 'test2', 'test3', 'test4'].forEach(testId => {
+                    const result = measureGrid(testId);
+                    if (result) {
+                        console.log(`${testId}: ${result.ratio.toFixed(2)}:1 - ${result.isGoodRatio ? 'PASS' : 'FAIL'}`);
+                    }
+                });
+                
+                analyzeComputedStyles();
+                
+                console.log('=== END DIAGNOSTIC ===');
+            }, 100);
+        });
+    </script>
+</body>
+</html>
