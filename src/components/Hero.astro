@@ -3,6 +3,7 @@ import { getFeaturedArticles } from '../lib/sanity';
 import { getCategoryUrl } from '../utils/urlHelpers';
 import { generateHeroImage, generateThumbnail } from '../utils/imageOptimization';
 import UniversalAd from './UniversalAd.astro';
+import { calculateReadTime } from '../utils/excerptGenerator';
 
 
 // Fetch more than 5 to allow for filtering/prioritization
@@ -230,11 +231,12 @@ function getCategoryKey(category: any) {
 						<p>{showMain.excerpt}</p>
 						<div class="article-meta">
 							<span class="author">
-								By <a href={`/authors/${typeof showMain.author?.slug === 'object' ? showMain.author.slug.current : showMain.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${showMain.author?.name || 'Anonymous'}`}>
+								<span class="by-text">By</span> <a href={`/authors/${typeof showMain.author?.slug === 'object' ? showMain.author.slug.current : showMain.author?.slug || 'anonymous'}`} class="author-link" aria-label={`View profile of ${showMain.author?.name || 'Anonymous'}`}>
 									{showMain.author?.name || 'Anonymous'}
 								</a>
 							</span>
 							<span class="date">{formatDate(showMain.publishedAt)}</span>
+							<span class="read-time">{calculateReadTime(showMain)} min read</span>
 						</div>
 					</div>
 				</article>
@@ -680,6 +682,33 @@ function getCategoryKey(category: any) {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.25rem;
+	}
+
+	/* Style the "By" text in main-featured to be grey and not affected by hover */
+	.main-featured .author {
+		color: #b3b3b3;
+	}
+
+	.main-featured .author .by-text {
+		color: #b3b3b3;
+		font-weight: normal;
+	}
+
+	.main-featured .author .author-link {
+		color: var(--color-text-secondary);
+	}
+
+	.main-featured .author .author-link:hover {
+		color: #00d4ff;
+		transform: translateY(-1px);
+		text-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+	}
+
+	/* Style for read-time in main-featured */
+	.main-featured .read-time {
+		color: #00d4ff;
+		font-weight: 600;
+		font-size: 0.9rem;
 	}
 
 	/* Responsive design */

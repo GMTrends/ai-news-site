@@ -161,14 +161,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     // Sanitize email
     const sanitizedEmail = email.toLowerCase().trim();
     
-    // Store subscription (for now, we'll log it - you can integrate with your preferred service)
-    console.log('New subscription:', {
-      email: sanitizedEmail,
-      source,
-      category,
-      timestamp: new Date().toISOString(),
-      ip: request.headers.get('x-forwarded-for') || 'unknown'
-    });
+    // Subscription received (logging removed)
 
     // TODO: Integrate with your preferred email service (Mailchimp, ConvertKit, etc.)
     // For now, we'll simulate a successful subscription
@@ -289,11 +282,7 @@ The AI Buzz Team`
 
   const emailTemplate = welcomeEmails[category as keyof typeof welcomeEmails] || welcomeEmails.general;
   
-  console.log('Welcome email would be sent:', {
-    to: email,
-    subject: emailTemplate.subject,
-    body: emailTemplate.body
-  });
+  // Welcome email would be sent (logging removed)
 }
 
 export const GET: APIRoute = async ({ cookies }) => {

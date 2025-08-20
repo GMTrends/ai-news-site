@@ -408,7 +408,7 @@ export class SanityAdManager {
       // Force fresh fetch by disabling CDN temporarily
       const freshClient = sanityClient.config({ useCdn: false });
       await freshClient.fetch(adsQuery);
-      console.log('Ad cache refreshed successfully');
+      // Ad cache refreshed successfully
     } catch (error) {
       console.error('Error refreshing ad cache:', error);
     }

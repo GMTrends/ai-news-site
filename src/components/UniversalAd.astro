@@ -65,10 +65,10 @@ if (!ad) {
           badge: 'FEATURED'
         },
         'sidebar-newsletter-promo': {
-          title: `Stay Ahead in ${categoryName} AI`,
-          description: `Get weekly insights and exclusive tools for ${categoryName} delivered to your inbox.`,
-          icon: '📧',
-          badge: 'FREE'
+          title: `AI Innovation Weekly`,
+          description: `Exclusive insights, cutting-edge tools, and expert strategies delivered to your inbox every week.`,
+          icon: '🚀',
+          badge: 'PREMIUM'
         },
         'sidebar-trending-news': {
           title: `Trending ${categoryName} AI News`,
@@ -110,7 +110,7 @@ if (!ad) {
         ctaUrl: '#',
         badge: content.badge,
         icon: content.icon,
-        dimensions: { width: 300, height: 250 }, // Default dimensions for fallback
+        dimensions: { width: 300, height: 180 }, // Default dimensions for fallback
         styling: {
           theme: 'gradient',
           colors: { primary: '#00c4ef', secondary: '#0056ef' }
@@ -147,7 +147,7 @@ if (!ad) {
         cta: 'Discover Tools',
         ctaUrl: '/ai-tools',
         icon: '🤖',
-        dimensions: { width: 300, height: 250 },
+        dimensions: { width: 300, height: 180 },
         targeting: {},
         styling: {
           theme: 'gradient',
@@ -172,15 +172,7 @@ if (!ad) {
   }
 }
 
-// Debug: Log final ad state
-console.log(`🔍 UniversalAd Final Debug for ${adId}:`, {
-  adFound: !!ad,
-  adType: ad?.type,
-  adActive: ad?.active,
-  isHeroType: ad?.type === 'hero',
-  adTitle: ad?.title,
-  willRenderHero: ad && ad.type === 'hero'
-});
+
 
 // Now we should always have an ad (either real or fallback)
 if (!ad || !ad.active) {
@@ -212,12 +204,7 @@ const isLeaderboard = ad.type === 'leaderboard';
 const isSidebar = ad.type === 'sidebar';
 const isHero = ad.type === 'hero';
 
-// Debug: Log rendering conditions
-console.log('UniversalAd Debug:', {
-  adId: Astro.props.adId,
-  ad: ad ? { id: ad.id, type: ad.type, title: ad.title } : 'null',
-  className: Astro.props.className || 'none'
-});
+
 
 
 
@@ -254,7 +241,7 @@ const trackingCode = `
         onclick={`trackPromoClick_${ad.id.replace(/-/g, '_')}()`}
         target="_blank"
         rel="noopener noreferrer"
-        style={`background: ${adStyles.background}; width: ${adStyles.width}; height: ${adStyles.height};`} /* Enforce dimensions */
+        style={`background: ${adStyles.background}; width: ${adStyles.width}; height: ${adStyles.height};`}
       >
         {ad.badge && <span class="promo-badge">{ad.badge}</span>}
         
@@ -2278,6 +2265,101 @@ const trackingCode = `
       max-width: 728px !important;
       height: 90px !important;
     }
+  }
+
+  /* Sidebar Promo Layout Fixes - Direct Component Styling */
+  .universal-promo .sidebar-promo {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 1rem !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    overflow: hidden !important;
+  }
+
+  .universal-promo .sidebar-promo .promo-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .universal-promo .sidebar-promo .promo-icon {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-bottom: 0.4rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  .universal-promo .sidebar-promo .promo-title {
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    margin: 0 0 0.3rem 0 !important;
+    line-height: 1.2 !important;
+    color: white !important;
+  }
+
+  .universal-promo .sidebar-promo .promo-description {
+    font-size: 0.75rem !important;
+    line-height: 1.3 !important;
+    margin: 0 0 0.6rem 0 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    max-height: 2.6em !important;
+    overflow: hidden !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+  }
+
+  .universal-promo .sidebar-promo .promo-cta {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    padding: 0.4rem 0.8rem !important;
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    font-size: 0.8rem !important;
+    backdrop-filter: blur(10px) !important;
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.3s ease !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    text-decoration: none !important;
+  }
+
+  .universal-promo .sidebar-promo .promo-cta:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .universal-promo .sidebar-promo .promo-badge {
+    position: absolute !important;
+    top: 0.75rem !important;
+    right: 0.75rem !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    padding: 0.2rem 0.6rem !important;
+    border-radius: 20px !important;
+    font-size: 0.65rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    z-index: 10 !important;
   }
 
 </style>

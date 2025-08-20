@@ -20,7 +20,6 @@ class NewsletterManager {
   public async init(): Promise<void> {
     if (this.initialized) return;
     
-    console.log('🚀 Initializing Unified Newsletter System');
     
     // Get CSRF token once for all forms
     await this.initCSRFToken();

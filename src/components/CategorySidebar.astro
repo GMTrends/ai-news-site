@@ -186,7 +186,8 @@ function getAdContent(adType: string, position: number) {
       image: null,
       link: '#',
       isRealAd: false
-    }
+    },
+
   };
   return adContents[adType as keyof typeof adContents] || adContents.general;
 }
@@ -236,18 +237,55 @@ function getAdContent(adType: string, position: number) {
     </div>
   </div>
 
-  <!-- Newsletter Promo Zone -->
-  <div class="sidebar-section promo-section">
-    {categorySlug === 'marketing' ? (
-      <UniversalAd adId={`sidebar-newsletter-promo-${categorySlug}`} />
-    ) : (
-      <UniversalAd adId={`sidebar-general-ad-${categorySlug}`} />
-    )}
+  <!-- Newsletter Signup - Value-Add Content -->
+  <div class="sidebar-section newsletter-signup-section">
+    <div class="newsletter-header">
+      <div class="newsletter-icon">📧</div>
+      <h3 class="newsletter-title">Stay Updated</h3>
+    </div>
+    <p class="newsletter-description">Get weekly AI insights, tool reviews, and exclusive content delivered to your inbox.</p>
+    <div class="newsletter-benefits">
+      <div class="benefit-item">
+        <span class="benefit-icon">🎯</span>
+        <span class="benefit-text">Curated AI tools</span>
+      </div>
+      <div class="benefit-item">
+        <span class="benefit-icon">📈</span>
+        <span class="benefit-text">Industry insights</span>
+      </div>
+      <div class="benefit-item">
+        <span class="benefit-icon">🚀</span>
+        <span class="benefit-text">Early access</span>
+      </div>
+    </div>
+    <form class="newsletter-form">
+      <input type="email" placeholder="Enter your email" class="newsletter-input" required />
+      <button type="submit" class="newsletter-submit">Subscribe Free</button>
+    </form>
+    <p class="newsletter-privacy">No spam, unsubscribe anytime.</p>
   </div>
 
-  <!-- Trending AI News Section (now bottom gradient ad) -->
-  <div class="sidebar-section promo-section">
-    <UniversalAd adId={`sidebar-bottom-gradient-ad-${categorySlug}`} />
+  <!-- Premium Sponsor Ad - Single Premium Placement -->
+  <div class="sidebar-section premium-sponsor-section">
+    <div class="sponsor-header">
+      <div class="sponsor-badge">SPONSORED</div>
+      <div class="sponsor-icon">⭐</div>
+    </div>
+    <div class="sponsor-content">
+      <h3 class="sponsor-title">Premium AI Solutions</h3>
+      <p class="sponsor-description">Exclusive advertising space for AI companies. Showcase your cutting-edge solutions to our engaged audience.</p>
+      <div class="sponsor-features">
+        <div class="feature-item">
+          <span class="feature-icon">🎯</span>
+          <span class="feature-text">Targeted Audience</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">📈</span>
+          <span class="feature-text">High Engagement</span>
+        </div>
+      </div>
+      <a href="/advertise" class="sponsor-cta">Advertise Here</a>
+    </div>
   </div>
 </aside>
 
@@ -1798,6 +1836,705 @@ padding: 0 !important; /* Removed all padding to allow elements to span full wid
 }
 .affiliate-promo-cta:hover {
   background: #3182ce;
+}
+
+/* Newsletter Signup Section - Value-Add Content */
+.newsletter-signup-section {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  border: 2px solid rgba(16, 185, 129, 0.3);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1);
+}
+
+.newsletter-signup-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(16, 185, 129, 0.05) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: newsletterShimmer 4s infinite;
+  pointer-events: none;
+}
+
+.newsletter-signup-section:hover {
+  border-color: rgba(16, 185, 129, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);
+}
+
+@keyframes newsletterShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.newsletter-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.newsletter-icon {
+  font-size: 1.5rem;
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
+}
+
+.newsletter-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(135deg, #ffffff 0%, #10b981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.newsletter-description {
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.newsletter-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  transition: all 0.3s ease;
+}
+
+.benefit-item:hover {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.3);
+  transform: translateX(3px);
+}
+
+.benefit-icon {
+  font-size: 1rem;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.benefit-text {
+  color: #e2e8f0;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.newsletter-input {
+  padding: 0.75rem;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.8);
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.newsletter-input:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.newsletter-input::placeholder {
+  color: #64748b;
+}
+
+.newsletter-submit {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.newsletter-submit:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-2px);
+}
+
+.newsletter-privacy {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  text-align: center;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Newsletter Promo Section - Enhanced Professional Styling */
+.newsletter-promo-section {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.newsletter-promo-section .universal-promo {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  border: 2px solid rgba(16, 185, 129, 0.3);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1);
+  height: 180px !important;
+  min-height: 180px !important;
+  max-height: 180px !important;
+}
+
+.newsletter-promo-section .universal-promo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(16, 185, 129, 0.05) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: newsletterShimmer 4s infinite;
+  pointer-events: none;
+}
+
+.newsletter-promo-section .universal-promo:hover {
+  border-color: rgba(16, 185, 129, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);
+}
+
+@keyframes newsletterShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.newsletter-promo-section .sidebar-promo {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  border: 1px solid rgba(16, 185, 129, 0.5) !important;
+  border-radius: 16px !important;
+  padding: 1rem !important;
+  height: 180px !important;
+  min-height: 180px !important;
+  max-height: 180px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+.newsletter-promo-section .promo-badge {
+  background: linear-gradient(45deg, #f59e0b, #d97706) !important;
+  color: white !important;
+  padding: 0.2rem 0.6rem !important;
+  border-radius: 20px !important;
+  font-size: 0.65rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3) !important;
+  animation: newsletterBadgePulse 2s ease-in-out infinite !important;
+  position: absolute !important;
+  top: 0.75rem !important;
+  right: 0.75rem !important;
+  z-index: 10 !important;
+}
+
+@keyframes newsletterBadgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.newsletter-promo-section .promo-icon {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2) !important;
+  flex-shrink: 0 !important;
+  margin-bottom: 0.4rem !important;
+}
+
+.newsletter-promo-section .promo-title {
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  color: white !important;
+  margin: 0 0 0.3rem 0 !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  line-height: 1.2 !important;
+}
+
+.newsletter-promo-section .promo-description {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 0.75rem !important;
+  line-height: 1.3 !important;
+  margin: 0 0 0.6rem 0 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+  max-width: 100% !important;
+  max-height: 2.6em !important;
+  overflow: hidden !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+}
+
+.newsletter-promo-section .promo-cta {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  padding: 0.4rem 0.8rem !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  font-size: 0.8rem !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1) !important;
+  transition: all 0.3s ease !important;
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+}
+
+.newsletter-promo-section .promo-cta:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2) !important;
+}
+
+.newsletter-promo-section .promo-content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* UniversalAd Component - Sidebar Promo Layout Fixes */
+.category-sidebar .universal-promo .sidebar-promo {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 1rem !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.category-sidebar .universal-promo .sidebar-promo .promo-content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.category-sidebar .universal-promo .sidebar-promo .promo-icon {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-bottom: 0.4rem !important;
+  flex-shrink: 0 !important;
+}
+
+.category-sidebar .universal-promo .sidebar-promo .promo-title {
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  margin: 0 0 0.3rem 0 !important;
+  line-height: 1.2 !important;
+  color: white !important;
+}
+
+.category-sidebar .universal-promo .sidebar-promo .promo-description {
+  font-size: 0.75rem !important;
+  line-height: 1.3 !important;
+  margin: 0 0 0.6rem 0 !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  max-height: 2.6em !important;
+  overflow: hidden !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+}
+
+.category-sidebar .universal-promo .sidebar-promo .promo-cta {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  padding: 0.4rem 0.8rem !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  font-size: 0.8rem !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1) !important;
+  transition: all 0.3s ease !important;
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+  text-decoration: none !important;
+}
+
+.category-sidebar .universal-promo .sidebar-promo .promo-cta:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2) !important;
+}
+
+.category-sidebar .universal-promo .sidebar-promo .promo-badge {
+  position: absolute !important;
+  top: 0.75rem !important;
+  right: 0.75rem !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  padding: 0.2rem 0.6rem !important;
+  border-radius: 20px !important;
+  font-size: 0.65rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  z-index: 10 !important;
+}
+
+/* Override inline styles with maximum specificity */
+.category-sidebar .universal-promo .sidebar-promo[style*="width: 300px"] {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 1rem !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.category-sidebar .universal-promo .sidebar-promo[style*="height: 180px"] {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 1rem !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Target specific ad types */
+.category-sidebar .universal-promo[data-promo-id*="sidebar-general-ad"] .sidebar-promo,
+.category-sidebar .universal-promo[data-promo-id*="sidebar-newsletter-promo"] .sidebar-promo {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 1rem !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Force override inline styles */
+.category-sidebar .universal-promo .sidebar-promo[style] {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 1rem !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Maximum specificity overrides for UniversalAd elements */
+.category-sidebar .universal-promo .sidebar-promo .promo-content[data-astro-source-file] {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.category-sidebar .universal-promo .sidebar-promo .promo-icon[data-astro-source-file] {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-bottom: 0.4rem !important;
+  flex-shrink: 0 !important;
+}
+
+.category-sidebar .universal-promo .sidebar-promo .promo-title[data-astro-source-file] {
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  margin: 0 0 0.3rem 0 !important;
+  line-height: 1.2 !important;
+  color: white !important;
+}
+
+.category-sidebar .universal-promo .sidebar-promo .promo-description[data-astro-source-file] {
+  font-size: 0.75rem !important;
+  line-height: 1.3 !important;
+  margin: 0 0 0.6rem 0 !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  max-height: 2.6em !important;
+  overflow: hidden !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+}
+
+.category-sidebar .universal-promo .sidebar-promo .promo-cta[data-astro-source-file] {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  padding: 0.4rem 0.8rem !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  font-size: 0.8rem !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1) !important;
+  transition: all 0.3s ease !important;
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+  text-decoration: none !important;
+}
+
+/* Premium Sponsor Section - Single Premium Placement */
+.premium-sponsor-section {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  border: 2px solid rgba(255, 193, 7, 0.3);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(255, 193, 7, 0.1);
+}
+
+.premium-sponsor-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 193, 7, 0.05) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: sponsorShimmer 4s infinite;
+  pointer-events: none;
+}
+
+.premium-sponsor-section:hover {
+  border-color: rgba(255, 193, 7, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.2);
+}
+
+@keyframes sponsorShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.sponsor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.sponsor-badge {
+  background: linear-gradient(45deg, #f59e0b, #d97706);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+  animation: sponsorBadgePulse 2s ease-in-out infinite;
+}
+
+@keyframes sponsorBadgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.sponsor-icon {
+  font-size: 1.5rem;
+  animation: sponsorIconFloat 3s ease-in-out infinite;
+}
+
+@keyframes sponsorIconFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
+}
+
+.sponsor-content {
+  position: relative;
+  z-index: 2;
+}
+
+.sponsor-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem 0;
+  background: linear-gradient(135deg, #ffffff 0%, #ffc107 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+.sponsor-description {
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.sponsor-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.sponsor-features .feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(255, 193, 7, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 193, 7, 0.2);
+  transition: all 0.3s ease;
+}
+
+.sponsor-features .feature-item:hover {
+  background: rgba(255, 193, 7, 0.15);
+  border-color: rgba(255, 193, 7, 0.3);
+  transform: translateX(3px);
+}
+
+.sponsor-cta {
+  display: block;
+  width: 100%;
+  background: linear-gradient(135deg, #ffc107 0%, #ff8f00 100%);
+  color: white;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.sponsor-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.sponsor-cta:hover::before {
+  left: 100%;
+}
+
+.sponsor-cta:hover {
+  background: linear-gradient(135deg, #ffd54f 0%, #ffb300 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+  border-color: rgba(255, 193, 7, 0.5);
+}
+
+/* Responsive design for premium ad space */
+@media (max-width: 768px) {
+  .premium-ad-space {
+    padding: 0.875rem;
+  }
+  
+  .ad-title {
+    font-size: 1rem;
+  }
+  
+  .ad-description {
+    font-size: 0.8rem;
+  }
+  
+  .feature-item {
+    padding: 0.4rem;
+  }
+  
+  .feature-text {
+    font-size: 0.75rem;
+  }
 }
 </style>
 

@@ -16,18 +16,11 @@ const pageDescription = categoryData?.metaDescription || "Discover AI-powered pr
 const keywords = categoryData?.keywords.join(', ') || "AI productivity, automation tools, workflow optimization, AI efficiency, business automation";
 
 // Debug logging
-console.log('🔍 SERVER-SIDE: Productivity Articles:', productivityArticles?.length || 0, 'articles found for display');
-console.log('📦 SERVER-SIDE: All Productivity Articles:', allProductivityArticles?.length || 0, 'total articles');
-console.log('🏷️  SERVER-SIDE: Category Data:', categoryData ? 'Found' : 'Missing');
 
 if (allProductivityArticles?.length > 0) {
-  console.log('📋 SERVER-SIDE: First few articles:');
-  allProductivityArticles.slice(0, 3).forEach((article: any, index: number) => {
-    console.log(`${index + 1}.`, article.title, '- Category:', article.category?.name);
-  });
-  console.log('📋 SERVER-SIDE: Should show load more?', allProductivityArticles.length > 8 ? 'YES' : 'NO');
+  
 } else {
-  console.log('❌ SERVER-SIDE: No productivity articles found in database');
+  
 }
 ---
 
@@ -572,37 +565,23 @@ if (allProductivityArticles?.length > 0) {
     document.addEventListener('DOMContentLoaded', function() {
       const articlesGrid = document.getElementById('articles-grid');
       const loadMoreBtn = document.getElementById('load-more-btn');
-      
-      console.log('🔍 Button search result:', loadMoreBtn);
-      console.log('🔍 Button found:', loadMoreBtn ? 'YES' : 'NO');
-      
+
       let currentPage = 0;
       const articlesPerPage = 8;
       
-      console.log('✅ Productivity articles page loaded:', allProductivityArticles.length, 'total articles');
-      console.log('📋 All articles:', allProductivityArticles);
-      console.log('🔢 Articles per page:', articlesPerPage);
-      console.log('🔢 Current page:', currentPage);
-      
       // Check if we have enough articles for load more
       if (allProductivityArticles.length <= 8) {
-        console.log('⚠️  Not enough articles for load more functionality');
-        console.log('📊 Total articles:', allProductivityArticles.length, 'Initial display:', 8);
         if (loadMoreBtn) {
           loadMoreBtn.style.display = 'none';
         }
       } else {
-        console.log('✅ Load more button should be visible');
-        console.log('📊 Will show', allProductivityArticles.length - 8, 'more articles when clicked');
-      }
+        }
       
       // Check sticky positioning
       const sidebar = document.querySelector('.sidebar.sticky-col');
       if (sidebar) {
         const sidebarStyles = window.getComputedStyle(sidebar);
-        console.log('📍 Sidebar position:', sidebarStyles.position);
-        console.log('📍 Sidebar top:', sidebarStyles.top);
-      }
+        }
       
       // Create article HTML function
       function createArticleHTML(article, index) {
@@ -632,22 +611,11 @@ if (allProductivityArticles?.length > 0) {
       }
       
       function loadMoreArticles() {
-        console.log('🔄 Load more articles clicked');
-        console.log('📊 Current page:', currentPage);
-        console.log('📊 Total articles available:', allProductivityArticles.length);
-        console.log('📊 Articles per page:', articlesPerPage);
-        
         const startIndex = (currentPage + 1) * articlesPerPage;
         const endIndex = Math.min(startIndex + articlesPerPage, allProductivityArticles.length);
         const articlesToLoad = allProductivityArticles.slice(startIndex, endIndex);
         
-        console.log('📊 Start index:', startIndex);
-        console.log('📊 End index:', endIndex);
-        console.log('📊 Articles to load:', articlesToLoad.length);
-        console.log('📋 Articles to load data:', articlesToLoad);
-        
         if (articlesToLoad.length === 0) {
-          console.log('❌ No more articles to load');
           loadMoreBtn.style.display = 'none';
           return;
         }
@@ -659,17 +627,11 @@ if (allProductivityArticles?.length > 0) {
         
         // Simulate loading delay for better UX
         setTimeout(() => {
-          console.log('🔧 Adding articles to DOM...');
-          
           // Add new articles to grid
           articlesToLoad.forEach((article, index) => {
             const articleHTML = createArticleHTML(article, startIndex + index);
-            console.log('➕ Adding article:', article.title);
             articlesGrid.insertAdjacentHTML('beforeend', articleHTML);
           });
-          
-          console.log('✅ Articles added to DOM');
-          console.log('📏 Articles grid children count:', articlesGrid.children.length);
           
           // Get the newly added articles and apply animations/styling
           const allArticles = articlesGrid.querySelectorAll('.category-article');
@@ -963,19 +925,14 @@ if (allProductivityArticles?.length > 0) {
       
       // Add click event listener
       if (loadMoreBtn) {
-        console.log('✅ Load more button found, adding event listener');
-        
         // Test if button is clickable
         loadMoreBtn.addEventListener('click', function(e) {
-          console.log('🖱️ Button clicked!', e);
           loadMoreArticles();
         });
         
         // Also add a test click to verify it works
-        console.log('🧪 Testing button click functionality...');
-      } else {
-        console.log('❌ Load more button not found');
-      }
+        } else {
+        }
     });
   </script>
 </body>

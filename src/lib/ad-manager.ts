@@ -6,8 +6,8 @@
 export interface AdSlotConfig {
   id: string;
   name: string; // Never use "Ad" in names
-  size: '300x250' | '336x280' | '728x90' | '320x50' | '300x600' | '970x250';
-  position: 'hero-sidebar' | 'article-top' | 'article-middle' | 'article-bottom' | 'category-sidebar' | 'footer-banner' | 'homepage-leaderboard';
+  size: '300x250' | '336x280' | '728x90' | '320x50' | '300x600' | '970x250' | '340x-flex';
+  position: 'hero-sidebar' | 'article-top' | 'article-middle' | 'article-bottom' | 'category-sidebar' | 'footer-banner' | 'homepage-leaderboard' | 'homepage-sidebar-top' | 'homepage-sidebar-bottom';
   priority: 'premium' | 'high' | 'medium' | 'low';
   cpmRange: string;
   targeting: string[];
@@ -139,6 +139,31 @@ export class AdManager {
       targeting: ['enterprise-ai', 'business-solutions', 'partnerships'],
       isActive: true
     });
+
+    // Homepage Sidebar Ad Slots - Custom dimensions for optimal layout
+    this.addAdSlot({
+      id: 'homepage-sidebar-top',
+      name: 'Homepage Sidebar Top Partner',
+      size: '340x-flex',
+      position: 'homepage-sidebar-top',
+      priority: 'premium',
+      cpmRange: '$18-28',
+      targeting: ['ai-tools', 'saas', 'enterprise', 'premium-partners'],
+      fallbackContent: 'Premium AI Solutions - Partner With Us',
+      isActive: true
+    });
+
+    this.addAdSlot({
+      id: 'homepage-sidebar-bottom',
+      name: 'Homepage Sidebar Bottom Partner',
+      size: '340x-flex',
+      position: 'homepage-sidebar-bottom',
+      priority: 'high',
+      cpmRange: '$12-20',
+      targeting: ['ai-innovation', 'business-tools', 'technology-partners'],
+      fallbackContent: 'AI Innovation Hub - Discover More',
+      isActive: true
+    });
   }
 
   public addAdSlot(config: AdSlotConfig): void {
@@ -152,6 +177,12 @@ export class AdManager {
   public getSlotsByPosition(position: string): AdSlotConfig[] {
     return Array.from(this.adSlots.values()).filter(slot => 
       slot.position === position && slot.isActive
+    );
+  }
+
+  public getHomepageSidebarSlots(): AdSlotConfig[] {
+    return Array.from(this.adSlots.values()).filter(slot => 
+      (slot.position === 'homepage-sidebar-top' || slot.position === 'homepage-sidebar-bottom') && slot.isActive
     );
   }
 
@@ -178,6 +209,37 @@ export class AdManager {
         <div class="partner-label">Partner Content</div>
         <div class="content-area" data-size="${slot.size}">
           <!-- Revenue-optimized placement -->
+        </div>
+      </div>
+    `;
+  }
+
+  public generateSidebarAdCode(position: 'homepage-sidebar-top' | 'homepage-sidebar-bottom', targeting?: string[]): string {
+    const slots = this.getSlotsByPosition(position);
+    const slot = slots[0]; // Get the first available slot for this position
+    
+    if (!slot) {
+      // Fallback content if no ad slot is configured
+      return `
+        <div class="sidebar-partner-space ${position}" data-size="340x-flex">
+          <div class="partner-placeholder">
+            <div class="partner-icon">⭐</div>
+            <h3 class="partner-title">Partner Space Available</h3>
+            <p class="partner-description">Exclusive advertising opportunity for AI companies</p>
+            <a href="/advertise" class="partner-cta">Partner With Us</a>
+          </div>
+        </div>
+      `;
+    }
+
+    const targetingString = targeting?.join(',') || slot.targeting.join(',');
+    
+    return `
+      <!-- Homepage Sidebar Partner Space: ${slot.name} -->
+      <div class="sidebar-partner-space ${position}" data-slot="${slot.id}" data-targeting="${targetingString}" data-size="340x-flex">
+        <div class="partner-label">${slot.fallbackContent || 'Partner Content'}</div>
+        <div class="partner-content-area">
+          <!-- Revenue-optimized sidebar placement -->
         </div>
       </div>
     `;
@@ -285,5 +347,44 @@ export const RevenueTracker = {
     const performance = adManager['performanceData'].get(slotId);
     if (!performance || !performance.impressions) return 0;
     return (performance.clicks / performance.impressions) * 100;
+  }
+};
+
+// Sidebar Ad Management Utilities
+export const SidebarAdManager = {
+  // Get optimal ad dimensions for homepage sidebars
+  getSidebarDimensions: () => ({
+    width: '340px',
+    height: 'flexible',
+    minHeight: '200px',
+    maxHeight: '400px'
+  }),
+
+  // Generate CSS for sidebar ad containers
+  generateSidebarAdCSS: (position: 'top' | 'bottom') => `
+    .sidebar-partner-space.${position === 'top' ? 'homepage-sidebar-top' : 'homepage-sidebar-bottom'} {
+      width: 340px;
+      min-height: 200px;
+      max-height: 400px;
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      border: 2px solid rgba(255, 193, 7, 0.3);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .sidebar-partner-space.${position === 'top' ? 'homepage-sidebar-top' : 'homepage-sidebar-bottom'}:hover {
+      border-color: rgba(255, 193, 7, 0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 193, 7, 0.2);
+    }
+  `,
+
+  // Validate sidebar ad dimensions
+  validateSidebarAd: (width: number, height: number): boolean => {
+    return width === 340 && height >= 200 && height <= 400;
   }
 };

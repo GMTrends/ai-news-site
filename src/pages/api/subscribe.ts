@@ -24,10 +24,7 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(JSON.stringify({ error: 'EmailOctopus API key or List ID not set.' }), { status: 500 });
   }
 
-  // Debug logging
-  console.log('EmailOctopus API Key exists:', !!apiKey);
-  console.log('EmailOctopus List ID exists:', !!listId);
-  console.log('Email:', email);
+  // Debug logging removed
 
   // EmailOctopus API docs: https://emailoctopus.com/api-documentation/lists/add-contact
   const res = await fetch(`https://emailoctopus.com/api/1.6/lists/${listId}/contacts`, {
@@ -54,7 +51,7 @@ export const POST: APIRoute = async ({ request }) => {
     } catch (e) {
       errorMsg = 'Subscription failed.';
     }
-    console.log('EmailOctopus API error:', errorMsg);
+    console.error('EmailOctopus API error:', errorMsg);
     return new Response(JSON.stringify({ error: errorMsg }), { status: res.status });
   }
 

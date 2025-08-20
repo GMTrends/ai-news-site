@@ -1,0 +1,262 @@
+---
+// Performance Monitor Component
+// Tracks Core Web Vitals and performance metrics
+---
+
+<div id="performance-monitor" style="position: fixed; top: 0; right: 0; width: 300px; height: 200px; pointer-events: none; z-index: 10000; display: none;"></div>
+
+<script>
+  // Performance monitoring utilities
+  class PerformanceMonitor {
+    private metrics: Record<string, any> = {};
+
+    constructor() {
+      this.init();
+    }
+
+    init() {
+      if (typeof window === 'undefined') return;
+      
+      // Monitor Core Web Vitals
+      this.setupWebVitals();
+      
+      // Monitor resource loading
+      this.setupResourceMonitoring();
+      
+      // Monitor user interactions
+      this.setupInteractionMonitoring();
+      
+      // Monitor memory usage
+      this.setupMemoryMonitoring();
+    }
+
+    setupWebVitals() {
+      if (!('PerformanceObserver' in window)) return;
+
+      try {
+        // LCP (Largest Contentful Paint)
+        const lcpObserver = new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          const lastEntry = entries[entries.length - 1];
+          this.metrics.lcp = lastEntry.startTime;
+          this.logMetric('LCP', lastEntry.startTime);
+        });
+        lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+
+        // FID (First Input Delay)
+        const fidObserver = new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          entries.forEach((entry) => {
+            const fidEntry = entry as PerformanceEventTiming;
+            const fid = fidEntry.processingStart - fidEntry.startTime;
+            this.metrics.fid = fid;
+            this.logMetric('FID', fid);
+          });
+        });
+        fidObserver.observe({ entryTypes: ['first-input'] });
+
+        // CLS (Cumulative Layout Shift)
+        const clsObserver = new PerformanceObserver((list) => {
+          let clsValue = 0;
+          const entries = list.getEntries();
+          entries.forEach((entry: any) => {
+            if (!entry.hadRecentInput) {
+              clsValue += entry.value;
+            }
+          });
+          this.metrics.cls = clsValue;
+          this.logMetric('CLS', clsValue);
+        });
+        clsObserver.observe({ entryTypes: ['layout-shift'] });
+
+        // FCP (First Contentful Paint)
+        const fcpObserver = new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          if (entries.length > 0) {
+            const fcp = entries[0].startTime;
+            this.metrics.fcp = fcp;
+            this.logMetric('FCP', fcp);
+          }
+        });
+        
+        // Check if the entry type is supported before observing
+        if ('PerformanceObserver' in window && 'supportedEntryTypes' in PerformanceObserver) {
+          const supportedTypes = PerformanceObserver.supportedEntryTypes;
+          if (supportedTypes && supportedTypes.includes('first-contentful-paint')) {
+            fcpObserver.observe({ entryTypes: ['first-contentful-paint'] });
+          } else {
+            console.warn('The entry type \'first-contentful-paint\' does not exist or isn\'t supported.');
+          }
+        } else {
+          // Fallback for older browsers
+          try {
+            fcpObserver.observe({ entryTypes: ['first-contentful-paint'] });
+          } catch (error) {
+            console.warn('PerformanceObserver not supported for first-contentful-paint:', error);
+          }
+        }
+
+        // TTFB (Time to First Byte)
+        const navigationObserver = new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          entries.forEach((entry) => {
+            if (entry.entryType === 'navigation') {
+              const navEntry = entry as PerformanceNavigationTiming;
+              const ttfb = navEntry.responseStart - navEntry.requestStart;
+              this.metrics.ttfb = ttfb;
+              this.logMetric('TTFB', ttfb);
+            }
+          });
+        });
+        navigationObserver.observe({ entryTypes: ['navigation'] });
+
+      } catch (error) {
+        console.warn('Performance monitoring setup failed:', error);
+      }
+    }
+
+    setupResourceMonitoring() {
+      if (!('PerformanceObserver' in window)) return;
+
+      const resourceObserver = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        entries.forEach((entry) => {
+          if (entry.entryType === 'resource') {
+            const resourceEntry = entry as PerformanceResourceTiming;
+            const duration = resourceEntry.duration;
+            const size = resourceEntry.transferSize || 0;
+            
+            // Log slow resources
+            if (duration > 1000) {
+              this.logMetric('Slow Resource', {
+                name: resourceEntry.name,
+                duration: duration,
+                size: size
+              });
+            }
+          }
+        });
+      });
+      resourceObserver.observe({ entryTypes: ['resource'] });
+    }
+
+    setupInteractionMonitoring() {
+      if (typeof window === 'undefined') return;
+
+      let interactionCount = 0;
+      const interactionThreshold = 100; // ms
+
+      const trackInteraction = (event: Event) => {
+        const now = performance.now();
+        const timeSinceLastInteraction = now - (this.metrics.lastInteraction || 0);
+        
+        if (timeSinceLastInteraction > interactionThreshold) {
+          interactionCount++;
+          this.metrics.lastInteraction = now;
+          this.metrics.interactionCount = interactionCount;
+        }
+      };
+
+      // Track various user interactions
+      ['click', 'scroll', 'keydown', 'touchstart'].forEach(eventType => {
+        document.addEventListener(eventType, trackInteraction, { passive: true });
+      });
+    }
+
+    setupMemoryMonitoring() {
+      if (typeof window === 'undefined' || !('memory' in performance)) return;
+
+      const checkMemory = () => {
+        const memory = (performance as any).memory;
+        if (memory) {
+          this.metrics.memory = {
+            used: memory.usedJSHeapSize,
+            total: memory.totalJSHeapSize,
+            limit: memory.jsHeapSizeLimit
+          };
+          
+          // Log memory warnings
+          const memoryUsage = memory.usedJSHeapSize / memory.jsHeapSizeLimit;
+          if (memoryUsage > 0.8) {
+            this.logMetric('High Memory Usage', memoryUsage);
+          }
+        }
+      };
+
+      // Check memory periodically
+      setInterval(checkMemory, 30000); // Every 30 seconds
+    }
+
+    logMetric(name: string, value: any) {
+      // Only log in development or when explicitly enabled
+      if (import.meta.env.DEV || window.location.search.includes('debug=performance')) {
+        console.log(`📊 ${name}:`, value);
+        
+        // Update the monitor display
+        this.updateDisplay(name, value);
+      }
+    }
+
+    updateDisplay(name: string, value: any) {
+      const monitor = document.getElementById('performance-monitor');
+      if (!monitor) return;
+
+      // Create or update metric display
+      let metricElement = monitor.querySelector(`[data-metric="${name}"]`) as HTMLElement;
+      if (!metricElement) {
+        metricElement = document.createElement('div');
+        metricElement.setAttribute('data-metric', name);
+        metricElement.style.cssText = `
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background: rgba(0, 0, 0, 0.8);
+          color: white;
+          padding: 5px 10px;
+          border-radius: 4px;
+          font-size: 12px;
+          z-index: 10000;
+          font-family: monospace;
+          pointer-events: none;
+        `;
+        monitor.appendChild(metricElement);
+      }
+
+      const formattedValue = typeof value === 'number' ? 
+        value.toFixed(2) : 
+        JSON.stringify(value).substring(0, 50);
+      
+      metricElement.textContent = `${name}: ${formattedValue}`;
+    }
+
+    getMetrics() {
+      return this.metrics;
+    }
+
+    // Send metrics to analytics (if configured)
+    sendMetrics() {
+      if (typeof window === 'undefined') return;
+
+      // Example: Send to Google Analytics
+      if (typeof (window as any).gtag !== 'undefined') {
+        Object.entries(this.metrics).forEach(([key, value]) => {
+          (window as any).gtag('event', 'performance_metric', {
+            metric_name: key,
+            metric_value: value
+          });
+        });
+      }
+    }
+  }
+
+  // Initialize performance monitor
+  const performanceMonitor = new PerformanceMonitor();
+
+  // Make available globally for debugging
+  (window as any).performanceMonitor = performanceMonitor;
+
+  // Send metrics on page unload
+  window.addEventListener('beforeunload', () => {
+    performanceMonitor.sendMetrics();
+  });
+</script> 

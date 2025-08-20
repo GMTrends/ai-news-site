@@ -106,4 +106,82 @@ export function processArticlesWithExcerpts(articles: any[], maxLength: number =
     ...article,
     excerpt: ensureExcerpt(article, maxLength)
   }));
+}
+
+/**
+ * Calculates accurate reading time for articles based on content length and type
+ * @param article - Article object with content, excerpt, and other properties
+ * @param wordsPerMinute - Reading speed (default: 200 WPM - industry standard)
+ * @returns Estimated reading time in minutes
+ */
+export function calculateReadTime(article: {
+  content?: any;
+  excerpt?: string;
+  body?: string;
+  title?: string;
+}, wordsPerMinute: number = 225): number {
+  if (!article) return 1;
+
+  let totalWords = 0;
+  
+  // Count words in title (if present)
+  if (article.title) {
+    totalWords += article.title.split(/\s+/).length;
+  }
+  
+  // Count words in excerpt
+  if (article.excerpt) {
+    totalWords += article.excerpt.split(/\s+/).length;
+  }
+  
+  // Count words in main content using the same approach as the original code
+  if (article.content) {
+    if (Array.isArray(article.content)) {
+      // Handle Sanity Portable Text blocks exactly like the original portableTextToPlainText function
+      totalWords += article.content
+        .map((block: any) => {
+          if (block._type === 'block' && Array.isArray(block.children)) {
+            return block.children.map((child: any) => child.text).join(' ');
+          }
+          // Handle custom HTML blocks
+          if (block._type === 'htmlBlock' && typeof block.html === 'string') {
+            // Strip HTML tags and return text
+            return block.html.replace(/<[^>]*>/g, ' ');
+          }
+          return '';
+        })
+        .join(' ')
+        .split(/\s+/)
+        .length;
+    } else if (typeof article.content === 'string') {
+      totalWords += article.content.split(/\s+/).length;
+    }
+  }
+  
+  // Fallback to body if content is not available
+  if (article.body && typeof article.body === 'string') {
+    totalWords += article.body.split(/\s+/).length;
+  }
+  
+  // Calculate reading time and ensure minimum of 1 minute
+  const readingTime = Math.ceil(totalWords / wordsPerMinute);
+  return Math.max(1, readingTime);
+}
+
+/**
+ * Calculates reading time from plain text content
+ * @param text - Plain text content
+ * @param wordsPerMinute - Reading speed (default: 200 WPM)
+ * @returns Estimated reading time in minutes
+ */
+export function calculateReadTimeFromText(text: string | null | undefined, wordsPerMinute: number = 200): number {
+  if (!text || typeof text !== 'string') {
+    return 1;
+  }
+  
+  const wordCount = text.split(/\s+/).length;
+  const readingTime = Math.ceil(wordCount / wordsPerMinute);
+  return Math.max(1, readingTime);
 } 
+
+ 
