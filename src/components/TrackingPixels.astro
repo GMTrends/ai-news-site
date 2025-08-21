@@ -50,11 +50,18 @@ window.fbq('track', 'PageView');
 (function() {
   if (typeof window.twq !== 'undefined') return;
   
-  !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments)
-  },s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='//static.ads-twitter.com/uwt.js',
-  a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
-  window.twq('init', 'YOUR_TWITTER_PIXEL_ID');
-  window.twq('track', 'PageView');
+  // Twitter Pixel - simplified implementation
+  window.twq = window.twq || function(){window.twq.callMethod ? window.twq.callMethod.apply(window.twq,arguments) : window.twq.queue.push(arguments)};
+  window.twq.version = '1.1';
+  window.twq.queue = [];
+  const twitterScript = document.createElement('script');
+  twitterScript.async = true;
+  twitterScript.src = '//static.ads-twitter.com/uwt.js';
+  document.head.appendChild(twitterScript);
+  if (window.twq) {
+    window.twq('init', 'YOUR_TWITTER_PIXEL_ID');
+    window.twq('track', 'PageView');
+  }
 })();
 
 // Track events only if Facebook Pixel is loaded
@@ -206,7 +213,7 @@ if (typeof window !== 'undefined') {
   // Track form submissions
   document.addEventListener('submit', (e) => {
     const form = e.target as HTMLFormElement;
-    if (form) return;
+    if (!form) return;
 
     // Track newsletter signups
     if (form.className?.includes('subscribe-form')) {
@@ -459,7 +466,7 @@ src="https://www.facebook.com/tr?id=733228089122455&ev=PageView&noscript=1"
   // Event handlers
   const handleFormSubmit = (e: Event) => {
     const form = e.target as HTMLFormElement;
-    if (form) return;
+    if (!form) return;
 
     if (DEBUG && import.meta.env.DEV) {
       console.log('Form submitted:', {
