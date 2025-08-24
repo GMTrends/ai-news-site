@@ -94,19 +94,22 @@ if (allCreativeArticles?.length > 0) {
                 </div>
               )}
             </div>
-            
-            {allCreativeArticles.length > 8 && (
-              <div class="load-more-container">
-                <button id="load-more-btn" class="load-more-btn">
-                  <span class="load-more-text">Load More Articles</span>
-                </button>
-              </div>
-            )}
           </div>
           <div class="sidebar sticky-col">
             <CategorySidebar categorySlug="creative" articles={allCreativeArticles} />
           </div>
         </div>
+        
+        {/* Load More button moved completely outside the grid layout */}
+        {allCreativeArticles.length > 8 && (
+          <div class="load-more-button-wrapper">
+            <div class="load-more-container-main-content">
+              <button id="load-more-btn" class="load-more-btn">
+                <span class="load-more-text">Load More Articles</span>
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   </div>
@@ -206,6 +209,50 @@ if (allCreativeArticles?.length > 0) {
       min-height: 0;
     }
     
+    /* Wrapper for the load more button to maintain grid-like structure */
+    .load-more-button-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    
+    /* Container for the button that centers it within the main content area */
+    .load-more-container-main-content {
+      display: flex;
+      justify-content: center;
+      margin: 0;
+      padding: 0;
+      /* Clean spacing */
+      margin-bottom: 0 !important;
+      padding-bottom: 0 !important;
+      /* Set exact top spacing to 2rem as requested */
+      margin-top: 2rem !important;
+      /* No additional padding needed */
+      padding-top: 0 !important;
+      /* Position the button container to align with main content area */
+      margin-left: 0; /* Align to the left like the main content */
+      margin-right: auto;
+      /* Constrain width to match main content area (excluding sidebar) */
+      width: calc(100% - 340px - 2rem); /* Full width minus sidebar width and gap */
+      /* Ensure the button is properly centered within this container */
+      position: relative;
+    }
+    
+    /* Responsive adjustments for the button positioning */
+    @media (max-width: 1200px) {
+      .load-more-container-main-content {
+        width: calc(100% - 340px - 1rem); /* Adjust for smaller padding on smaller screens */
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .load-more-container-main-content {
+        width: 100%; /* Full width on mobile since sidebar stacks below */
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+    
     /* Aggressive sticky sidebar positioning - highest specificity */
     .category-layout .sidebar,
     .category-layout .sidebar.sticky-col,
@@ -252,7 +299,7 @@ if (allCreativeArticles?.length > 0) {
       min-width: 0;
       display: flex;
       flex-direction: column;
-      height: auto; /* min-height: 100% removed */
+      height: auto;
       /* Ensure no bottom spacing */
       margin-bottom: 0 !important;
       padding-bottom: 0 !important;
@@ -265,59 +312,25 @@ if (allCreativeArticles?.length > 0) {
       flex: 1;
       align-content: start;
       min-height: 0;
-      /* Remove aggressive overrides that break grid alignment */
+      /* Simplified grid behavior for proper alignment */
       margin: 0 !important;
       padding: 0 !important;
       border: none !important;
       outline: none !important;
-      /* Keep natural grid behavior for proper row alignment */
-      /* grid-auto-rows: min-content !important; - REMOVED */
-      /* grid-template-rows: none !important; - REMOVED */
-      /* row-gap: 2rem !important; - REMOVED */
-      /* column-gap: 2rem !important; - REMOVED */
-      /* REMOVED: These were breaking grid alignment */
-      /* align-items: start !important; - REMOVED */
-      /* justify-items: start !important; - REMOVED */
-      /* REMOVED: These might interfere with natural grid behavior */
-      /* grid-auto-rows: 1fr; - REMOVED */
-      /* align-items: stretch; - REMOVED */
-      /* Fix: Prevent grid from creating invisible row with gap */
+      /* Natural grid behavior */
       grid-auto-rows: min-content;
       align-content: start;
       /* Ensure grid container sizes exactly to content */
       height: fit-content;
       max-height: none;
       overflow: visible;
-      /* Alternative approach: Force grid to only contain actual content */
-      grid-template-rows: repeat(auto-fit, minmax(0, auto));
-      /* Fix uneven heights by ensuring items stretch uniformly */
+      /* Simple and clean grid approach */
       align-items: stretch;
-      /* Try adjusting the gap to eliminate bottom spacing */
+      /* Clean spacing */
       row-gap: 2rem;
       column-gap: 2rem;
-      /* Remove the general gap property that might be causing issues */
-      gap: unset;
-      /* Remove complex margin manipulations - let grid size naturally */
-      /* margin-bottom: -2.625rem !important; - REMOVED */
-      /* Use grid gap to control spacing precisely */
-      row-gap: 2rem;
-      column-gap: 2rem;
-      /* Remove negative margin approach - try grid row control instead */
-      /* margin-bottom: -3rem !important; - REMOVED */
-      /* Force grid to only contain actual content rows */
-      grid-auto-rows: min-content;
-      align-content: start;
-      /* Remove complex grid template - go back to simple solution */
-      /* grid-template-areas: - REMOVED */
-      /* grid-template-columns: - REMOVED */
-      /* Simple negative margin that actually works */
-      margin-bottom: -2.5rem !important;
-    }
-    
-    /* Force remove any bottom spacing from articles grid */
-    .articles-grid::before {
-      content: none !important;
-      display: none !important;
+      /* No complex margin manipulations */
+      margin-bottom: 0 !important;
     }
     
     /* Ensure no extra space from individual articles */
@@ -327,31 +340,12 @@ if (allCreativeArticles?.length > 0) {
       border-radius: 16px;
       overflow: hidden;
       transition: all 0.3s ease;
-      /* Remove any potential margin/padding issues */
+      /* Clean spacing */
       margin: 0 !important;
       padding: 0 !important;
     }
     
-    /* Force remove bottom spacing from the last article */
-    .category-article:last-child {
-      margin-bottom: 0 !important;
-      padding-bottom: 0 !important;
-    }
-    
-    /* Ensure load more container has no bottom spacing */
-    .load-more-container {
-      display: flex;
-      justify-content: center;
-      margin: 2rem 0 0 0;
-      padding: 0;
-      /* Force remove any bottom spacing */
-      margin-bottom: 0 !important;
-      padding-bottom: 0 !important;
-      /* Add top spacing to compensate for the grid's negative margin */
-      margin-top: 0 !important;
-      /* Use padding for button spacing to avoid layout interference */
-      padding-top: 3.5rem !important;
-    }
+
     
     /* Ensure newly loaded articles are fully visible */
     .category-article.fade-in {
@@ -528,12 +522,7 @@ if (allCreativeArticles?.length > 0) {
       }
     }
     
-    .load-more-container {
-      display: flex;
-      justify-content: center;
-      margin: 2rem 0 0 0;
-      padding: 0;
-    }
+
     
     .load-more-btn {
       background: linear-gradient(135deg, #ff6b9d 0%, #8a2be2 100%);
@@ -549,6 +538,8 @@ if (allCreativeArticles?.length > 0) {
       align-items: center;
       gap: 0.5rem;
       box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
+      /* Ensure button is properly sized in its new container */
+      margin: 0 auto;
     }
     
     .load-more-btn:hover {
@@ -921,10 +912,8 @@ if (allCreativeArticles?.length > 0) {
           const mainHeight = categoryMain.offsetHeight;
           const articlesGridHeight = articlesGrid.offsetHeight;
 
-          const loadMoreContainer = document.querySelector('.load-more-container');
-          const loadMoreHeight = loadMoreContainer && loadMoreContainer.style.display !== 'none'
-            ? loadMoreContainer.offsetHeight
-            : 0;
+          // Since load more button is now outside main content, we don't need to account for its height
+          // This should allow perfect alignment between main content and sidebar
 
           // Don't set minHeight on layout container - let it size naturally
           // This prevents artificial height constraints that can cause extra space
