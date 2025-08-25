@@ -13,7 +13,7 @@ const smallArticles = await getArticlesByHeroPlacement('small', 6);
 // Select main article (priority: large placement, then recent)
 const mainArticle = largeArticles[0] || allFeaturedArticles[0] || {
   title: "Revolutionary AI Agent Framework Transforms Business Operations",
-  excerpt: "Discover how Fortune 500 companies are using this breakthrough AI agent system to automate complex workflows and boost productivity by 300%. Industry leaders share exclusive insights into implementation strategies, cost savings, and competitive advantages that are reshaping entire industries. From customer service automation to strategic decision-making, these AI agents are proving to be game-changers for businesses ready to embrace the future.",
+  excerpt: "Discover how Fortune 500 companies are using this breakthrough AI agent system to automate complex workflows and boost productivity by 300%. Industry leaders share exclusive insights into implementation strategies, cost savings, and competitive advantages that are reshaping entire industries. From customer service automation to strategic decision-making, these AI agents are proving to be game-changers for businesses ready to embrace the future. Our comprehensive analysis covers initial assessment phases, team preparation strategies, full-scale deployment methodologies, and ongoing optimization techniques that ensure long-term success. Learn from real-world case studies featuring companies like Microsoft, Amazon, and Tesla, who have already implemented these frameworks and achieved unprecedented results. The system's modular architecture allows for seamless integration with existing infrastructure while providing scalability for future growth. Industry experts predict this technology will become the standard for enterprise automation within the next three years, making early adoption crucial for maintaining competitive advantage.",
   publishedAt: "2025-08-22",
   author: { name: "Sarah Chen", slug: "sarah-chen" },
   category: { displayName: "AI Business", slug: { current: "business" }},
@@ -25,7 +25,7 @@ const mainArticle = largeArticles[0] || allFeaturedArticles[0] || {
 const secondaryArticles = smallArticles.length > 0 ? smallArticles.slice(0, 3) : [
     {
       title: "ChatGPT-5 Release: What Industry Insiders Know",
-      excerpt: "Exclusive early access insights and performance benchmarks reveal unprecedented capabilities in reasoning, creativity, and multimodal understanding. Industry experts share detailed analysis of the new architecture.",
+      excerpt: "Exclusive early access insights and performance benchmarks reveal unprecedented capabilities in reasoning, creativity, and multimodal understanding. Industry experts share detailed analysis of the new architecture, training methodologies, and real-world applications that demonstrate the system's revolutionary potential. Our comprehensive coverage includes detailed benchmarks against previous models, architectural improvements that enable enhanced reasoning capabilities, and practical applications across industries. The new multimodal understanding capabilities allow for seamless integration of text, image, audio, and video inputs, opening unprecedented possibilities for AI applications. Industry leaders discuss the implications for content creation, customer service automation, and creative workflows. Technical experts provide insights into the underlying transformer architecture improvements and training data enhancements that enable these breakthroughs. Early adopters share their experiences with the beta versions and discuss implementation strategies for enterprise environments.",
       publishedAt: "2025-08-21",
       author: { name: "Marcus Rodriguez", slug: "marcus-rodriguez" },
       category: { displayName: "Breaking News", slug: { current: "news" }},
@@ -34,7 +34,7 @@ const secondaryArticles = smallArticles.length > 0 ? smallArticles.slice(0, 3) :
     },
     {
       title: "AI Marketing Tools Driving 400% ROI",
-      excerpt: "Case studies from top agencies using AI for campaign optimization show how machine learning algorithms are revolutionizing customer acquisition, retention, and lifetime value.",
+      excerpt: "Case studies from top agencies using AI for campaign optimization show how machine learning algorithms are revolutionizing customer acquisition, retention, and lifetime value. Our in-depth analysis reveals how predictive analytics and personalized content generation are driving unprecedented ROI improvements. Industry leaders share their strategies for implementing AI-driven marketing automation, including customer segmentation techniques, dynamic pricing optimization, and real-time campaign adjustments. Learn how machine learning algorithms analyze customer behavior patterns to predict future purchasing decisions and optimize marketing spend accordingly. The comprehensive guide covers implementation strategies for businesses of all sizes, from startups to enterprise organizations. Discover how AI-powered tools are transforming email marketing, social media advertising, and content marketing strategies. Industry experts provide insights into the future of marketing automation and how businesses can prepare for the next wave of AI innovation.",
       publishedAt: "2025-08-20",
       author: { name: "Jennifer Kim", slug: "jennifer-kim" },
       category: { displayName: "Marketing", slug: { current: "marketing" }},
@@ -43,7 +43,7 @@ const secondaryArticles = smallArticles.length > 0 ? smallArticles.slice(0, 3) :
     },
     {
       title: "Enterprise AI Security: Complete Guide",
-      excerpt: "Protect your AI infrastructure with proven security frameworks designed specifically for enterprise environments. This comprehensive guide covers threat modeling and access controls.",
+      excerpt: "Protect your AI infrastructure with proven security frameworks designed specifically for enterprise environments. This comprehensive guide covers threat modeling, access controls, data privacy protection, model security protocols, and incident response strategies. Our expert analysis reveals the latest cybersecurity threats targeting AI systems and provides actionable defense strategies. Learn how to implement zero-trust security architectures, secure model training pipelines, and robust monitoring systems that detect and respond to threats in real-time. Industry leaders share their experiences with AI security breaches and the lessons learned from implementing comprehensive security frameworks. The guide includes detailed checklists for security audits, compliance requirements for different industries, and best practices for securing AI models in production environments. Discover how to balance security requirements with AI system performance and user experience, ensuring that security measures don't hinder innovation.",
       publishedAt: "2025-08-19",
       author: { name: "David Thompson", slug: "david-thompson" },
       category: { displayName: "Enterprise", slug: { current: "enterprise" }},

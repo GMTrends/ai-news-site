@@ -94,7 +94,7 @@ export async function getFeaturedArticles(limit: number = 8) {
       excerpt: ensureExcerpt({
         excerpt: article.excerpt,
         content: article.content
-      }, index === 0 ? 600 : 250) // Longer excerpts for the first/main article
+      }, index === 0 ? 1000 : 400, true) // Optimized excerpts: 1000 for first article, 400 for others, with Lorem Ipsum filling
     })).slice(0, limit)
     
     return articlesWithImages
@@ -149,7 +149,7 @@ export async function getArticlesByCategory(categorySlug: string, limit?: number
         excerpt: ensureExcerpt({
           excerpt: article.excerpt,
           content: article.content
-        }, 250)
+        }, 600, true) // Increased to 600 characters with Lorem Ipsum filling
       }))
       
       return articlesWithImages
@@ -202,7 +202,7 @@ export async function getArticlesByHeroPlacement(placement: 'large' | 'small' | 
       excerpt: ensureExcerpt({
         excerpt: article.excerpt,
         content: article.content
-      }, placement === 'large' ? 600 : 250) // Longer excerpts for large placement articles
+      }, placement === 'large' ? 1000 : 400, true) // Optimized excerpts: 1000 for large, 400 for small, with Lorem Ipsum filling
     }))
     
     return articlesWithImages
@@ -247,7 +247,7 @@ export async function getNews(limit: number = 2) {
       excerpt: ensureExcerpt({
         excerpt: article.excerpt,
         content: article.content
-      }, 250)
+      }, 600, true) // Increased to 600 characters with Lorem Ipsum filling
     })).slice(0, limit)
     
     return newsWithImages
@@ -290,7 +290,7 @@ export async function getReviews(limit: number = 2) {
       excerpt: ensureExcerpt({
         excerpt: article.excerpt,
         content: article.content
-      }, 250)
+      }, 600, true) // Increased to 600 characters with Lorem Ipsum filling
     })).slice(0, limit)
     
     return reviewsWithImages
@@ -406,7 +406,7 @@ export async function getArticlesByAuthor(authorId: string) {
       excerpt: ensureExcerpt({
         excerpt: article.excerpt,
         content: article.content
-      }, 250)
+      }, 600, true) // Increased to 600 characters with Lorem Ipsum filling
     }))
     
     return articlesWithImages
@@ -512,7 +512,7 @@ export async function getAllArticles() {
       excerpt: ensureExcerpt({
         excerpt: article.excerpt,
         content: article.content
-      }, 250)
+      }, 600, true) // Increased to 600 characters with Lorem Ipsum filling
     }))
   } catch (error) {
     console.error('❌ Error fetching all articles:', error)

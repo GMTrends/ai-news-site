@@ -3,12 +3,61 @@
  */
 
 /**
+ * Generates Lorem Ipsum filler text to reach desired length
+ * @param targetLength - Target length for the final text
+ * @param existingText - Existing text to build upon
+ * @returns Text with Lorem Ipsum filler to reach target length
+ */
+export function generateLoremIpsumFiller(targetLength: number, existingText: string = ''): string {
+  const loremWords = [
+    'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit',
+    'sed', 'do', 'eiusmod', 'tempor', 'incididunt', 'ut', 'labore', 'et', 'dolore',
+    'magna', 'aliqua', 'Ut', 'enim', 'ad', 'minim', 'veniam', 'quis', 'nostrud',
+    'exercitation', 'ullamco', 'laboris', 'nisi', 'ut', 'aliquip', 'ex', 'ea',
+    'commodo', 'consequat', 'Duis', 'aute', 'irure', 'dolor', 'in', 'reprehenderit',
+    'voluptate', 'velit', 'esse', 'cillum', 'dolore', 'eu', 'fugiat', 'nulla',
+    'pariatur', 'Excepteur', 'sint', 'occaecat', 'cupidatat', 'non', 'proident',
+    'sunt', 'culpa', 'qui', 'officia', 'deserunt', 'mollit', 'anim', 'id', 'est',
+    'laborum', 'Sed', 'ut', 'perspiciatis', 'unde', 'omnis', 'iste', 'natus',
+    'error', 'sit', 'voluptatem', 'accusantium', 'doloremque', 'laudantium',
+    'totam', 'rem', 'aperiam', 'eaque', 'ipsa', 'quae', 'ab', 'illo', 'inventore',
+    'veritatis', 'et', 'quasi', 'architecto', 'beatae', 'vitae', 'dicta', 'sunt',
+    'explicabo', 'Nemo', 'enim', 'ipsam', 'voluptatem', 'quia', 'voluptas',
+    'sit', 'aspernatur', 'aut', 'odit', 'aut', 'fugit', 'sed', 'quia',
+    'consequuntur', 'magni', 'dolores', 'eos', 'qui', 'ratione', 'voluptatem',
+    'sequi', 'nesciunt', 'Neque', 'porro', 'quisquam', 'est', 'qui', 'dolorem',
+    'ipsum', 'quia', 'dolor', 'sit', 'amet', 'consectetur', 'adipisci', 'velit'
+  ];
+
+  let result = existingText;
+  
+  while (result.length < targetLength) {
+    const randomWords = [];
+    const wordsToAdd = Math.min(5 + Math.floor(Math.random() * 10), loremWords.length);
+    
+    for (let i = 0; i < wordsToAdd; i++) {
+      const randomIndex = Math.floor(Math.random() * loremWords.length);
+      randomWords.push(loremWords[randomIndex]);
+    }
+    
+    const newText = randomWords.join(' ');
+    if (result.length + newText.length + 1 <= targetLength) {
+      result += (result ? ' ' : '') + newText;
+    } else {
+      break;
+    }
+  }
+  
+  return result;
+}
+
+/**
  * Generates an excerpt from article body text
  * @param body - The article body text
- * @param maxLength - Maximum length of the excerpt (default: 160)
+ * @param maxLength - Maximum length of the excerpt (default: 400)
  * @returns Generated excerpt
  */
-export function generateExcerpt(body: string, maxLength: number = 250): string {
+export function generateExcerpt(body: string, maxLength: number = 400): string {
   if (!body || typeof body !== 'string') {
     return '';
   }
@@ -58,16 +107,22 @@ export function generateExcerpt(body: string, maxLength: number = 250): string {
  * Ensures an article has an excerpt, generating one from body if missing
  * @param article - Article object with excerpt and body properties
  * @param maxLength - Maximum length for generated excerpts
+ * @param useLoremIpsum - Whether to fill short content with Lorem Ipsum
  * @returns Article with guaranteed excerpt
  */
 export function ensureExcerpt(article: {
   excerpt?: string;
   body?: string;
   content?: any;
-}, maxLength: number = 250): string {
+}, maxLength: number = 400, useLoremIpsum: boolean = true): string {
   // If excerpt exists and is not empty, use it
   if (article.excerpt && article.excerpt.trim()) {
-    return article.excerpt;
+    const excerpt = article.excerpt.trim();
+    // If using Lorem Ipsum and excerpt is shorter than maxLength, fill it
+    if (useLoremIpsum && excerpt.length < maxLength) {
+      return generateLoremIpsumFiller(maxLength, excerpt);
+    }
+    return excerpt;
   }
 
   // Try to get body text from different possible sources
@@ -92,19 +147,27 @@ export function ensureExcerpt(article: {
     }
   }
 
-  return generateExcerpt(bodyText, maxLength);
+  const generatedExcerpt = generateExcerpt(bodyText, maxLength);
+  
+  // If using Lorem Ipsum and generated excerpt is shorter than maxLength, fill it
+  if (useLoremIpsum && generatedExcerpt.length < maxLength) {
+    return generateLoremIpsumFiller(maxLength, generatedExcerpt);
+  }
+  
+  return generatedExcerpt;
 }
 
 /**
  * Processes a collection of articles to ensure they all have excerpts
  * @param articles - Array of article objects
  * @param maxLength - Maximum length for generated excerpts
+ * @param useLoremIpsum - Whether to fill short content with Lorem Ipsum
  * @returns Array of articles with guaranteed excerpts
  */
-export function processArticlesWithExcerpts(articles: any[], maxLength: number = 250): any[] {
+export function processArticlesWithExcerpts(articles: any[], maxLength: number = 400, useLoremIpsum: boolean = true): any[] {
   return articles.map(article => ({
     ...article,
-    excerpt: ensureExcerpt(article, maxLength)
+    excerpt: ensureExcerpt(article, maxLength, useLoremIpsum)
   }));
 }
 
