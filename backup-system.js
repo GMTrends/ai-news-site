@@ -14,10 +14,15 @@
  * - Automated: Add to cron job or GitHub Actions
  */
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
-const crypto = require('crypto');
+import fs from 'fs';
+import path from 'path';
+import { execSync } from 'child_process';
+import crypto from 'crypto';
+import { fileURLToPath } from 'url';
+
+// Get current directory for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Configuration
 const CONFIG = {
@@ -345,11 +350,12 @@ class BackupSystem {
 }
 
 // Run backup if called directly
-if (require.main === module) {
-  const backup = new BackupSystem();
-  backup.run().then(result => {
-    process.exit(result.success ? 0 : 1);
-  });
-}
+const backup = new BackupSystem();
+backup.run().then(result => {
+  process.exit(result.success ? 0 : 1);
+}).catch(error => {
+  console.error('Backup failed:', error);
+  process.exit(1);
+});
 
-module.exports = { BackupSystem, CONFIG }; 
+export { BackupSystem, CONFIG }; 

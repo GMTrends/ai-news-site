@@ -1,0 +1,829 @@
+{
+  "timestamp": "2025-08-25T23-53-27-460Z",
+  "backupName": "backup-2025-08-25T23-53-27-460Z",
+  "git": {
+    "commitHash": "83397445c95ec8978bd44a27b239baefde86334e",
+    "branch": "staging/performance-optimization",
+    "hasUncommittedChanges": true,
+    "status": "M backup-system.js\n M clean-astro-test\n M src/pages/hero-mockup.astro"
+  },
+  "files": [
+    {
+      "path": "src\\content\\authors\\john-doe.md",
+      "size": 240,
+      "modified": "2025-06-26T00:58:30.757Z"
+    },
+    {
+      "path": "src\\content\\authors\\raf-velazquez.md",
+      "size": 854,
+      "modified": "2025-07-26T03:13:16.102Z"
+    },
+    {
+      "path": "src\\content\\authors\\sarah-chen.md",
+      "size": 3778,
+      "modified": "2025-06-26T01:36:14.509Z"
+    },
+    {
+      "path": "src\\content\\categories\\ai-agents.md",
+      "size": 247,
+      "modified": "2025-06-26T03:24:29.303Z"
+    },
+    {
+      "path": "src\\content\\categories\\business.md",
+      "size": 303,
+      "modified": "2025-06-26T03:24:26.045Z"
+    },
+    {
+      "path": "src\\content\\pages\\about.md",
+      "size": 5716,
+      "modified": "2025-06-26T01:36:57.036Z"
+    },
+    {
+      "path": "src\\content\\site-settings\\site-config.json",
+      "size": 489,
+      "modified": "2025-06-26T01:34:05.158Z"
+    },
+    {
+      "path": "src\\components\\AdminLink.astro",
+      "size": 1368,
+      "modified": "2025-06-28T21:04:28.396Z"
+    },
+    {
+      "path": "src\\components\\AdvancedCache.astro",
+      "size": 13602,
+      "modified": "2025-08-24T09:01:24.348Z"
+    },
+    {
+      "path": "src\\components\\AIBuzzLayout.astro",
+      "size": 73891,
+      "modified": "2025-08-18T21:22:31.045Z"
+    },
+    {
+      "path": "src\\components\\AIToolsComparison.astro",
+      "size": 16460,
+      "modified": "2025-08-24T09:56:51.010Z"
+    },
+    {
+      "path": "src\\components\\Analytics.astro",
+      "size": 5204,
+      "modified": "2025-06-16T23:57:10.536Z"
+    },
+    {
+      "path": "src\\components\\AnalyticsDashboard.astro",
+      "size": 16322,
+      "modified": "2025-08-20T03:12:05.010Z"
+    },
+    {
+      "path": "src\\components\\ArticleGrid.astro",
+      "size": 27343,
+      "modified": "2025-08-14T01:57:36.528Z"
+    },
+    {
+      "path": "src\\components\\ArticleSidebar.astro",
+      "size": 22378,
+      "modified": "2025-08-20T01:44:13.325Z"
+    },
+    {
+      "path": "src\\components\\BaseHead.astro",
+      "size": 6161,
+      "modified": "2025-08-24T08:41:42.585Z"
+    },
+    {
+      "path": "src\\components\\CategoryHero.astro",
+      "size": 7002,
+      "modified": "2025-07-30T15:38:50.948Z"
+    },
+    {
+      "path": "src\\components\\CategorySections.astro",
+      "size": 16886,
+      "modified": "2025-07-03T20:19:56.478Z"
+    },
+    {
+      "path": "src\\components\\CategoryShortcuts.astro",
+      "size": 6059,
+      "modified": "2025-07-26T05:03:30.499Z"
+    },
+    {
+      "path": "src\\components\\CategorySidebar.astro",
+      "size": 74099,
+      "modified": "2025-08-24T20:26:25.599Z"
+    },
+    {
+      "path": "src\\components\\CompactSubscribe.astro",
+      "size": 10726,
+      "modified": "2025-07-03T20:29:44.369Z"
+    },
+    {
+      "path": "src\\components\\ContentSpotlight.astro",
+      "size": 10891,
+      "modified": "2025-08-01T21:32:51.476Z"
+    },
+    {
+      "path": "src\\components\\Footer.astro",
+      "size": 42397,
+      "modified": "2025-08-03T18:11:07.436Z"
+    },
+    {
+      "path": "src\\components\\FormattedDate.astro",
+      "size": 224,
+      "modified": "2025-06-13T11:31:44.000Z"
+    },
+    {
+      "path": "src\\components\\Header.astro",
+      "size": 23211,
+      "modified": "2025-08-01T01:02:34.567Z"
+    },
+    {
+      "path": "src\\components\\HeaderLink.astro",
+      "size": 493,
+      "modified": "2025-07-31T17:04:33.108Z"
+    },
+    {
+      "path": "src\\components\\Hero.astro",
+      "size": 25149,
+      "modified": "2025-08-24T13:09:04.269Z"
+    },
+    {
+      "path": "src\\components\\HeroPremiumAd.astro",
+      "size": 8541,
+      "modified": "2025-08-01T21:32:43.219Z"
+    },
+    {
+      "path": "src\\components\\HomepageNewsletterSidebar.astro",
+      "size": 16421,
+      "modified": "2025-08-20T01:41:03.305Z"
+    },
+    {
+      "path": "src\\components\\HomepagePartnerSidebar.astro",
+      "size": 18148,
+      "modified": "2025-08-20T01:40:56.417Z"
+    },
+    {
+      "path": "src\\components\\LeaderboardAd.astro",
+      "size": 7124,
+      "modified": "2025-08-01T06:06:39.700Z"
+    },
+    {
+      "path": "src\\components\\LeadMagnetSubscribe.astro",
+      "size": 21732,
+      "modified": "2025-08-25T01:56:06.520Z"
+    },
+    {
+      "path": "src\\components\\MobileNav.astro",
+      "size": 5652,
+      "modified": "2025-07-29T16:47:39.921Z"
+    },
+    {
+      "path": "src\\components\\PerformanceMonitor.astro",
+      "size": 8968,
+      "modified": "2025-07-03T04:15:02.243Z"
+    },
+    {
+      "path": "src\\components\\PremiumAd.astro",
+      "size": 10104,
+      "modified": "2025-08-14T02:20:14.499Z"
+    },
+    {
+      "path": "src\\components\\ProductStore.astro",
+      "size": 2275,
+      "modified": "2025-06-17T00:12:05.113Z"
+    },
+    {
+      "path": "src\\components\\RelatedArticlesSimple.astro",
+      "size": 9444,
+      "modified": "2025-08-01T04:31:03.199Z"
+    },
+    {
+      "path": "src\\components\\RevenueAnalytics.astro",
+      "size": 18080,
+      "modified": "2025-08-20T03:57:24.588Z"
+    },
+    {
+      "path": "src\\components\\SearchBar.astro",
+      "size": 17268,
+      "modified": "2025-07-02T05:46:42.000Z"
+    },
+    {
+      "path": "src\\components\\SEOOptimizer.astro",
+      "size": 8057,
+      "modified": "2025-07-03T04:23:39.892Z"
+    },
+    {
+      "path": "src\\components\\sidebar-config.ts",
+      "size": 2063,
+      "modified": "2025-08-18T19:58:19.509Z"
+    },
+    {
+      "path": "src\\components\\StrategicPlacementManager.astro",
+      "size": 21845,
+      "modified": "2025-08-01T21:16:48.225Z"
+    },
+    {
+      "path": "src\\components\\SubscribeSection.astro",
+      "size": 14961,
+      "modified": "2025-07-29T19:39:38.044Z"
+    },
+    {
+      "path": "src\\components\\TrackingPixels.astro",
+      "size": 20383,
+      "modified": "2025-08-21T04:43:26.198Z"
+    },
+    {
+      "path": "src\\components\\UnifiedNewsletter.astro",
+      "size": 10236,
+      "modified": "2025-07-28T17:57:19.052Z"
+    },
+    {
+      "path": "src\\components\\UniversalPromo.astro",
+      "size": 82359,
+      "modified": "2025-08-24T13:08:55.958Z"
+    },
+    {
+      "path": "src\\components\\UniversalRevenueSidebar.astro",
+      "size": 11055,
+      "modified": "2025-08-03T17:59:17.859Z"
+    },
+    {
+      "path": "src\\pages\\404.astro",
+      "size": 2636,
+      "modified": "2025-07-28T00:13:16.042Z"
+    },
+    {
+      "path": "src\\pages\\about.astro",
+      "size": 14044,
+      "modified": "2025-08-24T09:59:59.063Z"
+    },
+    {
+      "path": "src\\pages\\admin\\ad-config.astro",
+      "size": 31844,
+      "modified": "2025-08-20T03:51:11.312Z"
+    },
+    {
+      "path": "src\\pages\\admin\\analytics.astro",
+      "size": 61448,
+      "modified": "2025-08-20T23:54:38.825Z"
+    },
+    {
+      "path": "src\\pages\\admin\\articles\\edit\\[slug].astro",
+      "size": 9842,
+      "modified": "2025-06-26T21:51:48.770Z"
+    },
+    {
+      "path": "src\\pages\\admin\\authors\\edit\\[slug].astro",
+      "size": 9999,
+      "modified": "2025-06-26T21:54:06.472Z"
+    },
+    {
+      "path": "src\\pages\\admin\\authors.astro",
+      "size": 56436,
+      "modified": "2025-08-20T19:45:45.369Z"
+    },
+    {
+      "path": "src\\pages\\admin.astro",
+      "size": 30903,
+      "modified": "2025-08-21T04:13:16.325Z"
+    },
+    {
+      "path": "src\\pages\\advertise-with-us.astro",
+      "size": 42329,
+      "modified": "2025-08-20T03:07:13.110Z"
+    },
+    {
+      "path": "src\\pages\\affiliate-disclosure.astro",
+      "size": 15705,
+      "modified": "2025-07-28T00:05:14.922Z"
+    },
+    {
+      "path": "src\\pages\\ai-tools-comparison.astro",
+      "size": 4633,
+      "modified": "2025-07-29T20:42:50.856Z"
+    },
+    {
+      "path": "src\\pages\\api\\analytics\\authors.ts",
+      "size": 4686,
+      "modified": "2025-08-25T15:37:27.343Z"
+    },
+    {
+      "path": "src\\pages\\api\\authors\\index.json.ts",
+      "size": 3171,
+      "modified": "2025-08-25T00:45:40.171Z"
+    },
+    {
+      "path": "src\\pages\\api\\authors\\[slug].json.ts",
+      "size": 5436,
+      "modified": "2025-08-20T15:39:20.589Z"
+    },
+    {
+      "path": "src\\pages\\api\\contact.json.ts",
+      "size": 11736,
+      "modified": "2025-07-03T01:34:33.094Z"
+    },
+    {
+      "path": "src\\pages\\api\\download.ts",
+      "size": 438,
+      "modified": "2025-07-24T05:14:16.058Z"
+    },
+    {
+      "path": "src\\pages\\api\\search-articles.json.ts",
+      "size": 3516,
+      "modified": "2025-08-25T04:50:44.046Z"
+    },
+    {
+      "path": "src\\pages\\api\\security-check.json.ts",
+      "size": 1509,
+      "modified": "2025-06-16T07:15:42.614Z"
+    },
+    {
+      "path": "src\\pages\\api\\subscribe.ts",
+      "size": 8498,
+      "modified": "2025-08-25T00:45:09.148Z"
+    },
+    {
+      "path": "src\\pages\\api\\upload\\avatar.json.ts",
+      "size": 2468,
+      "modified": "2025-08-20T15:41:08.862Z"
+    },
+    {
+      "path": "src\\pages\\authors\\index.astro",
+      "size": 5100,
+      "modified": "2025-06-29T02:49:28.958Z"
+    },
+    {
+      "path": "src\\pages\\authors\\[slug].astro",
+      "size": 1342,
+      "modified": "2025-07-28T00:04:57.257Z"
+    },
+    {
+      "path": "src\\pages\\categories\\ai-agents.astro",
+      "size": 33578,
+      "modified": "2025-08-25T21:00:35.520Z"
+    },
+    {
+      "path": "src\\pages\\categories\\business.astro",
+      "size": 33561,
+      "modified": "2025-08-25T21:00:03.580Z"
+    },
+    {
+      "path": "src\\pages\\categories\\creative.astro",
+      "size": 33595,
+      "modified": "2025-08-25T20:56:16.676Z"
+    },
+    {
+      "path": "src\\pages\\categories\\ecommerce.astro",
+      "size": 33582,
+      "modified": "2025-08-25T21:00:13.562Z"
+    },
+    {
+      "path": "src\\pages\\categories\\marketing.astro",
+      "size": 33604,
+      "modified": "2025-08-25T20:59:55.805Z"
+    },
+    {
+      "path": "src\\pages\\categories\\productivity.astro",
+      "size": 33712,
+      "modified": "2025-08-25T20:59:59.729Z"
+    },
+    {
+      "path": "src\\pages\\contact.astro",
+      "size": 18264,
+      "modified": "2025-08-24T10:01:38.203Z"
+    },
+    {
+      "path": "src\\pages\\cookie-policy.astro",
+      "size": 23465,
+      "modified": "2025-07-28T00:01:38.086Z"
+    },
+    {
+      "path": "src\\pages\\disclaimers.astro",
+      "size": 11879,
+      "modified": "2025-07-30T02:36:00.796Z"
+    },
+    {
+      "path": "src\\pages\\faq.astro",
+      "size": 24321,
+      "modified": "2025-07-27T20:49:36.804Z"
+    },
+    {
+      "path": "src\\pages\\hero-mockup.astro",
+      "size": 93215,
+      "modified": "2025-08-25T23:37:54.076Z"
+    },
+    {
+      "path": "src\\pages\\index.astro",
+      "size": 3968,
+      "modified": "2025-08-20T01:40:56.402Z"
+    },
+    {
+      "path": "src\\pages\\lead-magnets\\[slug].astro",
+      "size": 6892,
+      "modified": "2025-07-26T04:04:55.473Z"
+    },
+    {
+      "path": "src\\pages\\privacy-policy.astro",
+      "size": 9411,
+      "modified": "2025-07-30T02:35:48.633Z"
+    },
+    {
+      "path": "src\\pages\\rss.xml.js",
+      "size": 869,
+      "modified": "2025-08-25T04:50:48.533Z"
+    },
+    {
+      "path": "src\\pages\\sitemap.xml.ts",
+      "size": 968,
+      "modified": "2025-06-26T03:26:47.587Z"
+    },
+    {
+      "path": "src\\pages\\terms-of-service.astro",
+      "size": 10663,
+      "modified": "2025-07-30T02:35:40.636Z"
+    },
+    {
+      "path": "src\\pages\\[category]\\[slug].astro",
+      "size": 7061,
+      "modified": "2025-08-04T08:02:17.973Z"
+    },
+    {
+      "path": "src\\styles\\article.css",
+      "size": 20256,
+      "modified": "2025-06-29T01:36:02.843Z"
+    },
+    {
+      "path": "src\\styles\\components.css",
+      "size": 10321,
+      "modified": "2025-08-24T10:37:21.119Z"
+    },
+    {
+      "path": "src\\styles\\critical.css",
+      "size": 7694,
+      "modified": "2025-08-04T07:00:57.132Z"
+    },
+    {
+      "path": "src\\styles\\fresh-dev.css",
+      "size": 9432,
+      "modified": "2025-07-30T02:36:22.702Z"
+    },
+    {
+      "path": "src\\styles\\global.css",
+      "size": 24837,
+      "modified": "2025-08-14T09:05:54.324Z"
+    },
+    {
+      "path": "src\\styles\\layout.css",
+      "size": 6054,
+      "modified": "2025-08-03T20:23:24.859Z"
+    },
+    {
+      "path": "src\\styles\\mobile-responsive.css",
+      "size": 31994,
+      "modified": "2025-07-29T01:49:38.717Z"
+    },
+    {
+      "path": "src\\styles\\optimized.css",
+      "size": 7501,
+      "modified": "2025-07-28T00:46:38.489Z"
+    },
+    {
+      "path": "src\\styles\\utilities.css",
+      "size": 8615,
+      "modified": "2025-08-04T01:20:04.123Z"
+    },
+    {
+      "path": "src\\layouts\\AuthorLayout.astro",
+      "size": 9974,
+      "modified": "2025-07-26T00:41:17.280Z"
+    },
+    {
+      "path": "src\\layouts\\MainLayout.astro",
+      "size": 12737,
+      "modified": "2025-08-24T09:22:28.499Z"
+    },
+    {
+      "path": "src\\layouts\\RevenueOptimizedLayout.astro",
+      "size": 9439,
+      "modified": "2025-07-30T01:10:34.002Z"
+    },
+    {
+      "path": "src\\lib\\ad-manager.ts",
+      "size": 12580,
+      "modified": "2025-08-18T14:03:50.351Z"
+    },
+    {
+      "path": "src\\lib\\analytics-config.ts",
+      "size": 3089,
+      "modified": "2025-08-20T02:59:19.496Z"
+    },
+    {
+      "path": "src\\lib\\analytics-service.ts",
+      "size": 6838,
+      "modified": "2025-08-20T02:59:53.551Z"
+    },
+    {
+      "path": "src\\lib\\ga-analytics-service.ts",
+      "size": 6829,
+      "modified": "2025-08-25T00:45:35.163Z"
+    },
+    {
+      "path": "src\\lib\\lockout.ts",
+      "size": 3889,
+      "modified": "2025-07-03T01:34:58.048Z"
+    },
+    {
+      "path": "src\\lib\\sanity.ts",
+      "size": 14139,
+      "modified": "2025-08-25T21:00:35.520Z"
+    },
+    {
+      "path": "src\\lib\\security.ts",
+      "size": 2950,
+      "modified": "2025-07-03T01:34:53.709Z"
+    },
+    {
+      "path": "src\\utils\\bundleAnalysis.js",
+      "size": 4626,
+      "modified": "2025-07-28T17:15:54.591Z"
+    },
+    {
+      "path": "src\\utils\\cssAnalysis.js",
+      "size": 4356,
+      "modified": "2025-07-28T17:15:52.842Z"
+    },
+    {
+      "path": "src\\utils\\excerptGenerator.ts",
+      "size": 9180,
+      "modified": "2025-08-25T18:39:39.634Z"
+    },
+    {
+      "path": "src\\utils\\finalPerformanceAudit.js",
+      "size": 5286,
+      "modified": "2025-07-28T18:39:09.755Z"
+    },
+    {
+      "path": "src\\utils\\finalPerformanceReport.js",
+      "size": 7380,
+      "modified": "2025-07-28T17:27:08.404Z"
+    },
+    {
+      "path": "src\\utils\\imageOptimization.ts",
+      "size": 8839,
+      "modified": "2025-07-28T16:54:32.254Z"
+    },
+    {
+      "path": "src\\utils\\imageOptimizer.js",
+      "size": 2419,
+      "modified": "2025-07-28T16:54:33.717Z"
+    },
+    {
+      "path": "src\\utils\\lighthouseAudit.js",
+      "size": 6679,
+      "modified": "2025-07-28T18:39:10.404Z"
+    },
+    {
+      "path": "src\\utils\\lighthouseStatus.js",
+      "size": 6029,
+      "modified": "2025-07-28T18:39:06.432Z"
+    },
+    {
+      "path": "src\\utils\\newsletterManager.ts",
+      "size": 7187,
+      "modified": "2025-08-18T19:21:13.338Z"
+    },
+    {
+      "path": "src\\utils\\newsletterOptimizationReport.js",
+      "size": 3574,
+      "modified": "2025-07-28T17:57:15.733Z"
+    },
+    {
+      "path": "src\\utils\\performance.ts",
+      "size": 6190,
+      "modified": "2025-07-03T04:35:35.761Z"
+    },
+    {
+      "path": "src\\utils\\performanceTest.js",
+      "size": 3017,
+      "modified": "2025-07-28T16:54:34.739Z"
+    },
+    {
+      "path": "src\\utils\\phase1Results.js",
+      "size": 5911,
+      "modified": "2025-07-28T17:15:51.114Z"
+    },
+    {
+      "path": "src\\utils\\phase2Results.js",
+      "size": 7272,
+      "modified": "2025-07-28T17:15:52.003Z"
+    },
+    {
+      "path": "src\\utils\\revenueAnalytics.js",
+      "size": 5588,
+      "modified": "2025-07-28T18:39:08.208Z"
+    },
+    {
+      "path": "src\\utils\\sanityAds.ts",
+      "size": 14232,
+      "modified": "2025-08-18T19:21:17.087Z"
+    },
+    {
+      "path": "src\\utils\\urlHelpers.ts",
+      "size": 1180,
+      "modified": "2025-07-26T04:04:59.007Z"
+    },
+    {
+      "path": "public\\assets\\lead-magnets\\2025 AI Money & Productivity Vault.zip",
+      "size": 6095042,
+      "modified": "2025-07-23T11:19:31.355Z"
+    },
+    {
+      "path": "public\\assets\\lead-magnets\\README.md",
+      "size": 1349,
+      "modified": "2025-07-24T05:14:19.009Z"
+    },
+    {
+      "path": "public\\favicon.svg",
+      "size": 749,
+      "modified": "2025-06-13T11:31:44.000Z"
+    },
+    {
+      "path": "public\\fonts\\atkinson-bold.woff",
+      "size": 23780,
+      "modified": "2025-06-13T11:31:44.000Z"
+    },
+    {
+      "path": "public\\fonts\\atkinson-regular.woff",
+      "size": 22792,
+      "modified": "2025-06-13T11:31:44.000Z"
+    },
+    {
+      "path": "public\\icons\\icon-128x128.svg",
+      "size": 688,
+      "modified": "2025-07-03T04:20:05.824Z"
+    },
+    {
+      "path": "public\\icons\\icon-144x144.svg",
+      "size": 702,
+      "modified": "2025-07-03T04:20:05.828Z"
+    },
+    {
+      "path": "public\\icons\\icon-152x152.svg",
+      "size": 677,
+      "modified": "2025-07-03T04:20:05.831Z"
+    },
+    {
+      "path": "public\\icons\\icon-192x192.svg",
+      "size": 678,
+      "modified": "2025-07-03T04:20:05.834Z"
+    },
+    {
+      "path": "public\\icons\\icon-384x384.svg",
+      "size": 680,
+      "modified": "2025-07-03T04:20:05.836Z"
+    },
+    {
+      "path": "public\\icons\\icon-512x512.svg",
+      "size": 692,
+      "modified": "2025-07-03T04:20:05.839Z"
+    },
+    {
+      "path": "public\\icons\\icon-72x72.svg",
+      "size": 696,
+      "modified": "2025-07-03T04:20:05.811Z"
+    },
+    {
+      "path": "public\\icons\\icon-96x96.svg",
+      "size": 670,
+      "modified": "2025-07-03T04:20:05.820Z"
+    },
+    {
+      "path": "public\\icons\\news-96x96.svg",
+      "size": 670,
+      "modified": "2025-07-03T04:20:05.843Z"
+    },
+    {
+      "path": "public\\icons\\reviews-96x96.svg",
+      "size": 670,
+      "modified": "2025-07-03T04:20:05.845Z"
+    },
+    {
+      "path": "public\\icons\\tutorials-96x96.svg",
+      "size": 670,
+      "modified": "2025-07-03T04:20:05.848Z"
+    },
+    {
+      "path": "public\\images\\authors\\raf-velazquez-optimized.jpg",
+      "size": 22330,
+      "modified": "2025-07-28T16:52:23.942Z"
+    },
+    {
+      "path": "public\\images\\authors\\raf-velazquez.avif",
+      "size": 17330,
+      "modified": "2025-07-28T16:52:23.787Z"
+    },
+    {
+      "path": "public\\images\\authors\\raf-velazquez.jpg",
+      "size": 108793,
+      "modified": "2025-07-26T03:11:09.657Z"
+    },
+    {
+      "path": "public\\images\\authors\\raf-velazquez.webp",
+      "size": 15012,
+      "modified": "2025-07-28T16:52:23.749Z"
+    },
+    {
+      "path": "public\\lead-magnets\\2025 AI Money & Productivity Vault.zip",
+      "size": 6048538,
+      "modified": "2025-08-21T06:08:06.375Z"
+    },
+    {
+      "path": "public\\manifest.json",
+      "size": 2847,
+      "modified": "2025-07-03T04:20:38.191Z"
+    },
+    {
+      "path": "public\\offline.html",
+      "size": 6720,
+      "modified": "2025-06-26T02:13:33.431Z"
+    },
+    {
+      "path": "public\\robots.txt",
+      "size": 1111,
+      "modified": "2025-06-27T02:35:37.428Z"
+    },
+    {
+      "path": "public\\studio-dark-theme.css",
+      "size": 4115,
+      "modified": "2025-07-26T06:12:38.030Z"
+    },
+    {
+      "path": "public\\styles\\components.css",
+      "size": 9449,
+      "modified": "2025-07-28T19:25:28.078Z"
+    },
+    {
+      "path": "public\\styles\\critical.css",
+      "size": 7694,
+      "modified": "2025-08-04T07:00:57.132Z"
+    },
+    {
+      "path": "public\\styles\\fresh-dev.css",
+      "size": 9433,
+      "modified": "2025-07-28T01:13:32.384Z"
+    },
+    {
+      "path": "public\\styles\\global.css",
+      "size": 24837,
+      "modified": "2025-08-14T09:05:54.324Z"
+    },
+    {
+      "path": "public\\styles\\layout.css",
+      "size": 6054,
+      "modified": "2025-08-03T20:23:24.859Z"
+    },
+    {
+      "path": "public\\styles\\optimized.css",
+      "size": 7501,
+      "modified": "2025-07-28T00:46:38.489Z"
+    },
+    {
+      "path": "public\\styles\\ultra-fresh-20250727-211452.css",
+      "size": 9433,
+      "modified": "2025-07-28T01:13:32.384Z"
+    },
+    {
+      "path": "public\\styles\\utilities.css",
+      "size": 8615,
+      "modified": "2025-08-04T01:20:04.123Z"
+    },
+    {
+      "path": "public\\sw.js",
+      "size": 3178,
+      "modified": "2025-07-28T00:58:01.228Z"
+    },
+    {
+      "path": "netlify\\functions\\contact.js",
+      "size": 9029,
+      "modified": "2025-06-26T03:39:23.278Z"
+    },
+    {
+      "path": "netlify\\functions\\package.json",
+      "size": 425,
+      "modified": "2025-06-26T03:39:32.730Z"
+    },
+    {
+      "path": "netlify\\functions\\sanity-webhook-simple.js",
+      "size": 1,
+      "modified": "2025-06-26T16:20:35.076Z"
+    },
+    {
+      "path": "netlify\\functions\\sanity-webhook.js",
+      "size": 1,
+      "modified": "2025-06-26T16:20:31.373Z"
+    },
+    {
+      "path": "netlify\\functions\\subscribe.js",
+      "size": 8631,
+      "modified": "2025-06-26T01:40:38.685Z"
+    }
+  ],
+  "totalSize": 14266931,
+  "checksum": null
+}
