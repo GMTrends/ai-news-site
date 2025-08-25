@@ -161,18 +161,9 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     // Sanitize email
     const sanitizedEmail = email.toLowerCase().trim();
     
-    // Debug logging for environment variables
+    // Get environment variables
     const apiKey = import.meta.env.EMAILOCTOPUS_API_KEY;
     const listId = import.meta.env.EMAILOCTOPUS_LIST_ID;
-    
-    console.log('Environment check:', {
-      hasApiKey: !!apiKey,
-      hasListId: !!listId,
-      apiKeyLength: apiKey ? apiKey.length : 0,
-      listIdLength: listId ? listId.length : 0,
-      email: sanitizedEmail,
-      category: category
-    });
     
     // Subscription received (logging removed)
 
@@ -245,8 +236,6 @@ async function sendWelcomeEmail(email: string, category: string): Promise<void> 
 
       if (!res.ok) {
         console.error('EmailOctopus API error:', await res.text());
-      } else {
-        console.log(`Successfully added ${email} to EmailOctopus list`);
       }
     } catch (error) {
       console.error('EmailOctopus integration error:', error);
@@ -256,7 +245,6 @@ async function sendWelcomeEmail(email: string, category: string): Promise<void> 
   }
   
   // Simple welcome message for all subscribers
-  console.log(`Welcome email would be sent to ${email} with AI newsletter bundle download link`);
 }
 
 export const GET: APIRoute = async ({ cookies }) => {

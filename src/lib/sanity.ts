@@ -9,6 +9,10 @@ export const sanityClient = createClient({
   token: import.meta.env.VITE_SANITY_TOKEN, // Only for write operations
 })
 
+
+
+
+
 // Helper function to generate Sanity image URLs
 export function urlFor(source: any) {
   if (!source?.asset?._ref) return null;
@@ -52,50 +56,57 @@ export function getImageUrl(image: any) {
   return url
 }
 
-export async function getFeaturedArticles(limit: number = 12) {
+export async function getFeaturedArticles(limit: number = 8) {
   try {
-    const featuredArticles = await sanityClient.fetch(`
-      *[_type == "article" && 
-        (status == "published" || 
-         (status == "scheduled" && publishedAt <= now())
-        )
-      ] | order(publishedAt desc) {
-        _id,
-        title,
-        "slug": slug.current,
-        excerpt,
-        publishedAt,
-        status,
-        heroPlacement,
-        priority,
-        revenueClassification,
-        contentType,
-        "author": author->{name, slug},
-        "category": category->{name, displayName, slug, icon, color},
-        "featuredImage": featuredImage{
-          asset->{
-            _id,
-            url,
-            metadata
-          }
-        },
-        content
-      }
-    `)
+    const query = `*[_type == "article" && 
+      (status == "published" || 
+       (status == "scheduled" && publishedAt <= now())
+      )
+    ] | order(heroPlacement == 'large' desc, heroPlacement == 'small' desc, publishedAt desc) {
+      _id,
+      title,
+      "slug": slug.current,
+      excerpt,
+      publishedAt,
+      status,
+      heroPlacement,
+      priority,
+      revenueClassification,
+      contentType,
+      "author": author->{name, "slug": slug.current},
+      "category": category->{name, displayName, slug, icon, color},
+      "featuredImage": featuredImage{
+        asset->{
+          _id,
+          url,
+          metadata
+        }
+      },
+      content
+    }`;
+    
+    const featuredArticles = await sanityClient.fetch(query);
     
     // Process images and limit
-    const articlesWithImages = featuredArticles.map((article: any) => ({
+    const articlesWithImages = featuredArticles.map((article: any, index: number) => ({
       ...article,
       featuredImage: getImageUrl(article.featuredImage),
       excerpt: ensureExcerpt({
         excerpt: article.excerpt,
         content: article.content
-      })
+      }, index === 0 ? 600 : 250) // Longer excerpts for the first/main article
     })).slice(0, limit)
     
     return articlesWithImages
   } catch (error) {
     console.error('❌ Error fetching articles:', error)
+    if (error instanceof Error) {
+      console.error('❌ Error details:', {
+        message: error.message,
+        stack: error.stack,
+        name: error.name
+      });
+    }
     return []
   }
 }  
@@ -107,15 +118,16 @@ export async function getArticlesByCategory(categorySlug: string, limit?: number
           (status == "published" ||
            (status == "scheduled" && publishedAt <= now())
           ) &&
-          category->slug.current == $categorySlug] | order(publishedAt desc) ${limit ? `[0...${limit}]` : ''} {
+          category->slug.current == $categorySlug] | order(heroPlacement == 'large' desc, heroPlacement == 'small' desc, publishedAt desc) ${limit ? `[0...${limit}]` : ''} {
           _id,
           title,
           "slug": slug.current,
           excerpt,
           publishedAt,
           status,
-          featured,
-          "author": author->{name, slug},
+          heroPlacement,
+          priority,
+          "author": author->{name, "slug": slug.current},
           "category": category->{name, displayName, slug, icon, color},
           "featuredImage": featuredImage{
             asset->{
@@ -137,7 +149,7 @@ export async function getArticlesByCategory(categorySlug: string, limit?: number
         excerpt: ensureExcerpt({
           excerpt: article.excerpt,
           content: article.content
-        })
+        }, 250)
       }))
       
       return articlesWithImages
@@ -151,6 +163,55 @@ export async function getBreakingNews(limit: number = 2) {
   return await getArticlesByCategory('ai-news', limit)
 }
 
+export async function getArticlesByHeroPlacement(placement: 'large' | 'small' | 'none', limit: number = 8) {
+  try {
+    const query = `*[_type == "article" && 
+      (status == "published" || 
+       (status == "scheduled" && publishedAt <= now())
+      ) &&
+      heroPlacement == $placement
+    ] | order(publishedAt desc) [0...$limit] {
+      _id,
+      title,
+      "slug": slug.current,
+      excerpt,
+      publishedAt,
+      status,
+      heroPlacement,
+      priority,
+      revenueClassification,
+      contentType,
+      "author": author->{name, "slug": slug.current},
+      "category": category->{name, displayName, slug, icon, color},
+      "featuredImage": featuredImage{
+        asset->{
+          _id,
+          url,
+          metadata
+        }
+      },
+      content
+    }`;
+    
+    const articles = await sanityClient.fetch(query, { placement, limit })
+    
+    // Process images and limit
+    const articlesWithImages = articles.map((article: any) => ({
+      ...article,
+      featuredImage: getImageUrl(article.featuredImage),
+      excerpt: ensureExcerpt({
+        excerpt: article.excerpt,
+        content: article.content
+      }, placement === 'large' ? 600 : 250) // Longer excerpts for large placement articles
+    }))
+    
+    return articlesWithImages
+  } catch (error) {
+    console.error(`❌ Error fetching articles with heroPlacement ${placement}:`, error)
+    return []
+  }
+}
+
 export async function getNews(limit: number = 2) {
   try {
     const news = await sanityClient.fetch(`
@@ -158,15 +219,16 @@ export async function getNews(limit: number = 2) {
         (status == "published" || 
          (status == "scheduled" && publishedAt <= now())
         ) && 
-        category->slug.current == "ai-news"] | order(publishedAt desc) {
+        category->slug.current == "ai-news"] | order(heroPlacement == 'large' desc, heroPlacement == 'small' desc, publishedAt desc) {
         _id,
         title,
         "slug": slug.current,
         excerpt,
         publishedAt,
         status,
-        featured,
-        "author": author->{name, slug},
+        heroPlacement,
+        priority,
+        "author": author->{name, "slug": slug.current},
         "category": category->{name, displayName, slug, icon, color},
         "featuredImage": featuredImage{
           asset->{
@@ -185,7 +247,7 @@ export async function getNews(limit: number = 2) {
       excerpt: ensureExcerpt({
         excerpt: article.excerpt,
         content: article.content
-      })
+      }, 250)
     })).slice(0, limit)
     
     return newsWithImages
@@ -202,14 +264,14 @@ export async function getReviews(limit: number = 2) {
         (status == "published" || 
          (status == "scheduled" && publishedAt <= now())
         ) && 
-        category->slug.current == "reviews"] | order(publishedAt desc) {
+        category->slug.current == "reviews"] | order(heroPlacement == 'large' desc, heroPlacement == 'small' desc, publishedAt desc) {
         _id,
         title,
         "slug": slug.current,
         excerpt,
         publishedAt,
         seoScore,
-        "author": author->{name, slug},
+        "author": author->{name, "slug": slug.current},
         "category": category->{name, displayName, slug, icon, color},
         "featuredImage": featuredImage{
           asset->{
@@ -228,7 +290,7 @@ export async function getReviews(limit: number = 2) {
       excerpt: ensureExcerpt({
         excerpt: article.excerpt,
         content: article.content
-      })
+      }, 250)
     })).slice(0, limit)
     
     return reviewsWithImages
@@ -321,15 +383,16 @@ export async function getArticlesByAuthor(authorId: string) {
         (status == "published" || 
          (status == "scheduled" && publishedAt <= now())
         ) && 
-        author._ref == $authorId] | order(publishedAt desc) {
+        author._ref == $authorId] | order(heroPlacement == 'large' desc, heroPlacement == 'small' desc, publishedAt desc) {
         _id,
         title,
         "slug": slug.current,
         excerpt,
         publishedAt,
         status,
-        featured,
-        "author": author->{name, slug},
+        heroPlacement,
+        priority,
+        "author": author->{name, "slug": slug.current},
         "category": category->{name, displayName, slug, icon, color},
         featuredImage,
         "imageUrl": featuredImage.asset->url,
@@ -343,7 +406,7 @@ export async function getArticlesByAuthor(authorId: string) {
       excerpt: ensureExcerpt({
         excerpt: article.excerpt,
         content: article.content
-      })
+      }, 250)
     }))
     
     return articlesWithImages
@@ -428,18 +491,17 @@ export async function getAllArticles() {
         (status == "published" || 
          (status == "scheduled" && publishedAt <= now())
         )
-      ] | order(publishedAt desc) {
+      ] | order(heroPlacement == 'large' desc, heroPlacement == 'small' desc, publishedAt desc) {
         _id,
         title,
         "slug": slug.current,
         excerpt,
         publishedAt,
         status,
-        featured,
         featuredImage {
           asset->
         },
-        "author": author->{name, slug},
+        "author": author->{name, "slug": slug.current},
         "category": category->{name, displayName, slug, icon, color},
         body,
         content
@@ -450,7 +512,7 @@ export async function getAllArticles() {
       excerpt: ensureExcerpt({
         excerpt: article.excerpt,
         content: article.content
-      })
+      }, 250)
     }))
   } catch (error) {
     console.error('❌ Error fetching all articles:', error)

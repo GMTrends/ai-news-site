@@ -52,22 +52,12 @@ class GoogleAnalyticsService {
     this.projectId = process.env.GA_PROJECT_ID || '';
     this.propertyId = process.env.GA_PROPERTY_ID || '';
     
-    // Debug logging
-    console.log('GA Service Environment Variables:');
-    console.log('- PUBLIC_GA_MEASUREMENT_ID:', process.env.PUBLIC_GA_MEASUREMENT_ID);
-    console.log('- GA_PRIVATE_KEY_ID:', this.privateKeyId ? 'SET' : 'NOT SET');
-    console.log('- GA_PRIVATE_KEY:', this.privateKey ? 'SET' : 'NOT SET');
-    console.log('- GA_CLIENT_EMAIL:', this.clientEmail ? 'SET' : 'NOT SET');
-    console.log('- GA_PROJECT_ID:', this.projectId ? 'SET' : 'NOT SET');
-    console.log('- GA_PROPERTY_ID:', this.propertyId ? 'SET' : 'NOT SET');
+
     
     this.initializeClient();
   }
 
   private initializeClient() {
-    console.log('Initializing GA client...');
-    console.log('isConfigured():', this.isConfigured());
-    
     if (this.isConfigured()) {
       try {
         // Create credentials object for the GA client
@@ -79,19 +69,14 @@ class GoogleAnalyticsService {
           type: 'service_account',
         };
 
-        console.log('Creating GA client with credentials...');
         this.analyticsClient = new BetaAnalyticsDataClient({
           credentials,
           projectId: this.projectId,
         });
-        
-        console.log('Google Analytics client initialized successfully');
       } catch (error) {
         console.error('Error initializing GA client:', error);
         this.analyticsClient = null;
       }
-    } else {
-      console.log('GA client not configured - missing required environment variables');
     }
   }
 
@@ -100,14 +85,6 @@ class GoogleAnalyticsService {
    */
   isConfigured(): boolean {
     const configured = !!(this.privateKeyId && this.privateKey && this.clientEmail && this.projectId && this.propertyId);
-    console.log('isConfigured check:', {
-      privateKeyId: !!this.privateKeyId,
-      privateKey: !!this.privateKey,
-      clientEmail: !!this.clientEmail,
-      projectId: !!this.projectId,
-      propertyId: !!this.propertyId,
-      result: configured
-    });
     return configured;
   }
 
@@ -119,10 +96,6 @@ class GoogleAnalyticsService {
     totalUniqueViews: number;
     avgEngagementRate: number;
   }> {
-    console.log('getOverallMetrics called');
-    console.log('isConfigured():', this.isConfigured());
-    console.log('analyticsClient exists:', !!this.analyticsClient);
-    
     if (!this.isConfigured() || !this.analyticsClient) {
       console.warn('Google Analytics not fully configured, returning mock data');
       return {
@@ -133,9 +106,6 @@ class GoogleAnalyticsService {
     }
 
     try {
-      console.log('Fetching real data from Google Analytics...');
-      console.log('Property ID:', this.propertyId);
-      
       // Get data for the last 30 days
       const [response] = await this.analyticsClient.runReport({
         property: `properties/${this.propertyId}`,
@@ -155,8 +125,6 @@ class GoogleAnalyticsService {
       const totalPageViews = response.rows?.[0]?.metricValues?.[0]?.value || '0';
       const totalUsers = response.rows?.[0]?.metricValues?.[1]?.value || '0';
       const engagementRate = response.rows?.[0]?.metricValues?.[2]?.value || '0';
-
-      console.log('Real GA data fetched:', { totalPageViews, totalUsers, engagementRate });
 
       return {
         totalPageViews: parseInt(totalPageViews),
@@ -183,11 +151,8 @@ class GoogleAnalyticsService {
     }
 
     try {
-      console.log('Fetching real author metrics from GA...');
-      
-      // For now, return mock data structure but log that we're ready for real data
+      // For now, return mock data structure
       // This would need to be enhanced to fetch article-specific metrics by author
-      console.log('Author metrics ready for real GA integration');
       return this.getMockAuthorMetrics(authors);
     } catch (error) {
       console.error('Error fetching GA author metrics:', error);
@@ -205,11 +170,8 @@ class GoogleAnalyticsService {
     }
 
     try {
-      console.log('Fetching real article metrics from GA...');
-      
-      // For now, return mock data structure but log that we're ready for real data
+      // For now, return mock data structure
       // This would need to be enhanced to fetch page-specific metrics
-      console.log('Article metrics ready for real GA integration');
       return this.getMockArticleMetrics(articleSlugs);
     } catch (error) {
       console.error('Error fetching GA article metrics:', error);

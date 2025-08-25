@@ -38,7 +38,7 @@ export const GET: APIRoute = async () => {
         excerpt: ensureExcerpt({
           excerpt: article.data.excerpt,
           body: bodySnippet
-        }),
+        }, 250),
         publishedAt: article.data.publishedAt || new Date().toISOString(),
         author: {
           name: article.data.author || 'Unknown',
@@ -67,7 +67,7 @@ export const GET: APIRoute = async () => {
         excerpt: article.excerpt,
         body: article.body,
         content: article.body // Sanity articles might have content in body field
-      }),
+      }, 250),
       publishedAt: article.publishedAt || new Date().toISOString(),
       author: article.author && typeof article.author === 'object' ? {
         name: article.author.name || 'Unknown',

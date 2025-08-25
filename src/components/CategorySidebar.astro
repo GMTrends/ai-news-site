@@ -195,16 +195,18 @@ function getAdContent(adType: string, position: number) {
 <aside class={`category-sidebar${className ? ` ${className}` : ''}`}>
 
 
-  <!-- Premium Creative Tools Ad - Professional 300x250 Design -->
-  <div class="sidebar-section premium-ad-section" id="sidebar-premium-spotlight-creative">
-    <div class="ad-header">
-      <div class="ad-badge">PREMIUM</div>
-      <div class="ad-icon">✨</div>
-    </div>
-    <div class="ad-content">
-      <h3 class="ad-title">AI Creative Suite</h3>
-      <p class="ad-description">Unlock your creative potential with cutting-edge AI tools for design, content, and innovation.</p>
-      <div class="ad-cta">Discover Tools</div>
+  <!-- Premium Creative Tools Promo - Professional 300x250 Design -->
+  <div class="sidebar-section premium-promo-wrapper" id="sidebar-premium-spotlight-creative">
+    <div class="premium-promo-section">
+      <div class="promo-header">
+        <div class="promo-badge">PREMIUM</div>
+        <div class="promo-icon">✨</div>
+      </div>
+      <div class="promo-content">
+        <h3 class="promo-title">Premium AI Solutions</h3>
+        <p class="promo-description">Discover cutting-edge AI tools and solutions that can transform your workflow across any industry.</p>
+        <div class="promo-cta">Explore Now</div>
+      </div>
     </div>
   </div>
 
@@ -347,157 +349,333 @@ aside.category-sidebar,
   margin-bottom: 0; /* Remove margin-bottom to rely on parent gap */
 }
 
-/* PREMIUM AD SECTION - Neutral Professional Design - Full Sidebar Width */
-.premium-ad-section {
-  background: linear-gradient(135deg, rgba(26, 26, 27, 0.95) 0%, rgba(59, 130, 246, 0.05) 100%);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  /* FULL SIDEBAR WIDTH: Scale up to fill sidebar like other elements */
-  width: 100%;
-  height: auto;
-  min-height: 250px;
-  box-sizing: border-box;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
+/* PREMIUM PROMO WRAPPER - Allows shadows to extend */
+.premium-promo-wrapper {
+  overflow: visible !important;
+  position: relative !important;
+  z-index: 1 !important;
+  /* Force overflow visible on parent containers */
+  margin: 0 !important;
+  padding: 0 !important;
+  /* Override parent sidebar overflow hidden */
+  transform: translateZ(0) !important;
+  will-change: transform !important;
 }
 
-.premium-ad-section:hover {
-  border-color: rgba(59, 130, 246, 0.6);
+/* Override any parent overflow hidden - MORE AGGRESSIVE */
+.premium-promo-wrapper,
+.premium-promo-wrapper * {
+  overflow: visible !important;
+}
+
+/* Force the main sidebar to allow overflow for this specific section */
+.category-sidebar .premium-promo-wrapper {
+  overflow: visible !important;
+  position: relative !important;
+  z-index: 20 !important;
+  /* Create new stacking context */
+  transform: translateZ(0) !important;
+  /* Override parent overflow hidden */
+  contain: none !important;
+}
+
+/* OVERRIDE MAIN SIDEBAR OVERFLOW FOR PROMO SECTION */
+.category-sidebar:has(.premium-promo-wrapper) {
+  overflow: visible !important;
+}
+
+/* Alternative approach for browsers that don't support :has() */
+.category-sidebar .premium-promo-wrapper ~ * {
+  overflow: visible !important;
+}
+
+/* Force sidebar overflow visible when promo is hovered */
+.premium-promo-wrapper:hover ~ .category-sidebar,
+.premium-promo-wrapper:hover ~ * {
+  overflow: visible !important;
+}
+
+/* Last resort: force overflow visible on all parent containers */
+.premium-promo-wrapper:hover,
+.premium-promo-wrapper:hover *,
+.premium-promo-wrapper:hover ~ * {
+  overflow: visible !important;
+}
+
+/* PREMIUM PROMO SECTION - Neutral Professional Design - Maintains 300x250 Proportions */
+.premium-promo-section {
+  background: linear-gradient(135deg, rgba(26, 26, 27, 0.95) 0%, rgba(59, 130, 246, 0.05) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  border-radius: 12px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  /* MAINTAIN 300x250 PROPORTIONS WHILE SCALING TO SIDEBAR */
+  width: 100% !important;
+  height: auto !important;
+  min-height: 250px !important;
+  max-height: 300px !important;
+  aspect-ratio: 300/250 !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  margin: 0 0 0 0 !important;
+  padding: 1rem 1rem 1rem 1rem !important;
+  /* Ensure shadows can extend beyond boundaries */
+  transform: translateZ(0) !important;
+  will-change: transform, box-shadow !important;
+}
+
+.premium-promo-section:hover {
+  border-color: rgba(59, 130, 246, 0.6) !important;
   box-shadow: 
-    0 12px 30px rgba(59, 130, 246, 0.2),
-    0 6px 20px rgba(26, 26, 27, 0.3);
-  transform: translateY(-2px);
+    0 12px 35px rgba(59, 130, 246, 0.3),
+    0 6px 20px rgba(26, 26, 27, 0.5),
+    0 0 0 2px rgba(59, 130, 246, 0.25) !important;
+  transform: scale(1.02) !important;
+  z-index: 25 !important;
+  /* Force shadow visibility */
+  filter: drop-shadow(0 0 0 rgba(59, 130, 246, 0.1)) !important;
 }
 
-/* Ad Header */
-.ad-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1rem 0.75rem 1rem;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(26, 26, 27, 0.8) 100%);
-  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+/* Promo Header - Compact Professional Design */
+.premium-promo-section .promo-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 0.6rem 0.75rem !important;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(26, 26, 27, 0.9) 100%) !important;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.25) !important;
+  position: relative !important;
 }
 
-.ad-badge {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  color: white;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 0.4rem 0.8rem;
-  border-radius: 12px;
-  box-shadow: 0 3px 12px rgba(245, 158, 11, 0.3);
-  transition: all 0.3s ease;
+.premium-promo-section .promo-header::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8, #3b82f6) !important;
+  background-size: 200% 100% !important;
+  animation: headerShine 3s ease-in-out infinite !important;
 }
 
-.premium-ad-section:hover .ad-badge {
-  transform: scale(1.05);
-  box-shadow: 0 5px 18px rgba(245, 158, 11, 0.4);
+@keyframes headerShine {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
-.ad-icon {
-  font-size: 1.1rem;
-  color: #f59e0b;
-  filter: drop-shadow(0 2px 8px rgba(245, 158, 11, 0.3));
-  transition: all 0.3s ease;
+.premium-promo-section .promo-badge {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: white !important;
+  font-size: 0.65rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.8px !important;
+  padding: 0.35rem 0.7rem !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4) !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
 }
 
-.premium-ad-section:hover .ad-icon {
-  transform: scale(1.15) rotate(10deg);
-  filter: drop-shadow(0 4px 12px rgba(245, 158, 11, 0.5));
+.premium-promo-section .promo-badge::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent) !important;
+  transition: left 0.5s ease !important;
 }
 
-/* Ad Content */
-.ad-content {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  height: calc(100% - 70px); /* Account for header height */
-  justify-content: space-between;
+.premium-promo-section:hover .promo-badge::before {
+  left: 100% !important;
 }
 
-.ad-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 0.75rem;
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  transition: all 0.3s ease;
-  line-height: 1.2;
+.premium-promo-section:hover .promo-badge {
+  transform: scale(1.05) !important;
+  box-shadow: 0 5px 18px rgba(245, 158, 11, 0.4) !important;
 }
 
-.premium-ad-section:hover .ad-title {
-  background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.premium-promo-section .promo-icon {
+  font-size: 1.25rem !important;
+  color: #f59e0b !important;
+  filter: drop-shadow(0 2px 8px rgba(245, 158, 11, 0.4)) !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  z-index: 2 !important;
 }
 
-.ad-description {
-  color: #cccccc;
-  font-size: 0.85rem;
-  line-height: 1.5;
-  margin-bottom: 1rem;
-  transition: color 0.3s ease;
-  flex-grow: 1;
+.premium-promo-section .promo-icon::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.1) 0%, transparent 70%) !important;
+  border-radius: 50% !important;
+  z-index: -1 !important;
+  transition: all 0.3s ease !important;
 }
 
-.premium-ad-section:hover .ad-description {
-  color: #ffffff;
+.premium-promo-section:hover .promo-icon {
+  transform: scale(1.15) rotate(10deg) !important;
+  filter: drop-shadow(0 4px 12px rgba(245, 158, 11, 0.5)) !important;
 }
 
-/* Ad CTA Button */
-.ad-cta {
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  color: white;
-  text-align: center;
-  padding: 0.75rem 1.5rem;
-  border-radius: 25px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  cursor: pointer;
-  user-select: none;
+/* Promo Content - Structured Professional Layout */
+.premium-promo-section .promo-content {
+  padding: 0.75rem 0 0.5rem 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: calc(100% - 65px) !important; /* Account for compact header height */
+  justify-content: space-between !important;
+  position: relative !important;
 }
 
-.premium-ad-section:hover .ad-cta {
+.premium-promo-section .promo-content::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 1rem !important;
+  right: 1rem !important;
+  height: 1px !important;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent) !important;
+}
+
+.premium-promo-section .promo-title {
+  font-size: 1.2rem !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  margin-bottom: 0rem !important;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  transition: all 0.3s ease !important;
+  line-height: 1.3 !important;
+}
+
+.premium-promo-section:hover .promo-title {
+  background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.premium-promo-section .promo-description {
+  color: #d1d5db !important;
+  font-size: 0.9rem !important;
+  line-height: 1.5 !important;
+  margin-bottom: 0.75rem !important;
+  transition: color 0.3s ease !important;
+  flex-grow: 1 !important;
+  padding: 0 0.25rem 0 0.25rem !important;
+  position: relative !important;
+}
+
+.premium-promo-section .promo-description::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: -0.5rem !important;
+  left: 0.25rem !important;
+  right: 0.25rem !important;
+  height: 1px !important;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.15), transparent) !important;
+}
+
+.premium-promo-section:hover .promo-description {
+  color: #ffffff !important;
+}
+
+/* Promo CTA Button - Professional Design */
+.premium-promo-section .promo-cta {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+  color: white !important;
+  text-align: center !important;
+  padding: 0.6rem 1.5rem !important;
+  border-radius: 12px !important;
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  position: relative !important;
+  overflow: hidden !important;
+  letter-spacing: 0.3px !important;
+  /* Center the button and give it appropriate width */
+  align-self: center !important;
+  width: fit-content !important;
+  min-width: 140px !important;
+  /* Ensure text is not clipped and vertically centered */
+  line-height: 1.2 !important;
+  height: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.premium-promo-section .promo-cta::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent) !important;
+  transition: left 0.6s ease !important;
+}
+
+.premium-promo-section:hover .promo-cta::before {
+  left: 100% !important;
+}
+
+.premium-promo-section:hover .promo-cta {
   box-shadow: 
-    0 6px 20px rgba(59, 130, 246, 0.4),
-    0 4px 15px rgba(29, 78, 216, 0.3);
-  border-color: rgba(255, 255, 255, 0.4);
-  transform: translateY(-1px);
+    0 8px 25px rgba(59, 130, 246, 0.5) !important,
+    0 4px 15px rgba(29, 78, 216, 0.4) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  transform: translateY(-1px) !important;
+  z-index: 6 !important;
 }
 
 /* Responsive Design - Full Width Across All Screens */
 @media (max-width: 768px) {
-  .premium-ad-section {
-    min-height: 200px;
+  .premium-promo-section {
+    min-height: 200px !important;
+    max-height: 250px !important;
+    aspect-ratio: 300/250 !important;
   }
   
-  .ad-title {
-    font-size: 1rem;
+  .premium-promo-section .promo-title {
+    font-size: 1.1rem !important;
   }
   
-  .ad-description {
-    font-size: 0.8rem;
+  .premium-promo-section .promo-description {
+    font-size: 0.85rem !important;
   }
   
-  .ad-header {
-    padding: 0.75rem 0.75rem 0.5rem 0.75rem;
+  .premium-promo-section .promo-header {
+    padding: 0.5rem 0.6rem !important;
   }
   
-  .ad-content {
-    padding: 0.75rem;
+  .premium-promo-section .promo-content {
+    padding: 0.6rem 0 0.4rem 0 !important;
+  }
+  
+  .premium-promo-section .promo-badge {
+    font-size: 0.6rem !important;
+    padding: 0.3rem 0.6rem !important;
+  }
+  
+  .premium-promo-section .promo-icon {
+    font-size: 1.1rem !important;
   }
 }
 
@@ -2008,7 +2186,7 @@ aside.category-sidebar,
   font-size: 0.8rem;
 }
 
-.affiliate-ad-card {
+.affiliate-promo-card {
   background: linear-gradient(135deg, #00d4ff22 0%, #0066ff22 100%);
   border-radius: 12px;
   padding: 1.2rem 1rem;
@@ -2721,17 +2899,17 @@ aside.category-sidebar,
   border-color: rgba(255, 193, 7, 0.5);
 }
 
-/* Responsive design for premium ad space */
+/* Responsive design for premium promo space */
 @media (max-width: 768px) {
-  .premium-ad-space {
+  .premium-promo-space {
     padding: 0.875rem;
   }
   
-  .ad-title {
+  .promo-title {
     font-size: 1rem;
   }
   
-  .ad-description {
+  .promo-description {
     font-size: 0.8rem;
   }
   

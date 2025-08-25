@@ -59,7 +59,6 @@ export const POST: APIRoute = async ({ request }) => {
       }
     } catch (error) {
       // Collection might not exist yet, which is fine for first author
-      console.log('Authors collection not found, creating first author');
     }
 
     // Create author markdown file

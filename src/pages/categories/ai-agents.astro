@@ -101,19 +101,25 @@ if (allAIAgentsArticles?.length > 0) {
                 </div>
               )}
             </div>
-            
-            {allAIAgentsArticles.length > 8 && (
-              <div class="load-more-container">
-                <button id="load-more-btn" class="load-more-btn">
-                  <span class="load-more-text">Load More Articles</span>
-                </button>
-              </div>
-            )}
           </div>
+          
           <div class="sidebar sticky-col">
             <CategorySidebar categorySlug="ai-agents" articles={allAIAgentsArticles} />
           </div>
         </div>
+        
+        </div>
+        
+        {/* Load More button positioned under category-main but inside category-content */}
+        {allAIAgentsArticles.length > 8 && (
+          <div class="load-more-button-wrapper">
+            <div class="load-more-container-main-content">
+              <button id="load-more-btn" class="load-more-btn">
+                <span class="load-more-text">Load More Articles</span>
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   </div>
@@ -185,7 +191,7 @@ if (allAIAgentsArticles?.length > 0) {
     }
     
     .category-content {
-      padding: 3rem 0 4rem 0;
+      padding: 3rem 0 2rem 0;
       min-height: calc(100vh + 200px);
     }
     
@@ -201,7 +207,7 @@ if (allAIAgentsArticles?.length > 0) {
       align-items: start;
       position: relative;
       overflow: visible;
-      contain: none; /* Changed from layout to none to allow transforms */
+      contain: layout;
       height: auto;
     }
     
@@ -247,7 +253,7 @@ if (allAIAgentsArticles?.length > 0) {
       flex-shrink: 0 !important;
       align-self: stretch !important;
       box-sizing: border-box !important;
-      overflow: visible !important; /* Changed from hidden to visible to allow hover effects */
+      overflow: visible !important;
       /* Override any component-level width constraints */
       transform: none !important;
       contain: none !important;
@@ -310,6 +316,9 @@ if (allAIAgentsArticles?.length > 0) {
       height: auto;
       margin-bottom: 0 !important;
       padding-bottom: 0 !important;
+      /* Ensure proper containment */
+      overflow: hidden;
+      position: relative;
     }
     
     .articles-grid {
@@ -327,15 +336,14 @@ if (allAIAgentsArticles?.length > 0) {
       align-content: start;
       height: fit-content;
       max-height: none;
-      overflow: visible;
+      /* Fix overflow to prevent content from going beyond boundaries */
+      overflow: hidden;
       grid-template-rows: repeat(auto-fit, minmax(0, auto));
       align-items: stretch;
       row-gap: 2rem;
       column-gap: 2rem;
-      gap: unset;
-      row-gap: 2rem;
-      column-gap: 2rem;
-      margin-bottom: -2.5rem !important;
+      /* Remove negative margin that was causing overflow */
+      margin-bottom: 0 !important;
     }
     
     /* Force remove any bottom spacing from articles grid */
@@ -361,16 +369,39 @@ if (allAIAgentsArticles?.length > 0) {
       padding-bottom: 0 !important;
     }
     
-    /* Ensure load more container has no bottom spacing */
-    .load-more-container {
+    /* Load More button wrapper - positioned inside category-content */
+    .load-more-button-wrapper {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
       display: flex;
       justify-content: center;
-      margin: 2rem 0 0 0;
+      margin-bottom: 2rem;
+    }
+    
+    /* Load More button container - centered under category-main section */
+    .load-more-container-main-content {
+      display: flex;
+      justify-content: center;
       padding: 0;
-      margin-bottom: 0 !important;
-      padding-bottom: 0 !important;
-      margin-top: 0 !important;
-      padding-top: 3.5rem !important;
+      margin: 0;
+      /* Center the button under the category-main section */
+      transform: translateX(calc(-340px / 2)); /* Offset by half the sidebar width */
+    }
+    
+    /* Mobile responsive positioning */
+    @media (max-width: 768px) {
+      .load-more-container-main-content {
+        margin-left: 0; /* Reset to center for mobile */
+      }
+    }
+    
+    /* Tablet responsive positioning */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .load-more-container-main-content {
+        margin-left: 0; /* Reset to center for tablet */
+      }
     }
     
     /* Ensure newly loaded articles are fully visible */
@@ -500,110 +531,32 @@ if (allAIAgentsArticles?.length > 0) {
       opacity: 0.8;
     }
     
-    .no-articles {
-      text-align: center;
-      padding: 3rem;
-      background: #1a1a1b;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      grid-column: 1 / -1;
-    }
-    
-    .no-articles h3 {
-      color: #ffffff;
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-    }
-    
-    .no-articles p {
-      color: #cccccc;
-      font-size: 1.1rem;
-    }
-    
-    @media (max-width: 768px) {
-      .category-layout {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-      
-      .category-title {
-        font-size: 2rem;
-      }
-      
-      .articles-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .category-hero {
-        padding: 1.5rem 0;
-      }
-      
-      .category-content {
-        padding: 2rem 0;
-      }
-      
-      .footer-padding-spacer {
-        height: 50px;
-      }
-    }
-    
-    .load-more-container {
-      display: flex;
-      justify-content: center;
-      margin: 2rem 0 0 0;
-      padding: 0;
-    }
-    
+    /* Load more button styling */
     .load-more-btn {
-      background: linear-gradient(135deg, #00d4ff 0%, #14b8a6 100%);
+      background: linear-gradient(135deg, #14b8a6 0%, #00d4ff 100%);
       color: white;
       border: none;
       padding: 1rem 2rem;
-      border-radius: 12px;
+      border-radius: 25px;
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
+      box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
     }
     
     .load-more-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(20, 184, 166, 0.4);
-      background: linear-gradient(135deg, #00c4ef 0%, #0d9488 100%);
-    }
-    
-    .load-more-btn:active {
-      transform: translateY(0);
+      box-shadow: 0 8px 25px rgba(20, 184, 166, 0.4);
     }
     
     .load-more-btn:disabled {
-      opacity: 0.6;
+      opacity: 0.7;
       cursor: not-allowed;
       transform: none;
     }
     
-    .loading-spinner {
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-top: 2px solid white;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
-    .category-article.fade-in {
-      animation: fadeInUp 0.6s ease-out;
-    }
-    
+    /* Fade in animation for new articles */
     @keyframes fadeInUp {
       from {
         opacity: 0;
@@ -906,6 +859,17 @@ if (allAIAgentsArticles?.length > 0) {
             loadMoreBtn.disabled = false;
           }
           
+          // Smooth scroll to first new article
+          // REMOVED: This was causing the page to scroll down and clip new articles
+          // const firstNewArticle = articlesGrid.querySelector(`[data-article-index="${startIndex}"]`);
+          // if (firstNewArticle) {
+          //   firstNewArticle.scrollIntoView({ 
+          //     behavior: 'smooth', 
+          //     block: 'start',
+          //     inline: 'nearest'
+          //   });
+          // }
+          
           // Update sidebar visual alignment after content is loaded and settled
           setTimeout(() => {
             updateSidebarAlignment();
@@ -929,10 +893,11 @@ if (allAIAgentsArticles?.length > 0) {
           const mainHeight = categoryMain.offsetHeight;
           const articlesGridHeight = articlesGrid.offsetHeight;
 
-          const loadMoreContainer = document.querySelector('.load-more-container');
-          const loadMoreHeight = loadMoreContainer && loadMoreContainer.style.display !== 'none'
-            ? loadMoreContainer.offsetHeight
-            : 0;
+          // Since load more button is now outside main content, we don't need to account for its height
+          // This should allow perfect alignment between main content and sidebar
+
+          // Don't set minHeight on layout container - let it size naturally
+          // This prevents artificial height constraints that can cause extra space
 
           // Remove any artificial height manipulation from sidebar
           if (sidebar.style.minHeight) {

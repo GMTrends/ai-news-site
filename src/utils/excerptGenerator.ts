@@ -8,7 +8,7 @@
  * @param maxLength - Maximum length of the excerpt (default: 160)
  * @returns Generated excerpt
  */
-export function generateExcerpt(body: string, maxLength: number = 160): string {
+export function generateExcerpt(body: string, maxLength: number = 250): string {
   if (!body || typeof body !== 'string') {
     return '';
   }
@@ -64,7 +64,7 @@ export function ensureExcerpt(article: {
   excerpt?: string;
   body?: string;
   content?: any;
-}, maxLength: number = 160): string {
+}, maxLength: number = 250): string {
   // If excerpt exists and is not empty, use it
   if (article.excerpt && article.excerpt.trim()) {
     return article.excerpt;
@@ -101,7 +101,7 @@ export function ensureExcerpt(article: {
  * @param maxLength - Maximum length for generated excerpts
  * @returns Array of articles with guaranteed excerpts
  */
-export function processArticlesWithExcerpts(articles: any[], maxLength: number = 160): any[] {
+export function processArticlesWithExcerpts(articles: any[], maxLength: number = 250): any[] {
   return articles.map(article => ({
     ...article,
     excerpt: ensureExcerpt(article, maxLength)

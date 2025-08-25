@@ -19,7 +19,7 @@ export async function GET(context) {
 			excerpt: article.data.excerpt,
 			body: article.data.content,
 			content: article.data.content
-		}),
+		}, 250),
 			pubDate: article.data.publishedAt ? new Date(article.data.publishedAt) : new Date(),
 			link: `/articles/${article.slug}/`,
 		})),

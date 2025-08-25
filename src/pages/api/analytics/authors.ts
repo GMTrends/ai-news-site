@@ -60,7 +60,7 @@ export const GET: APIRoute = async () => {
           "slug": slug.current,
           status,
           publishedAt,
-          "author": author->{name, slug},
+          "author": author->{name, "slug": slug.current},
           "category": category->{name, slug}
         }
       `);
