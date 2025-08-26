@@ -19,7 +19,9 @@
     "backup:status": "node scripts/backup-recovery.js status",
     "backup:verify": "node scripts/backup-recovery.js verify",
     "backup:restore": "node scripts/backup-recovery.js restore",
-    "backup:restore-file": "node scripts/backup-recovery.js restore-file"
+    "backup:restore-file": "node scripts/backup-recovery.js restore-file",
+    "deploy:staging": "node scripts/staging-deploy.js",
+    "deploy:prod": "netlify deploy --prod"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
