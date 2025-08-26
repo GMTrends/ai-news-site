@@ -16,6 +16,7 @@
     "backup:staging": "NODE_ENV=staging node scripts/production-backup.js",
     "backup:prod": "NODE_ENV=production node scripts/production-backup.js",
     "backup:list": "node scripts/backup-recovery.js list",
+    "backup:status": "node scripts/backup-recovery.js status",
     "backup:verify": "node scripts/backup-recovery.js verify",
     "backup:restore": "node scripts/backup-recovery.js restore",
     "backup:restore-file": "node scripts/backup-recovery.js restore-file"
