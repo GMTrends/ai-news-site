@@ -1,0 +1,167 @@
+---
+// CSS imports moved to MainLayout.astro for proper Astro processing
+
+import { SITE_TITLE } from '../consts';
+import FallbackImage from '../assets/blog-placeholder-1.jpg';
+import type { ImageMetadata } from 'astro';
+import Analytics from './Analytics.astro';
+import TrackingPixels from './TrackingPixels.astro';
+
+// Optimized font loading with layout shift prevention
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/space-grotesk/400.css';
+import '@fontsource/space-grotesk/500.css';
+import '@fontsource/space-grotesk/700.css';
+import '@fontsource/jetbrains-mono/400.css';
+
+interface Props {
+	title: string;
+	description: string;
+	image: string | ImageMetadata;
+	canonicalUrl?: string;
+	noindex?: boolean;
+	structuredData?: object;
+}
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'http://localhost:4321');
+
+const { title, description, image = FallbackImage, noindex = false } = Astro.props;
+
+// Global noindex setting - set to true to prevent search engine crawling
+const GLOBAL_NOINDEX = import.meta.env.PUBLIC_NOINDEX === 'true' || false;
+const finalNoindex = noindex || GLOBAL_NOINDEX;
+
+const imageUrl = typeof image === 'string' ? image : image.src;
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#00d4ff" />
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="/manifest.json" />
+
+<!-- PHASE 3: CSS Performance Optimization -->
+<!-- CSS is now imported at the top of this file using Astro's CSS handling -->
+
+<!-- DNS Prefetch for external domains -->
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="dns-prefetch" href="//fonts.gstatic.com" />
+<link rel="dns-prefetch" href="//www.googletagmanager.com" />
+<link rel="dns-prefetch" href="//www.google-analytics.com" />
+
+<!-- Preconnect to external domains -->
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+<link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
+
+<!-- CSS files are now properly imported at the top of this component -->
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link
+	rel="alternate"
+	type="application/rss+xml"
+	title={SITE_TITLE}
+	href={new URL('rss.xml', Astro.site || 'http://localhost:4321')}
+/>
+<meta name="generator" content={Astro.generator} />
+
+<!-- Font preloads - using @fontsource packages -->
+<!-- Fonts are loaded via @fontsource packages in the imports above -->
+
+<!-- SEO Meta Tags -->
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="robots" content={finalNoindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
+
+<!-- Cache Control Meta Tags (Development) -->
+{import.meta.env.DEV && (
+  <>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+  </>
+)}
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:image" content={new URL(imageUrl, Astro.site || 'http://localhost:4321')} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={title} />
+
+<!-- Twitter Card -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonicalURL} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={new URL(imageUrl, Astro.site || 'http://localhost:4321')} />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": SITE_TITLE,
+  "url": Astro.site || 'http://localhost:4321',
+  "description": "Latest AI news, reviews, and insights from industry experts",
+  "publisher": {
+    "@type": "Organization",
+    "name": "AI Buzz Media",
+    "url": Astro.site || 'http://localhost:4321',
+    "logo": {
+      "@type": "ImageObject",
+      "url": `${Astro.site || 'http://localhost:4321'}/logo.png`,
+      "width": 512,
+      "height": 512
+    }
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": `${Astro.site || 'http://localhost:4321'}/search?q={search_term_string}`
+    },
+    "query-input": "required name=search_term_string"
+  }
+})} />
+
+<!-- Performance Monitoring -->
+<script>
+  // Basic performance monitoring
+  if (typeof window !== 'undefined') {
+    // Page load time
+    window.addEventListener('load', () => {
+      const loadTime = performance.now();
+      console.log('Page Load Time:', loadTime);
+      
+      // Navigation timing
+      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      if (navigation) {
+        console.log('DOM Content Loaded:', navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart);
+        console.log('First Paint:', performance.getEntriesByName('first-paint')[0]?.startTime);
+      }
+    });
+  }
+</script>
+
+<!-- Unified Newsletter System -->
+<script src="/src/utils/newsletterManager.ts" type="module"></script>
+
+<Analytics />
+<TrackingPixels />
