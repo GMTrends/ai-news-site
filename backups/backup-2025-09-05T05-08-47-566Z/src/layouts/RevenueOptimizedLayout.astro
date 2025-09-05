@@ -1,0 +1,385 @@
+---
+/**
+ * Revenue-Optimized Layout - Wrapper for MainLayout that adds strategic revenue components
+ * Designed to help beginner entrepreneurs while maximizing site revenue potential
+ * Focuses on simplicity, clarity, and effective AI tools discovery
+ */
+
+import MainLayout from './MainLayout.astro';
+import UniversalRevenueSidebar from '../components/UniversalRevenueSidebar.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  type?: 'website' | 'article' | 'author' | 'category';
+  publishedAt?: string;
+  modifiedAt?: string;
+  author?: {
+    name: string;
+    slug?: string;
+    image?: string;
+    bio?: string;
+  };
+  category?: {
+    name: string;
+    slug: string;
+  };
+  tags?: string[];
+  readingTime?: number;
+  wordCount?: number;
+  canonicalUrl?: string;
+  noindex?: boolean;
+  nofollow?: boolean;
+  structuredData?: object;
+  bodyClass?: string;
+  
+  // Revenue optimization props
+  showRevenueSidebar?: boolean;
+  pageType?: 'home' | 'article' | 'category' | 'tools-comparison' | 'general';
+  revenueTargeting?: string[];
+  revenuePriority?: 'premium' | 'high' | 'medium' | 'low';
+}
+
+const { 
+  showRevenueSidebar = true,
+  pageType = 'general',
+  revenueTargeting = [],
+  revenuePriority = 'high',
+  ...mainLayoutProps
+} = Astro.props;
+
+// Auto-detect page type based on URL if not specified
+const currentPath = Astro.url.pathname;
+let detectedPageType = pageType;
+
+if (pageType === 'general') {
+  if (currentPath === '/') detectedPageType = 'home';
+  else if (currentPath.includes('/blog/') || currentPath.includes('/posts/')) detectedPageType = 'article';
+  else if (currentPath.includes('/categories/')) detectedPageType = 'category';
+  else if (currentPath.includes('/tools') || currentPath.includes('/comparison')) detectedPageType = 'tools-comparison';
+}
+
+// Enhanced targeting for beginner entrepreneurs
+const entrepreneurTargeting = [
+  'beginner-entrepreneurs',
+  'startup-tools',
+  'business-growth',
+  'ai-for-beginners',
+  ...revenueTargeting
+];
+
+// Determine if sidebar should be shown based on page context
+const shouldShowSidebar = showRevenueSidebar && !currentPath.includes('/admin') && !currentPath.includes('/api');
+---
+
+<MainLayout {...mainLayoutProps}>
+  <div class="revenue-optimized-container" data-page-type={detectedPageType}>
+    
+    <!-- Main Content Area - Full Width by Default -->
+    <div class={`main-content-wrapper ${shouldShowSidebar ? 'with-sidebar' : ''}`}>
+      <div class="primary-content">
+        <slot />
+      </div>
+      
+      <!-- Minimal, Helpful Sidebar for Entrepreneurs (Only When Needed) -->
+      {shouldShowSidebar && (
+        <div class="helpful-sidebar-container">
+          <div class="entrepreneur-helper-box">
+            <h3>🚀 Quick AI Tool Finder</h3>
+            <p>New to AI tools? Start here:</p>
+            <div class="quick-links">
+              <a href="/ai-tools-comparison" class="helper-link">Compare Top Tools</a>
+              <a href="/categories/beginner-friendly" class="helper-link">Beginner Guide</a>
+              <a href="/newsletter" class="helper-link">Weekly Updates</a>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+
+    <!-- Subtle Footer Helper Section -->
+    <div class="footer-helper-zone">
+      <div class="entrepreneur-success-tips">
+        <h3>💡 AI Success Tips for New Entrepreneurs</h3>
+        <div class="tips-grid">
+          <div class="tip-card">
+            <span class="tip-number">1</span>
+            <div class="tip-content">
+              <h4>Start Small</h4>
+              <p>Choose one AI tool that solves your biggest problem first</p>
+            </div>
+          </div>
+          <div class="tip-card">
+            <span class="tip-number">2</span>
+            <div class="tip-content">
+              <h4>Free Trials</h4>
+              <p>Most AI tools offer free trials - test before you invest</p>
+            </div>
+          </div>
+          <div class="tip-card">
+            <span class="tip-number">3</span>
+            <div class="tip-content">
+              <h4>Learn Gradually</h4>
+              <p>Master one feature at a time instead of overwhelming yourself</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</MainLayout>
+
+<style>
+  .revenue-optimized-container {
+    width: 100%;
+    /* Remove max-width constraint to allow full-width backgrounds */
+  }
+
+  .main-content-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .main-content-wrapper {
+      padding: 0 2rem;
+    }
+  }
+
+  /* Only show sidebar when explicitly enabled and on larger screens */
+  .main-content-wrapper.with-sidebar {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .primary-content {
+    min-width: 0; /* Prevents grid overflow */
+  }
+
+  .helpful-sidebar-container {
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+  }
+
+  /* Entrepreneur Helper Box */
+  .entrepreneur-helper-box {
+    background: rgba(26, 26, 27, 0.95);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .entrepreneur-helper-box h3 {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+  }
+
+  .entrepreneur-helper-box p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    margin: 0 0 16px 0;
+  }
+
+  .quick-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .helper-link {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .helper-link:hover {
+    background: rgba(34, 197, 94, 0.2);
+    transform: translateY(-1px);
+  }
+
+  /* Footer Helper Zone - Full Width */
+  .footer-helper-zone {
+    margin-top: 60px;
+    padding: 40px 20px;
+    background: rgba(26, 26, 27, 0.3);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+  }
+
+  .entrepreneur-success-tips {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: center;
+  }
+
+  .entrepreneur-success-tips h3 {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 24px 0;
+  }
+
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .tip-card {
+    background: rgba(26, 26, 27, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    transition: all 0.2s ease;
+  }
+
+  .tip-card:hover {
+    border-color: rgba(34, 197, 94, 0.3);
+    transform: translateY(-1px);
+  }
+
+  .tip-number {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .tip-content {
+    flex: 1;
+  }
+
+  .tip-content h4 {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+  }
+
+  .tip-content p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 13px;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  /* Responsive Design for Beginner-Friendly Experience */
+  @media (max-width: 1200px) {
+    .main-content-wrapper.with-sidebar {
+      grid-template-columns: 1fr 280px;
+      gap: 20px;
+      padding: 0 16px;
+    }
+  }
+
+  @media (max-width: 968px) {
+    .main-content-wrapper.with-sidebar {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    .helpful-sidebar-container {
+      position: relative;
+      top: 0;
+      order: 2;
+    }
+
+    .tips-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .main-content-wrapper.with-sidebar {
+      gap: 24px;
+      padding: 0 12px;
+    }
+
+    .footer-helper-zone {
+      margin-top: 40px;
+      padding: 30px 16px;
+    }
+
+    .tip-card {
+      padding: 16px;
+      flex-direction: column;
+      text-align: center;
+      gap: 8px;
+    }
+
+    .tip-number {
+      align-self: center;
+    }
+  }
+
+  /* Page-specific optimizations for entrepreneur focus */
+  .revenue-optimized-container[data-page-type="tools-comparison"] .footer-revenue-zone {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.05) 0%, rgba(247, 147, 30, 0.05) 100%);
+    border-color: rgba(255, 107, 53, 0.2);
+  }
+
+  .revenue-optimized-container[data-page-type="home"] .entrepreneur-tools-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  /* Entrepreneur-focused styling */
+  .entrepreneur-focused-sidebar {
+    border: 2px solid rgba(34, 197, 94, 0.2);
+    border-radius: 16px;
+    padding: 8px;
+    background: rgba(34, 197, 94, 0.02);
+  }
+
+  /* Accessibility improvements for beginners */
+  .tool-cta:focus {
+    outline: 2px solid #00d4ff;
+    outline-offset: 2px;
+  }
+
+  .tool-recommendation:focus-within {
+    border-color: rgba(0, 212, 255, 0.6);
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+  }
+
+  /* Loading states for better UX */
+  .revenue-optimized-container {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in-out forwards;
+  }
+
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
+  }
+</style>
