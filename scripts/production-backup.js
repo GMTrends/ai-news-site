@@ -572,7 +572,14 @@ class ProductionBackupSystem {
 }
 
 // Run backup if called directly
-if (import.meta.url === `file://${process.argv[1].replace(/\\/g, '/')}`) {
+// More robust check: compare normalized file paths
+const scriptPath = fileURLToPath(import.meta.url);
+const executedPath = process.argv[1] ? path.resolve(process.argv[1]) : '';
+const isDirectExecution = scriptPath === executedPath || 
+                         process.argv[1]?.endsWith('production-backup.js') ||
+                         process.argv[1]?.includes('production-backup.js');
+
+if (isDirectExecution) {
   const backup = new ProductionBackupSystem();
   backup.run().then(result => {
     process.exit(result.success ? 0 : 1);

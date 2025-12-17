@@ -59,16 +59,42 @@ jobs:
         echo "🚀 Starting backup process..."
         echo "📁 Backup directory: $BACKUP_DIR"
         echo "🔧 Environment: $NODE_ENV"
+        echo "📂 Current directory: $(pwd)"
+        echo "📄 Script path: scripts/production-backup.js"
         
-        # Run the backup script directly
+        # Create backup directory if it doesn't exist
+        mkdir -p "$BACKUP_DIR"
+        
+        # Run the backup script directly with explicit error handling
+        set +e  # Don't exit on error immediately
         node scripts/production-backup.js
+        EXIT_CODE=$?
+        set -e  # Re-enable exit on error
+        
+        if [ $EXIT_CODE -ne 0 ]; then
+          echo "❌ Backup script exited with code: $EXIT_CODE"
+          echo "Checking for partial backup..."
+        fi
         
         # Check if backup was created
         if [ -d "$BACKUP_DIR" ]; then
-          echo "✅ Backup directory created"
-          ls -lah "$BACKUP_DIR" | head -10
+          echo "✅ Backup directory exists"
+          BACKUP_COUNT=$(ls -1 "$BACKUP_DIR" 2>/dev/null | wc -l)
+          echo "📦 Backup count: $BACKUP_COUNT"
+          if [ $BACKUP_COUNT -gt 0 ]; then
+            echo "📋 Recent backups:"
+            ls -lah "$BACKUP_DIR" | head -10
+          else
+            echo "⚠️ Warning: Backup directory is empty"
+          fi
         else
-          echo "⚠️ Warning: Backup directory not found after script execution"
+          echo "❌ Error: Backup directory not found after script execution"
+          exit 1
+        fi
+        
+        # Exit with the script's exit code
+        if [ $EXIT_CODE -ne 0 ]; then
+          exit $EXIT_CODE
         fi
     
     - name: Upload backup artifacts
