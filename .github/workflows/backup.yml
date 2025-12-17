@@ -37,14 +37,20 @@ jobs:
       run: npm ci
     
     - name: Run backup system
+      env:
+        NODE_ENV: production
+        BACKUP_DIR: ./production-backups
+        MAX_BACKUPS: 10
+        LOG_LEVEL: info
       run: npm run backup:prod
     
     - name: Upload backup artifacts
       uses: actions/upload-artifact@v4
       with:
         name: website-backup-${{ github.run_number }}
-        path: backups/
+        path: production-backups/
         retention-days: 30
+        if-no-files-found: warn
     
     - name: Create backup summary
       run: |
@@ -55,9 +61,13 @@ jobs:
         echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         
-        if [ -d "backups" ]; then
+        if [ -d "production-backups" ]; then
           echo "**Backup files:**" >> $GITHUB_STEP_SUMMARY
-          ls -la backups/ >> $GITHUB_STEP_SUMMARY
+          ls -lah production-backups/ | head -20 >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Backup count:** $(ls -1 production-backups/ | wc -l)" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "⚠️ **Warning:** Backup directory not found!" >> $GITHUB_STEP_SUMMARY
         fi
     
     - name: Notify on failure
@@ -84,7 +94,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: website-backup-${{ github.run_number }}
-        path: backups/
+        path: production-backups/
     
     - name: Upload to Google Drive (optional)
       if: secrets.GOOGLE_DRIVE_FOLDER_ID
