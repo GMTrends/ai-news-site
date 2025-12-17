@@ -76,6 +76,150 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 			structuredData={structuredData}
 		/>
 		
+		<!-- CRITICAL INLINE CSS - Hero Form No-Shift Guarantee -->
+		<style>
+			/* Maximum specificity inline critical CSS to prevent ANY layout shift */
+			/* Loads BEFORE all external stylesheets and compiled Astro CSS */
+			
+			/* CRITICAL: Hide browser extension injections (LastPass, 1Password, etc.) */
+			[data-lastpass-icon-root],
+			[data-lastpass-root],
+			[data-onepassword-root],
+			[data-dashlane-root],
+			div[style*="data-lastpass"],
+			div[style*="lastpass-icon-root"] {
+				display: none !important;
+				visibility: hidden !important;
+				opacity: 0 !important;
+				width: 0 !important;
+				height: 0 !important;
+				position: absolute !important;
+				pointer-events: none !important;
+			}
+			
+			/* Prevent any transitions/animations during initial load */
+			.new-newsletter-cta,
+			.new-newsletter-cta *,
+			.new-lead-magnet-grid,
+			.new-lead-magnet-grid * {
+				transition: none !important;
+				animation: none !important;
+			}
+			
+			/* Parent containers with fixed spacing */
+			section.new-hero-redesigned div.new-newsletter-cta,
+			div.new-newsletter-cta,
+			.new-newsletter-cta {
+				margin: 16px auto !important;
+				padding: 0 !important;
+			}
+			
+			div.new-cta-container,
+			.new-cta-container {
+				width: 100% !important;
+				margin: 0 !important;
+				padding: 0 !important;
+			}
+			
+			div.new-lead-magnet-grid,
+			.new-lead-magnet-grid {
+				display: grid !important;
+				grid-template-columns: 1fr !important;
+				gap: 24px !important;
+				padding: 24px !important;
+				margin: 0 !important;
+				box-sizing: border-box !important;
+			}
+			
+			div.new-lead-magnet-right,
+			.new-lead-magnet-right {
+				display: flex !important;
+				flex-direction: column !important;
+				gap: 16px !important;
+				margin: 0 !important;
+				padding: 0 !important;
+			}
+
+			div.new-lead-magnet-offer,
+			.new-lead-magnet-offer {
+				margin: 0 !important;
+				padding: 16px !important;
+				box-sizing: border-box !important;
+			}
+			
+			/* Form with exact spacing */
+			form.new-subscribe-form,
+			.new-subscribe-form,
+			div.new-lead-magnet-right form,
+			div.new-lead-magnet-right .new-subscribe-form {
+				display: flex !important;
+				flex-direction: column !important;
+				gap: 16px !important;
+				margin: 0 !important;
+				padding: 0 !important;
+				box-sizing: border-box !important;
+				position: relative !important;
+				isolation: isolate !important;
+			}
+			
+			/* Input with fixed height */
+			input.new-subscribe-input,
+			.new-subscribe-input,
+			form.new-subscribe-form input[type="email"],
+			.new-subscribe-form input[type="email"] {
+				width: 100% !important;
+				box-sizing: border-box !important;
+				min-height: 48px !important;
+				height: 48px !important;
+				max-height: 48px !important;
+				margin: 0 !important;
+				padding: 16px 20px !important;
+				font-size: 14px !important;
+				line-height: 16px !important;
+				display: block !important;
+				position: relative !important;
+				isolation: isolate !important;
+			}
+			
+			/* Button with fixed height */
+			button.new-subscribe-button,
+			.new-subscribe-button,
+			form.new-subscribe-form button[type="submit"],
+			.new-subscribe-form button[type="submit"] {
+				width: 100% !important;
+				box-sizing: border-box !important;
+				min-height: 52px !important;
+				height: 52px !important;
+				max-height: 52px !important;
+				margin: 0 !important;
+				padding: 16px 32px !important;
+				font-size: 16px !important;
+				line-height: 20px !important;
+				display: flex !important;
+				align-items: center !important;
+				justify-content: center !important;
+			}
+
+			div.new-trust-signals,
+			.new-trust-signals {
+				margin: 0 !important;
+				padding: 0 !important;
+				border-top: none !important;
+				display: flex !important;
+				min-height: 24px !important;
+				box-sizing: border-box !important;
+			}
+
+			@media (min-width: 900px) {
+				div.new-lead-magnet-grid,
+				.new-lead-magnet-grid {
+					grid-template-columns: 1fr 1fr !important;
+					gap: 32px !important;
+					padding: 32px !important;
+				}
+			}
+		</style>
+		
 		<!-- CSS imports as link tags for proper serving -->
 		<link rel="stylesheet" href="/styles/critical.css">
 		<link rel="stylesheet" href="/styles/global.css">
@@ -141,6 +285,41 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 				
 				// Removed font loading JavaScript to prevent layout shifting
 				// Fonts now use font-display: swap in CSS for stable loading
+				
+				// CRITICAL: Remove browser extension injections to prevent layout shift
+				function removeBrowserExtensionInjections() {
+					const selectors = [
+						'[data-lastpass-icon-root]',
+						'[data-lastpass-root]',
+						'[data-onepassword-root]',
+						'[data-dashlane-root]',
+						'[data-bitwarden-root]',
+						'div[style*="lastpass"]',
+						'div[style*="1password"]'
+					];
+					
+					selectors.forEach(selector => {
+						document.querySelectorAll(selector).forEach(el => {
+							el.remove();
+						});
+					});
+				}
+				
+				// Remove on load
+				removeBrowserExtensionInjections();
+				
+				// Monitor for injections using MutationObserver
+				const observer = new MutationObserver(() => {
+					removeBrowserExtensionInjections();
+				});
+				
+				// Start observing after DOM is ready
+				if (document.body) {
+					observer.observe(document.body, {
+						childList: true,
+						subtree: true
+					});
+				}
 			}
 		</script>
 		

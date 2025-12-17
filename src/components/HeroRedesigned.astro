@@ -442,60 +442,98 @@ function getCategoryColor(category: any) {
 </section>
 
 <style>
-	/* CRITICAL CSS - Prevent FOUC - Must be first */
-	:root {
-		--new-hero-form-gap-critical: 0.5rem;
-		--new-lead-magnet-right-gap: 0rem;
-		--new-lead-magnet-grid-gap: 1.5rem;
+	/* CRITICAL CSS - Prevent FOUC and Layout Shift - Must be first */
+	/* Using PX units to prevent rem-based shifts during font loading */
+	
+	/* CRITICAL: Block browser extension injections (LastPass, 1Password, Dashlane, etc.) */
+	[data-lastpass-icon-root],
+	[data-lastpass-root],
+	[data-onepassword-root],
+	[data-dashlane-root],
+	[data-bitwarden-root],
+	div[style*="lastpass"],
+	div[style*="1password"] {
+		display: none !important;
+		visibility: hidden !important;
+		opacity: 0 !important;
+		width: 0 !important;
+		height: 0 !important;
+		position: absolute !important;
+		pointer-events: none !important;
+		margin: 0 !important;
+		padding: 0 !important;
 	}
 	
 	/* Reset any potential browser defaults that could cause shifting */
 	form.new-subscribe-form,
 	.new-subscribe-form {
-		all: unset;
 		display: flex !important;
 		flex-direction: column !important;
-		gap: var(--new-hero-form-gap-critical) !important;
-		margin-top: 1rem !important;
+		gap: 16px !important;
+		margin: 0 !important;
+		padding: 0 !important;
 		contain: layout style !important;
 		min-height: fit-content !important;
-		row-gap: var(--new-hero-form-gap-critical) !important;
-		column-gap: 0 !important;
 		will-change: auto !important;
 		-webkit-flex-direction: column !important;
 		-ms-flex-direction: column !important;
-		/* Force immediate application */
 		transform: translateZ(0) !important;
 		backface-visibility: hidden !important;
+		position: relative !important;
+		isolation: isolate !important;
 	}
 	
 	
 	.new-subscribe-input {
 		width: 100% !important;
 		box-sizing: border-box !important;
-		min-height: 44px !important;
+		min-height: 48px !important;
+		height: 48px !important;
 		margin: 0 !important;
+		padding: 16px 20px !important;
+		font-size: 14px !important;
+		line-height: 16px !important;
+		position: relative !important;
+		isolation: isolate !important;
 	}
 	
 	.new-subscribe-button {
 		width: 100% !important;
 		box-sizing: border-box !important;
-		min-height: 44px !important;
+		min-height: 48px !important;
+		height: 52px !important;
 		margin: 0 !important;
+		padding: 16px 32px !important;
+		font-size: 16px !important;
+		line-height: 20px !important;
 	}
-	
+
 	/* Critical CSS for parent containers to prevent shifting */
 	.new-lead-magnet-right {
 		display: flex !important;
 		flex-direction: column !important;
-		gap: var(--new-lead-magnet-right-gap) !important;
+		gap: 16px !important;
+	}
+
+	.new-lead-magnet-offer {
+		margin: 0 !important;
+		padding: 16px !important;
+	}
+
+	.new-trust-signals {
+		margin: 0 !important;
+		padding: 0 !important;
+		border-top: none !important;
+		display: flex !important;
+		height: auto !important;
+		min-height: 24px !important;
 	}
 	
 	.new-lead-magnet-grid {
 		display: grid !important;
 		grid-template-columns: 1fr !important;
-		gap: var(--new-lead-magnet-grid-gap) !important;
-		padding: 1.5rem !important;
+		gap: 24px !important;
+		padding: 24px !important;
 		align-items: start !important;
 		min-height: auto !important;
 	}
@@ -518,27 +556,27 @@ function getCategoryColor(category: any) {
 	@media (min-width: 900px) {
 		.new-lead-magnet-grid {
 			grid-template-columns: 1fr 1fr !important;
-			gap: 2rem !important;
-			padding: 2rem !important;
+			gap: 32px !important;
+			padding: 32px !important;
 			min-height: 350px !important;
 		}
 	}
 	
 	@media (max-width: 768px) {
 		.new-lead-magnet-right {
-			gap: 0.75rem !important;
+			gap: 16px !important;
 		}
-		
+
 		.new-lead-magnet-grid {
-			gap: 1.5rem !important;
-			padding: 1.25rem !important;
+			gap: 24px !important;
+			padding: 20px !important;
 		}
 	}
 	
 	@media (max-width: 480px) {
 		.new-lead-magnet-grid {
-			padding: 1rem !important;
-			gap: 1.25rem !important;
+			padding: 16px !important;
+			gap: 20px !important;
 		}
 	}
 	
@@ -566,8 +604,6 @@ function getCategoryColor(category: any) {
 		--new-hero-glass-bg: rgba(255, 255, 255, 0.05);
 		--new-hero-glass-border: rgba(59, 130, 246, 0.1);
 		--new-hero-backdrop-blur: blur(20px);
-		/* Prevent layout shift by defining consistent form gap */
-		--new-hero-form-gap: 0.5rem;
 	}
 
 	/* Hero Section - Premium Layout */
@@ -790,8 +826,8 @@ function getCategoryColor(category: any) {
 		display: grid;
 		/* Mobile first: Single column */
 		grid-template-columns: 1fr;
-		gap: 1.5rem;
-		padding: 1.5rem;
+		gap: 24px;
+		padding: 24px;
 		align-items: start;
 		min-height: auto;
 		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -801,8 +837,8 @@ function getCategoryColor(category: any) {
 	@media (min-width: 900px) {
 		.new-lead-magnet-grid {
 			grid-template-columns: 1fr 1fr;
-			gap: 2rem;
-			padding: 2rem;
+			gap: 32px;
+			padding: 32px;
 			min-height: 350px;
 		}
 	}
@@ -970,15 +1006,16 @@ function getCategoryColor(category: any) {
 	.new-lead-magnet-right {
 		display: flex;
 		flex-direction: column;
-		gap: 0rem;
+		gap: 16px;
 	}
 
 	.new-lead-magnet-offer {
 		background: rgba(255, 255, 255, 0.05);
 		border-radius: 16px;
-		padding: 0.5rem;
+		padding: 16px;
 		border: 1px solid rgba(59, 130, 246, 0.15);
 		transition: all 0.3s ease;
+		margin: 0;
 	}
 
 	.new-lead-magnet-offer:hover {
@@ -1063,28 +1100,33 @@ function getCategoryColor(category: any) {
 	.new-subscribe-form {
 		display: flex;
 		flex-direction: column;
-		gap: var(--new-hero-form-gap, 0.5rem);
-		margin-top: 1rem;
+		gap: 16px;
+		margin: 0;
+		padding: 0;
 		/* Prevent layout shift by ensuring consistent gap from initial load */
 		min-height: fit-content;
 		/* Force immediate application of gap to prevent shifting */
 		contain: layout style;
 		/* Ensure form is rendered immediately with correct spacing */
 		will-change: auto;
+		position: relative;
+		isolation: isolate;
 	}
 
 	.new-subscribe-input {
 		background: rgba(255, 255, 255, 0.05);
 		border: 2px solid rgba(59, 130, 246, 0.2);
 		border-radius: 12px;
-		padding: 0.75rem 1rem;
+		padding: 16px 20px;
 		color: var(--new-hero-text-primary);
-		font-size: 0.85rem;
+		font-size: 14px;
+		line-height: 16px;
 		transition: all 0.3s ease;
 		/* Prevent layout shift by ensuring consistent sizing */
 		width: 100%;
 		box-sizing: border-box;
-		min-height: 44px;
+		min-height: 48px;
+		height: 48px;
 	}
 
 	.new-subscribe-input:hover {
@@ -1107,10 +1149,12 @@ function getCategoryColor(category: any) {
 		color: var(--new-hero-bg-primary);
 		border: none;
 		border-radius: 12px;
-		padding: 0.85rem 1rem;
-		font-size: 1rem;
+		padding: 16px 32px;
+		font-size: 16px;
+		line-height: 20px;
 		font-weight: 800;
 		cursor: pointer;
+		height: 52px;
 		box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
 		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		position: relative;
@@ -1149,10 +1193,11 @@ function getCategoryColor(category: any) {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 0.75rem;
-		margin-top: 0.75rem;
-		padding-top: 0.75rem;
-		border-top: 1px solid rgba(255, 255, 255, 0.08);
+		gap: 12px;
+		margin: 0;
+		padding: 0;
+		border-top: none;
+		min-height: 24px;
 	}
 
 	.new-trust-text, .new-gdpr-badge, .new-security-badge {
@@ -2547,8 +2592,8 @@ function getCategoryColor(category: any) {
 		
 		.new-lead-magnet-grid {
 			grid-template-columns: 1fr;
-			gap: 1.5rem;
-			padding: 1.5rem;
+			gap: 24px;
+			padding: 24px;
 		}
 	}
 
@@ -2571,8 +2616,8 @@ function getCategoryColor(category: any) {
 
 		.new-lead-magnet-grid {
 			grid-template-columns: 1fr;
-			gap: 1.5rem;
-			padding: 1.25rem;
+			gap: 24px;
+			padding: 20px;
 			min-height: auto;
 		}
 		
@@ -2681,7 +2726,7 @@ function getCategoryColor(category: any) {
 		}
 		
 		.new-lead-magnet-right {
-			gap: 0.75rem;
+			gap: 16px;
 		}
 		
 		.new-cta-headline {
@@ -2740,8 +2785,8 @@ function getCategoryColor(category: any) {
 		}
 		
 		.new-lead-magnet-grid {
-			padding: 1rem;
-			gap: 1.25rem;
+			padding: 16px;
+			gap: 20px;
 		}
 
 		/* Ensure sidebar content is properly stacked on mobile */
@@ -2976,7 +3021,7 @@ function getCategoryColor(category: any) {
 		}
 		
 		.new-lead-magnet-grid {
-			padding: 0.75rem;
+			padding: 12px;
 		}
 		
 		.new-cta-headline {
