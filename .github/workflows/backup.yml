@@ -37,7 +37,7 @@ jobs:
       run: npm ci
     
     - name: Run backup system
-      run: node backup-system.js
+      run: npm run backup:prod
     
     - name: Upload backup artifacts
       uses: actions/upload-artifact@v4
