@@ -443,7 +443,7 @@ function getCategoryColor(category: any) {
 
 <style>
 	/* CRITICAL CSS - Prevent FOUC and Layout Shift - Must be first */
-	/* Using PX units to prevent rem-based shifts during font loading */
+	/* Using rem units for professional responsive scaling */
 	
 	/* CRITICAL: Block browser extension injections (LastPass, 1Password, Dashlane, etc.) */
 	[data-lastpass-icon-root],
@@ -469,7 +469,7 @@ function getCategoryColor(category: any) {
 	.new-subscribe-form {
 		display: flex !important;
 		flex-direction: column !important;
-		gap: 16px !important;
+		gap: 1rem !important;
 		margin: 0 !important;
 		padding: 0 !important;
 		contain: layout style !important;
@@ -487,12 +487,12 @@ function getCategoryColor(category: any) {
 	.new-subscribe-input {
 		width: 100% !important;
 		box-sizing: border-box !important;
-		min-height: 48px !important;
-		height: 48px !important;
+		min-height: 3rem !important;
+		height: 3rem !important;
 		margin: 0 !important;
-		padding: 16px 20px !important;
-		font-size: 14px !important;
-		line-height: 16px !important;
+		padding: 1rem 1.25rem !important;
+		font-size: 0.875rem !important;
+		line-height: 1rem !important;
 		position: relative !important;
 		isolation: isolate !important;
 	}
@@ -500,24 +500,24 @@ function getCategoryColor(category: any) {
 	.new-subscribe-button {
 		width: 100% !important;
 		box-sizing: border-box !important;
-		min-height: 48px !important;
-		height: 52px !important;
+		min-height: 3rem !important;
+		height: 3.25rem !important;
 		margin: 0 !important;
-		padding: 16px 32px !important;
-		font-size: 16px !important;
-		line-height: 20px !important;
+		padding: 1rem 2rem !important;
+		font-size: 1rem !important;
+		line-height: 1.25rem !important;
 	}
 
 	/* Critical CSS for parent containers to prevent shifting */
 	.new-lead-magnet-right {
 		display: flex !important;
 		flex-direction: column !important;
-		gap: 16px !important;
+		gap: 1rem !important;
 	}
 
 	.new-lead-magnet-offer {
 		margin: 0 !important;
-		padding: 16px !important;
+		padding: 1rem !important;
 	}
 
 	.new-trust-signals {
@@ -526,14 +526,14 @@ function getCategoryColor(category: any) {
 		border-top: none !important;
 		display: flex !important;
 		height: auto !important;
-		min-height: 24px !important;
+		min-height: 1.5rem !important;
 	}
 	
 	.new-lead-magnet-grid {
 		display: grid !important;
 		grid-template-columns: 1fr !important;
-		gap: 24px !important;
-		padding: 24px !important;
+		gap: 1.5rem !important;
+		padding: 1.5rem !important;
 		align-items: start !important;
 		min-height: auto !important;
 	}
@@ -556,27 +556,27 @@ function getCategoryColor(category: any) {
 	@media (min-width: 900px) {
 		.new-lead-magnet-grid {
 			grid-template-columns: 1fr 1fr !important;
-			gap: 32px !important;
-			padding: 32px !important;
+			gap: 2rem !important;
+			padding: 2rem !important;
 			min-height: 350px !important;
 		}
 	}
 	
 	@media (max-width: 768px) {
 		.new-lead-magnet-right {
-			gap: 16px !important;
+			gap: 1rem !important;
 		}
 
 		.new-lead-magnet-grid {
-			gap: 24px !important;
-			padding: 20px !important;
+			gap: 1.5rem !important;
+			padding: 1.25rem !important;
 		}
 	}
 	
 	@media (max-width: 480px) {
 		.new-lead-magnet-grid {
-			padding: 16px !important;
-			gap: 20px !important;
+			padding: 1rem !important;
+			gap: 1.25rem !important;
 		}
 	}
 	
@@ -661,7 +661,7 @@ function getCategoryColor(category: any) {
 		padding: 0 1rem;
 		display: flex;
 		flex-direction: column;
-		gap: 2rem;
+		gap: 1.25rem;
 		position: relative;
 		z-index: 1;
 		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -671,14 +671,14 @@ function getCategoryColor(category: any) {
 	@media (min-width: 768px) {
 		.new-hero-container-new {
 			padding: 0 1.5rem;
-			gap: 2rem;
+			gap: 1.25rem;
 		}
 	}
 
 	/* Desktop: Full spacing */
 	@media (min-width: 1024px) {
 		.new-hero-container-new {
-			gap: 2.5rem;
+			gap: 1.5rem;
 		}
 	}
 
@@ -744,7 +744,7 @@ function getCategoryColor(category: any) {
 		line-height: 1.1;
 		letter-spacing: -0.02em;
 		color: var(--text-primary);
-		margin: 0 0 1rem 0;
+		margin: 0 0 0.75rem 0;
 		background: linear-gradient(135deg, #ffffff 0%, #e5e7eb 50%, #f59e0b 100%);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
@@ -761,7 +761,7 @@ function getCategoryColor(category: any) {
 		font-size: 1.25rem;
 		color: #e5e7eb;
 		line-height: 1.6;
-		margin: 0 0 2rem 0;
+		margin: 0 0 1.25rem 0;
 		max-width: 700px;
 		margin-left: auto;
 		margin-right: auto;
@@ -826,8 +826,8 @@ function getCategoryColor(category: any) {
 		display: grid;
 		/* Mobile first: Single column */
 		grid-template-columns: 1fr;
-		gap: 24px;
-		padding: 24px;
+		gap: 1.5rem;
+		padding: 1.5rem;
 		align-items: start;
 		min-height: auto;
 		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -837,8 +837,8 @@ function getCategoryColor(category: any) {
 	@media (min-width: 900px) {
 		.new-lead-magnet-grid {
 			grid-template-columns: 1fr 1fr;
-			gap: 32px;
-			padding: 32px;
+			gap: 2rem;
+			padding: 2rem;
 			min-height: 350px;
 		}
 	}
@@ -1006,13 +1006,13 @@ function getCategoryColor(category: any) {
 	.new-lead-magnet-right {
 		display: flex;
 		flex-direction: column;
-		gap: 16px;
+		gap: 1rem;
 	}
 
 	.new-lead-magnet-offer {
 		background: rgba(255, 255, 255, 0.05);
 		border-radius: 16px;
-		padding: 16px;
+		padding: 1rem;
 		border: 1px solid rgba(59, 130, 246, 0.15);
 		transition: all 0.3s ease;
 		margin: 0;
@@ -1100,7 +1100,7 @@ function getCategoryColor(category: any) {
 	.new-subscribe-form {
 		display: flex;
 		flex-direction: column;
-		gap: 16px;
+		gap: 1rem;
 		margin: 0;
 		padding: 0;
 		/* Prevent layout shift by ensuring consistent gap from initial load */
@@ -1117,16 +1117,16 @@ function getCategoryColor(category: any) {
 		background: rgba(255, 255, 255, 0.05);
 		border: 2px solid rgba(59, 130, 246, 0.2);
 		border-radius: 12px;
-		padding: 16px 20px;
+		padding: 1rem 1.25rem;
 		color: var(--new-hero-text-primary);
-		font-size: 14px;
-		line-height: 16px;
+		font-size: 0.875rem;
+		line-height: 1rem;
 		transition: all 0.3s ease;
 		/* Prevent layout shift by ensuring consistent sizing */
 		width: 100%;
 		box-sizing: border-box;
-		min-height: 48px;
-		height: 48px;
+		min-height: 3rem;
+		height: 3rem;
 	}
 
 	.new-subscribe-input:hover {
@@ -1149,12 +1149,12 @@ function getCategoryColor(category: any) {
 		color: var(--new-hero-bg-primary);
 		border: none;
 		border-radius: 12px;
-		padding: 16px 32px;
-		font-size: 16px;
-		line-height: 20px;
+		padding: 1rem 2rem;
+		font-size: 1rem;
+		line-height: 1.25rem;
 		font-weight: 800;
 		cursor: pointer;
-		height: 52px;
+		height: 3.25rem;
 		box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
 		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		position: relative;
@@ -1193,11 +1193,11 @@ function getCategoryColor(category: any) {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 12px;
+		gap: 0.75rem;
 		margin: 0;
 		padding: 0;
 		border-top: none;
-		min-height: 24px;
+		min-height: 1.5rem;
 	}
 
 	.new-trust-text, .new-gdpr-badge, .new-security-badge {
@@ -2592,8 +2592,8 @@ function getCategoryColor(category: any) {
 		
 		.new-lead-magnet-grid {
 			grid-template-columns: 1fr;
-			gap: 24px;
-			padding: 24px;
+			gap: 1.5rem;
+			padding: 1.5rem;
 		}
 	}
 
@@ -2606,7 +2606,7 @@ function getCategoryColor(category: any) {
 		
 		.new-hero-container-new {
 			padding: 0 1rem;
-			gap: 2.5rem;
+			gap: 1.25rem;
 		}
 
 		/* Fix sponsor label spacing on mobile */
@@ -2616,8 +2616,8 @@ function getCategoryColor(category: any) {
 
 		.new-lead-magnet-grid {
 			grid-template-columns: 1fr;
-			gap: 24px;
-			padding: 20px;
+			gap: 1.5rem;
+			padding: 1.25rem;
 			min-height: auto;
 		}
 		
@@ -2628,14 +2628,14 @@ function getCategoryColor(category: any) {
 		
 		.new-hero-title-modern {
 			font-size: clamp(1.5rem, 3vw, 2.5rem);
-			margin-bottom: 1rem;
+			margin-bottom: 0.75rem;
 			line-height: 1.4;
 			padding: 0 1rem;
 		}
-		
+
 		.new-hero-subtitle-modern {
 			font-size: clamp(0.85rem, 1.8vw, 1rem);
-			margin-bottom: 1.5rem;
+			margin-bottom: 1.25rem;
 			line-height: 1.6;
 			padding: 0 0.5rem;
 		}
@@ -2726,7 +2726,7 @@ function getCategoryColor(category: any) {
 		}
 		
 		.new-lead-magnet-right {
-			gap: 16px;
+			gap: 1rem;
 		}
 		
 		.new-cta-headline {
@@ -2769,7 +2769,7 @@ function getCategoryColor(category: any) {
 	@media (max-width: 480px) {
 		.new-hero-container-new {
 			padding: 0 0.75rem;
-			gap: 1.5rem;
+			gap: 1rem;
 		}
 
 		.new-hero-main-grid {
@@ -2785,8 +2785,8 @@ function getCategoryColor(category: any) {
 		}
 		
 		.new-lead-magnet-grid {
-			padding: 16px;
-			gap: 20px;
+			padding: 1rem;
+			gap: 1.25rem;
 		}
 
 		/* Ensure sidebar content is properly stacked on mobile */
@@ -3021,7 +3021,7 @@ function getCategoryColor(category: any) {
 		}
 		
 		.new-lead-magnet-grid {
-			padding: 12px;
+			padding: 0.75rem;
 		}
 		
 		.new-cta-headline {
