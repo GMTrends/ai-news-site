@@ -587,6 +587,37 @@ import Footer from '../components/Footer.astro';
             
             if (response.ok && result.success) {
               showMessage(result.message || 'Message sent successfully! We will get back to you soon.', 'success');
+              
+              // Check if newsletter subscription was requested
+              const newsletterCheckbox = this.querySelector('input[name="newsletter"]') as HTMLInputElement;
+              if (newsletterCheckbox && newsletterCheckbox.checked) {
+                const email = (this.querySelector('input[name="email"]') as HTMLInputElement)?.value.trim();
+                if (email) {
+                  // Subscribe to EmailOctopus
+                  try {
+                    const subscribeResponse = await fetch('/api/subscribe', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        email: email,
+                        source: 'contact-form',
+                        category: 'general'
+                      })
+                    });
+                    
+                    const subscribeResult = await subscribeResponse.json();
+                    if (subscribeResponse.ok && subscribeResult.success) {
+                      console.log('Newsletter subscription successful from contact form');
+                    }
+                  } catch (error) {
+                    console.error('Newsletter subscription error from contact form:', error);
+                    // Don't show error to user - contact form already succeeded
+                  }
+                }
+              }
+              
               this.reset();
             } else {
               showMessage(result.error || 'Failed to send message. Please try again.', 'error');

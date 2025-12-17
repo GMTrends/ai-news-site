@@ -701,3 +701,62 @@ function getArticleUrl(article: any) {
   }
 }
 </style>
+
+<script>
+  // Newsletter subscription handler for HomepageNewsletterSidebar
+  document.addEventListener('DOMContentLoaded', function() {
+    const newsletterForm = document.querySelector('.homepage-newsletter-sidebar .newsletter-form') as HTMLFormElement;
+    const emailInput = newsletterForm?.querySelector('.newsletter-input') as HTMLInputElement;
+    const submitButton = newsletterForm?.querySelector('.newsletter-submit') as HTMLButtonElement;
+    
+    if (newsletterForm && emailInput && submitButton) {
+      newsletterForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = emailInput.value.trim();
+        
+        if (!email || !email.includes('@')) {
+          alert('Please enter a valid email address.');
+          return;
+        }
+        
+        // Show loading state
+        const originalButtonText = submitButton.textContent;
+        submitButton.disabled = true;
+        submitButton.textContent = 'Subscribing...';
+        submitButton.style.opacity = '0.7';
+        
+        try {
+          const response = await fetch('/api/subscribe', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: email,
+              source: 'homepage-sidebar',
+              category: 'general'
+            })
+          });
+          
+          const result = await response.json();
+          
+          if (response.ok && result.success) {
+            emailInput.value = '';
+            alert(result.message || 'Successfully subscribed! Check your email for confirmation.');
+          } else {
+            alert(result.error || 'Subscription failed. Please try again.');
+          }
+        } catch (error) {
+          console.error('Homepage sidebar newsletter subscription error:', error);
+          alert('Network error. Please check your connection and try again.');
+        } finally {
+          // Reset button state
+          submitButton.disabled = false;
+          submitButton.textContent = originalButtonText || 'Subscribe Free';
+          submitButton.style.opacity = '1';
+        }
+      });
+    }
+  });
+</script>

@@ -3157,5 +3157,78 @@ function getCategoryColor(category: any) {
 </style>
 
 <script>
-	// Read more button now navigates to full article - no toggle functionality needed
+	// Newsletter subscription handler for Hero form
+	document.addEventListener('DOMContentLoaded', function() {
+		const heroForm = document.querySelector('.new-subscribe-form') as HTMLFormElement;
+		const emailInput = heroForm?.querySelector('input[name="email"]') as HTMLInputElement;
+		const submitButton = heroForm?.querySelector('.new-subscribe-button') as HTMLButtonElement;
+		
+		if (heroForm && emailInput && submitButton) {
+			heroForm.addEventListener('submit', async function(e) {
+				e.preventDefault();
+				
+				const email = emailInput.value.trim();
+				
+				if (!email || !email.includes('@')) {
+					// Show error message (you can add a message container if needed)
+					alert('Please enter a valid email address.');
+					return;
+				}
+				
+				// Show loading state
+				const originalButtonText = submitButton.innerHTML;
+				submitButton.disabled = true;
+				submitButton.style.opacity = '0.7';
+				submitButton.querySelector('.new-button-text')?.setAttribute('data-original', originalButtonText);
+				if (submitButton.querySelector('.button-text-desktop')) {
+					submitButton.querySelector('.button-text-desktop')!.textContent = 'Subscribing...';
+				}
+				if (submitButton.querySelector('.button-text-mobile')) {
+					submitButton.querySelector('.button-text-mobile')!.textContent = 'Subscribing...';
+				}
+				
+				try {
+					const response = await fetch('/api/subscribe', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							email: email,
+							source: 'homepage-hero',
+							category: 'general'
+						})
+					});
+					
+					const result = await response.json();
+					
+					if (response.ok && result.success) {
+						// Success - show message and reset form
+						emailInput.value = '';
+						alert(result.message || 'Successfully subscribed! Check your email for your free AI Money & Productivity Vault.');
+					} else {
+						alert(result.error || 'Subscription failed. Please try again.');
+					}
+				} catch (error) {
+					console.error('Hero newsletter subscription error:', error);
+					alert('Network error. Please check your connection and try again.');
+				} finally {
+					// Reset button state
+					submitButton.disabled = false;
+					submitButton.style.opacity = '1';
+					const originalText = submitButton.querySelector('.new-button-text')?.getAttribute('data-original');
+					if (originalText) {
+						submitButton.innerHTML = originalText;
+					} else {
+						if (submitButton.querySelector('.button-text-desktop')) {
+							submitButton.querySelector('.button-text-desktop')!.textContent = 'YES! I Want To 10X My Income With AI';
+						}
+						if (submitButton.querySelector('.button-text-mobile')) {
+							submitButton.querySelector('.button-text-mobile')!.textContent = '10X My Income With AI →';
+						}
+					}
+				}
+			});
+		}
+	});
 </script>
