@@ -101,7 +101,7 @@ jobs:
       uses: burnett01/rsync-deployments@6.0.0
       with:
         switches: -avzr --delete
-        path: backups/
+        path: production-backups/
         remote_path: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
         remote_host: ${{ secrets.GOOGLE_DRIVE_HOST }}
         remote_user: ${{ secrets.GOOGLE_DRIVE_USER }}
@@ -118,6 +118,6 @@ jobs:
     - name: Sync to S3
       if: secrets.AWS_ACCESS_KEY_ID
       run: |
-        aws s3 sync backups/ s3://${{ secrets.S3_BUCKET }}/website-backups/ \
+        aws s3 sync production-backups/ s3://${{ secrets.S3_BUCKET }}/website-backups/ \
           --exclude "*.tar.gz" \
           --storage-class STANDARD_IA 
