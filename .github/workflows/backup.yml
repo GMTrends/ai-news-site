@@ -15,7 +15,11 @@ on:
       - 'src/content/**'
       - 'public/**'
       - 'netlify/**'
-      - '**' # Trigger on any file change for comprehensive backup
+      - 'schemas/**'
+      - 'src/components/**'
+      - 'src/pages/**'
+      - '.github/workflows/backup.yml' # Trigger when workflow is updated
+      - 'scripts/production-backup.js' # Trigger when backup script is updated
 
 jobs:
   backup:
@@ -36,13 +40,36 @@ jobs:
     - name: Install dependencies
       run: npm ci
     
+    - name: Verify backup script exists
+      run: |
+        if [ ! -f "scripts/production-backup.js" ]; then
+          echo "❌ Error: backup script not found!"
+          exit 1
+        fi
+        echo "✅ Backup script found"
+        ls -la scripts/production-backup.js
+    
     - name: Run backup system
       env:
         NODE_ENV: production
         BACKUP_DIR: ./production-backups
         MAX_BACKUPS: 10
         LOG_LEVEL: info
-      run: npm run backup:prod
+      run: |
+        echo "🚀 Starting backup process..."
+        echo "📁 Backup directory: $BACKUP_DIR"
+        echo "🔧 Environment: $NODE_ENV"
+        
+        # Run the backup script directly
+        node scripts/production-backup.js
+        
+        # Check if backup was created
+        if [ -d "$BACKUP_DIR" ]; then
+          echo "✅ Backup directory created"
+          ls -lah "$BACKUP_DIR" | head -10
+        else
+          echo "⚠️ Warning: Backup directory not found after script execution"
+        fi
     
     - name: Upload backup artifacts
       uses: actions/upload-artifact@v4
@@ -70,6 +97,25 @@ jobs:
           echo "⚠️ **Warning:** Backup directory not found!" >> $GITHUB_STEP_SUMMARY
         fi
     
+    - name: Debug on failure
+      if: failure()
+      run: |
+        echo "❌ Backup failed! Debugging information:"
+        echo "Current directory: $(pwd)"
+        echo "Node version: $(node --version)"
+        echo "NPM version: $(npm --version)"
+        if [ -d "production-backups" ]; then
+          echo "Backup directory exists:"
+          ls -lah production-backups/
+        else
+          echo "Backup directory does not exist"
+        fi
+        if [ -f "scripts/production-backup.js" ]; then
+          echo "Backup script exists"
+        else
+          echo "Backup script NOT found!"
+        fi
+    
     - name: Notify on failure
       if: failure()
       uses: 8398a7/action-slack@v3
@@ -79,6 +125,7 @@ jobs:
         text: "❌ Website backup failed! Check the logs for details."
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      continue-on-error: true
 
   # Optional: Upload to cloud storage
   upload-to-cloud:
