@@ -170,7 +170,7 @@ jobs:
         path: production-backups/
     
     - name: Upload to Google Drive (optional)
-      if: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID != '' }}
+      continue-on-error: true
       uses: burnett01/rsync-deployments@6.0.0
       with:
         switches: -avzr --delete
@@ -181,7 +181,7 @@ jobs:
         remote_key: ${{ secrets.GOOGLE_DRIVE_KEY }}
     
     - name: Upload to AWS S3 (optional)
-      if: ${{ secrets.AWS_ACCESS_KEY_ID != '' }}
+      continue-on-error: true
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -189,7 +189,7 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}
     
     - name: Sync to S3
-      if: ${{ secrets.AWS_ACCESS_KEY_ID != '' }}
+      continue-on-error: true
       run: |
         aws s3 sync production-backups/ s3://${{ secrets.S3_BUCKET }}/website-backups/ \
           --exclude "*.tar.gz" \
