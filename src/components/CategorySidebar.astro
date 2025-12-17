@@ -314,6 +314,13 @@ aside.category-sidebar,
   flex-shrink: 0 !important;
   align-self: stretch !important;
   box-sizing: border-box !important;
+  overflow: hidden !important;
+  contain: layout !important;
+}
+
+aside.category-sidebar *,
+.category-sidebar * {
+  box-sizing: border-box;
 }
 
 /* Sidebar visual styles only - sticky handled by parent column wrapper */
@@ -333,7 +340,7 @@ aside.category-sidebar,
   z-index: 10 !important;
   box-sizing: border-box !important;
   overflow: hidden !important;
-  contain: none !important;
+  contain: layout !important;
   will-change: auto !important;
   /* Force full width expansion */
   flex: 1 1 100% !important;
@@ -1556,6 +1563,8 @@ aside.category-sidebar,
   transition: all var(--transition-duration) ease;
   /* Performance optimizations */
   will-change: border-color, box-shadow;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .newsletter-input:focus {
@@ -1923,6 +1932,8 @@ aside.category-sidebar,
   background: rgba(15, 23, 42, 0.8);
   color: #e2e8f0;
   font-size: 0.9rem;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .newsletter-input::placeholder {
@@ -2232,6 +2243,7 @@ aside.category-sidebar,
   position: relative;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1);
+  contain: layout;
 }
 
 .newsletter-signup-section::before {
@@ -2245,6 +2257,9 @@ aside.category-sidebar,
   transform: translateX(-100%);
   animation: newsletterShimmer 4s infinite;
   pointer-events: none;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
 }
 
 .newsletter-signup-section:hover {
@@ -2345,6 +2360,8 @@ aside.category-sidebar,
   color: #e2e8f0;
   font-size: 0.9rem;
   transition: all 0.3s ease;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .newsletter-input:focus {
@@ -2413,6 +2430,9 @@ aside.category-sidebar,
   transform: translateX(-100%);
   animation: newsletterShimmer 4s infinite;
   pointer-events: none;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
 }
 
 .newsletter-promo-section .universal-promo:hover {
@@ -2748,6 +2768,7 @@ aside.category-sidebar,
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 20px rgba(255, 193, 7, 0.1);
+  contain: layout;
 }
 
 .premium-sponsor-section::before {
@@ -2761,6 +2782,9 @@ aside.category-sidebar,
   transform: translateX(-100%);
   animation: sponsorShimmer 4s infinite;
   pointer-events: none;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
 }
 
 .premium-sponsor-section:hover {
@@ -2875,6 +2899,8 @@ aside.category-sidebar,
   border: 1px solid rgba(255, 193, 7, 0.3);
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .sponsor-cta::before {
