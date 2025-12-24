@@ -1,0 +1,959 @@
+---
+import { getArticlesByCategory } from '../../lib/sanity.ts';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import CategorySidebar from '../../components/CategorySidebar.astro';
+import CategoryHero from '../../components/CategoryHero.astro';
+import { getCategoryData } from '../../data/categoryData.ts';
+// CSS now imported centrally in MainLayout.astro
+
+const allBusinessArticles = await getArticlesByCategory('business', 50);
+const businessArticles = allBusinessArticles.slice(0, 8);
+const categoryData = getCategoryData('business');
+
+const pageTitle = categoryData?.title + " - Tools & Inspiration" || "AI Business Intelligence - Tools & Inspiration";
+const pageDescription = categoryData?.metaDescription || "Leverage AI for strategic business insights, data analysis, and decision-making. Transform your business operations with intelligent solutions.";
+const keywords = categoryData?.keywords.join(', ') || "AI business, business intelligence, data analysis, strategic insights, AI decision making";
+
+// Debug logging
+
+if (allBusinessArticles?.length > 0) {
+  
+} else {
+  
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={pageDescription} />
+  <meta name="keywords" content={keywords} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={Astro.url} />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={pageDescription} />
+  <meta property="og:site_name" content="AI Buzz Media" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content={Astro.url} />
+  <meta property="twitter:title" content={pageTitle} />
+  <meta property="twitter:description" content={pageDescription} />
+  <link rel="canonical" href={Astro.url} />
+  
+  <!-- CSS imports -->
+  <link rel="stylesheet" href="/styles/critical.css">
+  <link rel="stylesheet" href="/styles/global.css">
+  <link rel="stylesheet" href="/styles/layout.css">
+  <link rel="stylesheet" href="/styles/components.css">
+  <link rel="stylesheet" href="/styles/utilities.css">
+</head>
+<body>
+  <Header />
+  <div class="main-content">
+    <main class="category-page">
+      
+      {categoryData && (
+        <CategoryHero 
+          category={categoryData.slug}
+          title={categoryData.title}
+          description={categoryData.description}
+          icon={categoryData.icon}
+          toolsCount={categoryData.toolsCount}
+          lastUpdated={categoryData.lastUpdated}
+          breadcrumbs={[
+            { name: "Home", url: "/" },
+            { name: "Categories", url: "/categories" }
+          ]}
+        />
+      )}
+      <div class="category-content">
+        <div class="category-layout">
+          <div class="category-main">
+            <div class="articles-grid" id="articles-grid">
+              {businessArticles.length > 0 ? (
+                businessArticles.map((article: any, index: number) => (
+                  <article class="category-article" data-article-index={index}>
+                    <div class="article-image">
+                      {article.featuredImage ? (
+                        <img src={article.featuredImage} alt={article.title} width="400" height="240" loading="lazy" decoding="async" />
+                      ) : (
+                        <div class="placeholder">💼</div>
+                      )}
+                    </div>
+                    <div class="article-content">
+                      <a href="/categories/business" class="category-badge-small business">Business</a>
+                      <h2><a href={`/business/${article.slug}`}>{article.title}</a></h2>
+                      <p>{article.excerpt}</p>
+                      <div class="article-meta">
+                        <span class="author">By <a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link">{article.author?.name || 'Anonymous'}</a></span>
+                        <span class="date">{new Date(article.publishedAt || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                      </div>
+                    </div>
+                  </article>
+                ))
+              ) : (
+                <div class="no-articles">
+                  <h3>No Business Articles Found</h3>
+                  <p>We're working on bringing you the latest in AI business insights. Check back soon!</p>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          <div class="sidebar sticky-col">
+            <CategorySidebar categorySlug="business" articles={allBusinessArticles} />
+          </div>
+        </div>
+        
+        </div>
+        
+        {/* Load More button positioned under category-main but inside category-content */}
+        {allBusinessArticles.length > 8 && (
+          <div class="load-more-button-wrapper">
+            <div class="load-more-container-main-content">
+              <button id="load-more-btn" class="load-more-btn">
+                <span class="load-more-text">Load More Articles</span>
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </main>
+  </div>
+  <Footer />
+
+  <style>
+    /* STICKY SIDEBAR FIX: Override optimized.css overflow settings - highest specificity */
+    html, html.astro {
+      overflow-y: visible !important;
+      overflow: visible !important;
+    }
+    
+    body, body.astro {
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+    }
+    
+    /* Force remove any transforms or positioning that breaks sticky */
+    .category-page,
+    .category-content,
+    .category-layout,
+    .main-content {
+      position: relative !important;
+      overflow: visible !important;
+      transform: none !important;
+      contain: none !important;
+      filter: none !important;
+      perspective: none !important;
+      will-change: auto !important;
+    }
+    
+    .main-content {
+      position: relative;
+    }
+    
+    .category-page {
+      background: var(--bg-primary);
+      padding-bottom: 2rem;
+    }
+    
+    .category-hero {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.1) 100%);
+      padding: 2.5rem 0;
+      border-bottom: 2px solid rgba(34, 197, 94, 0.2);
+    }
+    
+    .category-header {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .category-icon {
+      font-size: 3rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .category-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #22c55e;
+      margin-bottom: 0.75rem;
+    }
+    
+    .category-description {
+      font-size: 1.1rem;
+      color: #666666;
+      line-height: 1.5;
+    }
+    
+    .category-content {
+      padding: 3rem 0 2rem 0;
+      min-height: calc(100vh + 200px);
+    }
+    
+    .category-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      grid-template-rows: 1fr;
+      row-gap: 0;
+      column-gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      align-items: start;
+      position: relative;
+      overflow: visible;
+      contain: layout;
+      height: auto;
+    }
+    
+    /* Ensure the layout container expands with content */
+    .category-layout::after {
+      content: '';
+      grid-column: 1 / -1;
+      height: 0;
+      min-height: 0;
+    }
+    
+    /* Aggressive sticky sidebar positioning - highest specificity */
+    .category-layout .sidebar,
+    .category-layout .sidebar.sticky-col,
+    .sidebar.sticky-col {
+      position: sticky !important;
+      top: 100px !important;
+      z-index: 10 !important;
+      height: auto !important;
+      max-height: none !important;
+      overflow: visible !important;
+      align-self: start !important;
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      max-width: 340px !important;
+      box-sizing: border-box !important;
+      /* CRITICAL: Remove padding to allow child to span full width */
+      padding: 0 !important;
+      /* Ensure child content can expand to full width */
+      overflow: visible !important;
+    }
+    
+    /* CRITICAL: Force CategorySidebar to fill entire sidebar width */
+    .category-layout .sidebar .category-sidebar,
+    .sidebar.sticky-col .category-sidebar,
+    .sidebar .category-sidebar {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 100% !important;
+      flex: 1 1 100% !important;
+      flex-grow: 1 !important;
+      flex-shrink: 0 !important;
+      align-self: stretch !important;
+      box-sizing: border-box !important;
+      overflow: visible !important;
+      /* Override any component-level width constraints */
+      transform: none !important;
+      contain: none !important;
+      /* CRITICAL: Override parent sidebar padding */
+      margin: 0 !important;
+      padding: 0 !important;
+      /* Force full width expansion - simplified approach */
+      position: relative !important;
+      left: 0 !important;
+      right: 0 !important;
+      /* Ensure no width constraints from parent - use simple 100% */
+      min-width: 100% !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      /* Remove complex calculations that cause layout issues */
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+    
+    /* Ensure all sidebar sections take full width */
+    .category-sidebar .sidebar-section,
+    .sidebar .category-sidebar .sidebar-section {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 100% !important;
+      box-sizing: border-box !important;
+      /* Add proper padding to sections since parent has no padding */
+      padding: 1.5rem !important;
+      margin: 0 !important;
+      /* Ensure sections span full width */
+      position: relative !important;
+      left: 0 !important;
+      right: 0 !important;
+    }
+    
+    /* Add proper spacing between sections */
+    .category-sidebar .sidebar-section:not(:last-child) {
+      margin-bottom: 1rem !important;
+    }
+    
+    /* Ensure first section has top spacing */
+    .category-sidebar .sidebar-section:first-child {
+      margin-top: 0 !important;
+    }
+    
+    /* Ensure last section has bottom spacing */
+    .category-sidebar .sidebar-section:last-child {
+      margin-bottom: 0 !important;
+    }
+    
+    /* Layout container properly distributes space */
+    .category-layout {
+      align-items: start;
+    }
+    
+    .category-main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      height: auto;
+      margin-bottom: 0 !important;
+      padding-bottom: 0 !important;
+      /* Ensure proper containment */
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+      flex: 1;
+      align-content: start;
+      min-height: 0;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+      outline: none !important;
+      grid-auto-rows: min-content;
+      align-content: start;
+      height: fit-content;
+      max-height: none;
+      /* Fix overflow to prevent content from going beyond boundaries */
+      overflow: hidden;
+      grid-template-rows: repeat(auto-fit, minmax(0, auto));
+      align-items: stretch;
+      row-gap: 2rem;
+      column-gap: 2rem;
+      /* Remove negative margin that was causing overflow */
+      margin-bottom: 0 !important;
+    }
+    
+    /* Force remove any bottom spacing from articles grid */
+    .articles-grid::before {
+      content: none !important;
+      display: none !important;
+    }
+    
+    /* Ensure no extra space from individual articles */
+    .category-article {
+      background: #1a1a1b;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    
+    /* Force remove bottom spacing from the last article */
+    .category-article:last-child {
+      margin-bottom: 0 !important;
+      padding-bottom: 0 !important;
+    }
+    
+    /* Load More button wrapper - positioned inside category-content */
+    .load-more-button-wrapper {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    
+    /* Load More button container - centered under category-main section */
+    .load-more-container-main-content {
+      display: flex;
+      justify-content: center;
+      padding: 0;
+      margin: 0;
+      /* Center the button under the category-main section */
+      transform: translateX(calc(-340px / 2)); /* Offset by half the sidebar width */
+    }
+    
+    /* Mobile responsive positioning */
+    @media (max-width: 768px) {
+      .load-more-container-main-content {
+        margin-left: 0; /* Reset to center for mobile */
+      }
+    }
+    
+    /* Tablet responsive positioning */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .load-more-container-main-content {
+        margin-left: 0; /* Reset to center for tablet */
+      }
+    }
+    
+    /* Ensure newly loaded articles are fully visible */
+    .category-article.fade-in {
+      animation: fadeInUp 0.6s ease-out;
+      overflow: visible !important;
+      position: relative !important;
+      z-index: 1 !important;
+    }
+    
+    .category-article:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(34, 197, 94, 0.2);
+      border-color: rgba(34, 197, 94, 0.3);
+    }
+    
+    .article-image {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .article-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      background: rgba(34, 197, 94, 0.1);
+    }
+    
+    .article-content {
+      padding: 1.5rem;
+    }
+    
+    .category-badge-small.business {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 0.4rem 0.9rem;
+      border-radius: 15px;
+      display: inline-block;
+      margin-bottom: 1.25rem;
+      color: #22c55e;
+      background: rgba(34, 197, 94, 0.2);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .category-badge-small.business:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4);
+      background: rgba(34, 197, 94, 0.3);
+      color: #ffffff;
+    }
+    
+    .article-content h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    
+    .article-content h2 a {
+      color: #ffffff;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      will-change: transform;
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .article-content h2 a:hover {
+      background: linear-gradient(135deg, #00d4ff 0%, #22c55e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transform: translateX(2px);
+    }
+    
+    .article-content p {
+      color: #cccccc;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    
+    .article-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #888888;
+    }
+    
+    .author {
+      font-weight: 500;
+    }
+    
+    .author-link {
+      color: #888888;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border-radius: 4px;
+      padding: 2px 4px;
+      margin: -2px -4px;
+    }
+    
+    .author-link:hover {
+      color: #00d4ff;
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+    
+    .author-link:focus {
+      outline: 2px solid #00d4ff;
+      outline-offset: 2px;
+      background: rgba(0, 212, 255, 0.1);
+    }
+    
+    .date {
+      opacity: 0.8;
+    }
+    
+    /* Load more button styling */
+    .load-more-btn {
+      background: linear-gradient(135deg, #22c55e 0%, #00d4ff 100%);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+    }
+    
+    .load-more-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+    }
+    
+    .load-more-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    /* Fade in animation for new articles */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+  
+  <script define:vars={{ allBusinessArticles }}>
+    document.addEventListener('DOMContentLoaded', function() {
+      const articlesGrid = document.getElementById('articles-grid');
+      const loadMoreBtn = document.getElementById('load-more-btn');
+
+      let currentPage = 0;
+      const articlesPerPage = 8;
+      
+      // Check if we have enough articles for load more
+      if (allBusinessArticles.length <= 8) {
+        if (loadMoreBtn) {
+          loadMoreBtn.style.display = 'none';
+        }
+      } else {
+        }
+      
+      // Check sticky positioning
+      const sidebar = document.querySelector('.sidebar.sticky-col');
+      if (sidebar) {
+        const sidebarStyles = window.getComputedStyle(sidebar);
+        }
+      
+      // Create article HTML function
+      function createArticleHTML(article, index) {
+        const authorSlug = typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous';
+        const authorName = article.author?.name || 'Anonymous';
+        const publishDate = new Date(article.publishedAt || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        
+        return `
+          <article class="category-article" data-article-index="${index}">
+            <div class="article-image">
+              ${article.featuredImage ? 
+                `<img src="${article.featuredImage}" alt="${article.title}" width="400" height="240" loading="lazy" decoding="async" />` :
+                `<div class="placeholder">💼</div>`
+              }
+            </div>
+            <div class="article-content">
+              <a href="/categories/business" class="category-badge-small business">Business</a>
+              <h2><a href="/business/${article.slug}">${article.title}</a></h2>
+              <p>${article.excerpt}</p>
+              <div class="article-meta">
+                <span class="author">By <a href="/authors/${authorSlug}" class="author-link">${authorName}</a></span>
+                <span class="date">${publishDate}</span>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+      
+      function loadMoreArticles() {
+        const startIndex = (currentPage + 1) * articlesPerPage;
+        const endIndex = Math.min(startIndex + articlesPerPage, allBusinessArticles.length);
+        const articlesToLoad = allBusinessArticles.slice(startIndex, endIndex);
+        
+        if (articlesToLoad.length === 0) {
+          loadMoreBtn.style.display = 'none';
+          return;
+        }
+        
+        // Show loading state
+        const originalHTML = loadMoreBtn.innerHTML;
+        loadMoreBtn.innerHTML = '<span class="loading-spinner"></span> Loading...';
+        loadMoreBtn.disabled = true;
+        
+        // Simulate loading delay for better UX
+        setTimeout(() => {
+          // Add new articles to grid
+          articlesToLoad.forEach((article, index) => {
+            const articleHTML = createArticleHTML(article, startIndex + index);
+            articlesGrid.insertAdjacentHTML('beforeend', articleHTML);
+          });
+          
+          // Get the newly added articles and apply animations/styling
+          const allArticles = articlesGrid.querySelectorAll('.category-article');
+          const newArticlesStart = allArticles.length - articlesToLoad.length;
+          
+          // Apply fade-in animation to new articles
+          for (let i = newArticlesStart; i < allArticles.length; i++) {
+            const article = allArticles[i];
+            
+            // Add fade-in class for animation
+            article.classList.add('fade-in');
+            
+            // Force browser to recognize the element and apply styles
+            article.offsetHeight;
+            
+            // Ensure all CSS properties are applied correctly to the main container
+            article.style.background = '#1a1a1b';
+            article.style.border = '1px solid rgba(255, 255, 255, 0.1)';
+            article.style.borderRadius = '16px';
+            article.style.overflow = 'hidden';
+            article.style.transition = 'all 0.3s ease';
+            
+            // Style the image container
+            const articleImage = article.querySelector('.article-image');
+            if (articleImage) {
+              articleImage.style.height = '200px';
+              articleImage.style.overflow = 'hidden';
+              
+              const img = articleImage.querySelector('img');
+              if (img) {
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+              }
+              
+              const placeholder = articleImage.querySelector('.placeholder');
+              if (placeholder) {
+                placeholder.style.width = '100%';
+                placeholder.style.height = '100%';
+                placeholder.style.display = 'flex';
+                placeholder.style.alignItems = 'center';
+                placeholder.style.justifyContent = 'center';
+                placeholder.style.fontSize = '3rem';
+                placeholder.style.background = 'rgba(34, 197, 94, 0.1)';
+              }
+            }
+            
+            // Style the content container
+            const articleContent = article.querySelector('.article-content');
+            if (articleContent) {
+              articleContent.style.padding = '1.5rem';
+              
+              // Style the business badge
+              const badge = articleContent.querySelector('.category-badge-small.business');
+              if (badge) {
+                badge.style.fontSize = '0.7rem';
+                badge.style.fontWeight = '600';
+                badge.style.textTransform = 'uppercase';
+                badge.style.letterSpacing = '0.5px';
+                badge.style.padding = '0.4rem 0.9rem';
+                badge.style.borderRadius = '15px';
+                badge.style.display = 'inline-block';
+                badge.style.marginBottom = '1.25rem';
+                badge.style.color = '#22c55e';
+                badge.style.background = 'rgba(34, 197, 94, 0.2)';
+                badge.style.textDecoration = 'none';
+                badge.style.transition = 'all 0.3s ease';
+              }
+              
+              // Style the h2 and title link
+              const h2 = articleContent.querySelector('h2');
+              if (h2) {
+                h2.style.fontSize = '1.25rem';
+                h2.style.fontWeight = '600';
+                h2.style.marginBottom = '0.75rem';
+                
+                const titleLink = h2.querySelector('a');
+                if (titleLink) {
+                  titleLink.style.color = '#ffffff';
+                  titleLink.style.textDecoration = 'none';
+                  titleLink.style.transition = 'all 0.3s ease';
+                  titleLink.style.willChange = 'transform';
+                  titleLink.style.backfaceVisibility = 'hidden';
+                  titleLink.style.webkitFontSmoothing = 'antialiased';
+                }
+              }
+              
+              // Style the excerpt paragraph
+              const excerpt = articleContent.querySelector('p');
+              if (excerpt) {
+                excerpt.style.color = '#cccccc';
+                excerpt.style.lineHeight = '1.6';
+                excerpt.style.marginBottom = '1rem';
+              }
+              
+              // Style the article meta
+              const articleMeta = articleContent.querySelector('.article-meta');
+              if (articleMeta) {
+                articleMeta.style.display = 'flex';
+                articleMeta.style.justifyContent = 'space-between';
+                articleMeta.style.alignItems = 'center';
+                articleMeta.style.fontSize = '0.85rem';
+                articleMeta.style.color = '#888888';
+                
+                // Style author section
+                const author = articleMeta.querySelector('.author');
+                if (author) {
+                  author.style.fontWeight = '500';
+                  
+                  const authorLink = author.querySelector('.author-link');
+                  if (authorLink) {
+                    authorLink.style.color = '#888888';
+                    authorLink.style.textDecoration = 'none';
+                    authorLink.style.transition = 'all 0.3s ease';
+                    authorLink.style.borderRadius = '4px';
+                    authorLink.style.padding = '2px 4px';
+                    authorLink.style.margin = '-2px -4px';
+                  }
+                }
+                
+                // Style date
+                const date = articleMeta.querySelector('.date');
+                if (date) {
+                  date.style.opacity = '0.8';
+                }
+              }
+            }
+            
+            // Add hover effects to new articles
+            article.addEventListener('mouseenter', function() {
+              this.style.transform = 'translateY(-4px)';
+              this.style.boxShadow = '0 20px 40px rgba(34, 197, 94, 0.2)';
+              this.style.borderColor = 'rgba(34, 197, 94, 0.3)';
+            });
+            
+            article.addEventListener('mouseleave', function() {
+              this.style.transform = 'translateY(0)';
+              this.style.boxShadow = '';
+              this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+            });
+            
+            // Add hover effects to business badge
+            const badge = article.querySelector('.category-badge-small.business');
+            if (badge) {
+              badge.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+                this.style.boxShadow = '0 6px 16px rgba(34, 197, 94, 0.4)';
+                this.style.background = 'rgba(34, 197, 94, 0.3)';
+                this.style.color = '#ffffff';
+              });
+              
+              badge.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '';
+                this.style.background = 'rgba(34, 197, 94, 0.2)';
+                this.style.color = '#22c55e';
+              });
+            }
+            
+            // Add hover effects to title link
+            const titleLink = article.querySelector('h2 a');
+            if (titleLink) {
+              titleLink.addEventListener('mouseenter', function() {
+                this.style.background = 'linear-gradient(135deg, #00d4ff 0%, #22c55e 100%)';
+                this.style.webkitBackgroundClip = 'text';
+                this.style.webkitTextFillColor = 'transparent';
+                this.style.backgroundClip = 'text';
+                this.style.transform = 'translateX(2px)';
+              });
+              
+              titleLink.addEventListener('mouseleave', function() {
+                this.style.background = '';
+                this.style.webkitBackgroundClip = '';
+                this.style.webkitTextFillColor = '';
+                this.style.backgroundClip = '';
+                this.style.transform = 'translateX(0)';
+                this.style.color = '#ffffff';
+              });
+            }
+            
+            // Add hover effects to author link
+            const authorLink = article.querySelector('.author-link');
+            if (authorLink) {
+              authorLink.addEventListener('mouseenter', function() {
+                this.style.color = '#00d4ff';
+                this.style.transform = 'translateY(-1px)';
+              });
+              
+              authorLink.addEventListener('mouseleave', function() {
+                this.style.color = '#888888';
+                this.style.transform = 'translateY(0)';
+              });
+              
+              authorLink.addEventListener('focus', function() {
+                this.style.outline = '2px solid #00d4ff';
+                this.style.outlineOffset = '2px';
+                this.style.background = 'rgba(0, 212, 255, 0.1)';
+              });
+              
+              authorLink.addEventListener('blur', function() {
+                this.style.outline = '';
+                this.style.outlineOffset = '';
+                this.style.background = '';
+              });
+            }
+          }
+          
+          currentPage++;
+          
+          // Update button state
+          const remainingArticles = allBusinessArticles.length - ((currentPage + 1) * articlesPerPage);
+          
+          if (remainingArticles <= 0) {
+            loadMoreBtn.style.display = 'none';
+          } else {
+            loadMoreBtn.innerHTML = `<span class="load-more-text">Load More Articles</span>`;
+            loadMoreBtn.disabled = false;
+          }
+          
+          // Smooth scroll to first new article
+          // REMOVED: This was causing the page to scroll down and clip new articles
+          // const firstNewArticle = articlesGrid.querySelector(`[data-article-index="${startIndex}"]`);
+          // if (firstNewArticle) {
+          //   firstNewArticle.scrollIntoView({ 
+          //     behavior: 'smooth', 
+          //     block: 'start',
+          //     inline: 'nearest'
+          //   });
+          // }
+          
+          // Update sidebar visual alignment after content is loaded and settled
+          setTimeout(() => {
+            updateSidebarAlignment();
+          }, 100);
+          
+          // Additional alignment update after animations complete
+          setTimeout(() => {
+            updateSidebarAlignment();
+          }, 600);
+        }, 500);
+      }
+      
+      // Enhanced function to update sidebar visual alignment with content
+      function updateSidebarAlignment() {
+        const sidebar = document.querySelector('.sidebar.sticky-col');
+        const categoryMain = document.querySelector('.category-main');
+        const categoryLayout = document.querySelector('.category-layout');
+        const articlesGrid = document.getElementById('articles-grid');
+        
+        if (sidebar && categoryMain && categoryLayout && articlesGrid) {
+          const mainHeight = categoryMain.offsetHeight;
+          const articlesGridHeight = articlesGrid.offsetHeight;
+
+          // Since load more button is now outside main content, we don't need to account for its height
+          // This should allow perfect alignment between main content and sidebar
+
+          // Don't set minHeight on layout container - let it size naturally
+          // This prevents artificial height constraints that can cause extra space
+
+          // Remove any artificial height manipulation from sidebar
+          if (sidebar.style.minHeight) {
+            sidebar.style.minHeight = '';
+          }
+
+          const sidebarContent = sidebar.querySelector('.category-sidebar');
+          if (sidebarContent && sidebarContent.style.minHeight) {
+            sidebarContent.style.minHeight = '';
+          }
+        }
+      }
+      
+      // Initial alignment update
+      setTimeout(updateSidebarAlignment, 100);
+      
+      // Update on window resize
+      window.addEventListener('resize', updateSidebarAlignment);
+      
+      // Set up a MutationObserver to watch for content changes
+      const observer = new MutationObserver((mutations) => {
+        let shouldUpdate = false;
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+            // Check if articles were added
+            const addedElements = Array.from(mutation.addedNodes);
+            if (addedElements.some(node => node.classList && node.classList.contains('category-article'))) {
+              shouldUpdate = true;
+            }
+          }
+        });
+        
+        if (shouldUpdate) {
+          setTimeout(updateSidebarAlignment, 150);
+        }
+      });
+      
+      // Start observing the articles grid for changes
+      if (articlesGrid) {
+        observer.observe(articlesGrid, {
+          childList: true,
+          subtree: true
+        });
+      }
+      
+      // Add click event listener
+      if (loadMoreBtn) {
+        // Test if button is clickable
+        loadMoreBtn.addEventListener('click', function(e) {
+          loadMoreArticles();
+        });
+        
+        // Also add a test click to verify it works
+        } else {
+        }
+    });
+  </script>
+</body>
+</html>

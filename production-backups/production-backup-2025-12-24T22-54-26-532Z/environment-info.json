@@ -1,0 +1,24 @@
+{
+  "nodeEnv": "development",
+  "timestamp": "2025-12-24T22-54-26-532Z",
+  "backupName": "production-backup-2025-12-24T22-54-26-532Z",
+  "git": {
+    "commitHash": "cc80bea3648e9096eb5256b7fc4b7325b8816b2e",
+    "branch": "staging/performance-optimization",
+    "remoteUrl": "https://github.com/GMTrends/ai-news-site",
+    "hasUncommittedChanges": true,
+    "status": "D backups/manual-backup-2025-07-21-21-55-04-591175981abeea78a78b9fc64251514661a24864.zip\n M clean-astro-test\n?? backups/manual-backup-2025-12-17-09-22-20-2c949803d592f58f9c310a0bf47b7ddfc644cf33.zip\n?? production-backups/"
+  },
+  "system": {
+    "platform": "win32",
+    "arch": "x64",
+    "nodeVersion": "v20.19.3",
+    "memoryUsage": {
+      "rss": 46948352,
+      "heapTotal": 6524928,
+      "heapUsed": 5020720,
+      "external": 2031515,
+      "arrayBuffers": 16997
+    }
+  }
+}

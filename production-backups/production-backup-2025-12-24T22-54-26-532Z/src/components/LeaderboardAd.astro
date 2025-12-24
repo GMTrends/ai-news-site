@@ -1,0 +1,325 @@
+---
+// Enhanced 728x90 Leaderboard Ad with Wave Animation
+// Designed for entrepreneur-focused AI news site
+---
+
+<section class="leaderboard-promo-section">
+  <div class="leaderboard-container">
+    <div class="leaderboard-promo">
+      <div class="wave-overlay"></div>
+      <div class="promo-content">
+        <div class="promo-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor"/>
+            <path d="M19 15L20.09 18.26L24 19L20.09 19.74L19 23L17.91 19.74L14 19L17.91 18.26L19 15Z" fill="currentColor"/>
+            <path d="M5 15L6.09 18.26L10 19L6.09 19.74L5 23L3.91 19.74L0 19L3.91 18.26L5 15Z" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="promo-text">
+          <h3>Supercharge Your AI Journey</h3>
+          <p>Discover premium AI tools that successful entrepreneurs use to scale their businesses</p>
+        </div>
+        <div class="promo-cta">
+          <span class="cta-text">Explore Now</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.leaderboard-promo-section {
+  width: 100%;
+  padding: 3rem 0;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.leaderboard-container {
+  position: relative;
+  width: 100%;
+  max-width: 728px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+
+
+.leaderboard-promo {
+  position: relative;
+  width: 728px;
+  height: 90px;
+  background: linear-gradient(135deg, 
+    rgba(15, 23, 42, 0.95) 0%, 
+    rgba(30, 41, 59, 0.95) 50%,
+    rgba(15, 23, 42, 0.95) 100%
+  );
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.leaderboard-promo:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 212, 255, 0.4);
+  box-shadow: 
+    0 8px 32px rgba(0, 212, 255, 0.15),
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.wave-overlay {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent 0%,
+    rgba(0, 212, 255, 0.1) 25%,
+    rgba(0, 212, 255, 0.3) 50%,
+    rgba(0, 212, 255, 0.1) 75%,
+    transparent 100%
+  );
+  animation: waveFlow 3s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes waveFlow {
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+.promo-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 24px;
+  z-index: 2;
+  gap: 16px;
+}
+
+.promo-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+  animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+  }
+}
+
+.promo-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.promo-text h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+  background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.promo-text p {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.3;
+  font-weight: 500;
+}
+
+.promo-cta {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+}
+
+.promo-cta:hover {
+  transform: translateX(2px);
+  box-shadow: 0 4px 16px rgba(0, 212, 255, 0.4);
+  background: linear-gradient(135deg, #0066ff 0%, #9333ea 100%);
+}
+
+.cta-text {
+  white-space: nowrap;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .leaderboard-promo-section {
+    padding: 2rem 0;
+  }
+  
+  .leaderboard-container {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+  
+  .leaderboard-promo {
+    width: 100%;
+    max-width: 728px;
+    height: auto;
+    min-height: 90px;
+    padding: 16px 0;
+  }
+  
+  .promo-content {
+    flex-wrap: wrap;
+    padding: 0 20px;
+    gap: 12px;
+  }
+  
+  .promo-text h3 {
+    font-size: 1rem;
+  }
+  
+  .promo-text p {
+    font-size: 0.8rem;
+  }
+  
+  .promo-cta {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .promo-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 16px;
+  }
+  
+  .promo-icon {
+    align-self: center;
+  }
+  
+  .promo-cta {
+    align-self: center;
+  }
+}
+
+/* Enhanced accessibility */
+.leaderboard-promo:focus {
+  outline: 2px solid #00d4ff;
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .wave-overlay {
+    animation: none;
+  }
+  
+  .promo-icon {
+    animation: none;
+  }
+  
+  .leaderboard-promo:hover {
+    transform: none;
+  }
+  
+  .promo-cta:hover {
+    transform: none;
+  }
+}
+</style>
+
+<script>
+// Enhanced interaction tracking
+document.addEventListener('DOMContentLoaded', function() {
+  const leaderboardAd = document.querySelector('.leaderboard-promo') as HTMLElement;
+  
+  if (leaderboardAd) {
+    // Click tracking
+    leaderboardAd.addEventListener('click', function(this: HTMLElement) {
+      // Track ad click for analytics
+      if (typeof (window as any).gtag !== 'undefined') {
+        (window as any).gtag('event', 'click', {
+          event_category: 'leaderboard_ad',
+          event_label: 'homepage_after_categories',
+          value: 1
+        });
+      }
+      
+      // Add click effect
+      this.style.transform = 'scale(0.98)';
+      setTimeout(() => {
+        this.style.transform = '';
+      }, 150);
+    });
+    
+    // Hover tracking for engagement metrics
+    let hoverStartTime: number | undefined;
+    leaderboardAd.addEventListener('mouseenter', function() {
+      hoverStartTime = Date.now();
+    });
+    
+    leaderboardAd.addEventListener('mouseleave', function() {
+      if (hoverStartTime) {
+        const hoverDuration = Date.now() - hoverStartTime;
+        if (hoverDuration > 1000 && typeof (window as any).gtag !== 'undefined') {
+          (window as any).gtag('event', 'engagement', {
+            event_category: 'leaderboard_ad',
+            event_label: 'hover_duration',
+            value: Math.round(hoverDuration / 1000)
+          });
+        }
+      }
+    });
+  }
+});
+</script>
