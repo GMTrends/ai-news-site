@@ -19,27 +19,27 @@ export const CATEGORIES = [
     homepagePriority: 2,
   },
   {
-    slug: 'ai-agents',
-    displayName: 'AI Agents',
-    fullName: 'AI Agents & Autonomous Systems',
-    homepagePriority: 3,
-  },
-  {
     slug: 'productivity',
     displayName: 'Productivity',
     fullName: 'AI Productivity & Automation',
-    homepagePriority: 4,
-  },
-  {
-    slug: 'creative',
-    displayName: 'Creative',
-    fullName: 'AI Video & Image Generation',
-    homepagePriority: 5,
+    homepagePriority: 3,
   },
   {
     slug: 'ecommerce',
     displayName: 'eCommerce',
     fullName: 'AI for eCommerce & Online Business',
+    homepagePriority: 4,
+  },
+  {
+    slug: 'ai-agents',
+    displayName: 'AI Agents',
+    fullName: 'AI Agents & Autonomous Systems',
+    homepagePriority: 5,
+  },
+  {
+    slug: 'creative',
+    displayName: 'Creative',
+    fullName: 'AI Video & Image Generation',
     homepagePriority: 6,
   },
 ];

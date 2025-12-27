@@ -1,9 +1,0 @@
----
-import Hero from './Hero.astro';
-import HeroRedesigned from './HeroRedesigned.astro';
-
-// Feature flag - can be controlled via environment variable or config
-const useNewHero = import.meta.env.PUBLIC_USE_NEW_HERO === 'true' || false;
----
-
-{useNewHero ? <HeroRedesigned /> : <Hero />}

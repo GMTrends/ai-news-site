@@ -1,0 +1,654 @@
+---
+import MainLayout from './MainLayout.astro';
+import CategoryHero from '../components/CategoryHero.astro';
+import CategorySidebar from '../components/CategorySidebar.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  keywords?: string;
+  image?: string;
+  canonicalUrl?: string;
+  categorySlug: string;
+  categoryData: {
+    slug: string;
+    title: string;
+    description: string;
+    icon?: string;
+    toolsCount?: number;
+    lastUpdated?: string;
+  } | null;
+  allArticles: any[];
+  initialArticles: any[];
+  categoryDisplayName: string;
+}
+
+const { 
+  title, 
+  description, 
+  keywords = '',
+  image,
+  canonicalUrl,
+  categorySlug,
+  categoryData,
+  allArticles,
+  initialArticles,
+  categoryDisplayName,
+} = Astro.props;
+
+const hasMoreArticles = allArticles.length > initialArticles.length;
+const categorySlugForScript = categorySlug || '';
+
+// Map category slugs to placeholder emojis
+const categoryPlaceholders: Record<string, string> = {
+  'marketing': '📈',
+  'creative': '🎨',
+  'business': '💼',
+  'ai-agents': '🤖',
+  'ecommerce': '🛒',
+  'productivity': '⚡',
+};
+
+const placeholderEmoji = categoryPlaceholders[categorySlug] || '📰';
+---
+
+<MainLayout 
+  title={title}
+  description={description}
+  type="category"
+  canonicalUrl={canonicalUrl}
+  image={image}
+>
+  <main class="category-page">
+    {categoryData ? (
+      <CategoryHero 
+        category={categoryData.slug}
+        title={categoryData.title}
+        description={categoryData.description}
+        icon={categoryData.icon || ''}
+        toolsCount={categoryData.toolsCount || 0}
+        lastUpdated={categoryData.lastUpdated || ''}
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Categories", url: "/categories" }
+        ]}
+      />
+    ) : (
+      <CategoryHero 
+        category={categorySlug}
+        title={categoryDisplayName}
+        description={description}
+        icon=""
+        toolsCount={0}
+        lastUpdated=""
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Categories", url: "/categories" }
+        ]}
+      />
+    )}
+    <div class="category-content">
+      <div class="category-layout">
+        <div class="category-main">
+          <div class="articles-grid" id="articles-grid">
+            {initialArticles.length > 0 ? (
+              initialArticles.map((article: any, index: number) => (
+                <article class="category-article" data-article-index={index}>
+                  <div class="article-image">
+                    {article.featuredImage ? (
+                      <img src={article.featuredImage} alt={article.title} width="400" height="240" loading="lazy" decoding="async" />
+                    ) : (
+                      <div class="placeholder">{placeholderEmoji}</div>
+                    )}
+                  </div>
+                  <div class="article-content">
+                    <a href={`/categories/${categorySlug}`} class={`category-badge-small ${categorySlug}`}>{categoryDisplayName}</a>
+                    <h2><a href={`/${categorySlug}/${article.slug}`}>{article.title}</a></h2>
+                    <p>{article.excerpt || ''}</p>
+                    <div class="article-meta">
+                      <span class="author">By <a href={`/authors/${typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous'}`} class="author-link">{article.author?.name || 'Anonymous'}</a></span>
+                      <span class="date">{new Date(article.publishedAt || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                    </div>
+                  </div>
+                </article>
+              ))
+            ) : (
+              <div class="no-articles">
+                <h3>No {categoryDisplayName} Articles Found</h3>
+                <p>We're working on bringing you the latest in AI {categoryDisplayName.toLowerCase()} tools. Check back soon!</p>
+              </div>
+            )}
+          </div>
+        </div>
+        
+        <div class="sidebar sticky-col">
+          <CategorySidebar categorySlug={categorySlug} articles={allArticles} />
+        </div>
+      </div>
+      
+      {hasMoreArticles && (
+        <div class="load-more-button-wrapper">
+          <div class="load-more-container-main-content">
+            <button id="load-more-btn" class="load-more-btn">
+              <span class="load-more-text">Load More Articles</span>
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  </main>
+
+  <script define:vars={{ allArticles: JSON.stringify(allArticles), categoryDisplayName, categorySlug: categorySlugForScript }}>
+    document.addEventListener('DOMContentLoaded', function() {
+      const articlesGrid = document.getElementById('articles-grid');
+      const loadMoreBtn = document.getElementById('load-more-btn');
+      const allArticlesArray = typeof allArticles === 'string' ? JSON.parse(allArticles) : allArticles;
+      
+      if (!articlesGrid || !loadMoreBtn || !allArticlesArray || allArticlesArray.length <= 8) {
+        if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+        return;
+      }
+
+      let currentPage = 0;
+      const articlesPerPage = 8;
+
+      function loadMoreArticles() {
+        if (loadMoreBtn.disabled) return;
+        
+        loadMoreBtn.disabled = true;
+        loadMoreBtn.innerHTML = '<span class="load-more-text">Loading...</span>';
+        
+        setTimeout(() => {
+          const startIndex = (currentPage + 1) * articlesPerPage;
+          const endIndex = Math.min(startIndex + articlesPerPage, allArticlesArray.length);
+          const articlesToAdd = allArticlesArray.slice(startIndex, endIndex);
+          
+          articlesToAdd.forEach((article, idx) => {
+            const articleIndex = startIndex + idx;
+            const articleEl = document.createElement('article');
+            articleEl.className = 'category-article fade-in';
+            articleEl.setAttribute('data-article-index', articleIndex.toString());
+            
+            const articleUrl = `/${categorySlug}/${article.slug}`;
+            const authorSlug = typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'anonymous';
+            const authorName = article.author?.name || 'Anonymous';
+            const publishedDate = new Date(article.publishedAt || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            
+            articleEl.innerHTML = `
+              <div class="article-image">
+                ${article.featuredImage ? 
+                  `<img src="${article.featuredImage}" alt="${article.title}" width="400" height="240" loading="lazy" decoding="async" />` : 
+                  `<div class="placeholder">📈</div>`
+                }
+              </div>
+              <div class="article-content">
+                <a href="/categories/${categorySlug}" class="category-badge-small ${categorySlug}">${categoryDisplayName}</a>
+                <h2><a href="${articleUrl}">${article.title}</a></h2>
+                <p>${article.excerpt || ''}</p>
+                <div class="article-meta">
+                  <span class="author">By <a href="/authors/${authorSlug}" class="author-link">${authorName}</a></span>
+                  <span class="date">${publishedDate}</span>
+                </div>
+              </div>
+            `;
+            
+            articlesGrid.appendChild(articleEl);
+            
+            const authorLink = articleEl.querySelector('.author-link');
+            if (authorLink) {
+              authorLink.addEventListener('mouseenter', function() {
+                this.style.color = '#00d4ff';
+                this.style.transform = 'translateY(-2px)';
+              });
+              
+              authorLink.addEventListener('mouseleave', function() {
+                this.style.color = '#888888';
+                this.style.transform = 'translateY(0)';
+              });
+              
+              authorLink.addEventListener('focus', function() {
+                this.style.outline = '2px solid #00d4ff';
+                this.style.outlineOffset = '2px';
+                this.style.background = 'rgba(0, 212, 255, 0.1)';
+              });
+              
+              authorLink.addEventListener('blur', function() {
+                this.style.outline = '';
+                this.style.outlineOffset = '';
+                this.style.background = '';
+              });
+            }
+          });
+          
+          currentPage++;
+          
+          const remainingArticles = allArticlesArray.length - ((currentPage + 1) * articlesPerPage);
+          
+          if (remainingArticles <= 0) {
+            loadMoreBtn.style.display = 'none';
+          } else {
+            loadMoreBtn.innerHTML = '<span class="load-more-text">Load More Articles</span>';
+            loadMoreBtn.disabled = false;
+          }
+          
+          setTimeout(() => {
+            updateSidebarAlignment();
+          }, 100);
+          
+          setTimeout(() => {
+            updateSidebarAlignment();
+          }, 600);
+        }, 500);
+      }
+      
+      function updateSidebarAlignment() {
+        const sidebar = document.querySelector('.sidebar.sticky-col');
+        const categoryMain = document.querySelector('.category-main');
+        const categoryLayout = document.querySelector('.category-layout');
+        const articlesGrid = document.getElementById('articles-grid');
+        
+        if (sidebar && categoryMain && categoryLayout && articlesGrid) {
+          if (sidebar.style.minHeight) {
+            sidebar.style.minHeight = '';
+          }
+
+          const sidebarContent = sidebar.querySelector('.category-sidebar');
+          if (sidebarContent && sidebarContent.style.minHeight) {
+            sidebarContent.style.minHeight = '';
+          }
+        }
+      }
+      
+      setTimeout(updateSidebarAlignment, 100);
+      window.addEventListener('resize', updateSidebarAlignment);
+      
+      const observer = new MutationObserver((mutations) => {
+        let shouldUpdate = false;
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+            const addedElements = Array.from(mutation.addedNodes);
+            if (addedElements.some((node) => node.classList && node.classList.contains('category-article'))) {
+              shouldUpdate = true;
+            }
+          }
+        });
+        
+        if (shouldUpdate) {
+          setTimeout(updateSidebarAlignment, 150);
+        }
+      });
+      
+      if (articlesGrid) {
+        observer.observe(articlesGrid, {
+          childList: true,
+          subtree: true
+        });
+      }
+      
+      if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', function(e) {
+          loadMoreArticles();
+        });
+      }
+    });
+  </script>
+
+  <style>
+    /* STICKY SIDEBAR FIX: Override optimized.css overflow settings - highest specificity */
+    html, html.astro {
+      overflow-y: visible !important;
+      overflow: visible !important;
+    }
+    
+    body, body.astro {
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+    }
+    
+    /* Force remove any transforms or positioning that breaks sticky */
+    .category-page,
+    .category-content,
+    .category-layout,
+    .main-content {
+      position: relative !important;
+      overflow: visible !important;
+      transform: none !important;
+      contain: none !important;
+      filter: none !important;
+      perspective: none !important;
+      will-change: auto !important;
+    }
+    
+    .main-content {
+      position: relative;
+    }
+    
+    .category-page {
+      background: var(--bg-primary);
+      padding-bottom: 2rem;
+    }
+    
+    .category-content {
+      padding: 3rem 0 2rem 0;
+      min-height: calc(100vh + 200px);
+    }
+    
+    .category-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      grid-template-rows: 1fr;
+      row-gap: 0;
+      column-gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      align-items: start;
+      position: relative;
+      overflow: visible;
+      contain: layout;
+      height: auto;
+    }
+    
+    .category-layout::after {
+      content: '';
+      grid-column: 1 / -1;
+      height: 0;
+      min-height: 0;
+    }
+    
+    .category-layout .sidebar,
+    .category-layout .sidebar.sticky-col,
+    .sidebar.sticky-col {
+      position: sticky !important;
+      top: 100px !important;
+      z-index: 10 !important;
+      height: auto !important;
+      max-height: none !important;
+      overflow: visible !important;
+      align-self: start !important;
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      max-width: 340px !important;
+      box-sizing: border-box !important;
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+    
+    .sidebar,
+    .sidebar.sticky-col {
+      background: transparent !important;
+      background-color: transparent !important;
+      border: none !important;
+      border-width: 0 !important;
+      border-style: none !important;
+      border-color: transparent !important;
+    }
+
+    .sidebar.sticky-col .category-sidebar,
+    .sidebar .category-sidebar {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 100% !important;
+      flex: 1 1 100% !important;
+      flex-grow: 1 !important;
+      flex-shrink: 0 !important;
+      align-self: stretch !important;
+      box-sizing: border-box !important;
+      overflow: visible !important;
+      transform: none !important;
+      contain: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      position: relative !important;
+      left: 0 !important;
+      right: 0 !important;
+      min-width: 100% !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      background: transparent !important;
+      background-color: transparent !important;
+      border: none !important;
+      border-width: 0 !important;
+      border-style: none !important;
+      border-color: transparent !important;
+    }
+    
+    .category-sidebar .sidebar-section,
+    .sidebar .category-sidebar .sidebar-section {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 100% !important;
+      box-sizing: border-box !important;
+      padding: 1.5rem !important;
+      margin: 0 !important;
+      position: relative !important;
+      left: 0 !important;
+      right: 0 !important;
+    }
+    
+    .category-sidebar .sidebar-section:not(:last-child) {
+      margin-bottom: 1rem !important;
+    }
+    
+    .category-sidebar .sidebar-section:first-child {
+      margin-top: 0 !important;
+    }
+    
+    .category-sidebar .sidebar-section:last-child {
+      margin-bottom: 0 !important;
+    }
+    
+    .category-layout {
+      align-items: start;
+    }
+    
+    .category-main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      height: auto;
+      margin-bottom: 0 !important;
+      padding-bottom: 0 !important;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+      flex: 1;
+      align-content: start;
+      min-height: 0;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+      outline: none !important;
+      grid-auto-rows: min-content;
+      align-content: start;
+      height: fit-content;
+      max-height: none;
+      overflow: hidden;
+      grid-template-rows: repeat(auto-fit, minmax(0, auto));
+      align-items: stretch;
+      row-gap: 2rem;
+      column-gap: 2rem;
+      margin-bottom: 0 !important;
+    }
+    
+    
+    .articles-grid::before {
+      content: none !important;
+      display: none !important;
+    }
+    
+    .category-article {
+      background: #1a1a1b;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    
+    .category-article:last-child {
+      margin-bottom: 0 !important;
+      padding-bottom: 0 !important;
+    }
+    
+    .load-more-button-wrapper {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    
+    .load-more-container-main-content {
+      display: flex;
+      justify-content: center;
+      padding: 0;
+      margin: 0;
+      transform: translateX(calc(-340px / 2));
+    }
+    
+    @media (max-width: 768px) {
+      .load-more-container-main-content {
+        margin-left: 0;
+        transform: none;
+      }
+      .category-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .load-more-container-main-content {
+        margin-left: 0;
+        transform: none;
+      }
+    }
+    
+    .category-article.fade-in {
+      animation: fadeInUp 0.6s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .load-more-btn {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+      border: none;
+      padding: 0.875rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    .load-more-btn:hover {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    }
+    
+    .load-more-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .article-image {
+      width: 100%;
+      height: 240px;
+      overflow: hidden;
+      background: #1a1a1b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .article-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .article-image .placeholder {
+      font-size: 3rem;
+      color: #666;
+    }
+    
+    .article-content {
+      padding: 1.5rem;
+    }
+    
+    .category-badge-small {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-decoration: none;
+      margin-bottom: 0.75rem;
+    }
+    
+    .article-content h2 {
+      margin: 0 0 0.75rem 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    
+    .article-content h2 a {
+      color: #ffffff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .article-content h2 a:hover {
+      color: #00d4ff;
+    }
+    
+    .article-content p {
+      color: #cccccc;
+      line-height: 1.6;
+      margin: 0 0 1rem 0;
+    }
+    
+    .article-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.875rem;
+      color: #888888;
+    }
+    
+    .article-meta .author-link {
+      color: #888888;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .no-articles {
+      text-align: center;
+      padding: 3rem;
+      color: #888888;
+    }
+  </style>
+</MainLayout>

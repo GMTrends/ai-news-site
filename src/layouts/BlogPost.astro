@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
+import HeaderPremium from '../components/HeaderPremium.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import RelatedArticlesSimple from '../components/RelatedArticlesSimple.astro';
@@ -979,7 +979,7 @@ const updatedDateObj = typeof updatedDate === 'string' ? new Date(updatedDate) :
 	</head>
 
 	<body class="article-page">
-		<Header />
+		<HeaderPremium />
 		<div class="article-wrapper">
 			{heroImage && heroImage !== '' ? (
 				<div class="hero-image">
