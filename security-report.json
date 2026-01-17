@@ -1,49 +1,49 @@
 {
-  "passed": 3,
-  "failed": 0,
+  "passed": 2,
+  "failed": 1,
   "warnings": 3,
   "checks": [
     {
       "check": "Environment Variables",
-      "status": "PASS",
-      "message": "No hardcoded secrets found",
+      "status": "FAIL",
+      "message": "Hardcoded secrets found in .env file",
       "details": null,
-      "timestamp": "2025-06-27T02:54:41.468Z"
+      "timestamp": "2026-01-17T17:27:12.983Z"
     },
     {
       "check": "Dependencies",
       "status": "WARN",
       "message": "Could not run npm audit - check manually",
       "details": null,
-      "timestamp": "2025-06-27T02:54:45.784Z"
+      "timestamp": "2026-01-17T17:27:22.061Z"
     },
     {
       "check": "Security Headers",
       "status": "PASS",
       "message": "All required security headers configured",
       "details": null,
-      "timestamp": "2025-06-27T02:54:45.785Z"
+      "timestamp": "2026-01-17T17:27:22.061Z"
     },
     {
       "check": "Sensitive Files",
       "status": "WARN",
       "message": "Files not in .gitignore: package-lock.json, yarn.lock",
       "details": null,
-      "timestamp": "2025-06-27T02:54:45.786Z"
+      "timestamp": "2026-01-17T17:27:22.062Z"
     },
     {
       "check": "Code Security",
       "status": "WARN",
-      "message": "Potential security issues found: 3 issues",
+      "message": "Potential security issues found: 13 issues",
       "details": null,
-      "timestamp": "2025-06-27T02:54:45.809Z"
+      "timestamp": "2026-01-17T17:27:22.087Z"
     },
     {
       "check": "Sanity Configuration",
       "status": "PASS",
       "message": "Using environment variables for configuration",
       "details": null,
-      "timestamp": "2025-06-27T02:54:45.811Z"
+      "timestamp": "2026-01-17T17:27:22.088Z"
     }
   ]
 }

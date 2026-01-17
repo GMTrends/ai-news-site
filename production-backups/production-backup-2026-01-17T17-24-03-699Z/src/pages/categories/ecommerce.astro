@@ -1,0 +1,25 @@
+---
+import { getArticlesByCategory } from '../../lib/sanity.ts';
+import { getCategoryData } from '../../data/categoryData.ts';
+import CategoryLayout from '../../layouts/CategoryLayout.astro';
+
+const allEcommerceArticles = await getArticlesByCategory('ecommerce', 50);
+const ecommerceArticles = allEcommerceArticles.slice(0, 8);
+const categoryData = getCategoryData('ecommerce');
+
+const pageTitle = categoryData?.title + " - Tools & Inspiration" || "AI E-commerce & Sales - Tools & Inspiration";
+const pageDescription = categoryData?.metaDescription || "Revolutionize your online business with AI-powered e-commerce tools, sales optimization, and customer experience enhancement.";
+const keywords = categoryData?.keywords.join(', ') || "AI ecommerce, sales optimization, customer experience, online business, AI retail";
+---
+
+<CategoryLayout
+  title={pageTitle}
+  description={pageDescription}
+  keywords={keywords}
+  canonicalUrl={Astro.url.href}
+  categorySlug="ecommerce"
+  categoryData={categoryData}
+  allArticles={allEcommerceArticles}
+  initialArticles={ecommerceArticles}
+  categoryDisplayName="eCommerce"
+/>

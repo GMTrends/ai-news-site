@@ -1,0 +1,270 @@
+---
+import HeaderPremium from '../components/HeaderPremium.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service | AI Buzz Media</title>
+  <meta name="description" content="Read AI Buzz Media's terms of service. Learn about your rights and responsibilities when using our website and services." />
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={Astro.url} />
+  <meta property="og:title" content="Terms of Service | AI Buzz Media" />
+  <meta property="og:description" content="Read AI Buzz Media's terms of service and user agreements." />
+  <meta property="og:site_name" content="AI Buzz Media" />
+  
+  <link rel="canonical" href={Astro.url} />
+</head>
+<body>
+  <HeaderPremium />
+  
+  <main class="legal-page">
+    <div class="legal-hero">
+      <div class="container">
+        <h1 class="page-title">Terms of Service</h1>
+        <p class="page-subtitle">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+      </div>
+    </div>
+    
+    <section class="legal-content">
+      <div class="container">
+        <div class="content-wrapper">
+          <article class="legal-article">
+            <p class="intro">
+              Welcome to AI Buzz Media. By accessing and using our website, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
+            </p>
+            
+            <h2>Acceptance of Terms</h2>
+            <p>By accessing and using AI Buzz Media's website, you accept and agree to be bound by the terms and provision of this agreement. These terms apply to all visitors, users, and others who access or use the service.</p>
+            
+            <h2>Description of Service</h2>
+            <p>AI Buzz Media provides news, analysis, and information related to artificial intelligence, technology, and related topics. Our services include:</p>
+            <ul>
+              <li>News articles and analysis</li>
+              <li>Newsletter subscriptions</li>
+              <li>Comment sections on articles</li>
+              <li>Contact forms and communication channels</li>
+              <li>Social media integration</li>
+            </ul>
+            
+            <h2>User Accounts</h2>
+            <p>When you create an account with us, you must provide information that is accurate, complete, and current at all times. You are responsible for safeguarding the password and for all activities that occur under your account.</p>
+            
+            <p>You agree not to:</p>
+            <ul>
+              <li>Use another user's account without permission</li>
+              <li>Create false or misleading account information</li>
+              <li>Share your account credentials with others</li>
+              <li>Use the service for any illegal or unauthorized purpose</li>
+            </ul>
+            
+            <h2>Intellectual Property Rights</h2>
+            <p>The service and its original content, features, and functionality are and will remain the exclusive property of AI Buzz Media and its licensors. The service is protected by copyright, trademark, and other laws.</p>
+            
+            <p>You may not:</p>
+            <ul>
+              <li>Reproduce, distribute, or create derivative works from our content</li>
+              <li>Use our trademarks or service marks without permission</li>
+              <li>Remove any copyright or proprietary notices</li>
+              <li>Use our content for commercial purposes without authorization</li>
+            </ul>
+            
+            <h2>User-Generated Content</h2>
+            <p>By posting content to our website, you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, and distribute your content in connection with our service.</p>
+            
+            <p>You represent and warrant that:</p>
+            <ul>
+              <li>You own the content or have the right to use it</li>
+              <li>Your content does not violate any third-party rights</li>
+              <li>Your content is not defamatory, obscene, or illegal</li>
+              <li>Your content does not contain malware or harmful code</li>
+            </ul>
+            
+            <h2>Prohibited Uses</h2>
+            <p>You may not use our service to:</p>
+            <ul>
+              <li>Violate any applicable laws or regulations</li>
+              <li>Infringe upon the rights of others</li>
+              <li>Transmit harmful, offensive, or inappropriate content</li>
+              <li>Attempt to gain unauthorized access to our systems</li>
+              <li>Interfere with the proper functioning of our service</li>
+              <li>Use automated tools to access our service</li>
+              <li>Spam or send unsolicited communications</li>
+            </ul>
+            
+            <h2>Privacy and Data Protection</h2>
+            <p>Your privacy is important to us. Please review our Privacy Policy, which also governs your use of the service, to understand our practices regarding the collection and use of your personal information.</p>
+            
+            <h2>Disclaimers</h2>
+            <p>The information on this website is provided for general informational purposes only. While we strive to keep the information up to date and correct, we make no representations or warranties of any kind about the completeness, accuracy, reliability, suitability, or availability of the information, products, services, or related graphics contained on the website.</p>
+            
+            <h2>Limitation of Liability</h2>
+            <p>In no event shall AI Buzz Media, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your use of the service.</p>
+            
+            <h2>Indemnification</h2>
+            <p>You agree to defend, indemnify, and hold harmless AI Buzz Media and its licensors and service providers from and against any claims, liabilities, damages, judgments, awards, losses, costs, expenses, or fees arising out of or relating to your violation of these terms or your use of the service.</p>
+            
+            <h2>Termination</h2>
+            <p>We may terminate or suspend your account and bar access to the service immediately, without prior notice or liability, under our sole discretion, for any reason whatsoever and without limitation, including but not limited to a breach of the terms.</p>
+            
+            <h2>Governing Law</h2>
+            <p>These terms shall be interpreted and governed by the laws of [Your Jurisdiction], without regard to its conflict of law provisions. Our failure to enforce any right or provision of these terms will not be considered a waiver of those rights.</p>
+            
+            <h2>Changes to Terms</h2>
+            <p>We reserve the right, at our sole discretion, to modify or replace these terms at any time. If a revision is material, we will try to provide at least 30 days notice prior to any new terms taking effect.</p>
+            
+            <h2>Contact Information</h2>
+            <p>If you have any questions about these terms of service, please contact us at:</p>
+            <div class="contact-info">
+              <p><strong>Email:</strong> legal@aibuzzmedia.com</p>
+              <p><strong>Address:</strong> [Your Business Address]</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <div class="footer-padding-spacer"></div>
+  <Footer />
+</body>
+</html>
+
+<style>
+  html, body {
+    background: var(--color-bg);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .legal-page {
+    min-height: 100vh;
+  }
+  
+  .legal-hero {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 102, 255, 0.1) 100%);
+    padding: 4rem 0 2rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+    margin: 0;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  .page-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .page-subtitle {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+  }
+  
+  .legal-content {
+    padding: 4rem 0;
+    background: var(--color-bg);
+  }
+  
+  .content-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .legal-article {
+    background: rgba(30, 30, 31, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 16px;
+    padding: 3rem;
+    box-shadow: 0 20px 50px rgba(0, 212, 255, 0.1);
+  }
+  
+  .intro {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+  
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 2.5rem 0 1rem;
+    color: var(--color-text);
+    border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    padding-bottom: 0.5rem;
+  }
+  
+  h2:first-of-type {
+    margin-top: 0;
+  }
+  
+  p {
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  
+  ul {
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+  
+  li {
+    margin-bottom: 0.5rem;
+  }
+  
+  strong {
+    color: var(--color-text);
+  }
+  
+  .contact-info {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+  }
+  
+  .contact-info p {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .page-title {
+      font-size: 2rem;
+    }
+    
+    .legal-article {
+      padding: 2rem;
+    }
+    
+    .container {
+      padding: 0 1rem;
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+</style> 

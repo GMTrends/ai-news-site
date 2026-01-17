@@ -1,0 +1,41 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import HeroRedesigned from '../components/HeroRedesigned.astro';
+---
+
+<MainLayout 
+	title="Hero Redesigned Test - AI News" 
+	description="Test page for the new isolated hero component"
+>
+	<div class="test-notice">
+		<div class="notice-content">
+			<h2>🧪 Hero Redesigned Test Page</h2>
+			<p>This page tests the new isolated hero component with CSS namespace protection. The component uses "new-" prefixed classes to prevent conflicts.</p>
+		</div>
+	</div>
+
+	<HeroRedesigned />
+</MainLayout>
+
+<style>
+	.test-notice {
+		background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+		color: white;
+		padding: 1rem 0;
+		text-align: center;
+		border-bottom: 3px solid #60a5fa;
+	}
+
+	.notice-content h2 {
+		margin: 0 0 0.5rem 0;
+		font-size: 1.5rem;
+		font-weight: 700;
+	}
+
+	.notice-content p {
+		margin: 0;
+		opacity: 0.9;
+		max-width: 800px;
+		margin: 0 auto;
+	}
+</style>

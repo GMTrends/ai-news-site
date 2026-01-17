@@ -1,0 +1,208 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import HeroToggle from '../components/HeroToggle.astro';
+import CategoryShortcuts from '../components/CategoryShortcuts.astro';
+import UniversalPromo from '../components/UniversalPromo.astro';
+import AIBuzzLayout from '../components/AIBuzzLayout.astro';
+---
+
+<MainLayout 
+	title="AI News - Latest Updates in Artificial Intelligence" 
+	description="Stay updated with the latest AI news, reviews, tutorials, and insights. Get comprehensive coverage of artificial intelligence breakthroughs, tools, and industry developments."
+>
+	<div class="main-content">
+		<HeroToggle />
+		<CategoryShortcuts />
+		<UniversalPromo adId="leaderboard-main" />
+		<AIBuzzLayout />
+		<div class="footer-homepage-spacer"></div>
+		<div class="footer-padding-spacer"></div>
+	</div>
+</MainLayout>
+
+<style>
+/* Homepage Premium Banner Styles */
+.homepage-banner-section {
+	width: 100%;
+	padding: 4rem 0;
+	background: linear-gradient(135deg, rgba(0, 212, 255, 0.03) 0%, rgba(0, 102, 255, 0.03) 100%);
+}
+
+.banner-container {
+	position: relative;
+	width: 100%;
+	max-width: 728px;
+	margin: 0 auto;
+}
+
+.banner-label {
+	position: absolute;
+	top: -8px;
+	left: 12px;
+	background: linear-gradient(45deg, #64748b, #475569);
+	color: white;
+	padding: 0.25rem 0.75rem;
+	font-size: 0.7rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	border-radius: 4px 4px 0 0;
+	z-index: 2;
+}
+
+.premium-banner-slot {
+	width: 100%;
+	height: 90px;
+	background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+	border: 1px solid #334155;
+	border-radius: 8px;
+	overflow: hidden;
+	position: relative;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.premium-banner-slot:hover {
+	border-color: #3b82f6;
+	box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
+	transform: translateY(-1px);
+}
+
+.banner-placeholder {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+	position: relative;
+	overflow: hidden;
+}
+
+.banner-placeholder::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: -100%;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+	animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+	0% { left: -100%; }
+	100% { left: 100%; }
+}
+
+.banner-content {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 0 1.5rem;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	z-index: 2;
+}
+
+.banner-icon {
+	font-size: 2rem;
+	flex-shrink: 0;
+}
+
+.banner-text {
+	flex: 1;
+	min-width: 0;
+}
+
+.banner-headline {
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: #f1f5f9;
+	margin: 0 0 0.25rem 0;
+	line-height: 1.2;
+}
+
+.banner-description {
+	font-size: 0.8rem;
+	color: #94a3b8;
+	margin: 0;
+	line-height: 1.3;
+}
+
+.banner-cta {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	flex-shrink: 0;
+}
+
+.cta-button {
+	background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+	color: white;
+	padding: 0.5rem 1rem;
+	border-radius: 6px;
+	font-size: 0.8rem;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.cta-arrow {
+	color: #3b82f6;
+	font-size: 1.2rem;
+	font-weight: bold;
+	transition: transform 0.3s ease;
+}
+
+.premium-banner-slot:hover .cta-arrow {
+	transform: translateX(3px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+	.homepage-banner-section {
+		margin: 2rem auto;
+		padding: 0 0.5rem;
+	}
+	
+	.banner-content {
+		padding: 0 1rem;
+		gap: 0.75rem;
+	}
+	
+	.banner-icon {
+		font-size: 1.5rem;
+	}
+	
+	.banner-headline {
+		font-size: 1rem;
+	}
+	
+	.banner-description {
+		font-size: 0.75rem;
+	}
+	
+	.cta-button {
+		padding: 0.4rem 0.8rem;
+		font-size: 0.75rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.banner-content {
+		flex-direction: column;
+		text-align: center;
+		gap: 0.5rem;
+		padding: 0.75rem;
+	}
+	
+	.banner-text {
+		text-align: center;
+	}
+	
+	.banner-cta {
+		justify-content: center;
+	}
+}
+</style>

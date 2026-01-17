@@ -119,14 +119,26 @@ import Footer from '../components/Footer.astro';
                     </div>
                     
                     <div class="form-group">
-                      <label for="subject" class="form-label">Subject *</label>
-                      <select id="subject" name="subject" class="form-select" required>
-                        <option value="">Select a subject</option>
-                        <option value="general">General Inquiry</option>
-                        <option value="partnership">Partnership Opportunity</option>
-                        <option value="content">Content Suggestion</option>
-                        <option value="technical">Technical Support</option>
-                        <option value="other">Other</option>
+                      <label for="subject" class="form-label">Inquiry Type *</label>
+                      <select id="subject" name="subject" class="form-select" required style="background-color: #1a1a1b !important; color: #ffffff !important;">
+                        <option value="">Select an inquiry type</option>
+                        <optgroup label="General">
+                          <option value="general">General Inquiry</option>
+                          <option value="partnership">Partnership Opportunity</option>
+                          <option value="content">Content Suggestion</option>
+                          <option value="technical">Technical Support</option>
+                        </optgroup>
+                        <optgroup label="Legal & Privacy">
+                          <option value="privacy-policy">Privacy Policy Inquiry</option>
+                          <option value="terms-of-service">Terms of Service Question</option>
+                          <option value="legal">Legal Matter</option>
+                          <option value="disclaimers">Disclaimers Question</option>
+                          <option value="affiliate-disclosure">Affiliate Disclosure Inquiry</option>
+                          <option value="cookie-policy">Cookie Policy Question</option>
+                        </optgroup>
+                        <optgroup label="Other">
+                          <option value="other">Other</option>
+                        </optgroup>
                       </select>
                     </div>
                     
@@ -352,7 +364,6 @@ import Footer from '../components/Footer.astro';
     }
     
     .form-input,
-    .form-select,
     .form-textarea {
       padding: 0.75rem 1rem;
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -363,13 +374,122 @@ import Footer from '../components/Footer.astro';
       transition: all 0.3s ease;
     }
     
-    .form-input:focus,
+    /* Consolidated select styling - prevent white flash */
+    .form-select,
+    select.form-select,
+    #subject.form-select {
+      padding: 0.75rem 2.5rem 0.75rem 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      border-radius: 8px;
+      font-size: 1rem;
+      /* Dark background set immediately - no transition to prevent flash */
+      background-color: #1a1a1b !important;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2300d4ff' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+      background-repeat: no-repeat !important;
+      background-position: right 1rem center !important;
+      background-size: 12px !important;
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      cursor: pointer;
+      color: #ffffff !important;
+      /* Force immediate rendering */
+      will-change: auto;
+      transform: translateZ(0);
+    }
+    
+    .form-select:hover,
+    select.form-select:hover,
+    #subject.form-select:hover {
+      background-color: #1e1e1f !important;
+      border-color: rgba(0, 212, 255, 0.4) !important;
+    }
+    
+    .form-select:active,
     .form-select:focus,
+    select.form-select:active,
+    select.form-select:focus,
+    #subject.form-select:active,
+    #subject.form-select:focus {
+      background-color: #1a1a1b !important;
+      border-color: #00d4ff !important;
+      box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1) !important;
+      outline: none !important;
+    }
+    
+    .form-select option {
+      background-color: #1a1a1b !important;
+      color: #ffffff !important;
+      padding: 0.5rem;
+    }
+    
+    .form-select optgroup {
+      background-color: #1a1a1b !important;
+      color: #00d4ff !important;
+      font-weight: 600;
+      padding: 0.5rem;
+    }
+    
+    .form-select optgroup option {
+      background-color: #1a1a1b !important;
+      color: #ffffff !important;
+      padding-left: 1.5rem;
+    }
+    
+    /* Prevent white flash on dropdown open - browser-specific fixes */
+    .form-select::-ms-expand,
+    select.form-select::-ms-expand {
+      display: none !important;
+    }
+    
+    /* Force dark background on all select states */
+    select.form-select,
+    select.form-select:focus,
+    select.form-select:active,
+    select.form-select:hover {
+      background-color: #1a1a1b !important;
+    }
+    
+    /* Style all option elements */
+    select.form-select option,
+    .form-select option,
+    #subject option {
+      background: #1a1a1b !important;
+      background-color: #1a1a1b !important;
+      color: #ffffff !important;
+      padding: 0.5rem !important;
+    }
+    
+    /* Style optgroups */
+    select.form-select optgroup,
+    .form-select optgroup,
+    #subject optgroup {
+      background: #1a1a1b !important;
+      background-color: #1a1a1b !important;
+      color: #00d4ff !important;
+      font-weight: 600 !important;
+      padding: 0.5rem !important;
+    }
+    
+    /* Nested options under optgroups */
+    select.form-select optgroup option,
+    .form-select optgroup option,
+    #subject optgroup option {
+      background: #1a1a1b !important;
+      background-color: #1a1a1b !important;
+      color: #ffffff !important;
+      padding-left: 1.5rem !important;
+    }
+    
+    .form-input:focus,
     .form-textarea:focus {
       outline: none;
       border-color: #00d4ff;
       box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+      background-color: rgba(26, 26, 27, 1);
     }
+    
+    /* Select focus handled separately above to prevent white flash */
     
     .form-textarea {
       resize: vertical;
@@ -426,6 +546,24 @@ import Footer from '../components/Footer.astro';
       
       .contact-info {
         padding-right: 0;
+      }
+      
+      .form-card {
+        padding: 1.5rem;
+      }
+      
+      .form-select,
+      select.form-select,
+      #subject.form-select {
+        background-color: #1a1a1b !important;
+        color: #ffffff !important;
+      }
+      
+      .form-select option,
+      select.form-select option,
+      #subject option {
+        background-color: #1a1a1b !important;
+        color: #ffffff !important;
       }
       
       .page-title {
@@ -560,6 +698,20 @@ import Footer from '../components/Footer.astro';
     
     // Initialize form
     document.addEventListener('DOMContentLoaded', function() {
+      // Immediately set dark background on select to prevent white flash
+      const subjectSelect = document.getElementById('subject') as HTMLSelectElement;
+      if (subjectSelect) {
+        subjectSelect.style.backgroundColor = '#1a1a1b';
+        subjectSelect.style.color = '#ffffff';
+        
+        // Pre-select inquiry type from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const inquiryType = urlParams.get('inquiry');
+        if (inquiryType) {
+          subjectSelect.value = inquiryType;
+        }
+      }
+
       const contactForm = document.getElementById('contactForm') as HTMLFormElement;
       
       if (contactForm) {

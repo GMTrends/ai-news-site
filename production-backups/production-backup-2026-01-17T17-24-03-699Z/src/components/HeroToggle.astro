@@ -1,0 +1,15 @@
+---
+import Hero from './Hero.astro';
+import HeroRedesigned from './HeroRedesigned.astro';
+import HeroConvert from './HeroConvert.astro';
+import HeroHybrid from './HeroHybrid.astro';
+
+// Feature flags - can be controlled via environment variables
+const useConvertHero = import.meta.env.PUBLIC_USE_CONVERT_HERO === 'true' || false;
+const useNewHero = import.meta.env.PUBLIC_USE_NEW_HERO === 'true' || false;
+
+// Priority: Convert Hero (full) > Hybrid (new header + old main-grid) > New Hero > Old Hero
+// HeroHybrid uses the new header from HeroConvert but keeps the old main-grid from HeroRedesigned
+---
+
+{useConvertHero ? <HeroHybrid /> : (useNewHero ? <HeroRedesigned /> : <Hero />)}

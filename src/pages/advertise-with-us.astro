@@ -187,7 +187,7 @@ import MainLayout from '../layouts/MainLayout.astro';
                 <div class="featured-glow"></div>
                 <div class="conversion-header">
                   <span class="conversion-icon">⭐</span>
-                  <h3>Professional Package</h3>
+                  <h3>Pro Package</h3>
                   <div class="package-price">
                     <span class="currency">$</span>
                     <span class="amount">1,000</span>
@@ -219,7 +219,7 @@ import MainLayout from '../layouts/MainLayout.astro';
                 <div class="package-badge enterprise">Enterprise</div>
                 <div class="conversion-header">
                   <span class="conversion-icon">🏆</span>
-                  <h3>Enterprise Package</h3>
+                  <h3>Enterprise</h3>
                   <div class="package-price">
                     <span class="currency">$</span>
                     <span class="amount">1,500</span>
@@ -1063,18 +1063,19 @@ import MainLayout from '../layouts/MainLayout.astro';
   /* Package Badges */
   .conversion-item .package-badge {
     position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
+    top: 0.75rem;
+    right: 0.75rem;
     background: var(--accent-cyan);
     color: var(--bg-primary);
-    padding: 0.6rem 1.2rem;
+    padding: 0.5rem 1rem;
     border-radius: 25px;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 700;
     z-index: 2;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+    line-height: 1.2;
   }
   
   .conversion-item .starter {
@@ -1183,9 +1184,9 @@ import MainLayout from '../layouts/MainLayout.astro';
     }
     
     .package-badge {
-      top: 1rem;
-      right: 1rem;
-      font-size: 0.75rem;
+      top: 0.75rem;
+      right: 0.75rem;
+      font-size: 0.85rem;
       padding: 0.5rem 1rem;
     }
     

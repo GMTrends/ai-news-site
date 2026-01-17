@@ -83,6 +83,23 @@ exports.handler = async (event, context) => {
     const sanitizedSubject = sanitizeInput(subject);
     const sanitizedMessage = sanitizeInput(message);
 
+    // Map inquiry types to readable labels
+    const inquiryTypeLabels = {
+      'general': 'General Inquiry',
+      'partnership': 'Partnership Opportunity',
+      'content': 'Content Suggestion',
+      'technical': 'Technical Support',
+      'privacy-policy': 'Privacy Policy Inquiry',
+      'terms-of-service': 'Terms of Service Question',
+      'legal': 'Legal Matter',
+      'disclaimers': 'Disclaimers Question',
+      'affiliate-disclosure': 'Affiliate Disclosure Inquiry',
+      'cookie-policy': 'Cookie Policy Question',
+      'other': 'Other'
+    };
+
+    const inquiryLabel = inquiryTypeLabels[sanitizedSubject] || sanitizedSubject;
+
     // Log the contact form submission
     console.log('Contact Form Submission:', {
       name: sanitizedName,
@@ -109,7 +126,7 @@ exports.handler = async (event, context) => {
     const mailOptions = {
       from: process.env.SMTP_USER || 'noreply@aibuzzmedia.com',
       to: process.env.CONTACT_EMAIL || 'contact@aibuzzmedia.com',
-      subject: `AI Buzz Media Contact: ${sanitizedSubject}`,
+      subject: `[${inquiryLabel}] AI Buzz Media Contact Form`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #00d4ff; border-bottom: 2px solid #00d4ff; padding-bottom: 10px;">
@@ -119,7 +136,7 @@ exports.handler = async (event, context) => {
           <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
             <p><strong>Name:</strong> ${sanitizedName}</p>
             <p><strong>Email:</strong> ${email.toLowerCase()}</p>
-            <p><strong>Subject:</strong> ${sanitizedSubject}</p>
+            <p><strong>Inquiry Type:</strong> ${inquiryLabel}</p>
             <p><strong>Message:</strong></p>
             <div style="background: white; padding: 15px; border-radius: 5px; border-left: 4px solid #00d4ff;">
               ${sanitizedMessage.replace(/\n/g, '<br>')}
@@ -144,7 +161,7 @@ exports.handler = async (event, context) => {
         
         Name: ${sanitizedName}
         Email: ${email.toLowerCase()}
-        Subject: ${sanitizedSubject}
+        Inquiry Type: ${inquiryLabel}
         Message: ${sanitizedMessage}
         
         Submission Details:

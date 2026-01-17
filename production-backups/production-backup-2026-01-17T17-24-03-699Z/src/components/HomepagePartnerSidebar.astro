@@ -1,0 +1,750 @@
+---
+import UniversalPromo from './UniversalPromo.astro';
+
+interface Props {
+  categorySlug: string;
+  currentArticleSlug?: string;
+  className?: string;
+  articles?: any[];
+  mainGridCount?: number;
+  sidebarCount?: number;
+  priority?: 'high' | 'medium' | 'low';
+}
+
+const { categorySlug, currentArticleSlug, className = '', articles = [], mainGridCount = 5, sidebarCount = 3, priority = 'high' } = Astro.props;
+
+// Smart related articles logic - avoid duplicating main grid articles
+let filteredArticles: any[] = [];
+if (Array.isArray(articles) && articles.length > 0) {
+  // For homepage: skip main grid articles, show next articles for sidebar
+  const sidebarArticles = articles.slice(mainGridCount, mainGridCount + sidebarCount);
+  
+  // Fallback: if not enough articles after main grid, show random articles from same category
+  if (sidebarArticles.length < sidebarCount) {
+    const remaining = sidebarCount - sidebarArticles.length;
+    // Get random articles from the same category as fallbacks
+    const availableArticles = articles.filter((_, index) => index < mainGridCount);
+    const shuffled = availableArticles.sort(() => 0.5 - Math.random());
+    const fallbackArticles = shuffled.slice(0, remaining);
+    filteredArticles = [...sidebarArticles, ...fallbackArticles];
+  } else {
+    filteredArticles = sidebarArticles;
+  }
+}
+
+// Helper function to format dates
+function formatDate(dateString: string) {
+  if (!dateString) return '';
+  try {
+    return new Date(dateString).toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric' 
+    });
+  } catch {
+    return '';
+  }
+}
+
+// Helper function to get article URL
+function getArticleUrl(article: any) {
+  const category = article.category?.slug?.current || categorySlug;
+  const slug = article.slug?.current || article.slug;
+  return `/${category}/${slug}`;
+}
+---
+
+<aside class={`homepage-partner-sidebar ${className}`}>
+  <!-- Top Partner Space - Premium Monetization (All priorities) -->
+  <div class="sidebar-section premium-partner-section">
+    <div class="sponsor-header">
+      <div class="sponsor-badge">FEATURED PARTNER</div>
+      <div class="sponsor-icon">⭐</div>
+    </div>
+    <div class="sponsor-content">
+      <h3 class="sponsor-title">Premium AI Solutions</h3>
+      <p class="sponsor-description">Exclusive advertising space for AI companies. Showcase your cutting-edge solutions to our engaged audience.</p>
+      <div class="sponsor-features">
+        <div class="feature-item">
+          <span class="feature-icon">🎯</span>
+          <span class="feature-text">Targeted Audience</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">📈</span>
+          <span class="feature-text">High Engagement</span>
+        </div>
+      </div>
+      <a href="/advertise" class="sponsor-cta">Partner With Us</a>
+    </div>
+  </div>
+
+  <!-- Related Articles -->
+  <div class="sidebar-section sidebar-related">
+    <h3 class="section-title">Related in {categorySlug?.charAt(0).toUpperCase() + categorySlug?.slice(1)}</h3>
+    <div class="related-articles">
+      {filteredArticles.map((a: any) => (
+        <a href={getArticleUrl(a)} class="related-article-item">
+          {a.featuredImage ? (
+            <img src={a.featuredImage} alt={a.title} class="related-article-thumbnail" width="56" height="56" loading="lazy" decoding="async" />
+          ) : (
+            <div class="related-article-thumbnail placeholder-thumbnail">📰</div>
+          )}
+          <div class="related-article-content">
+            <h4 class="related-article-title">{a.title || 'Article Title'}</h4>
+            <div class="related-article-date">{formatDate(a.publishedAt)}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <!-- AI Tool Comparison Widget - Streamlined (All priorities) -->
+  <div class="sidebar-section tool-comparison">
+    <h3 class="section-title">Recommended Tools</h3>
+    <div class="comparison-grid">
+      <div class="tool-card">
+        <div class="tool-icon">🤖</div>
+        <div class="tool-info">
+          <h4>Claude AI</h4>
+          <span class="tool-price">$20/mo</span>
+        </div>
+        <a href="#" class="tool-link">Get Started</a>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">✨</div>
+        <div class="tool-info">
+          <h4>ChatGPT Plus</h4>
+          <span class="tool-price">$20/mo</span>
+        </div>
+        <a href="#" class="tool-link">Get Started</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Partner Space - Secondary Monetization (Only for high priority sections) -->
+  {priority === 'high' && (
+    <div class="sidebar-section secondary-partner-section">
+      <div class="secondary-ad-header">
+        <div class="secondary-ad-badge">FEATURED CONTENT</div>
+        <div class="secondary-ad-icon">💡</div>
+      </div>
+      <div class="secondary-ad-content">
+        <h3 class="secondary-ad-title">AI Innovation Hub</h3>
+        <p class="secondary-ad-description">Discover the latest AI breakthroughs and cutting-edge technologies that are shaping the future.</p>
+        <div class="secondary-ad-features">
+          <div class="feature-item">
+            <span class="feature-icon">🚀</span>
+            <span class="feature-text">Latest Updates</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🔬</span>
+            <span class="feature-text">Research Insights</span>
+          </div>
+        </div>
+        <a href="/ai-innovation" class="secondary-ad-cta">Discover More</a>
+      </div>
+    </div>
+  )}
+
+</aside>
+
+<style>
+/* Homepage Partner Sidebar - Optimized for Homepage Layout with Dual Monetization */
+.homepage-partner-sidebar {
+  width: 340px !important;
+  max-width: 340px !important;
+  align-self: flex-start !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.2rem !important;
+  padding: 0 !important;
+  background: rgba(15, 23, 42, 0.3) !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(71, 85, 105, 0.2) !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  contain: layout !important;
+}
+
+.homepage-partner-sidebar * {
+  box-sizing: border-box;
+}
+
+.homepage-partner-sidebar[data-astro-cid-sbrm7gxs] {
+  gap: 0.4rem !important;
+}
+
+.sidebar-section {
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 8px;
+  border: 1px solid rgba(71, 85, 105, 0.3);
+  margin-bottom: 0;
+}
+
+.section-title {
+  color: #e2e8f0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  display: block;
+}
+
+/* Premium Partner Section - Top Partner Space */
+.premium-partner-section {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  border: 2px solid rgba(255, 193, 7, 0.3);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(255, 193, 7, 0.1);
+}
+
+.premium-partner-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 193, 7, 0.05) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: sponsorShimmer 4s infinite;
+  pointer-events: none;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.premium-sponsor-section:hover {
+  border-color: rgba(255, 193, 7, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.2);
+}
+
+@keyframes sponsorShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.sponsor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.sponsor-badge {
+  background: linear-gradient(45deg, #f59e0b, #d97706);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+  animation: sponsorBadgePulse 2s ease-in-out infinite;
+}
+
+@keyframes sponsorBadgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.sponsor-icon {
+  font-size: 1.5rem;
+  animation: sponsorIconFloat 3s ease-in-out infinite;
+}
+
+@keyframes sponsorIconFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
+}
+
+.sponsor-content {
+  position: relative;
+  z-index: 2;
+}
+
+.sponsor-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem 0;
+  background: linear-gradient(135deg, #ffffff 0%, #ffc107 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+.sponsor-description {
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.sponsor-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.sponsor-features .feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(255, 193, 7, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 193, 7, 0.2);
+  transition: all 0.3s ease;
+}
+
+.sponsor-features .feature-item:hover {
+  background: rgba(255, 193, 7, 0.15);
+  border-color: rgba(255, 193, 7, 0.3);
+  transform: translateX(3px);
+}
+
+.sponsor-cta {
+  display: block;
+  width: 100%;
+  background: linear-gradient(135deg, #ffc107 0%, #ff8f00 100%);
+  color: white;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.sponsor-cta:hover {
+  background: linear-gradient(135deg, #ff8f00 0%, #f57c00 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 193, 7, 0.4);
+}
+
+/* Related Articles Section */
+.related-articles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.related-article-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(71, 85, 105, 0.2);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.related-article-item:hover {
+  background: rgba(6, 182, 212, 0.1);
+  transform: translateY(-1px);
+}
+
+.related-article-thumbnail {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.placeholder-thumbnail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(71, 85, 105, 0.3);
+  color: #94a3b8;
+  font-size: 1.5rem;
+}
+
+.related-article-content {
+  flex: 1;
+}
+
+.related-article-title {
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.related-article-date {
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+/* AI Tool Comparison Widget */
+.tool-comparison {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(71, 85, 105, 0.4);
+}
+
+.comparison-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tool-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(71, 85, 105, 0.2);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.tool-card:hover {
+  background: rgba(6, 182, 212, 0.1);
+  border-color: rgba(6, 182, 212, 0.3);
+  transform: translateY(-1px);
+}
+
+.tool-icon {
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 182, 212, 0.1);
+  border-radius: 8px;
+}
+
+.tool-info {
+  flex: 1;
+}
+
+.tool-info h4 {
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+
+.tool-price {
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+.tool-link {
+  color: #06b6d4;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.tool-link:hover {
+  background: rgba(6, 182, 212, 0.1);
+  color: #0891b2;
+}
+
+/* Secondary Partner Section - Bottom Partner Space */
+.secondary-partner-section {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  border: 2px solid rgba(6, 182, 212, 0.3);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.1);
+}
+
+.secondary-ad-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(6, 182, 212, 0.05) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: secondaryPartnerShimmer 4s infinite;
+  pointer-events: none;
+}
+
+.secondary-ad-section:hover {
+  border-color: rgba(6, 182, 212, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(6, 182, 212, 0.2);
+}
+
+@keyframes secondaryPartnerShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.secondary-ad-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.secondary-ad-badge {
+  background: linear-gradient(45deg, #06b6d4, #0891b2);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(6, 182, 212, 0.3);
+  animation: secondaryPartnerBadgePulse 2s ease-in-out infinite;
+}
+
+@keyframes secondaryPartnerBadgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.secondary-ad-icon {
+  font-size: 1.5rem;
+  animation: secondaryPartnerIconFloat 3s ease-in-out infinite;
+}
+
+@keyframes secondaryPartnerIconFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
+}
+
+.secondary-partner-content {
+  position: relative;
+  z-index: 2;
+}
+
+.secondary-partner-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem 0;
+  background: linear-gradient(135deg, #ffffff 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 8px rgba(6, 182, 212, 0.3);
+}
+
+.secondary-partner-description {
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.secondary-partner-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.secondary-partner-features .feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(6, 182, 212, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  transition: all 0.3s ease;
+}
+
+.secondary-partner-features .feature-item:hover {
+  background: rgba(6, 182, 212, 0.15);
+  border-color: rgba(6, 182, 212, 0.3);
+  transform: translateX(3px);
+}
+
+.feature-icon {
+  font-size: 1rem;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.feature-text {
+  color: #e2e8f0;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.secondary-partner-cta {
+  display: block;
+  width: 100%;
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+  color: white;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.secondary-partner-cta:hover {
+  background: linear-gradient(135deg, #0891b2, #0e7490 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(6, 182, 212, 0.4);
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .homepage-partner-sidebar {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 1rem;
+  }
+  
+  .premium-partner-section {
+    padding: 1.5rem;
+  }
+  
+  .premium-partner-title {
+    font-size: 1.3rem;
+    line-height: 1.3;
+  }
+  
+  .premium-partner-description {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  
+  .premium-partner-cta {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .related-articles {
+    gap: 1rem;
+  }
+  
+  .related-article {
+    padding: 1rem;
+  }
+  
+  .related-article-title {
+    font-size: 0.95rem;
+    line-height: 1.3;
+  }
+  
+  .tool-comparison {
+    padding: 1rem;
+  }
+  
+  .tool-card {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .tool-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 1.3rem;
+  }
+  
+  .secondary-partner-section {
+    padding: 1.5rem;
+  }
+  
+  .secondary-partner-title {
+    font-size: 1.2rem;
+    line-height: 1.3;
+  }
+  
+  .secondary-partner-description {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  
+  .secondary-partner-cta {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .homepage-partner-sidebar {
+    padding: 0.75rem;
+  }
+  
+  .premium-partner-section,
+  .secondary-partner-section {
+    padding: 1.25rem;
+  }
+  
+  .premium-partner-title {
+    font-size: 1.2rem;
+  }
+  
+  .premium-partner-description {
+    font-size: 0.85rem;
+  }
+  
+  .premium-partner-cta,
+  .secondary-partner-cta {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+  
+  .related-article {
+    padding: 0.75rem;
+  }
+  
+  .tool-card {
+    padding: 0.75rem;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .tool-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+  
+  .secondary-partner-title {
+    font-size: 1.1rem;
+  }
+  
+  .secondary-partner-description {
+    font-size: 0.85rem;
+  }
+}
+</style>
