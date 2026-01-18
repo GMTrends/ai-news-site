@@ -1,0 +1,208 @@
+---
+import BlogPost from '../../layouts/BlogPost.astro';
+import { sanityClient, getImageUrl, getArticlesByCategory } from '../../lib/sanity';
+import CategorySidebar from '../../components/CategorySidebar.astro';
+import HeaderPremium from '../../components/HeaderPremium.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { getCategoryUrl } from '../../utils/urlHelpers';
+// CSS already included in BaseHead via optimized.css
+import { getCollection } from 'astro:content';
+import { CATEGORIES } from '../../consts';
+
+// Enable static generation for this page
+export const prerender = true;
+
+export async function getStaticPaths() {
+  try {
+    // Fetch all articles from Sanity
+    const sanityArticles = await sanityClient.fetch(`
+      *[_type == "article" && 
+        (status == "published" || 
+         (status == "scheduled" && publishedAt <= now())
+        )] {
+        _id,
+        title,
+        slug,
+        category->{
+          name,
+          slug
+        },
+        excerpt,
+        content,
+        "featuredImage": featuredImage{
+          asset->{
+            _id,
+            url,
+            metadata
+          }
+        },
+        publishedAt,
+        author->{
+          name,
+          slug,
+          bio,
+          image
+        },
+        tags
+      }
+    `);
+    
+    // Fetch all local Markdown articles
+    const localArticles = await getCollection('articles');
+
+    // Map Sanity articles to static paths
+    const sanityPaths = (sanityArticles || []).map((article: any) => {
+      if (!article || !article.title || !article.slug?.current) return null;
+      return {
+        params: { 
+          category: article.category?.slug?.current || 'marketing',
+          slug: article.slug.current
+        },
+        props: { article },
+      };
+    }).filter(Boolean);
+
+    // Map local Markdown articles to static paths
+    const localPaths = (localArticles || []).map((article: any) => {
+      if (!article || !article.data?.title || !article.slug) return null;
+      return {
+        params: {
+          category: article.data.category || 'uncategorized',
+          slug: article.slug
+        },
+        props: {
+          article: {
+            title: article.data.title,
+            excerpt: article.data.excerpt || '',
+            publishedAt: article.data.publishedAt || '',
+            updatedAt: article.data.updatedAt || '',
+            featuredImage: article.data.image || '',
+            author: {
+              name: article.data.author || 'Unknown',
+              slug: article.data.author || 'unknown',
+            },
+            category: {
+              name: article.data.category || 'Uncategorized',
+              slug: article.data.category || 'uncategorized',
+            },
+            slug: { current: article.slug },
+            content: [
+              { _type: 'block', style: 'normal', children: [{ text: article.body || '', marks: [] }] }
+            ],
+            tags: article.data.tags || [],
+            // Add any other fields as needed
+          }
+        },
+      };
+    }).filter(Boolean);
+
+    const allPaths = [...sanityPaths, ...localPaths];
+    return allPaths;
+  } catch (error) {
+    return [];
+  }
+}
+
+interface Props {
+  article: any;
+}
+
+const { article }: Props = Astro.props;
+
+// Safety check - if no article is found, return a 404 page
+if (!article || !article.title) {
+  return Astro.redirect('/404');
+}
+ 
+ // Fetch related articles for the sidebar
+ const currentCategorySlug = article.category?.slug?.current || article.category?.slug || 'uncategorized';
+ const relatedArticles = await getArticlesByCategory(currentCategorySlug);
+ 
+ // Convert Sanity content to HTML for rendering
+function renderContent(content: any[]): string {
+  if (!content || !Array.isArray(content)) return '';
+  
+  return content.map((block: any) => {
+    if (block._type === 'block') {
+      // Handle rich text blocks
+      let text = block.children?.map((child: any) => {
+        let result = child.text || '';
+        if (child.marks?.includes('strong')) result = `<strong>${result}</strong>`;
+        if (child.marks?.includes('em')) result = `<em>${result}</em>`;
+        if (child.marks?.includes('code')) result = `<code>${result}</code>`;
+        return result;
+      }).join('') || '';
+      
+      const style = block.style || 'normal';
+      if (style === 'h2') return `<h2>${text}</h2>`;
+      if (style === 'h3') return `<h3>${text}</h3>`;
+      if (style === 'h4') return `<h4>${text}</h4>`;
+      if (style === 'blockquote') return `<blockquote>${text}</blockquote>`;
+      return `<p>${text}</p>`;
+    } else if (block._type === 'image') {
+      // Handle image blocks
+      const alt = block.alt || '';
+      const caption = block.caption ? `<figcaption>${block.caption}</figcaption>` : '';
+      return `<figure><img src="${block.asset?.url || ''}" alt="${alt}" />${caption}</figure>`;
+    }
+    return '';
+  }).join('');
+}
+
+// Helper to get display name from slug
+function getCategoryDisplayName(slug: string): string {
+  const cat = CATEGORIES.find(c => c.slug === slug);
+  return cat ? cat.displayName : slug;
+}
+
+// Strip first # heading from Markdown content (if present)
+function stripFirstH1(content: any[]): any[] {
+  if (!content || !Array.isArray(content)) return content;
+  if (content.length === 0) return content;
+  const first = content[0];
+  if (first._type === 'block' && first.style === 'h1') {
+    return content.slice(1);
+  }
+  // Also handle Markdown converted to a single block with # at start
+  if (first._type === 'block' && first.children && first.children[0]?.text?.startsWith('# ')) {
+    first.children[0].text = first.children[0].text.replace(/^#\s+/, '');
+    return content;
+  }
+  return content;
+}
+
+const cleanContent = article.content;
+const articleContent = renderContent(cleanContent);
+
+// Ensure publishedAt and updatedAt are valid Date objects
+function parseDateSafe(dateVal: any): Date {
+  if (!dateVal) return new Date('2000-01-01T00:00:00Z');
+  const d = new Date(dateVal);
+  return isNaN(d.getTime()) ? new Date('2000-01-01T00:00:00Z') : d;
+}
+
+const pubDate = parseDateSafe(article.publishedAt);
+const updatedDate = parseDateSafe(article.updatedAt);
+
+---
+
+<BlogPost
+	title={article.title}
+	description={article.excerpt}
+	pubDate={pubDate}
+	updatedDate={updatedDate}
+	heroImage={getImageUrl(article.featuredImage)}
+	authorName={article.author?.name || 'Unknown'}
+	authorSlug={typeof article.author?.slug === 'object' ? article.author.slug.current : article.author?.slug || 'unknown'}
+	categoryName={getCategoryDisplayName(article.category?.slug?.current || article.category?.slug || 'uncategorized')}
+	categorySlug={article.category?.slug?.current || article.category?.slug || 'uncategorized'}
+>
+            <Fragment set:html={articleContent} />
+          <CategorySidebar
+  categorySlug={article.category?.slug?.current || article.category?.slug || 'uncategorized'}
+  currentArticleSlug={article.slug?.current || article.slug}
+  articles={relatedArticles}
+  slot="sidebar"
+ />
+</BlogPost>

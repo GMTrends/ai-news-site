@@ -1,0 +1,27 @@
+# Block all search engines until site is ready for public
+User-agent: *
+Disallow: /
+
+# Block AI training bots
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: /
+
+# When ready to allow search engines, replace above with:
+# User-agent: *
+# Allow: /
+# Sitemap: https://aibuzzmedia.com/sitemap-index.xml

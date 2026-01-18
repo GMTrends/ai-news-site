@@ -1,0 +1,1073 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+
+const pageTitle = `Unified Admin - ${SITE_TITLE}`;
+const description = 'Streamlined content management for AI Buzz Media';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={pageTitle} description={description} image="/assets/blog-placeholder-1.jpg" />
+		
+		<style>
+
+
+			.content-management {
+				background: rgba(26, 26, 27, 0.9);
+				backdrop-filter: blur(20px);
+				border: 1px solid rgba(0, 212, 255, 0.2);
+				border-radius: 20px;
+				padding: 2rem;
+				margin-bottom: 2rem;
+			}
+
+			.content-management h3 {
+				color: #00d4ff;
+				margin-bottom: 1.5rem;
+				font-size: 1.5rem;
+				text-align: center;
+			}
+
+			.content-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+				gap: 1.5rem;
+			}
+
+			.content-card {
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 16px;
+				padding: 2rem;
+				transition: all 0.3s ease;
+				text-align: center;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.content-card::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 3px;
+				background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+				opacity: 0;
+				transition: opacity 0.3s ease;
+			}
+
+			.content-card:hover {
+				background: rgba(0, 212, 255, 0.1);
+				border-color: rgba(0, 212, 255, 0.3);
+				transform: translateY(-4px);
+				box-shadow: 0 12px 30px rgba(0, 212, 255, 0.2);
+			}
+
+			.content-card:hover::before {
+				opacity: 1;
+			}
+
+			.content-icon {
+				font-size: 3rem;
+				margin-bottom: 1rem;
+				display: block;
+			}
+
+			.content-title {
+				color: #ffffff;
+				font-size: 1.3rem;
+				font-weight: 600;
+				margin-bottom: 0.8rem;
+			}
+
+			.content-description {
+				color: #b3b3b3;
+				font-size: 0.95rem;
+				margin-bottom: 1.5rem;
+				line-height: 1.5;
+			}
+
+			.content-button {
+				background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+				color: white;
+				padding: 0.75rem 1.5rem;
+				border-radius: 8px;
+				text-decoration: none;
+				font-size: 0.9rem;
+				font-weight: 500;
+				transition: all 0.3s ease;
+				display: inline-block;
+				border: none;
+				cursor: pointer;
+			}
+
+			.content-button:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+				text-decoration: none;
+				color: white;
+			}
+
+			.business-tools {
+				background: rgba(26, 26, 27, 0.9);
+				backdrop-filter: blur(20px);
+				border: 1px solid rgba(0, 212, 255, 0.2);
+				border-radius: 20px;
+				padding: 2rem;
+				margin-bottom: 2rem;
+			}
+
+			.business-tools h3 {
+				color: #00d4ff;
+				margin-bottom: 1.5rem;
+				font-size: 1.5rem;
+				text-align: center;
+			}
+
+			.tools-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+				gap: 1.5rem;
+			}
+
+			.tool-card {
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 16px;
+				padding: 2rem;
+				transition: all 0.3s ease;
+				text-align: center;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.tool-card::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 3px;
+				background: linear-gradient(135deg, #059669 0%, #047857 100%);
+				opacity: 0;
+				transition: opacity 0.3s ease;
+			}
+
+			.tool-card:hover {
+				background: rgba(5, 150, 105, 0.1);
+				border-color: rgba(5, 150, 105, 0.3);
+				transform: translateY(-4px);
+				box-shadow: 0 12px 30px rgba(5, 150, 105, 0.2);
+			}
+
+			.tool-card:hover::before {
+				opacity: 1;
+			}
+
+			.tool-icon {
+				font-size: 3rem;
+				margin-bottom: 1rem;
+				display: block;
+			}
+
+			.tool-title {
+				color: #ffffff;
+				font-size: 1.3rem;
+				font-weight: 600;
+				margin-bottom: 0.8rem;
+			}
+
+			.tool-description {
+				color: #b3b3b3;
+				font-size: 0.95rem;
+				margin-bottom: 1.5rem;
+				line-height: 1.5;
+			}
+
+			.tool-button {
+				background: linear-gradient(135deg, #059669 0%, #047857 100%);
+				color: white;
+				padding: 0.75rem 1.5rem;
+				border-radius: 8px;
+				text-decoration: none;
+				font-size: 0.9rem;
+				font-weight: 500;
+				transition: all 0.3s ease;
+				display: inline-block;
+				border: none;
+				cursor: pointer;
+			}
+
+			.tool-button:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+				text-decoration: none;
+				color: white;
+			}
+
+			.sanity-status {
+				background: rgba(26, 26, 27, 0.9);
+				backdrop-filter: blur(20px);
+				border: 1px solid rgba(0, 212, 255, 0.2);
+				border-radius: 16px;
+				padding: 2rem;
+				margin-bottom: 2rem;
+				text-align: center;
+			}
+
+			.sanity-status h3 {
+				color: #00d4ff;
+				margin-bottom: 1rem;
+				font-size: 1.3rem;
+			}
+
+			.sanity-status p {
+				color: #b3b3b3;
+				margin-bottom: 1.5rem;
+				font-size: 1rem;
+			}
+
+			.sanity-status .status-info {
+				background: rgba(0, 212, 255, 0.1);
+				padding: 1rem;
+				border-radius: 8px;
+				margin: 1rem 0;
+				border-left: 4px solid #00d4ff;
+			}
+
+			.sanity-status .status-info p {
+				margin: 0;
+				color: #00d4ff;
+				font-family: monospace;
+				font-size: 1rem;
+				font-weight: 600;
+			}
+
+			.sanity-setup {
+				background: rgba(26, 26, 27, 0.9);
+				backdrop-filter: blur(20px);
+				border: 1px solid rgba(255, 107, 107, 0.3);
+				border-radius: 16px;
+				padding: 2rem;
+				margin-bottom: 2rem;
+				text-align: center;
+			}
+
+			.sanity-setup h3 {
+				color: #ff6b6b;
+				margin-bottom: 1rem;
+				font-size: 1.3rem;
+			}
+
+			.sanity-setup p {
+				color: #b3b3b3;
+				margin-bottom: 1.5rem;
+				font-size: 1rem;
+			}
+
+			.sanity-setup .setup-steps {
+				background: rgba(255,255,255,0.1);
+				padding: 1rem;
+				border-radius: 8px;
+				margin: 1rem 0;
+				border-left: 4px solid #00d4ff;
+				text-align: left;
+			}
+
+			.sanity-setup .setup-steps ol {
+				margin: 0;
+				padding-left: 1.5rem;
+				color: #00d4ff;
+				font-family: monospace;
+				font-size: 0.9rem;
+				line-height: 1.6;
+			}
+
+			.sanity-setup .setup-steps li {
+				margin-bottom: 0.5rem;
+			}
+
+			.terminal-button {
+				background: linear-gradient(135deg, #059669 0%, #047857 100%);
+				color: white;
+				padding: 0.75rem 1.5rem;
+				border-radius: 8px;
+				text-decoration: none;
+				font-size: 0.9rem;
+				font-weight: 500;
+				transition: all 0.3s ease;
+				display: inline-block;
+				border: none;
+				cursor: pointer;
+				margin-top: 1rem;
+			}
+
+			.terminal-button:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+				text-decoration: none;
+				color: white;
+			}
+
+			@media (max-width: 768px) {
+				.admin-container {
+					padding: 0 1rem;
+				}
+				
+				.admin-card {
+					padding: 1rem;
+				}
+				
+				.admin-title {
+					font-size: 2rem;
+				}
+				
+				.content-grid,
+				.tools-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main class="admin-page">
+			<div class="admin-container">
+				<div class="admin-card">
+					<div class="admin-header">
+						<h1 class="admin-title">Unified Content Management</h1>
+						<p class="admin-subtitle">Everything you need to manage your AI news content in one place</p>
+						
+						<!-- Sanity Connection Status -->
+						<div id="sanity-status-indicator" class="sanity-status-indicator">
+							<div class="status-main">
+								<span id="status-icon">🔄</span>
+								<span id="status-text">Checking Sanity Studio connection status...</span>
+							</div>
+							<div id="status-details" class="status-details" style="display: none;">
+								<div id="last-check-time" class="last-check-time"></div>
+								<div id="connection-details" class="connection-details"></div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Content Management -->
+					<div class="content-management">
+						<h3>📚 Content Management</h3>
+						<div class="content-grid">
+							<div class="content-card">
+								<span class="content-icon">🎨</span>
+								<h4 class="content-title">Sanity Studio</h4>
+								<p class="content-description">Access your complete content management system for articles, authors, categories, and media</p>
+								<button id="sanity-studio-btn" class="content-button" onclick="openSanityStudio()">Open Sanity Studio</button>
+							</div>
+							
+							<div class="content-card">
+								<span class="content-icon">👥</span>
+								<h4 class="content-title">Authors Management</h4>
+								<p class="content-description">Manage contributors, permissions, and author profiles</p>
+								<a href="/admin/authors" class="content-button">Manage Authors</a>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Business Tools -->
+					<div class="business-tools">
+						<h3>💼 Business Tools</h3>
+						<div class="tools-grid">
+							<div class="tool-card">
+								<span class="tool-icon">💰</span>
+								<h4 class="tool-title">Ad Configuration</h4>
+								<p class="tool-description">Manage ad placements, revenue settings, and monetization</p>
+								<a href="/admin/ad-config" class="tool-button">Configure Ads</a>
+							</div>
+							
+							<div class="tool-card">
+								<span class="tool-icon">📊</span>
+								<h4 class="tool-title">Analytics Dashboard</h4>
+								<p class="tool-description">View site performance, visitor data, and content insights</p>
+								<a href="/admin/analytics" class="tool-button">Open Analytics</a>
+							</div>
+							
+							<div class="tool-card">
+								<span class="tool-icon">ℹ️</span>
+								<h4 class="tool-title">Site Information</h4>
+								<p class="tool-description">View site configuration, SEO settings, and technical details</p>
+								<button id="business-site-info-btn" class="tool-button" onclick="showSiteInfo()">View Site Info</button>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Sanity Status Section -->
+					<div id="sanity-status-section" class="sanity-status" style="display: none;">
+						<h3>✅ Sanity Studio Connected</h3>
+						<p>Your Sanity Studio is running and accessible.</p>
+						<div class="status-info">
+							<p>Status: Connected to http://localhost:3333</p>
+						</div>
+						<p>You can use the "Open Sanity Studio" button above to access Sanity Studio in a new tab.</p>
+						<button onclick="window.open('http://localhost:3333', '_blank')" class="primary-button primary" style="display: inline-block; margin-top: 1rem;">
+							Open Sanity Studio
+						</button>
+					</div>
+					
+					<!-- Sanity Setup Instructions -->
+					<div id="sanity-setup-section" class="sanity-setup">
+						<h3>⚠️ Sanity Studio Not Running</h3>
+						<p>To manage your content, you need to start Sanity Studio first.</p>
+						<div class="setup-steps">
+							<ol>
+								<li>Open a new terminal/command prompt</li>
+								<li>Navigate to your project directory</li>
+								<li>Run: <code>npx sanity dev</code></li>
+								<li>Wait for the server to start (usually at http://localhost:3333)</li>
+								<li>Return to this admin page and click "Open Sanity Studio"</li>
+							</ol>
+						</div>
+						<p>Once Sanity Studio is running, you can manage all your content from there.</p>
+						<button id="terminal-instructions-btn" class="terminal-button" onclick="showTerminalInstructions()">
+							💻 Show Terminal Instructions
+						</button>
+					</div>
+				</div>
+			</div>
+		</main>
+		<Footer />
+		
+		<script>
+			// Enhanced Sanity connection checker with real project verification
+			class SanityConnectionChecker {
+				projectId: string;
+				dataset: string;
+				apiVersion: string;
+				studioUrl: string;
+				apiUrl: string;
+				checkInterval: ReturnType<typeof setInterval> | null;
+				isChecking: boolean;
+
+				constructor() {
+					this.projectId = 'crtekmb2'; // From sanity.config.ts
+					this.dataset = 'production';
+					this.apiVersion = '2024-01-01';
+					this.studioUrl = 'http://localhost:3333';
+					this.apiUrl = `https://${this.projectId}.api.sanity.io/v${this.apiVersion}/data/query/${this.dataset}`;
+					this.checkInterval = null;
+					this.isChecking = false;
+				}
+
+				// Check if Sanity Studio dev server is running
+				async checkStudioServer(): Promise<boolean> {
+					const controller = new AbortController();
+					const timeoutId = setTimeout(() => controller.abort(), 3000);
+					
+					try {
+						const response = await fetch(this.studioUrl, { 
+							method: 'HEAD',
+							mode: 'no-cors',
+							cache: 'no-cache',
+							signal: controller.signal
+						});
+						
+						clearTimeout(timeoutId);
+						return true;
+					} catch (error) {
+						clearTimeout(timeoutId);
+						
+						if (error instanceof Error && error.name === 'AbortError') {
+							console.log('Studio server check timed out after 3 seconds');
+						} else if (error instanceof Error && error.message.includes('Content Security Policy')) {
+							console.log('⚠️ CSP Violation: Studio server check blocked by Content Security Policy');
+							console.log('💡 Solution: Update CSP to allow http://localhost:3333');
+						} else {
+							console.log('Studio server check failed:', error);
+						}
+						return false;
+					}
+				}
+
+				// Check if Sanity project is accessible via API
+				async checkProjectConnection(): Promise<{
+					success: boolean;
+					status?: number;
+					data?: any;
+					error?: string;
+					message: string;
+				}> {
+					const controller = new AbortController();
+					const timeoutId = setTimeout(() => controller.abort(), 5000);
+					
+					try {
+						// Test with a simple GROQ query
+						const query = encodeURIComponent('*[_type == "article"][0...1]');
+						const url = `${this.apiUrl}?query=${query}`;
+						
+						console.log('🔍 Testing Sanity API connection...');
+						console.log('🌐 API URL:', url);
+						console.log('📝 Query:', query);
+						
+						const response = await fetch(url, {
+							method: 'GET',
+							headers: {
+								'Content-Type': 'application/json',
+							},
+							cache: 'no-cache',
+							signal: controller.signal
+						});
+						
+						clearTimeout(timeoutId);
+
+						console.log('📡 API Response Status:', response.status);
+						console.log('📡 API Response Headers:', Object.fromEntries(response.headers.entries()));
+
+						if (response.ok) {
+							const data = await response.json();
+							console.log('✅ API Response Data:', data);
+							return {
+								success: true,
+								status: response.status,
+								data: data,
+								message: 'Project accessible and responding'
+							};
+						} else {
+							const errorText = await response.text();
+							console.log('❌ API Error Response:', errorText);
+							return {
+								success: false,
+								status: response.status,
+								error: `HTTP ${response.status}: ${response.statusText}`,
+								message: 'Project responded with error'
+							};
+						}
+					} catch (error) {
+						clearTimeout(timeoutId);
+						
+						console.log('💥 API Connection Error:', error);
+						
+						if (error instanceof Error && error.name === 'AbortError') {
+							return {
+								success: false,
+								error: 'Request timed out after 5 seconds',
+								message: 'API request timed out'
+							};
+						} else if (error instanceof Error && error.message.includes('Failed to fetch')) {
+							return {
+								success: false,
+								error: 'Network error - check internet connection',
+								message: 'Network connection failed'
+							};
+						} else if (error instanceof Error && error.message.includes('Content Security Policy')) {
+							return {
+								success: false,
+								error: 'CSP Violation: API check blocked by Content Security Policy',
+								message: 'Update CSP to allow https://*.sanity.io'
+							};
+						} else {
+							return {
+								success: false,
+								error: error instanceof Error ? error.message : String(error),
+								message: 'Network or configuration error'
+							};
+						}
+					}
+				}
+
+				// Comprehensive connection check
+				async performFullCheck(): Promise<{
+					studioServer: boolean;
+					projectConnection: {
+						success: boolean;
+						status?: number;
+						data?: any;
+						error?: string;
+						message: string;
+					} | null;
+					timestamp: string;
+					overallStatus: string;
+				}> {
+					if (this.isChecking) {
+						return {
+							studioServer: false,
+							projectConnection: null,
+							timestamp: new Date().toISOString(),
+							overallStatus: 'unknown'
+						};
+					}
+					this.isChecking = true;
+
+					console.log('🔍 Starting comprehensive Sanity connection check...');
+					
+					const results = {
+						studioServer: false,
+						projectConnection: null as any,
+						timestamp: new Date().toISOString(),
+						overallStatus: 'unknown'
+					};
+
+					// Check Studio server
+					console.log('📡 Checking Studio server...');
+					results.studioServer = await this.checkStudioServer();
+					console.log('Studio server status:', results.studioServer);
+
+					// Check project connection
+					console.log('🌐 Checking project connection...');
+					results.projectConnection = await this.checkProjectConnection();
+					console.log('Project connection result:', results.projectConnection);
+
+					// Determine overall status
+					if (results.studioServer && results.projectConnection?.success) {
+						results.overallStatus = 'fully_connected';
+					} else if (results.studioServer && !results.projectConnection?.success) {
+						results.overallStatus = 'studio_only';
+					} else if (!results.studioServer && results.projectConnection?.success) {
+						results.overallStatus = 'api_only';
+					} else {
+						results.overallStatus = 'disconnected';
+					}
+
+					this.isChecking = false;
+					return results;
+				}
+
+				// Update UI based on connection status
+				updateUI(results: {
+					studioServer: boolean;
+					projectConnection: {
+						success: boolean;
+						status?: number;
+						data?: any;
+						error?: string;
+						message: string;
+					} | null;
+					timestamp: string;
+					overallStatus: string;
+				}): void {
+					const statusIndicator = document.getElementById('sanity-status-indicator');
+					const statusIcon = document.getElementById('status-icon');
+					const statusText = document.getElementById('status-text');
+					const statusDetails = document.getElementById('status-details');
+					const lastCheckTime = document.getElementById('last-check-time');
+					const connectionDetails = document.getElementById('connection-details');
+					const statusSection = document.getElementById('sanity-status-section');
+					const setupSection = document.getElementById('sanity-setup-section');
+
+					if (!statusIndicator || !statusIcon || !statusText) return;
+
+					let icon, text, color, borderColor, shadow;
+					let showStatusSection = false;
+					let showSetupSection = false;
+
+					switch (results.overallStatus) {
+						case 'fully_connected':
+							icon = '✅';
+							text = 'Sanity Studio & Project fully connected!';
+							color = '#059669';
+							borderColor = '#059669';
+							shadow = '0 12px 30px rgba(5, 150, 105, 0.2)';
+							showStatusSection = true;
+							showSetupSection = false;
+							break;
+
+						case 'studio_only':
+							icon = '⚠️';
+							text = 'Studio running but project connection failed';
+							color = '#f59e0b';
+							borderColor = '#f59e0b';
+							shadow = '0 12px 30px rgba(245, 158, 11, 0.2)';
+							showStatusSection = false;
+							showSetupSection = true;
+							break;
+
+						case 'api_only':
+							icon = 'ℹ️';
+							text = 'Project accessible but Studio not running';
+							color = '#3b82f6';
+							borderColor = '#3b82f6';
+							shadow = '0 12px 30px rgba(59, 130, 246, 0.2)';
+							showStatusSection = true;
+							showSetupSection = false;
+							break;
+
+						case 'disconnected':
+						default:
+							icon = '❌';
+							text = 'Sanity Studio & Project not accessible';
+							color = '#ff6b6b';
+							borderColor = '#ff6b6b';
+							shadow = '0 12px 30px rgba(255, 107, 107, 0.2)';
+							showStatusSection = false;
+							showSetupSection = true;
+							break;
+					}
+
+					// Update indicator
+					statusIcon.textContent = icon;
+					statusText.textContent = text;
+					statusIndicator.style.color = color;
+					statusIndicator.style.borderColor = borderColor;
+					statusIndicator.style.boxShadow = shadow;
+
+					// Update status details
+					if (lastCheckTime) {
+						lastCheckTime.textContent = `Last checked: ${new Date(results.timestamp).toLocaleString()}`;
+					}
+					if (connectionDetails) {
+						let detailsText = '';
+						if (results.studioServer) {
+							detailsText += `Studio: Running on ${this.studioUrl}\n`;
+						} else {
+							detailsText += `Studio: Not accessible\n`;
+							detailsText += `  → Check if npx sanity dev is running`;
+						}
+						if (results.projectConnection?.success) {
+							detailsText += `Project: Connected (${this.projectId}/${this.dataset})\n`;
+							detailsText += `API: Responding (${results.projectConnection.status})`;
+						} else {
+							detailsText += `Project: Connection failed\n`;
+							detailsText += `  → Error: ${results.projectConnection?.message || 'Unknown'}`;
+						}
+						connectionDetails.textContent = detailsText;
+						if (statusDetails) {
+							statusDetails.style.display = 'block'; // Show details
+						}
+					}
+
+					// Update sections
+					if (statusSection) statusSection.style.display = showStatusSection ? 'block' : 'none';
+					if (setupSection) setupSection.style.display = showSetupSection ? 'block' : 'none';
+
+					// Log detailed results
+					console.log('🔍 Connection check results:', results);
+				}
+
+				// Start periodic checking
+				startPeriodicCheck(intervalMs: number = 10000): void {
+					if (this.checkInterval) {
+						clearInterval(this.checkInterval);
+					}
+					
+					console.log(`🔄 Starting Sanity connection monitoring...`);
+					console.log(`📊 Project ID: ${this.projectId}`);
+					console.log(`📊 Dataset: ${this.dataset}`);
+					console.log(`📊 API URL: ${this.apiUrl}`);
+					console.log(`📊 Studio URL: ${this.studioUrl}`);
+					
+					// Initial check
+					this.performFullCheck().then(results => {
+						this.updateUI(results);
+					});
+
+					// Set up periodic checking
+					this.checkInterval = setInterval(async () => {
+						const results = await this.performFullCheck();
+						if (results) {
+							this.updateUI(results);
+						}
+					}, intervalMs);
+
+					console.log(`🔄 Started periodic Sanity connection checking every ${intervalMs/1000} seconds`);
+				}
+
+				// Stop periodic checking
+				stopPeriodicCheck(): void {
+					if (this.checkInterval) {
+						clearInterval(this.checkInterval);
+						this.checkInterval = null;
+						console.log('⏹️ Stopped periodic Sanity connection checking');
+					}
+				}
+
+				// Manual refresh
+				async refresh(): Promise<{
+					studioServer: boolean;
+					projectConnection: {
+						success: boolean;
+						status?: number;
+						data?: any;
+						error?: string;
+						message: string;
+					} | null;
+					timestamp: string;
+					overallStatus: string;
+				}> {
+					console.log('🔄 Manual refresh requested');
+					const results = await this.performFullCheck();
+					if (results) {
+						this.updateUI(results);
+					}
+					return results;
+				}
+			}
+
+			// Initialize the connection checker
+			let sanityChecker: SanityConnectionChecker | null = null;
+
+			// Update the UI based on Sanity connection status (legacy function - kept for compatibility)
+			async function updateSanityStatus() {
+				if (sanityChecker) {
+					await sanityChecker.refresh();
+				}
+			}
+
+			function openSanityStudio() {
+				// Try to open Sanity Studio
+				const sanityUrl = 'http://localhost:3333';
+				window.open(sanityUrl, '_blank');
+				
+				// Show helpful message if it doesn't work
+				setTimeout(() => {
+					alert('If Sanity Studio doesn\'t open, please start it first with:\n\nnpx sanity dev\n\nThen try again.');
+				}, 1000);
+			}
+			
+			function showSiteInfo() {
+				const info = `Site Information:
+				
+• Site Title: AI Buzz Media
+• Framework: Astro
+• CMS: Sanity Studio
+• Admin Pages: /admin/analytics, /admin/authors, /admin/ad-config
+• Content: Articles, Authors, Categories, Blog Posts
+• Features: Analytics, Ad Management, Content Management
+
+For technical configuration, check the project files:
+• astro.config.mjs
+• package.json
+• src/config/
+• src/content/
+
+To start Sanity Studio:
+• Run: npx sanity dev
+• Access at: http://localhost:3333`;
+				
+				alert(info);
+			}
+
+			function showTerminalInstructions() {
+				const instructions = `Terminal Instructions:
+
+1. Open a new terminal/command prompt
+2. Navigate to your project directory:
+   cd /path/to/ai-news-site
+
+3. Start Sanity Studio:
+   npx sanity dev
+
+4. Wait for the server to start
+5. You should see: "Studio is running on http://localhost:3333"
+
+6. Return to this admin page and click "Open Sanity Studio"
+
+Note: If you get any errors, make sure you have Node.js installed and you're in the correct directory.`;
+				
+				alert(instructions);
+			}
+
+			// Initialize the page
+			document.addEventListener('DOMContentLoaded', function() {
+				console.log('Admin page loaded, initializing enhanced Sanity connection checker...');
+				
+				// Initialize the enhanced connection checker
+				sanityChecker = new SanityConnectionChecker();
+				
+				// Start periodic checking (every 10 seconds)
+				sanityChecker.startPeriodicCheck(10000);
+				
+				// Add click event listeners as backup
+				document.getElementById('sanity-studio-btn')?.addEventListener('click', openSanityStudio);
+				document.getElementById('business-site-info-btn')?.addEventListener('click', showSiteInfo);
+				document.getElementById('terminal-instructions-btn')?.addEventListener('click', showTerminalInstructions);
+				
+				// Add manual refresh button if it doesn't exist
+				const statusIndicator = document.getElementById('sanity-status-indicator');
+				const statusMain = statusIndicator?.querySelector('.status-main');
+				if (statusMain && !statusMain.querySelector('.refresh-btn')) {
+					const refreshBtn = document.createElement('button');
+					refreshBtn.className = 'refresh-btn';
+					refreshBtn.innerHTML = '🔄';
+					refreshBtn.title = 'Refresh connection status';
+					refreshBtn.addEventListener('click', () => {
+						refreshBtn.style.opacity = '0.3';
+						sanityChecker?.refresh().then(() => {
+							setTimeout(() => {
+								refreshBtn.style.opacity = '0.7';
+							}, 1000);
+						});
+					});
+					refreshBtn.addEventListener('mouseenter', () => {
+						refreshBtn.style.opacity = '1';
+					});
+					refreshBtn.addEventListener('mouseleave', () => {
+						refreshBtn.style.opacity = '0.7';
+					});
+					statusMain.appendChild(refreshBtn);
+				}
+			});
+		</script>
+	</body>
+</html>
+
+<style>
+.admin-page {
+	min-height: 100vh;
+	background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(0, 102, 255, 0.05) 100%);
+	padding: 2rem 0;
+}
+
+.admin-container {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 0 2rem;
+}
+
+.admin-card {
+	background: rgba(26, 26, 27, 0.9);
+	backdrop-filter: blur(20px);
+	border: 1px solid rgba(0, 212, 255, 0.2);
+	border-radius: 20px;
+	padding: 2rem;
+	box-shadow: 
+		0 20px 60px rgba(0, 212, 255, 0.1),
+		0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.admin-header {
+	margin-bottom: 2rem;
+	text-align: center;
+}
+
+.admin-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-bottom: 1rem;
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+.admin-subtitle {
+	font-size: 1.1rem;
+	color: #b3b3b3;
+	margin: 0;
+}
+
+.sanity-status-indicator {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+	margin-top: 1.5rem;
+	padding: 1rem 2rem;
+	border-radius: 12px;
+	border: 2px solid #00d4ff;
+	background: rgba(0, 212, 255, 0.1);
+	color: #00d4ff;
+	font-size: 1.1rem;
+	font-weight: 600;
+	box-shadow: 0 8px 25px rgba(0, 212, 255, 0.2);
+	transition: all 0.4s ease;
+	max-width: 500px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.sanity-status-indicator .status-main {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+	width: 100%;
+}
+
+.sanity-status-indicator #status-icon {
+	font-size: 1.5rem;
+}
+
+.sanity-status-indicator #status-text {
+	font-size: 1rem;
+	line-height: 1.4;
+}
+
+.sanity-status-indicator .refresh-btn {
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 1.2rem;
+	margin-left: 0.5rem;
+	opacity: 0.7;
+	transition: all 0.3s ease;
+	padding: 0.25rem;
+	border-radius: 4px;
+	color: inherit;
+}
+
+.sanity-status-indicator .refresh-btn:hover {
+	opacity: 1;
+	background: rgba(255, 255, 255, 0.1);
+	transform: scale(1.1);
+}
+
+.sanity-status-indicator .refresh-btn:active {
+	opacity: 1;
+	background: rgba(255, 255, 255, 0.1);
+	transform: scale(0.95);
+}
+
+.sanity-status-indicator .status-details {
+	margin-top: 0.75rem;
+	padding-top: 0.75rem;
+	border-top: 1px solid rgba(255, 255, 255, 0.2);
+	font-size: 0.85rem;
+	opacity: 0.8;
+	text-align: left;
+}
+
+.sanity-status-indicator .last-check-time {
+	color: inherit;
+	margin-bottom: 0.5rem;
+	font-style: italic;
+}
+
+.sanity-status-indicator .connection-details {
+	color: inherit;
+	line-height: 1.4;
+	white-space: pre-line;
+	font-family: monospace;
+}
+
+.primary-button {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 1rem 2rem;
+	border-radius: 12px;
+	font-weight: 600;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	border: none;
+	cursor: pointer;
+	font-size: 1rem;
+	min-width: 180px;
+	justify-content: center;
+}
+
+.primary-button.primary {
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	color: white;
+}
+
+.primary-button:hover {
+	transform: translateY(-2px);
+	text-decoration: none;
+}
+
+.primary-button.primary:hover {
+	box-shadow: 0 8px 20px rgba(0, 212, 255, 0.4);
+}
+</style> 

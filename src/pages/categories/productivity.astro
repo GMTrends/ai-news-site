@@ -1,0 +1,25 @@
+---
+import { getArticlesByCategory } from '../../lib/sanity.ts';
+import { getCategoryData } from '../../data/categoryData.ts';
+import CategoryLayout from '../../layouts/CategoryLayout.astro';
+
+const allProductivityArticles = await getArticlesByCategory('productivity', 50);
+const productivityArticles = allProductivityArticles.slice(0, 8);
+const categoryData = getCategoryData('productivity');
+
+const pageTitle = categoryData?.title + " - Tools & Inspiration" || "AI Productivity & Automation - Tools & Inspiration";
+const pageDescription = categoryData?.metaDescription || "Discover AI-powered productivity tools, automation workflows, and efficiency systems. Learn how AI can streamline your work and boost performance.";
+const keywords = categoryData?.keywords.join(', ') || "AI productivity, automation tools, workflow optimization, AI efficiency, business automation";
+---
+
+<CategoryLayout
+  title={pageTitle}
+  description={pageDescription}
+  keywords={keywords}
+  canonicalUrl={Astro.url.href}
+  categorySlug="productivity"
+  categoryData={categoryData}
+  allArticles={allProductivityArticles}
+  initialArticles={productivityArticles}
+  categoryDisplayName="Productivity"
+/>

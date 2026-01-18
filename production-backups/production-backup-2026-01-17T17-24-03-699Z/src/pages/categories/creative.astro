@@ -1,0 +1,25 @@
+---
+import { getArticlesByCategory } from '../../lib/sanity.ts';
+import { getCategoryData } from '../../data/categoryData.ts';
+import CategoryLayout from '../../layouts/CategoryLayout.astro';
+
+const allCreativeArticles = await getArticlesByCategory('creative', 50);
+const creativeArticles = allCreativeArticles.slice(0, 8);
+const categoryData = getCategoryData('creative');
+
+const pageTitle = categoryData?.title + " - Tools & Inspiration" || "AI Creative & Design - Tools & Inspiration";
+const pageDescription = categoryData?.metaDescription || "Unleash your creativity with AI-powered design tools, content generation, and artistic solutions. Create stunning visuals and content effortlessly.";
+const keywords = categoryData?.keywords.join(', ') || "AI design, creative tools, content generation, AI art, design automation";
+---
+
+<CategoryLayout
+  title={pageTitle}
+  description={pageDescription}
+  keywords={keywords}
+  canonicalUrl={Astro.url.href}
+  categorySlug="creative"
+  categoryData={categoryData}
+  allArticles={allCreativeArticles}
+  initialArticles={creativeArticles}
+  categoryDisplayName="Creative"
+/>

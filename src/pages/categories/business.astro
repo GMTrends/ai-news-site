@@ -1,0 +1,25 @@
+---
+import { getArticlesByCategory } from '../../lib/sanity.ts';
+import { getCategoryData } from '../../data/categoryData.ts';
+import CategoryLayout from '../../layouts/CategoryLayout.astro';
+
+const allBusinessArticles = await getArticlesByCategory('business', 50);
+const businessArticles = allBusinessArticles.slice(0, 8);
+const categoryData = getCategoryData('business');
+
+const pageTitle = categoryData?.title + " - Tools & Inspiration" || "AI Business Intelligence - Tools & Inspiration";
+const pageDescription = categoryData?.metaDescription || "Leverage AI for strategic business insights, data analysis, and decision-making. Transform your business operations with intelligent solutions.";
+const keywords = categoryData?.keywords.join(', ') || "AI business, business intelligence, data analysis, strategic insights, AI decision making";
+---
+
+<CategoryLayout
+  title={pageTitle}
+  description={pageDescription}
+  keywords={keywords}
+  canonicalUrl={Astro.url.href}
+  categorySlug="business"
+  categoryData={categoryData}
+  allArticles={allBusinessArticles}
+  initialArticles={businessArticles}
+  categoryDisplayName="Business"
+/>

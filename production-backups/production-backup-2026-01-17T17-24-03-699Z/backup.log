@@ -1,0 +1,40 @@
+{"timestamp":"2026-01-17T17:24:03.700Z","level":"info","message":"🤖 AI Buzz Media - Production Backup System","data":null}
+{"timestamp":"2026-01-17T17:24:03.704Z","level":"info","message":"==============================================","data":null}
+{"timestamp":"2026-01-17T17:24:03.719Z","level":"info","message":"📅 Starting production backup at: 1/17/2026, 12:24:03 PM","data":null}
+{"timestamp":"2026-01-17T17:24:03.720Z","level":"info","message":"📁 Backup name: production-backup-2026-01-17T17-24-03-699Z","data":null}
+{"timestamp":"2026-01-17T17:24:03.721Z","level":"info","message":"🔧 Environment: development","data":null}
+{"timestamp":"2026-01-17T17:24:03.721Z","level":"info","message":"","data":null}
+{"timestamp":"2026-01-17T17:24:03.722Z","level":"info","message":"Creating production backup directory...","data":null}
+{"timestamp":"2026-01-17T17:24:03.723Z","level":"info","message":"✅ Backup directory created: production-backups\\production-backup-2026-01-17T17-24-03-699Z","data":null}
+{"timestamp":"2026-01-17T17:24:03.724Z","level":"info","message":"Creating backup manifest...","data":null}
+{"timestamp":"2026-01-17T17:24:03.960Z","level":"info","message":"Starting file copy process...","data":null}
+{"timestamp":"2026-01-17T17:24:03.978Z","level":"warn","message":"Failed to scan directory astro.config.mjs: ENOTDIR: not a directory, scandir 'C:\\Users\\Raf\\Desktop\\AINewsSite\\ai-news-site\\astro.config.mjs'","data":null}
+{"timestamp":"2026-01-17T17:24:03.979Z","level":"warn","message":"Failed to scan directory package.json: ENOTDIR: not a directory, scandir 'C:\\Users\\Raf\\Desktop\\AINewsSite\\ai-news-site\\package.json'","data":null}
+{"timestamp":"2026-01-17T17:24:03.980Z","level":"warn","message":"Failed to scan directory package-lock.json: ENOTDIR: not a directory, scandir 'C:\\Users\\Raf\\Desktop\\AINewsSite\\ai-news-site\\package-lock.json'","data":null}
+{"timestamp":"2026-01-17T17:24:03.980Z","level":"warn","message":"Failed to scan directory netlify.toml: ENOTDIR: not a directory, scandir 'C:\\Users\\Raf\\Desktop\\AINewsSite\\ai-news-site\\netlify.toml'","data":null}
+{"timestamp":"2026-01-17T17:24:03.981Z","level":"warn","message":"Failed to scan directory tsconfig.json: ENOTDIR: not a directory, scandir 'C:\\Users\\Raf\\Desktop\\AINewsSite\\ai-news-site\\tsconfig.json'","data":null}
+{"timestamp":"2026-01-17T17:24:03.982Z","level":"warn","message":"Failed to scan directory sanity.config.ts: ENOTDIR: not a directory, scandir 'C:\\Users\\Raf\\Desktop\\AINewsSite\\ai-news-site\\sanity.config.ts'","data":null}
+{"timestamp":"2026-01-17T17:24:03.982Z","level":"warn","message":"Failed to scan directory env.example: ENOTDIR: not a directory, scandir 'C:\\Users\\Raf\\Desktop\\AINewsSite\\ai-news-site\\env.example'","data":null}
+{"timestamp":"2026-01-17T17:24:03.983Z","level":"warn","message":"Failed to scan directory README.md: ENOTDIR: not a directory, scandir 'C:\\Users\\Raf\\Desktop\\AINewsSite\\ai-news-site\\README.md'","data":null}
+{"timestamp":"2026-01-17T17:24:03.984Z","level":"info","message":"Found 191 files to backup","data":null}
+{"timestamp":"2026-01-17T17:24:04.044Z","level":"info","message":"📋 Copied 50 files...","data":null}
+{"timestamp":"2026-01-17T17:24:04.110Z","level":"info","message":"📋 Copied 100 files...","data":null}
+{"timestamp":"2026-01-17T17:24:04.190Z","level":"info","message":"📋 Copied 150 files...","data":null}
+{"timestamp":"2026-01-17T17:24:04.260Z","level":"info","message":"✅ File copy completed: 191 files (13.81 MB)","data":null}
+{"timestamp":"2026-01-17T17:24:04.262Z","level":"info","message":"Creating compressed archive...","data":null}
+{"timestamp":"2026-01-17T17:24:08.222Z","level":"info","message":"✅ Archive created: production-backup-2026-01-17T17-24-03-699Z.zip (12.26 MB)","data":null}
+{"timestamp":"2026-01-17T17:24:08.223Z","level":"info","message":"Verifying backup integrity...","data":null}
+{"timestamp":"2026-01-17T17:24:08.258Z","level":"info","message":"✅ Backup verification: 191/191 files verified (100.0%)","data":null}
+{"timestamp":"2026-01-17T17:24:08.258Z","level":"info","message":"Cleaning old production backups...","data":null}
+{"timestamp":"2026-01-17T17:24:08.292Z","level":"info","message":"✅ Kept 6 backups","data":null}
+{"timestamp":"2026-01-17T17:24:08.293Z","level":"info","message":"","data":null}
+{"timestamp":"2026-01-17T17:24:08.293Z","level":"info","message":"🎉 Production backup completed successfully!","data":null}
+{"timestamp":"2026-01-17T17:24:08.293Z","level":"info","message":"==========================================","data":null}
+{"timestamp":"2026-01-17T17:24:08.294Z","level":"info","message":"📁 Backup location: production-backups\\production-backup-2026-01-17T17-24-03-699Z","data":null}
+{"timestamp":"2026-01-17T17:24:08.294Z","level":"info","message":"📦 Archive: production-backups\\production-backup-2026-01-17T17-24-03-699Z.zip","data":null}
+{"timestamp":"2026-01-17T17:24:08.295Z","level":"info","message":"📊 Total files: 191","data":null}
+{"timestamp":"2026-01-17T17:24:08.295Z","level":"info","message":"💾 Total size: 13.81 MB","data":null}
+{"timestamp":"2026-01-17T17:24:08.295Z","level":"info","message":"⏱️ Duration: 0.6s","data":null}
+{"timestamp":"2026-01-17T17:24:08.296Z","level":"info","message":"🔗 Git commit: c6e0bc1171226397f9103db5f416ea0d64ca267e","data":null}
+{"timestamp":"2026-01-17T17:24:08.296Z","level":"info","message":"✅ Verification: PASSED","data":null}
+{"timestamp":"2026-01-17T17:24:08.297Z","level":"info","message":"","data":null}

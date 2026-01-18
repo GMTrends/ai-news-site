@@ -1,0 +1,223 @@
+---
+import BaseHead from '../../components/BaseHead.astro'
+import Header from '../../components/Header.astro'
+import Footer from '../../components/Footer.astro'
+import { getCollection } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+import { SITE_TITLE } from '../../consts'
+
+const authors = await getCollection('authors')
+const pageTitle = `Authors - ${SITE_TITLE}`
+const description = 'Meet our expert AI and technology writers. Read their latest articles and learn about their expertise.'
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={pageTitle} description={description} image="/assets/blog-placeholder-1.jpg" />
+	</head>
+	<body>
+		<Header />
+		<main class="authors-page">
+			<div class="authors-container">
+				
+				<section class="authors-hero">
+					<h1 class="page-title">Our Expert Authors</h1>
+					<p class="page-subtitle">Meet the AI and technology experts behind our content</p>
+				</section>
+
+				<section class="authors-grid">
+					{authors.map((author: CollectionEntry<'authors'>) => (
+						<article class="author-card">
+							<div class="author-image">
+								{author.data.avatar ? (
+									<img src={author.data.avatar} alt={author.data.name} />
+								) : (
+									<div class="author-placeholder">
+										{author.data.name.charAt(0).toUpperCase()}
+									</div>
+								)}
+							</div>
+							<div class="author-info">
+								<h2 class="author-name">
+									<a href={`/authors/${author.slug}`}>{author.data.name}</a>
+								</h2>
+								<div class="author-expertise">
+									{author.data.social && Object.keys(author.data.social).slice(0, 3).map((platform) => (
+										<span class="expertise-tag">{platform}</span>
+									))}
+								</div>
+								<div class="author-bio-preview">
+									{author.data.bio && (
+										<p>{author.data.bio.substring(0, 120)}...</p>
+									)}
+								</div>
+								<a href={`/authors/${author.slug}`} class="view-profile">
+									View Profile →
+								</a>
+							</div>
+						</article>
+					))}
+				</section>
+
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+.authors-page {
+	background: var(--bg-primary);
+	min-height: 100vh;
+	padding: 2rem 0;
+}
+
+.authors-container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 2rem;
+}
+
+.authors-hero {
+	text-align: center;
+	margin-bottom: 4rem;
+}
+
+.page-title {
+	font-size: 3rem;
+	font-weight: 700;
+	margin-bottom: 1rem;
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+.page-subtitle {
+	font-size: 1.2rem;
+	color: #b3b3b3;
+	max-width: 600px;
+	margin: 0 auto;
+}
+
+.authors-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+	gap: 2rem;
+}
+
+.author-card {
+	background: rgba(30, 30, 31, 0.8);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 16px;
+	padding: 2rem;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	text-align: center;
+}
+
+.author-card:hover {
+	transform: translateY(-8px);
+	box-shadow: 0 20px 50px rgba(0, 212, 255, 0.2);
+}
+
+.author-image {
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	overflow: hidden;
+	margin: 0 auto 1.5rem;
+	border: 3px solid rgba(0, 212, 255, 0.3);
+}
+
+.author-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.author-placeholder {
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 2.5rem;
+	font-weight: 700;
+	color: white;
+}
+
+.author-name {
+	margin-bottom: 1rem;
+}
+
+.author-name a {
+	color: #ffffff;
+	text-decoration: none;
+	font-size: 1.5rem;
+	font-weight: 600;
+	transition: color 0.3s ease;
+}
+
+.author-name a:hover {
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+.author-expertise {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	justify-content: center;
+	margin-bottom: 1rem;
+}
+
+.expertise-tag {
+	background: rgba(0, 212, 255, 0.1);
+	border: 1px solid rgba(0, 212, 255, 0.3);
+	padding: 0.25rem 0.75rem;
+	border-radius: 15px;
+	font-size: 0.7rem;
+	color: #00d4ff;
+}
+
+.author-bio-preview {
+	margin-bottom: 1.5rem;
+}
+
+.author-bio-preview p {
+	color: #b3b3b3;
+	line-height: 1.6;
+	font-size: 0.9rem;
+}
+
+.view-profile {
+	display: inline-block;
+	background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+	color: white;
+	padding: 0.75rem 1.5rem;
+	border-radius: 25px;
+	text-decoration: none;
+	font-weight: 600;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.view-profile:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+}
+
+@media (max-width: 768px) {
+	.page-title {
+		font-size: 2rem;
+	}
+	
+	.authors-grid {
+		grid-template-columns: 1fr;
+	}
+}
+</style>

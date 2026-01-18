@@ -1,0 +1,1144 @@
+{
+  "timestamp": "2025-12-17T22-53-04-050Z",
+  "backupName": "production-backup-2025-12-17T22-53-04-050Z",
+  "environment": {
+    "nodeEnv": "production",
+    "timestamp": "2025-12-17T22-53-04-050Z",
+    "backupName": "production-backup-2025-12-17T22-53-04-050Z",
+    "git": {
+      "commitHash": "cc80bea3648e9096eb5256b7fc4b7325b8816b2e",
+      "branch": "staging/performance-optimization",
+      "remoteUrl": "https://github.com/GMTrends/ai-news-site",
+      "hasUncommittedChanges": true,
+      "status": "D backups/manual-backup-2025-07-21-21-55-04-591175981abeea78a78b9fc64251514661a24864.zip\n M clean-astro-test\n?? backups/manual-backup-2025-12-17-09-22-20-2c949803d592f58f9c310a0bf47b7ddfc644cf33.zip"
+    },
+    "system": {
+      "platform": "win32",
+      "arch": "x64",
+      "nodeVersion": "v20.19.3",
+      "memoryUsage": {
+        "rss": 43376640,
+        "heapTotal": 6524928,
+        "heapUsed": 5014080,
+        "external": 2031492,
+        "arrayBuffers": 16974
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "src\\content\\authors\\john-doe.md",
+      "size": 240,
+      "modified": "2025-06-26T00:58:30.757Z",
+      "checksum": "3968cbf4a6107478353b8869b961d978076b26b705e7908e70f6ec92ba0dbf2a"
+    },
+    {
+      "path": "src\\content\\authors\\raf-velazquez.md",
+      "size": 854,
+      "modified": "2025-07-26T03:13:16.102Z",
+      "checksum": "888e3e79d257da5055545822bbd68f6282df0fab7576fcba5ef47473558cf495"
+    },
+    {
+      "path": "src\\content\\authors\\sarah-chen.md",
+      "size": 3778,
+      "modified": "2025-06-26T01:36:14.509Z",
+      "checksum": "9519323c7b156f6787fbd45d934da1f09e223b625aa1dc67e3d6d3f2128ae2b5"
+    },
+    {
+      "path": "src\\content\\blog\\first-post.md",
+      "size": 3524,
+      "modified": "2025-08-01T04:16:25.231Z",
+      "checksum": "486e2c0ee624d188236dff22f7f8c1fe32385c341fdcf9662ef2ab629d072b36"
+    },
+    {
+      "path": "src\\content\\blog\\markdown-style-guide.md",
+      "size": 4830,
+      "modified": "2025-08-01T04:16:51.855Z",
+      "checksum": "785bbf43a38297e25ad75c5d533667a9f5ea09abd3807cc946e93b5feff08503"
+    },
+    {
+      "path": "src\\content\\blog\\second-post.md",
+      "size": 3532,
+      "modified": "2025-08-01T04:16:32.087Z",
+      "checksum": "c7e18d635f4e1bfd629e1e9b77460b98de15bb008231472cb0e69750e22298aa"
+    },
+    {
+      "path": "src\\content\\blog\\third-post.md",
+      "size": 3529,
+      "modified": "2025-08-01T04:16:41.846Z",
+      "checksum": "d2f5ace267b4974d45a919c034cb39f885bbeec96afbb73b6fda58f26a251007"
+    },
+    {
+      "path": "src\\content\\blog\\using-mdx.mdx",
+      "size": 1596,
+      "modified": "2025-06-13T11:31:44.000Z",
+      "checksum": "b08c9869ef0bbfc236c982cce9940eff577e3227b4f164e73fae66ae78ff7a47"
+    },
+    {
+      "path": "src\\content\\categories\\ai-agents.md",
+      "size": 247,
+      "modified": "2025-06-26T03:24:29.303Z",
+      "checksum": "3b608aa48b4ed811c0b60fc999eba6a47d9dfeeddb40ceb48f10f32b661c7b2e"
+    },
+    {
+      "path": "src\\content\\categories\\business.md",
+      "size": 303,
+      "modified": "2025-06-26T03:24:26.045Z",
+      "checksum": "56a84048d73787f32f5dc0b6e8543181a6db9d30e0546042971bebbc1a75f87f"
+    },
+    {
+      "path": "src\\content\\pages\\about.md",
+      "size": 5716,
+      "modified": "2025-06-26T01:36:57.036Z",
+      "checksum": "64c0ea2c816d4d1e09fafc09600ecd70111ee5a58702a533b3dd2aa740e2e0de"
+    },
+    {
+      "path": "src\\content\\site-settings\\site-config.json",
+      "size": 489,
+      "modified": "2025-06-26T01:34:05.158Z",
+      "checksum": "afba09944cdb5cce768fb612b5657e68b827361f7194af057a67cda64f4e1a6d"
+    },
+    {
+      "path": "src\\components\\AdminLink.astro",
+      "size": 1368,
+      "modified": "2025-06-28T21:04:28.396Z",
+      "checksum": "8ef188dbeeb4a7f7c83b786b71245b7153c8f31c99ec69d8b1d7c4c436c2e46e"
+    },
+    {
+      "path": "src\\components\\AdvancedCache.astro",
+      "size": 13602,
+      "modified": "2025-08-24T09:01:24.348Z",
+      "checksum": "849b6416faf71f53cb43273bbb27116ad0445346308cc3ada79467f380858325"
+    },
+    {
+      "path": "src\\components\\AIBuzzLayout.astro",
+      "size": 73891,
+      "modified": "2025-08-18T21:22:31.045Z",
+      "checksum": "83b0cd832234852d1f567664a46a40c4f9d90f560deaebe6afcb17fbd6491627"
+    },
+    {
+      "path": "src\\components\\AIToolsComparison.astro",
+      "size": 16460,
+      "modified": "2025-08-24T09:56:51.010Z",
+      "checksum": "335725aa855add1602085516d1e3d2709c4548bcf9b73aa5abfc42643890334d"
+    },
+    {
+      "path": "src\\components\\Analytics.astro",
+      "size": 5204,
+      "modified": "2025-06-16T23:57:10.536Z",
+      "checksum": "e590205bdc558e72cce8046e45b3655b8fc00299bcd0a7adb0516ffcedc0164d"
+    },
+    {
+      "path": "src\\components\\AnalyticsDashboard.astro",
+      "size": 16322,
+      "modified": "2025-08-20T03:12:05.010Z",
+      "checksum": "4b77a012acfb75c7c3806778c91824a2d9d88ec1d55db7cae0e06d3acd4c1d5a"
+    },
+    {
+      "path": "src\\components\\ArticleGrid.astro",
+      "size": 27343,
+      "modified": "2025-08-14T01:57:36.528Z",
+      "checksum": "96c9019925850c6366af2a48f828f421b808e49b546f4bd58fd76d2d63b8d6aa"
+    },
+    {
+      "path": "src\\components\\ArticleSidebar.astro",
+      "size": 22378,
+      "modified": "2025-08-20T01:44:13.325Z",
+      "checksum": "f572983f9c607f976da7796a4ef1fb68cce2208c2b3e90c845c5610a74181975"
+    },
+    {
+      "path": "src\\components\\BaseHead.astro",
+      "size": 6161,
+      "modified": "2025-08-24T08:41:42.585Z",
+      "checksum": "4f68da702faf6835c15260ccdac502818989bcc1aa283636f056d0e6042fc6af"
+    },
+    {
+      "path": "src\\components\\CategoryHero.astro",
+      "size": 7002,
+      "modified": "2025-07-30T15:38:50.948Z",
+      "checksum": "5e7cac5029b2b8128b079f185d49fc3c1275103d1ee997bb98c572d7e39bb9b8"
+    },
+    {
+      "path": "src\\components\\CategorySections.astro",
+      "size": 16886,
+      "modified": "2025-07-03T20:19:56.478Z",
+      "checksum": "20e92df1afefd1c2e28b26c711a89b0b70d59ef0569000ecd9f729e290e62a49"
+    },
+    {
+      "path": "src\\components\\CategoryShortcuts.astro",
+      "size": 6059,
+      "modified": "2025-07-26T05:03:30.499Z",
+      "checksum": "c10caf680fddf7f77138ec9df1e26854cc4e3f9f799c938cbf25bf079a5bcd39"
+    },
+    {
+      "path": "src\\components\\CategorySidebar.astro",
+      "size": 74610,
+      "modified": "2025-09-10T06:50:11.287Z",
+      "checksum": "7907f9ee0effe0f76151f191e97f5b4ba693bf45137eb853f1a1e491076e7dc0"
+    },
+    {
+      "path": "src\\components\\CompactSubscribe.astro",
+      "size": 10726,
+      "modified": "2025-07-03T20:29:44.369Z",
+      "checksum": "887c7a66d3fc286a826b08d55a725a343885ee529057ec7b9946396a6a9474df"
+    },
+    {
+      "path": "src\\components\\ContentSpotlight.astro",
+      "size": 10891,
+      "modified": "2025-08-01T21:32:51.476Z",
+      "checksum": "29da00452e333de2604c49d48757b007c28b80c66b7088ad1b57005a7c0ce8c8"
+    },
+    {
+      "path": "src\\components\\Footer.astro",
+      "size": 42397,
+      "modified": "2025-08-03T18:11:07.436Z",
+      "checksum": "4cdd05beeecd0d7d0eb1b38cbfa44dfa82c1a2bf70e0131635ef3ce09811912f"
+    },
+    {
+      "path": "src\\components\\FormattedDate.astro",
+      "size": 224,
+      "modified": "2025-06-13T11:31:44.000Z",
+      "checksum": "3a7e8f80a5b38c918862754b2d1370c9baf70a9e2fab5ee6af58d8013ca20e0d"
+    },
+    {
+      "path": "src\\components\\Header.astro",
+      "size": 23218,
+      "modified": "2025-12-17T06:27:25.142Z",
+      "checksum": "17d0d20b036bd662f090c51224b7149dfecd1510b5f41dc4a6835eba970efa4a"
+    },
+    {
+      "path": "src\\components\\HeaderLink.astro",
+      "size": 493,
+      "modified": "2025-07-31T17:04:33.108Z",
+      "checksum": "1a77bb1b7f747058933b55591bfa2f5de834802021d3aa8eb0917accc7044b2e"
+    },
+    {
+      "path": "src\\components\\Hero.astro",
+      "size": 25149,
+      "modified": "2025-08-24T13:09:04.269Z",
+      "checksum": "77744d8fdd79dad5e413a4106e2e974777169d18ea4a2bb4070a3a745c1047e0"
+    },
+    {
+      "path": "src\\components\\HeroPremiumAd.astro",
+      "size": 8541,
+      "modified": "2025-08-01T21:32:43.219Z",
+      "checksum": "99992b477280a3a8cbd105e044b4070a548358e0008e40695d230219f10a0277"
+    },
+    {
+      "path": "src\\components\\HeroRedesigned.astro",
+      "size": 80317,
+      "modified": "2025-12-17T22:35:11.641Z",
+      "checksum": "94ac04a2672b8fa0918f4cd0f91c9727c117523c51559c5eca930497a76dc6f6"
+    },
+    {
+      "path": "src\\components\\HeroToggle.astro",
+      "size": 297,
+      "modified": "2025-09-01T17:23:28.786Z",
+      "checksum": "3537d2a94ed52a9c00fef746814d98149d4242af6a0d23f1d08a58782378bb51"
+    },
+    {
+      "path": "src\\components\\HomepageNewsletterSidebar.astro",
+      "size": 18979,
+      "modified": "2025-12-17T21:20:14.374Z",
+      "checksum": "4f81528271bcaa6b88917776bd913d90a05fd3f66477fcb3bf2d54d888a94c80"
+    },
+    {
+      "path": "src\\components\\HomepagePartnerSidebar.astro",
+      "size": 18416,
+      "modified": "2025-09-10T06:50:14.869Z",
+      "checksum": "b9e14bee53d2f7cbe0d3d816fe65c9f8e3cefdac50d9f44590c8f34e77450a5e"
+    },
+    {
+      "path": "src\\components\\LeaderboardAd.astro",
+      "size": 7124,
+      "modified": "2025-08-01T06:06:39.700Z",
+      "checksum": "eca4a66c254c0c55362a5ea99ee4f8e4bf5e56caa5aaad7cfc117ceec814f2b6"
+    },
+    {
+      "path": "src\\components\\LeadMagnetSubscribe.astro",
+      "size": 21732,
+      "modified": "2025-08-25T01:56:06.520Z",
+      "checksum": "d8fba53287c831e0eecd5eb1e0de1d93fd4b4a4d52d46c988e0481bf0b12565a"
+    },
+    {
+      "path": "src\\components\\MobileNav.astro",
+      "size": 5652,
+      "modified": "2025-07-29T16:47:39.921Z",
+      "checksum": "51365a7b97d910987ec5650cfee086f9f6f40546b1ec6c0a73f50d46d0234fdb"
+    },
+    {
+      "path": "src\\components\\PerformanceMonitor.astro",
+      "size": 8968,
+      "modified": "2025-07-03T04:15:02.243Z",
+      "checksum": "13b0f6606c116c037cd8b2b08f899130b13b27a3f534e14be478a77133e0f527"
+    },
+    {
+      "path": "src\\components\\PremiumAd.astro",
+      "size": 10104,
+      "modified": "2025-08-14T02:20:14.499Z",
+      "checksum": "d8f5a9454dce1edd70f8487a8d6f508d06a5ac5813d7ac45678a84df639dc9a9"
+    },
+    {
+      "path": "src\\components\\ProductStore.astro",
+      "size": 2275,
+      "modified": "2025-06-17T00:12:05.113Z",
+      "checksum": "27dadef4078f7689dcce808e64d7bbfe2cf8245e4b02b35cbea05fb42120c45e"
+    },
+    {
+      "path": "src\\components\\RelatedArticlesSimple.astro",
+      "size": 9444,
+      "modified": "2025-08-01T04:31:03.199Z",
+      "checksum": "332b21209e471ebc243c0121e31d3840a5d96f8510c38ab88e47a950e1c3d756"
+    },
+    {
+      "path": "src\\components\\RevenueAnalytics.astro",
+      "size": 18080,
+      "modified": "2025-08-20T03:57:24.588Z",
+      "checksum": "1e890187dc7e0927103ec8c2ee5521062fc6d38ce6cc5a5b1ffbba68845c41e1"
+    },
+    {
+      "path": "src\\components\\SearchBar.astro",
+      "size": 17268,
+      "modified": "2025-07-02T05:46:42.000Z",
+      "checksum": "7190b3797f8ae374109b6a723cb2bbca6e726c26c2527fd943c52ab8b2515d9e"
+    },
+    {
+      "path": "src\\components\\SEOOptimizer.astro",
+      "size": 8057,
+      "modified": "2025-07-03T04:23:39.892Z",
+      "checksum": "28fcc8cfdf15ff806dff2577c0083da363f12f206bb6054cd94f84c61a7f37ce"
+    },
+    {
+      "path": "src\\components\\sidebar-config.ts",
+      "size": 2063,
+      "modified": "2025-08-18T19:58:19.509Z",
+      "checksum": "069b357b6fbaf7d02080ac1f9e41ba79c43ab3dafa5ec886b9deba088804e145"
+    },
+    {
+      "path": "src\\components\\StrategicPlacementManager.astro",
+      "size": 21845,
+      "modified": "2025-08-01T21:16:48.225Z",
+      "checksum": "8cc624d36d05af9ca9e0686584e604a0b7057db02bb1386560a525e7e3ded96a"
+    },
+    {
+      "path": "src\\components\\SubscribeSection.astro",
+      "size": 14961,
+      "modified": "2025-07-29T19:39:38.044Z",
+      "checksum": "be4a9a017a2f6a70b00f0bab3620f008587cc235df1b50520b1d9d9c92e6ac72"
+    },
+    {
+      "path": "src\\components\\TrackingPixels.astro",
+      "size": 20383,
+      "modified": "2025-08-21T04:43:26.198Z",
+      "checksum": "be761f233a992bb2ff84be3c81453b9e239585f9c077ec4aa1fcb3cf76adda76"
+    },
+    {
+      "path": "src\\components\\UnifiedNewsletter.astro",
+      "size": 10236,
+      "modified": "2025-07-28T17:57:19.052Z",
+      "checksum": "669ae6eab3d506e148f9176f574e570a43631b44b24069e2e8ccf721adfa4906"
+    },
+    {
+      "path": "src\\components\\UniversalPromo.astro",
+      "size": 82359,
+      "modified": "2025-08-24T13:08:55.958Z",
+      "checksum": "8800837659be9c8b1c62958e7b282ab0f3205c1910125d35306ec27d6ffcbf78"
+    },
+    {
+      "path": "src\\components\\UniversalRevenueSidebar.astro",
+      "size": 11055,
+      "modified": "2025-08-03T17:59:17.859Z",
+      "checksum": "632d2968336bec0577c9e77fdc9630ae47c9ee158bc7ca8d3bbeddf49db0f444"
+    },
+    {
+      "path": "src\\pages\\404.astro",
+      "size": 2636,
+      "modified": "2025-07-28T00:13:16.042Z",
+      "checksum": "216b19ca852870ad521797f154ae3fbfca9c2c17eb75a2194460dda669300cfd"
+    },
+    {
+      "path": "src\\pages\\about.astro",
+      "size": 14044,
+      "modified": "2025-08-24T09:59:59.063Z",
+      "checksum": "c4896688e53637948482d425a3b3beea5b820e0bfb770a4260ae915bd17c3158"
+    },
+    {
+      "path": "src\\pages\\admin\\ad-config.astro",
+      "size": 31844,
+      "modified": "2025-08-20T03:51:11.312Z",
+      "checksum": "6e3ac15e803c9f6be454ea548970c5de4d5557a69a3067457b4a0e6506a6fae7"
+    },
+    {
+      "path": "src\\pages\\admin\\analytics.astro",
+      "size": 61448,
+      "modified": "2025-08-20T23:54:38.825Z",
+      "checksum": "52360f78ebc674d0f4978ea3aa2e206caf183667e4d625de20aae22364c68f2c"
+    },
+    {
+      "path": "src\\pages\\admin\\articles\\edit\\[slug].astro",
+      "size": 9842,
+      "modified": "2025-06-26T21:51:48.770Z",
+      "checksum": "acb32fd1c5868aae5f822306ddf817596b89485d634fcfe405957a2c7acde7fc"
+    },
+    {
+      "path": "src\\pages\\admin\\authors\\edit\\[slug].astro",
+      "size": 9999,
+      "modified": "2025-06-26T21:54:06.472Z",
+      "checksum": "38272bb906831b1538d18d9fb2871c196b6685564afb90cd09821591c7e0f436"
+    },
+    {
+      "path": "src\\pages\\admin\\authors.astro",
+      "size": 56436,
+      "modified": "2025-08-20T19:45:45.369Z",
+      "checksum": "7de1ac85a43d39ae71f29e930b4d36738427fbf960017f658fd8bfdac359217f"
+    },
+    {
+      "path": "src\\pages\\admin.astro",
+      "size": 30903,
+      "modified": "2025-08-21T04:13:16.325Z",
+      "checksum": "e5395b5344b0cca0365d205615d8b2c279fd07fc93b79fe93faed0b45f721324"
+    },
+    {
+      "path": "src\\pages\\advertise-with-us.astro",
+      "size": 42329,
+      "modified": "2025-08-20T03:07:13.110Z",
+      "checksum": "50b9bbb729ec9a1982f5bc08b6f8a3f68bb3695cd90c7423c5fa7a7548a85e33"
+    },
+    {
+      "path": "src\\pages\\affiliate-disclosure.astro",
+      "size": 15705,
+      "modified": "2025-07-28T00:05:14.922Z",
+      "checksum": "7e59e9d7f649b84d7aa5ee4a8ce77d8e6e3fe992aa5bda4e43be6d2b651eb292"
+    },
+    {
+      "path": "src\\pages\\ai-tools-comparison.astro",
+      "size": 4633,
+      "modified": "2025-07-29T20:42:50.856Z",
+      "checksum": "e451617b2b15293fef57b1d73019c58e30b53dde9c44102d75de5cd085584b38"
+    },
+    {
+      "path": "src\\pages\\api\\analytics\\authors.ts",
+      "size": 4686,
+      "modified": "2025-08-25T15:37:27.343Z",
+      "checksum": "e384f63814de095b6d1e9ec8d4f03d9553fd8e026b376cce10570374b63f53e4"
+    },
+    {
+      "path": "src\\pages\\api\\authors\\index.json.ts",
+      "size": 3171,
+      "modified": "2025-08-25T00:45:40.171Z",
+      "checksum": "64aa7b835057f2dfaf02b85da598567bacfe125999411a998146d117b661c3ab"
+    },
+    {
+      "path": "src\\pages\\api\\authors\\[slug].json.ts",
+      "size": 5436,
+      "modified": "2025-08-20T15:39:20.589Z",
+      "checksum": "d3152a50d9a55585a07ac03b3283e9166395a3fc6d787993657e98b099db3898"
+    },
+    {
+      "path": "src\\pages\\api\\contact.json.ts",
+      "size": 11736,
+      "modified": "2025-07-03T01:34:33.094Z",
+      "checksum": "c197b070852fd60dd73d75d962e4abacc8e3e152730bf0dfa0abaf18cd4b9d57"
+    },
+    {
+      "path": "src\\pages\\api\\download.ts",
+      "size": 438,
+      "modified": "2025-07-24T05:14:16.058Z",
+      "checksum": "450b844f983c61e069e324d1b5dde189b3e201ec9c30ddde81517353d44bc797"
+    },
+    {
+      "path": "src\\pages\\api\\search-articles.json.ts",
+      "size": 3516,
+      "modified": "2025-08-25T04:50:44.046Z",
+      "checksum": "dc3df0e57138a1e241dde938cf793e01b21a089f487c688212f7a59774635627"
+    },
+    {
+      "path": "src\\pages\\api\\security-check.json.ts",
+      "size": 1509,
+      "modified": "2025-06-16T07:15:42.614Z",
+      "checksum": "7d77768d2e6281a4d86859c8c975cc3cee24b80ef41b6d33948f0fceebd3e312"
+    },
+    {
+      "path": "src\\pages\\api\\subscribe.json.ts",
+      "size": 9403,
+      "modified": "2025-12-17T21:20:12.254Z",
+      "checksum": "574c87e96d1e669c4f0b5046757c438a246f0bc92cb70503391532e8f5453348"
+    },
+    {
+      "path": "src\\pages\\api\\subscribe.ts",
+      "size": 8498,
+      "modified": "2025-08-25T00:45:09.148Z",
+      "checksum": "883faed5fafe04c57992e982c9875cefb7bc77161fb22acec9c9bf84bd6b0d93"
+    },
+    {
+      "path": "src\\pages\\api\\upload\\avatar.json.ts",
+      "size": 2468,
+      "modified": "2025-08-20T15:41:08.862Z",
+      "checksum": "65f3cd9385b47e6f1ea0b89ad20043c277d6b652ba1b48901388c09308382ac8"
+    },
+    {
+      "path": "src\\pages\\authors\\index.astro",
+      "size": 5100,
+      "modified": "2025-06-29T02:49:28.958Z",
+      "checksum": "7874f76d839f9ddd54fa8a4047d8cd2cd61592554d0c8f9aa88528858b006794"
+    },
+    {
+      "path": "src\\pages\\authors\\[slug].astro",
+      "size": 1342,
+      "modified": "2025-07-28T00:04:57.257Z",
+      "checksum": "703709ee7483ce9c879569565cb1e98a49492414f333efbc1125d6d0379591c4"
+    },
+    {
+      "path": "src\\pages\\blog\\index.astro",
+      "size": 2301,
+      "modified": "2025-08-21T04:40:55.713Z",
+      "checksum": "940245c26898029818e7d876f8f89cb1a6e16587ae1971ec6d0b0fdcd98e1363"
+    },
+    {
+      "path": "src\\pages\\blog\\[...slug].astro",
+      "size": 2516,
+      "modified": "2025-08-04T08:02:35.399Z",
+      "checksum": "d801129c05227d850cd3dadaf8b22d37bbce2b55686f5be91b2f4bc2d04b8e0f"
+    },
+    {
+      "path": "src\\pages\\categories\\ai-agents.astro",
+      "size": 33578,
+      "modified": "2025-08-25T21:00:35.520Z",
+      "checksum": "24af3d58283b43dcc70d5b0002f8622f78d9a2fccc6fdfe1443cf58b12207a06"
+    },
+    {
+      "path": "src\\pages\\categories\\business.astro",
+      "size": 33561,
+      "modified": "2025-08-25T21:00:03.580Z",
+      "checksum": "ff1e128fd39299cc5d98969bb031d94440d1ffef865a07d6fb9fb7ce80f80f65"
+    },
+    {
+      "path": "src\\pages\\categories\\creative.astro",
+      "size": 33595,
+      "modified": "2025-08-25T20:56:16.676Z",
+      "checksum": "e9c267b77405e927d5f30959ad9ba4bfd6c2c60d7d9ad3df9549e85d0160f77e"
+    },
+    {
+      "path": "src\\pages\\categories\\ecommerce.astro",
+      "size": 33582,
+      "modified": "2025-08-25T21:00:13.562Z",
+      "checksum": "372f132c1b291e7d0d98e77238cc007eb23ea5b60ddbd78f7d1fcf5ca556fbc6"
+    },
+    {
+      "path": "src\\pages\\categories\\marketing.astro",
+      "size": 33604,
+      "modified": "2025-08-25T20:59:55.805Z",
+      "checksum": "23457e96d4e6d59fcae705472d97c2dfd51023685b7de74c34d218f5f9be86ec"
+    },
+    {
+      "path": "src\\pages\\categories\\productivity.astro",
+      "size": 33712,
+      "modified": "2025-08-25T20:59:59.729Z",
+      "checksum": "83e4c365cdc00814cfc85df304f617806f34b2430cb29380c4540995a4d9eaa3"
+    },
+    {
+      "path": "src\\pages\\contact.astro",
+      "size": 19754,
+      "modified": "2025-12-17T21:20:09.831Z",
+      "checksum": "40693cf10023c34494596d191db6d6977625e6106d63a3b78a4308cf948dc859"
+    },
+    {
+      "path": "src\\pages\\cookie-policy.astro",
+      "size": 23465,
+      "modified": "2025-07-28T00:01:38.086Z",
+      "checksum": "8f6029137079cdb70c141e821e1003eb3fd63f5133e0462a5fd2e86107086326"
+    },
+    {
+      "path": "src\\pages\\disclaimers.astro",
+      "size": 11879,
+      "modified": "2025-07-30T02:36:00.796Z",
+      "checksum": "82c74e0017c4ff094eec7a15e247b3fa4c525d5d2b34c556c0149d32d1438eb0"
+    },
+    {
+      "path": "src\\pages\\faq.astro",
+      "size": 24321,
+      "modified": "2025-07-27T20:49:36.804Z",
+      "checksum": "c51ee02a0ef498359b3ca43228e9555e4c2c6fbd00b4041ddd5c5c2f424a3545"
+    },
+    {
+      "path": "src\\pages\\hero-mockup.astro",
+      "size": 93214,
+      "modified": "2025-09-01T14:16:50.489Z",
+      "checksum": "d99904c7d4603b075e52a957aa8a8d3efd22d2a8b7ad1fe69ba0305005c24776"
+    },
+    {
+      "path": "src\\pages\\hero-test.astro",
+      "size": 971,
+      "modified": "2025-09-01T17:23:20.552Z",
+      "checksum": "cc0ef723c5d66ffc729487340793be974565de150cf96846833263bb3a4838c4"
+    },
+    {
+      "path": "src\\pages\\index.astro",
+      "size": 3885,
+      "modified": "2025-12-17T06:42:08.803Z",
+      "checksum": "43aa8c31f266baa026b58d57ffc4f62fb4c8b5e3b5d917d881445accbc9fd727"
+    },
+    {
+      "path": "src\\pages\\lead-magnets\\[slug].astro",
+      "size": 6892,
+      "modified": "2025-07-26T04:04:55.473Z",
+      "checksum": "98134cc1b7bba482742c72d682cc2d41b9d4fba5ae1da88993732d28db613f39"
+    },
+    {
+      "path": "src\\pages\\privacy-policy.astro",
+      "size": 9411,
+      "modified": "2025-07-30T02:35:48.633Z",
+      "checksum": "a8f00c61726d00d5f3140eac175f73ad8d019c4b887eba51c888e2f6c8c6a781"
+    },
+    {
+      "path": "src\\pages\\rss.xml.js",
+      "size": 869,
+      "modified": "2025-08-25T04:50:48.533Z",
+      "checksum": "a0ea7187ab32c3ac58c15166d1457c6627c90be0411a3113f05b7c58badffe7f"
+    },
+    {
+      "path": "src\\pages\\sitemap.xml.ts",
+      "size": 968,
+      "modified": "2025-06-26T03:26:47.587Z",
+      "checksum": "4ec8ccd49569869ce3b09289d862018cf3013a69fd142766d8fe21b6eb116307"
+    },
+    {
+      "path": "src\\pages\\terms-of-service.astro",
+      "size": 10663,
+      "modified": "2025-07-30T02:35:40.636Z",
+      "checksum": "92992c866a2ee492cca13ee329d30b5c5aff586e5369857c4ce7c7e57f753f24"
+    },
+    {
+      "path": "src\\pages\\[category]\\[slug].astro",
+      "size": 7061,
+      "modified": "2025-08-04T08:02:17.973Z",
+      "checksum": "3d55f568998aa672627fdc1687744272f96e9b9bae86cffd609cf968e04e8ace"
+    },
+    {
+      "path": "src\\styles\\article.css",
+      "size": 20256,
+      "modified": "2025-06-29T01:36:02.843Z",
+      "checksum": "04af29685964187361d38f43502f18772980c03d613208a4ea5387119bfb2a64"
+    },
+    {
+      "path": "src\\styles\\components.css",
+      "size": 10321,
+      "modified": "2025-08-24T10:37:21.119Z",
+      "checksum": "365f8769ab127c9068ac499a9e8c206994b06393c3b6e91c4f61110eb9d54d8b"
+    },
+    {
+      "path": "src\\styles\\critical.css",
+      "size": 7694,
+      "modified": "2025-08-04T07:00:57.132Z",
+      "checksum": "06123702dd910f1e31c056ad8989a22a75d9df1f1fbe2acc8400ba934a68db81"
+    },
+    {
+      "path": "src\\styles\\fresh-dev.css",
+      "size": 9432,
+      "modified": "2025-07-30T02:36:22.702Z",
+      "checksum": "9bad053b4551fba298644157e1597b84027cb6256c0acab8c46406a88af680fd"
+    },
+    {
+      "path": "src\\styles\\global.css",
+      "size": 24837,
+      "modified": "2025-08-14T09:05:54.324Z",
+      "checksum": "34f6b079371a03410d51c0202305d6af1e57c567e7e2eec5290fae800d81c164"
+    },
+    {
+      "path": "src\\styles\\layout.css",
+      "size": 6054,
+      "modified": "2025-08-03T20:23:24.859Z",
+      "checksum": "213ecd8f58b7752313eb56df149d7d5b1ecb0a91adc1dd3299111ed748b263ab"
+    },
+    {
+      "path": "src\\styles\\mobile-responsive.css",
+      "size": 31994,
+      "modified": "2025-07-29T01:49:38.717Z",
+      "checksum": "bca2dc764602ba28f6f4cb2604552f3457a1529838f309c54bbe6a7bd5c53046"
+    },
+    {
+      "path": "src\\styles\\optimized.css",
+      "size": 7501,
+      "modified": "2025-07-28T00:46:38.489Z",
+      "checksum": "cda8a07f9893fd85445251250784411c6250f9f8d49f5e9e9304e722dda9cbd2"
+    },
+    {
+      "path": "src\\styles\\utilities.css",
+      "size": 8615,
+      "modified": "2025-08-04T01:20:04.123Z",
+      "checksum": "341dff3ac062ce6467f8cf4a07e7587960290167229142dcfca406bbcdadb35f"
+    },
+    {
+      "path": "src\\layouts\\AuthorLayout.astro",
+      "size": 10056,
+      "modified": "2025-09-10T06:34:35.258Z",
+      "checksum": "44788ef093c3ce8039cb6e0e7ab9c450cf8d8461838f377acad3c50f58b06532"
+    },
+    {
+      "path": "src\\layouts\\BlogPost.astro",
+      "size": 31570,
+      "modified": "2025-09-10T06:50:09.303Z",
+      "checksum": "f937e45670cfb74c1f459a0e85f0fb46f5b98952a7c53ad4adda38573e661018"
+    },
+    {
+      "path": "src\\layouts\\MainLayout.astro",
+      "size": 17710,
+      "modified": "2025-12-17T22:35:14.765Z",
+      "checksum": "fb4397c063f619b99b400f5cc9f483152734bfcb532d3c218ec7f0487d8e8ef3"
+    },
+    {
+      "path": "src\\layouts\\RevenueOptimizedLayout.astro",
+      "size": 9439,
+      "modified": "2025-07-30T01:10:34.002Z",
+      "checksum": "ffd242fd6378c52b22e90de0d5826393083b1a3b6eff06921e2ba5fe39623815"
+    },
+    {
+      "path": "src\\lib\\ad-manager.ts",
+      "size": 12580,
+      "modified": "2025-08-18T14:03:50.351Z",
+      "checksum": "934ca01eeed2093e74a9534a6e07ef542e30346b734cb0477e9da96f40cf528c"
+    },
+    {
+      "path": "src\\lib\\analytics-config.ts",
+      "size": 3089,
+      "modified": "2025-08-20T02:59:19.496Z",
+      "checksum": "b9d0986f34b230c840f7a082df3c2c97397b96be77a5cc7de6831a2430e77e0b"
+    },
+    {
+      "path": "src\\lib\\analytics-service.ts",
+      "size": 6838,
+      "modified": "2025-08-20T02:59:53.551Z",
+      "checksum": "db4e737ba6da9145088996e219b4c53eb3c12409034ca5eb19cd1fcf1c61f44e"
+    },
+    {
+      "path": "src\\lib\\ga-analytics-service.ts",
+      "size": 6829,
+      "modified": "2025-08-25T00:45:35.163Z",
+      "checksum": "b13edbc44d40955c7c26811396da28e050f24a739124ab85e51dc6d1fea97340"
+    },
+    {
+      "path": "src\\lib\\lockout.ts",
+      "size": 3889,
+      "modified": "2025-07-03T01:34:58.048Z",
+      "checksum": "45b1af14fc2f134cdbfe484a34566c505a2d00dd4f081837964b454960398e82"
+    },
+    {
+      "path": "src\\lib\\sanity.ts",
+      "size": 14139,
+      "modified": "2025-08-25T21:00:35.520Z",
+      "checksum": "d2cb12eb63f72e9607f12618b2237ec707f08e66cf5a9700beda295fe35477b2"
+    },
+    {
+      "path": "src\\lib\\security-logger.ts",
+      "size": 9688,
+      "modified": "2025-07-03T01:34:51.343Z",
+      "checksum": "b85bee7be464656de7074b55d800a8b63e7a9ca2403c5017ed5e0737ab967ef7"
+    },
+    {
+      "path": "src\\lib\\security.ts",
+      "size": 2950,
+      "modified": "2025-07-03T01:34:53.709Z",
+      "checksum": "9896a84355e039381e8dd6d71b554a580c44f2d0849c043201f86828c3425c5f"
+    },
+    {
+      "path": "src\\utils\\bundleAnalysis.js",
+      "size": 4626,
+      "modified": "2025-07-28T17:15:54.591Z",
+      "checksum": "0c7edfda051f193e01f1ef4d6c84c1a692996619f6a9da25a3b97127b5e8f129"
+    },
+    {
+      "path": "src\\utils\\cssAnalysis.js",
+      "size": 4356,
+      "modified": "2025-07-28T17:15:52.842Z",
+      "checksum": "ee8d39be99d2f295a6c39e72b94372fffa7d6f284b2999ff41b00cab6b79cf72"
+    },
+    {
+      "path": "src\\utils\\excerptGenerator.ts",
+      "size": 9180,
+      "modified": "2025-08-25T18:39:39.634Z",
+      "checksum": "ee6bd4ce47ff6bf57fc9c92c787c14dc644354e6bea48abbc1b55da8b3a21366"
+    },
+    {
+      "path": "src\\utils\\finalPerformanceAudit.js",
+      "size": 5286,
+      "modified": "2025-07-28T18:39:09.755Z",
+      "checksum": "3d5822cf45432b71cf88fc04aa383b13ded834f18e5b145f459ad4f53751c20e"
+    },
+    {
+      "path": "src\\utils\\finalPerformanceReport.js",
+      "size": 7380,
+      "modified": "2025-07-28T17:27:08.404Z",
+      "checksum": "e85cc5130467b05c23149ccbd3f8420928b00f6955a986fc287460be3fe25985"
+    },
+    {
+      "path": "src\\utils\\imageOptimization.ts",
+      "size": 8839,
+      "modified": "2025-07-28T16:54:32.254Z",
+      "checksum": "e26dcbb3e968eb6210ac3fce9cab3fa8bd1264f0e8940539e671dfa14f364fb4"
+    },
+    {
+      "path": "src\\utils\\imageOptimizer.js",
+      "size": 2419,
+      "modified": "2025-07-28T16:54:33.717Z",
+      "checksum": "95d541b31a600eaca0aa4d2dd310e493e392c69e5bc0d0db85deade00c69123d"
+    },
+    {
+      "path": "src\\utils\\lighthouseAudit.js",
+      "size": 6679,
+      "modified": "2025-07-28T18:39:10.404Z",
+      "checksum": "974dce72bf63de75b4a3ce4cd56b86e73e8f6dd86947a1c385d72d3914ce2ce3"
+    },
+    {
+      "path": "src\\utils\\lighthouseStatus.js",
+      "size": 6029,
+      "modified": "2025-07-28T18:39:06.432Z",
+      "checksum": "28c24d219a2b2ce8dbf7ad5acfdb2cbaec0def88921bf4b0b68ecbc09bbeed21"
+    },
+    {
+      "path": "src\\utils\\newsletterManager.ts",
+      "size": 7187,
+      "modified": "2025-08-18T19:21:13.338Z",
+      "checksum": "f307cb2f6fcd3c2ea00241a3328249f5cf401736894e448f89f5d04e59ee3e40"
+    },
+    {
+      "path": "src\\utils\\newsletterOptimizationReport.js",
+      "size": 3574,
+      "modified": "2025-07-28T17:57:15.733Z",
+      "checksum": "3141a100707c74f07acb4a727aa4950431236ea4cde6ade14e2db7f2be776458"
+    },
+    {
+      "path": "src\\utils\\performance.ts",
+      "size": 6190,
+      "modified": "2025-07-03T04:35:35.761Z",
+      "checksum": "2a76b5f183b44a3af468e2f5582ffdb29317d59e3cb207041f77bcf1056f73f5"
+    },
+    {
+      "path": "src\\utils\\performanceTest.js",
+      "size": 3017,
+      "modified": "2025-07-28T16:54:34.739Z",
+      "checksum": "68f648e0a2da823b3006f29f40dddbfed293d75ff3078d6bc165e17eddc65182"
+    },
+    {
+      "path": "src\\utils\\phase1Results.js",
+      "size": 5911,
+      "modified": "2025-07-28T17:15:51.114Z",
+      "checksum": "33a0bfc62ca7d6757a5a3e5ba5ba651fee2cbf0f3a55c808feff8b122af3e951"
+    },
+    {
+      "path": "src\\utils\\phase2Results.js",
+      "size": 7272,
+      "modified": "2025-07-28T17:15:52.003Z",
+      "checksum": "8db942c2fc46cffeddd5263b18e260242473061a73e7b50f4065843d29fc9b9e"
+    },
+    {
+      "path": "src\\utils\\revenueAnalytics.js",
+      "size": 5588,
+      "modified": "2025-07-28T18:39:08.208Z",
+      "checksum": "fbc92c2afad4c14a6365c7ed24fa00808ee9d567157c3cc73c4443ff1fa0b072"
+    },
+    {
+      "path": "src\\utils\\sanityAds.ts",
+      "size": 14232,
+      "modified": "2025-08-18T19:21:17.087Z",
+      "checksum": "dc1fcd32daeb6dbcb52f0a66568d0d19588aac0f138b53c8b52c31db50040e4a"
+    },
+    {
+      "path": "src\\utils\\urlHelpers.ts",
+      "size": 1180,
+      "modified": "2025-07-26T04:04:59.007Z",
+      "checksum": "b9d8b19dba3172fbf4e759441c46359ed0206cdcdf92ed7eb9e9f60d2ef85177"
+    },
+    {
+      "path": "public\\assets\\lead-magnets\\2025 AI Money & Productivity Vault.zip",
+      "size": 6095042,
+      "modified": "2025-07-23T11:19:31.355Z",
+      "checksum": "b49f1aacf7bd242d5e44784ddbb37ade500a9b433ad5dc544ed291e6c7667cd7"
+    },
+    {
+      "path": "public\\assets\\lead-magnets\\README.md",
+      "size": 1349,
+      "modified": "2025-07-24T05:14:19.009Z",
+      "checksum": "b79e2f917c3c0ee07bbc1bf1ee023e713f56afa8c982cca3d6e5b101c3400cf6"
+    },
+    {
+      "path": "public\\favicon.svg",
+      "size": 749,
+      "modified": "2025-06-13T11:31:44.000Z",
+      "checksum": "2d7a310283d6f9cc753210d83224cd6db6348cb82a5536348884e5831d46203f"
+    },
+    {
+      "path": "public\\fonts\\atkinson-bold.woff",
+      "size": 23780,
+      "modified": "2025-06-13T11:31:44.000Z",
+      "checksum": "f0de8ccb0af6e50fd1b51d50d5032c6824adc0f1b435345919fca1d9b72b3623"
+    },
+    {
+      "path": "public\\fonts\\atkinson-regular.woff",
+      "size": 22792,
+      "modified": "2025-06-13T11:31:44.000Z",
+      "checksum": "b51d2e16226a56e304ab9ba67d22f504afc5bdceab1caefe386063a26ee4bc0b"
+    },
+    {
+      "path": "public\\icons\\icon-128x128.svg",
+      "size": 688,
+      "modified": "2025-07-03T04:20:05.824Z",
+      "checksum": "d2c011301bb1a7cf246e937a739be00125c87e7fd56c84a0f1a5f74b302e37a9"
+    },
+    {
+      "path": "public\\icons\\icon-144x144.svg",
+      "size": 702,
+      "modified": "2025-07-03T04:20:05.828Z",
+      "checksum": "b3f4b4995bc0d29425971fe69a799e2c6ec4b9c2b5d0116dc0451d007c4f93bc"
+    },
+    {
+      "path": "public\\icons\\icon-152x152.svg",
+      "size": 677,
+      "modified": "2025-07-03T04:20:05.831Z",
+      "checksum": "da4d027a88393828ce676a30905353c46e32ff01e98dcb5b000d00af1664361b"
+    },
+    {
+      "path": "public\\icons\\icon-192x192.svg",
+      "size": 678,
+      "modified": "2025-07-03T04:20:05.834Z",
+      "checksum": "7ce468e953669bddefad7c618591e1d8941dafc37fd0fdc6c8c95a5485616c7d"
+    },
+    {
+      "path": "public\\icons\\icon-384x384.svg",
+      "size": 680,
+      "modified": "2025-07-03T04:20:05.836Z",
+      "checksum": "8508db032b448b6fe0bb05fb108668082ea2b57972ee7e02c9a67dc0bc0001c5"
+    },
+    {
+      "path": "public\\icons\\icon-512x512.svg",
+      "size": 692,
+      "modified": "2025-07-03T04:20:05.839Z",
+      "checksum": "eb20d958374cb6c17b0d198ef40d7a95eaa80f997a77673926e35b5cc16d8b2d"
+    },
+    {
+      "path": "public\\icons\\icon-72x72.svg",
+      "size": 696,
+      "modified": "2025-07-03T04:20:05.811Z",
+      "checksum": "66ae43c8a484957cf00256589e6d5a47669c5f637b7c52bdc28815a683e26f24"
+    },
+    {
+      "path": "public\\icons\\icon-96x96.svg",
+      "size": 670,
+      "modified": "2025-07-03T04:20:05.820Z",
+      "checksum": "677eb6c173154a4d7dc9e0bb32ed716e70b11c4047e5fb8d842df9d05f73d69d"
+    },
+    {
+      "path": "public\\icons\\news-96x96.svg",
+      "size": 670,
+      "modified": "2025-07-03T04:20:05.843Z",
+      "checksum": "677eb6c173154a4d7dc9e0bb32ed716e70b11c4047e5fb8d842df9d05f73d69d"
+    },
+    {
+      "path": "public\\icons\\reviews-96x96.svg",
+      "size": 670,
+      "modified": "2025-07-03T04:20:05.845Z",
+      "checksum": "677eb6c173154a4d7dc9e0bb32ed716e70b11c4047e5fb8d842df9d05f73d69d"
+    },
+    {
+      "path": "public\\icons\\tutorials-96x96.svg",
+      "size": 670,
+      "modified": "2025-07-03T04:20:05.848Z",
+      "checksum": "677eb6c173154a4d7dc9e0bb32ed716e70b11c4047e5fb8d842df9d05f73d69d"
+    },
+    {
+      "path": "public\\images\\authors\\raf-velazquez-optimized.jpg",
+      "size": 22330,
+      "modified": "2025-07-28T16:52:23.942Z",
+      "checksum": "4523083030e4cd43f85ad2581c5730f84ddfe7cd972fc1c56791d47fe7c184c2"
+    },
+    {
+      "path": "public\\images\\authors\\raf-velazquez.avif",
+      "size": 17330,
+      "modified": "2025-07-28T16:52:23.787Z",
+      "checksum": "956b507f838e15df2567f73fadfe92edb32cdf46c405a5c72710aa836c53f21f"
+    },
+    {
+      "path": "public\\images\\authors\\raf-velazquez.jpg",
+      "size": 108793,
+      "modified": "2025-07-26T03:11:09.657Z",
+      "checksum": "4b96354402d84bf479f28ab4059d8827bdd30fcd5aeea1e6a558aa5e6fb521c6"
+    },
+    {
+      "path": "public\\images\\authors\\raf-velazquez.webp",
+      "size": 15012,
+      "modified": "2025-07-28T16:52:23.749Z",
+      "checksum": "47ff8eebe58a3c386cdcab100261cbd885d486c238876749a962f780f3ea6fb2"
+    },
+    {
+      "path": "public\\lead-magnets\\2025 AI Money & Productivity Vault.zip",
+      "size": 6048538,
+      "modified": "2025-08-21T06:08:06.375Z",
+      "checksum": "4498b04b9a975d8ce50109e90d83b96aaee76cfa5af4b2febca8e685c1458458"
+    },
+    {
+      "path": "public\\manifest.json",
+      "size": 2847,
+      "modified": "2025-07-03T04:20:38.191Z",
+      "checksum": "ddc26fadfa247048656addd7f2f7ee99d390952c04eb976aca2e2cb2bd597fc6"
+    },
+    {
+      "path": "public\\offline.html",
+      "size": 6720,
+      "modified": "2025-06-26T02:13:33.431Z",
+      "checksum": "7af311ccab319e202310b4c62056d341426eb6a79311a5bff2997c86e2b1b967"
+    },
+    {
+      "path": "public\\robots.txt",
+      "size": 1111,
+      "modified": "2025-06-27T02:35:37.428Z",
+      "checksum": "5aa06690feefc9e4f2860685a2af56b07ee6254388ec107f77403c9241bdef23"
+    },
+    {
+      "path": "public\\studio-dark-theme.css",
+      "size": 4115,
+      "modified": "2025-07-26T06:12:38.030Z",
+      "checksum": "3f4b899fb903bf21cebec23d82d4a5eb4b80c9212ad07b166b01e207b6b8612b"
+    },
+    {
+      "path": "public\\styles\\components.css",
+      "size": 9449,
+      "modified": "2025-07-28T19:25:28.078Z",
+      "checksum": "2b667f40dd9dce0606f4eb11b2fb5a2251b97fd34fb78a007ece39d940a3c4ae"
+    },
+    {
+      "path": "public\\styles\\critical.css",
+      "size": 9543,
+      "modified": "2025-09-05T04:23:35.102Z",
+      "checksum": "d60bb08e4ee31d5a3e06fd6c94b8a070c4253c5cc9bea4761f6bca6d71279c2b"
+    },
+    {
+      "path": "public\\styles\\fresh-dev.css",
+      "size": 9433,
+      "modified": "2025-07-28T01:13:32.384Z",
+      "checksum": "9051b8f2d70dbc4b859a3eb2ce765e56438d546c47fa1973f7b2613fb0435a73"
+    },
+    {
+      "path": "public\\styles\\global.css",
+      "size": 24837,
+      "modified": "2025-08-14T09:05:54.324Z",
+      "checksum": "34f6b079371a03410d51c0202305d6af1e57c567e7e2eec5290fae800d81c164"
+    },
+    {
+      "path": "public\\styles\\layout.css",
+      "size": 6054,
+      "modified": "2025-08-03T20:23:24.859Z",
+      "checksum": "213ecd8f58b7752313eb56df149d7d5b1ecb0a91adc1dd3299111ed748b263ab"
+    },
+    {
+      "path": "public\\styles\\optimized.css",
+      "size": 7501,
+      "modified": "2025-07-28T00:46:38.489Z",
+      "checksum": "cda8a07f9893fd85445251250784411c6250f9f8d49f5e9e9304e722dda9cbd2"
+    },
+    {
+      "path": "public\\styles\\ultra-fresh-20250727-211452.css",
+      "size": 9433,
+      "modified": "2025-07-28T01:13:32.384Z",
+      "checksum": "9051b8f2d70dbc4b859a3eb2ce765e56438d546c47fa1973f7b2613fb0435a73"
+    },
+    {
+      "path": "public\\styles\\utilities.css",
+      "size": 8615,
+      "modified": "2025-08-04T01:20:04.123Z",
+      "checksum": "341dff3ac062ce6467f8cf4a07e7587960290167229142dcfca406bbcdadb35f"
+    },
+    {
+      "path": "public\\sw.js",
+      "size": 3178,
+      "modified": "2025-07-28T00:58:01.228Z",
+      "checksum": "6f2b31b2af76155f1faa291bcf67b656ddcbd187b6ccc83768c8364a91be9ae9"
+    },
+    {
+      "path": "netlify\\functions\\contact.js",
+      "size": 9029,
+      "modified": "2025-06-26T03:39:23.278Z",
+      "checksum": "7233647602b5ba8d4a54f8564093edf8defb6ed352fa88ee19b350db60cc4c87"
+    },
+    {
+      "path": "netlify\\functions\\package.json",
+      "size": 425,
+      "modified": "2025-06-26T03:39:32.730Z",
+      "checksum": "173eb25bdb21537d9f3b371eb589b333a8c77d94ac5a9ad2548c965c1572ddb4"
+    },
+    {
+      "path": "netlify\\functions\\sanity-webhook-simple.js",
+      "size": 1,
+      "modified": "2025-06-26T16:20:35.076Z",
+      "checksum": "36a9e7f1c95b82ffb99743e0c5c4ce95d83c9a430aac59f84ef3cbfab6145068"
+    },
+    {
+      "path": "netlify\\functions\\sanity-webhook.js",
+      "size": 1,
+      "modified": "2025-06-26T16:20:31.373Z",
+      "checksum": "36a9e7f1c95b82ffb99743e0c5c4ce95d83c9a430aac59f84ef3cbfab6145068"
+    },
+    {
+      "path": "netlify\\functions\\subscribe.js",
+      "size": 8631,
+      "modified": "2025-06-26T01:40:38.685Z",
+      "checksum": "ea4c80d3913849367e93e158e020314661572c44c204c576f147c35e6095e5e3"
+    },
+    {
+      "path": "schemas\\ads.ts",
+      "size": 10478,
+      "modified": "2025-08-01T20:51:24.967Z",
+      "checksum": "f29a494bf2737b7b8089e9e1d2a0d5d5b2c6c04100585f5557cffd05282710e7"
+    },
+    {
+      "path": "schemas\\article.ts",
+      "size": 41818,
+      "modified": "2025-07-27T18:35:38.622Z",
+      "checksum": "ecc121dfe41958952aa48477518e57865084ae930444879c56f629f1e8e94089"
+    },
+    {
+      "path": "schemas\\author.ts",
+      "size": 1015,
+      "modified": "2025-06-26T16:48:47.707Z",
+      "checksum": "213e1b02bcb6f8e760cbdb8e1d8c07f3899e5f047e025fb2aa50d6822b880bfd"
+    },
+    {
+      "path": "schemas\\category.ts",
+      "size": 3775,
+      "modified": "2025-07-02T01:15:19.246Z",
+      "checksum": "e67ead75f3193b3c437a3b631a1addc630bd5ec70f041af27afeaab355bb40bd"
+    },
+    {
+      "path": "schemas\\faq.ts",
+      "size": 6664,
+      "modified": "2025-07-26T06:12:36.208Z",
+      "checksum": "fa2902291f89e74bd1617403d5c89b0b59312eabf7b9e9e9d170ef6b42e55674"
+    },
+    {
+      "path": "schemas\\index.ts",
+      "size": 458,
+      "modified": "2025-07-26T06:12:36.884Z",
+      "checksum": "73659fa65398ad37b98c5c02fd11795217363774c1ec9c9028d32a65201a3fa0"
+    },
+    {
+      "path": "schemas\\mediaAsset.ts",
+      "size": 6517,
+      "modified": "2025-07-26T06:12:35.554Z",
+      "checksum": "3379b314252980de1c23c4f0f6407abd2dc609d7f68ed78979a80f359e5a9324"
+    },
+    {
+      "path": "schemas\\navigationMenu.ts",
+      "size": 8313,
+      "modified": "2025-07-26T06:12:34.884Z",
+      "checksum": "f2afa1b4d4e164d8feb84d3d5ab820d3510bcc7644ca4fd412c38308d2a7902c"
+    },
+    {
+      "path": "schemas\\siteSettings.ts",
+      "size": 8818,
+      "modified": "2025-07-26T06:12:33.950Z",
+      "checksum": "fe91e63229691a600d3ba6885f01f9215fc10a30d31c7a23d83d2f3e7efb9c0e"
+    }
+  ],
+  "totalSize": 14520515,
+  "checksum": null,
+  "backupDuration": 674,
+  "status": "completed"
+}

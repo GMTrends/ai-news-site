@@ -1,0 +1,49 @@
+{
+  "passed": 2,
+  "failed": 1,
+  "warnings": 3,
+  "checks": [
+    {
+      "check": "Environment Variables",
+      "status": "FAIL",
+      "message": "Hardcoded secrets found in .env file",
+      "details": null,
+      "timestamp": "2026-01-17T17:27:12.983Z"
+    },
+    {
+      "check": "Dependencies",
+      "status": "WARN",
+      "message": "Could not run npm audit - check manually",
+      "details": null,
+      "timestamp": "2026-01-17T17:27:22.061Z"
+    },
+    {
+      "check": "Security Headers",
+      "status": "PASS",
+      "message": "All required security headers configured",
+      "details": null,
+      "timestamp": "2026-01-17T17:27:22.061Z"
+    },
+    {
+      "check": "Sensitive Files",
+      "status": "WARN",
+      "message": "Files not in .gitignore: package-lock.json, yarn.lock",
+      "details": null,
+      "timestamp": "2026-01-17T17:27:22.062Z"
+    },
+    {
+      "check": "Code Security",
+      "status": "WARN",
+      "message": "Potential security issues found: 13 issues",
+      "details": null,
+      "timestamp": "2026-01-17T17:27:22.087Z"
+    },
+    {
+      "check": "Sanity Configuration",
+      "status": "PASS",
+      "message": "Using environment variables for configuration",
+      "details": null,
+      "timestamp": "2026-01-17T17:27:22.088Z"
+    }
+  ]
+}

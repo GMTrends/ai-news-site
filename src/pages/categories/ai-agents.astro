@@ -1,0 +1,25 @@
+---
+import { getArticlesByCategory } from '../../lib/sanity.ts';
+import { getCategoryData } from '../../data/categoryData.ts';
+import CategoryLayout from '../../layouts/CategoryLayout.astro';
+
+const allAIAgentsArticles = await getArticlesByCategory('ai-agents', 50);
+const aiAgentsArticles = allAIAgentsArticles.slice(0, 8);
+const categoryData = getCategoryData('ai-agents');
+
+const pageTitle = categoryData?.title + " - Tools & Inspiration" || "AI Agents & Automation - Tools & Inspiration";
+const pageDescription = categoryData?.metaDescription || "Discover intelligent AI agents and autonomous systems that can handle complex tasks, workflows, and decision-making processes.";
+const keywords = categoryData?.keywords.join(', ') || "AI agents, autonomous systems, intelligent automation, AI workflows, smart assistants";
+---
+
+<CategoryLayout
+  title={pageTitle}
+  description={pageDescription}
+  keywords={keywords}
+  canonicalUrl={Astro.url.href}
+  categorySlug="ai-agents"
+  categoryData={categoryData}
+  allArticles={allAIAgentsArticles}
+  initialArticles={aiAgentsArticles}
+  categoryDisplayName="AI Agents"
+/>

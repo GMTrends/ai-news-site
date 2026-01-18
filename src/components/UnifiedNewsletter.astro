@@ -1,0 +1,466 @@
+---
+// Unified Newsletter Component
+// Replaces: CompactSubscribe, LeadMagnetSubscribe, SubscribeSection
+interface Props {
+  variant?: 'compact' | 'hero' | 'sidebar' | 'footer';
+  title?: string;
+  subtitle?: string;
+  benefits?: string[];
+  placeholder?: string;
+  buttonText?: string;
+  showBenefits?: boolean;
+  showSocialProof?: boolean;
+  customClass?: string;
+}
+
+const {
+  variant = 'compact',
+  title = 'Stay Ahead in AI',
+  subtitle = 'Get the latest AI news, reviews, and insights delivered to your inbox.',
+  benefits = [
+    'Weekly AI insights & tools',
+    'Breaking news alerts', 
+    'Exclusive early access'
+  ],
+  placeholder = 'Enter your email address',
+  buttonText = 'Subscribe',
+  showBenefits = true,
+  showSocialProof = false,
+  customClass = ''
+} = Astro.props;
+
+// Variant-specific configurations
+const configs = {
+  compact: {
+    containerClass: 'newsletter-compact',
+    icon: '📧',
+    layout: 'horizontal'
+  },
+  hero: {
+    containerClass: 'newsletter-hero',
+    icon: '🚀',
+    layout: 'vertical'
+  },
+  sidebar: {
+    containerClass: 'newsletter-sidebar',
+    icon: '📬',
+    layout: 'vertical'
+  },
+  footer: {
+    containerClass: 'newsletter-footer',
+    icon: '✉️',
+    layout: 'horizontal'
+  }
+};
+
+const config = configs[variant];
+const uniqueId = `newsletter-${variant}-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<section class={`newsletter-unified ${config.containerClass} ${customClass}`}>
+  <div class="newsletter-container">
+    <div class={`newsletter-content layout-${config.layout}`}>
+      
+      <!-- Header Section -->
+      <div class="newsletter-header">
+        <div class="newsletter-icon" aria-hidden="true">
+          {config.icon}
+        </div>
+        <div class="newsletter-text">
+          <h2 class="newsletter-title">{title}</h2>
+          <p class="newsletter-subtitle">{subtitle}</p>
+        </div>
+      </div>
+
+      <!-- Benefits List -->
+      {showBenefits && (
+        <div class="newsletter-benefits">
+          <ul class="benefits-list">
+            {benefits.map((benefit) => (
+              <li class="benefit-item">
+                <span class="benefit-icon" aria-hidden="true">✓</span>
+                <span class="benefit-text">{benefit}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <!-- Social Proof (for hero variant) -->
+      {showSocialProof && variant === 'hero' && (
+        <div class="social-proof">
+          <div class="social-stats">
+            <div class="stat-item">
+              <span class="stat-number">50K+</span>
+              <span class="stat-label">Subscribers</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">98%</span>
+              <span class="stat-label">Satisfaction</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <!-- Newsletter Form -->
+      <form 
+        class="newsletter-form" 
+        data-newsletter-form={variant}
+        id={uniqueId}
+        aria-label="Newsletter subscription form"
+      >
+        <!-- CSRF Token -->
+        <input type="hidden" data-csrf-token name="_csrf" value="" />
+        
+        <!-- Honeypot for bot protection -->
+        <div class="honeypot-field" style="display: none;" aria-hidden="true">
+          <input 
+            type="text" 
+            data-honeypot 
+            name="honeypot" 
+            tabindex="-1" 
+            autocomplete="off"
+            aria-hidden="true"
+          />
+        </div>
+
+        <!-- Form Fields -->
+        <div class="form-group">
+          <label for={`email-${uniqueId}`} class="sr-only">Email Address</label>
+          <input 
+            type="email"
+            id={`email-${uniqueId}`}
+            data-email-input
+            name="email"
+            class="newsletter-input"
+            placeholder={placeholder}
+            required
+            autocomplete="email"
+            aria-describedby={`message-${uniqueId}`}
+          />
+          <button 
+            type="submit"
+            data-submit-button
+            class="newsletter-button"
+            aria-describedby={`message-${uniqueId}`}
+          >
+            <span class="button-text">{buttonText}</span>
+            <span class="button-icon" aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <!-- Message Container -->
+        <div 
+          class="form-message-container"
+          data-message-container
+          id={`message-${uniqueId}`}
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <div class="form-message" style="display: none;"></div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+/* BASE NEWSLETTER STYLES */
+.newsletter-unified {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.newsletter-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.newsletter-content {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.layout-vertical {
+  flex-direction: column;
+  text-align: center;
+}
+
+.layout-horizontal {
+  flex-direction: row;
+  text-align: left;
+}
+
+/* HEADER STYLES */
+.newsletter-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.newsletter-icon {
+  font-size: 2.5rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+  border-radius: 50%;
+  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+}
+
+.newsletter-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary);
+}
+
+.newsletter-subtitle {
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* BENEFITS STYLES */
+.newsletter-benefits {
+  flex: 1;
+}
+
+.benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.benefit-icon {
+  color: var(--accent-cyan);
+  font-weight: bold;
+}
+
+.benefit-text {
+  color: var(--text-secondary);
+}
+
+/* FORM STYLES */
+.newsletter-form {
+  flex-shrink: 0;
+  min-width: 300px;
+}
+
+.form-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.newsletter-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.newsletter-input:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+}
+
+.newsletter-button {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.newsletter-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4);
+}
+
+.newsletter-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.newsletter-button.loading .button-icon {
+  animation: spin 1s linear infinite;
+}
+
+/* MESSAGE STYLES */
+.form-message {
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.form-message.success {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.form-message.error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.form-message.loading {
+  background: rgba(0, 212, 255, 0.1);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+/* VARIANT SPECIFIC STYLES */
+.newsletter-compact {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.newsletter-hero {
+  padding: 3rem 0;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(0, 102, 255, 0.05));
+}
+
+.newsletter-sidebar {
+  background: var(--bg-secondary);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.newsletter-footer {
+  background: var(--bg-secondary);
+  padding: 2rem 0;
+  border-top: 1px solid var(--border-color);
+}
+
+/* SOCIAL PROOF STYLES */
+.social-proof {
+  margin: 1rem 0;
+}
+
+.social-stats {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  .layout-horizontal {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .newsletter-content {
+    gap: 1rem;
+  }
+  
+  .newsletter-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .form-group {
+    flex-direction: column;
+  }
+  
+  .newsletter-form {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .benefits-list {
+    gap: 0.25rem;
+  }
+  
+  .social-stats {
+    gap: 1rem;
+  }
+}
+
+/* ACCESSIBILITY */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ANIMATIONS */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* REDUCED MOTION SUPPORT */
+@media (prefers-reduced-motion: reduce) {
+  .newsletter-button {
+    transition: none;
+  }
+  
+  .newsletter-button.loading .button-icon {
+    animation: none;
+  }
+}
+</style>
+
+<script>
+// The unified script is loaded separately via newsletterManager.ts
+// This ensures no duplicate event listeners across components
+</script>

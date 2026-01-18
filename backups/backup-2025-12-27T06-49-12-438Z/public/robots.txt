@@ -1,0 +1,66 @@
+User-agent: *
+Disallow: /
+
+# Allow specific bots for testing (optional)
+User-agent: Googlebot
+Disallow: /
+
+User-agent: Bingbot
+Disallow: /
+
+# Allow your own testing
+User-agent: *
+Allow: /admin
+Allow: /api
+
+# Sitemap (when ready)
+# Sitemap: https://yourdomain.com/sitemap.xml
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /.netlify/
+Disallow: /_astro/
+
+# Allow important pages
+Allow: /rss.xml
+Allow: /sitemap-index.xml
+Allow: /sitemap-*.xml
+
+# Sitemap
+Sitemap: https://aibuzzmedia.com/sitemap-index.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Specific rules for major search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+# Block AI training bots (optional - remove if you want AI training)
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: / 

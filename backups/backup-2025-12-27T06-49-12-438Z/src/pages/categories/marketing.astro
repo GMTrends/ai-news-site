@@ -1,0 +1,25 @@
+---
+import { getArticlesByCategory } from '../../lib/sanity.ts';
+import { getCategoryData } from '../../data/categoryData.ts';
+import CategoryLayout from '../../layouts/CategoryLayout.astro';
+
+const allMarketingArticles = await getArticlesByCategory('marketing', 50);
+const marketingArticles = allMarketingArticles.slice(0, 8);
+const categoryData = getCategoryData('marketing');
+
+const pageTitle = categoryData?.title + " - Tools & Inspiration" || "AI Marketing & Growth - Tools & Inspiration";
+const pageDescription = categoryData?.metaDescription || "Explore cutting-edge AI marketing tools, growth strategies, and customer engagement solutions. Transform your marketing with intelligent automation.";
+const keywords = categoryData?.keywords.join(', ') || "AI marketing, growth tools, customer engagement, marketing automation, AI analytics";
+---
+
+<CategoryLayout
+  title={pageTitle}
+  description={pageDescription}
+  keywords={keywords}
+  canonicalUrl={Astro.url.href}
+  categorySlug="marketing"
+  categoryData={categoryData}
+  allArticles={allMarketingArticles}
+  initialArticles={marketingArticles}
+  categoryDisplayName="Marketing"
+/>

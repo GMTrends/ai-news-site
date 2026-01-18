@@ -1,0 +1,763 @@
+---
+// Lead Magnet Subscription (MVP)
+---
+<section class="lead-magnet-subscribe">
+  <div class="lead-magnet-container">
+    <div class="lead-magnet-grid">
+      <!-- Left Column -->
+      <div class="lead-magnet-left">
+        <div class="icon-headline">
+          <div class="envelope-icon-anim" aria-hidden="true">
+            <span class="envelope-glow"></span>
+            <svg width="80" height="80" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="envelope-svg">
+              <defs>
+                <linearGradient id="envelope-gradient" x1="0" y1="0" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#00d4ff"/>
+                  <stop offset="1" stop-color="#0066ff"/>
+                </linearGradient>
+              </defs>
+              <g class="envelope-shape">
+                <rect x="10" y="18" width="40" height="24" rx="5" fill="#181A1B" stroke="url(#envelope-gradient)" stroke-width="3"/>
+                <path d="M13 21L30 36L47 21" stroke="url(#envelope-gradient)" stroke-width="2.5" fill="none"/>
+                <path d="M13 41L27 29" stroke="url(#envelope-gradient)" stroke-width="2" fill="none"/>
+                <path d="M47 41L33 29" stroke="url(#envelope-gradient)" stroke-width="2" fill="none"/>
+              </g>
+            </svg>
+          </div>
+          <h2 class="headline">Join 5,000+ Entrepreneurs Making $10K+/Month With AI</h2>
+        </div>
+        <ul class="subscribe-benefits">
+          <li><span class="benefit-icon">🤖</span> Discover AI money machines generating $1K-$10K/month</li>
+          <li><span class="benefit-icon">💎</span> Get AI automation setups that replace 10+ hours daily</li>
+          <li><span class="benefit-icon">⚡</span> First access to breakthrough AI tools before they go viral</li>
+          <li><span class="benefit-icon">🚀</span> Join exclusive community of successful AI entrepreneurs</li>
+        </ul>
+        <div class="social-proof-placeholder">
+          <!-- Enhanced testimonials section -->
+          <div class="testimonial-card">
+            <span class="social-proof-text">"This AI system helped me build a $15K/month side business" - Maria K., Tech Consultant</span>
+          </div>
+          <div class="success-stats">
+            <div class="stat-item">
+              <span class="stat-number">5,247</span>
+              <span class="stat-label">Success Stories</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">$2.3M+</span>
+              <span class="stat-label">Revenue Generated</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">847%</span>
+              <span class="stat-label">Avg ROI</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Right Column -->
+      <div class="lead-magnet-right">
+        <div class="lead-magnet-offer">
+          <span class="free-badge">FREE</span>
+          <div class="offer-content">
+            <span class="offer-emoji">🎁</span>
+            <div>
+              <strong>2025 AI Money & Productivity Vault</strong>
+              <ul class="offer-bullets">
+                <li>$10K/Month AI Side Hustles (Copy-paste systems that work in 2025)</li>
+                <li>AI Agents That Do 10 Hours of Work in 10 Minutes (step-by-step)</li>
+                <li>Personal AI Assistant Setup (makes money while you sleep)</li>
+                <li>AI Marketing Funnels That Convert 10X Better Than Humans</li>
+                <li>BONUS: $497 AI ROI Calculator (pays for itself in 24 hours)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <form class="subscribe-form" id="leadMagnetForm" autocomplete="off">
+          <input type="email" name="email" class="subscribe-input" placeholder="Enter your email for instant access" required autocomplete="email" />
+          <!-- Fixed height container to prevent button shift -->
+          <div class="button-container-fixed">
+            <button type="submit" class="subscribe-button" id="subscribeButton">
+              <span class="button-text">YES! I Want To 10X My Income With AI</span>
+            </button>
+          </div>
+          <div class="form-message" id="formMessage"></div>
+        </form>
+        <div class="trust-signals">
+          <span class="trust-text">No spam, unsubscribe anytime</span>
+          <span class="gdpr-badge">GDPR Compliant</span>
+          <div class="pointing-arrow" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="arrow-gradient" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#00d4ff"/>
+                  <stop offset="1" stop-color="#0066ff"/>
+                </linearGradient>
+              </defs>
+              <path d="M24 2L44 32L34 32L34 46L14 46L14 32L4 32L24 2Z" fill="url(#arrow-gradient)"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<style>
+.lead-magnet-subscribe {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  position: relative;
+  z-index: 1;
+  /* Allow shadow to expand beyond container */
+  overflow: visible;
+}
+.lead-magnet-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.2rem;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  /* Allow shadow to expand beyond container boundaries */
+  overflow: visible;
+}
+.lead-magnet-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 3rem;
+  background: #23232a;
+  border-radius: 20px;
+  border: 1px solid #00d4ff;
+  box-shadow: 0 8px 32px rgba(33,150,243,0.08), 0 2px 8px rgba(0,0,0,0.10);
+  padding: 2.2rem 0;
+  position: relative;
+  overflow: visible;
+  z-index: 2;
+  min-height: 450px;
+  align-items: start;
+  transition: transform 0.3s ease-out, box-shadow 0.4s ease-out;
+}
+.lead-magnet-grid::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 120%;
+  height: 120%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, transparent 50%, rgba(0,212,255,0.08) 70%, rgba(0,102,255,0.05) 85%, transparent 100%);
+  filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.4s ease-out;
+}
+.lead-magnet-grid:hover {
+  transform: translateY(-8px) scale(1.015);
+  box-shadow: 
+    0 0 0 1px rgba(0,212,255,0.4), 
+    0 0 40px rgba(0,212,255,0.3), 
+    0 0 80px rgba(0,212,255,0.2), 
+    0 0 120px rgba(0,102,255,0.15), 
+    0 8px 32px rgba(33,150,243,0.15);
+  z-index: 10;
+}
+.lead-magnet-grid:hover::before {
+  opacity: 1;
+}
+.lead-magnet-left {
+  box-sizing: border-box;
+  min-width: 0;
+  flex: 0 0 50%;
+}
+
+.lead-magnet-right {
+  box-sizing: border-box;
+  min-width: 0;
+  flex: 0 0 50%;
+}
+.lead-magnet-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  justify-content: flex-start;
+  padding-left: 2rem;
+  padding-bottom: 1rem;
+  align-self: stretch;
+}
+.icon-headline {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 0.3rem;
+}
+.envelope-icon-anim {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  /* Gentle vertical float */
+  animation: envelope-float 3.5s ease-in-out infinite;
+}
+.envelope-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 80px;
+  height: 80px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, transparent 30%, rgba(0,212,255,0.4) 50%, rgba(0,102,255,0.3) 70%, transparent 100%);
+  opacity: 0.8;
+  border-radius: 50%;
+  filter: blur(8px);
+  z-index: -1;
+  pointer-events: none;
+  animation: envelope-glow-pulse 2.2s infinite alternate;
+}
+.envelope-svg {
+  position: relative;
+  z-index: 1;
+}
+.envelope-shape {
+  /* No drop-shadow here */
+  animation: none;
+  transform-origin: 50% 50%;
+}
+@keyframes envelope-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes envelope-glow-pulse {
+  0% { opacity: 0.35; filter: blur(8px); }
+  100% { opacity: 0.75; filter: blur(16px); }
+}
+.headline {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #E3F2FD;
+  line-height: 1.2;
+  text-shadow: 0 2px 12px rgba(33,150,243,0.18);
+}
+.subscribe-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.benefit-icon {
+  font-size: 1.25rem;
+  background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-right: 0.7em;
+}
+.social-proof-placeholder {
+  margin-top: 1.2rem;
+  font-size: 1rem;
+  color: #B0BEC5;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.testimonial-card {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 102, 255, 0.1) 100%);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  font-style: italic;
+}
+
+.success-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.stat-item {
+  text-align: center;
+  background: rgba(0, 212, 255, 0.05);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem 0.5rem;
+}
+
+.stat-number {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.75rem;
+  color: #B0BEC5;
+  margin-top: 0.25rem;
+}
+
+/* Comprehensive overflow prevention for all right column elements */
+.lead-magnet-right * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Comprehensive layout stability - prevent any shifts */
+.lead-magnet-right {
+  transform: none !important;
+  transition: none !important;
+  will-change: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.5rem !important;
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+  padding-right: 2rem !important;
+  padding-bottom: 1rem !important;
+  max-width: 100% !important;
+  align-self: stretch !important;
+  /* Force immediate layout calculation */
+  contain: layout style !important;
+}
+
+.lead-magnet-right .lead-magnet-offer,
+.lead-magnet-right .subscribe-form,
+.lead-magnet-right .trust-signals {
+  transform: none !important;
+  transition: none !important;
+  will-change: auto !important;
+  position: static !important;
+  /* Remove extra width calculations to match left column spacing */
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+.lead-magnet-offer,
+.subscribe-form,
+.trust-signals {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.lead-magnet-offer {
+  background: linear-gradient(90deg, #23232a 60%, #2D2D2D 100%);
+  border: 2px solid;
+  border-image: linear-gradient(90deg, #00d4ff 0%, #0066ff 100%) 1;
+  border-radius: 14px;
+  padding: 1.2rem 1rem 1.2rem 1rem;
+  position: relative;
+  margin-bottom: 0.5rem;
+  box-sizing: border-box;
+  overflow: visible;
+  /* Prevent child animations from affecting layout */
+  contain: layout;
+  transform: translateZ(0);
+}
+.free-badge {
+  position: absolute;
+  top: -14px;
+  left: -14px;
+  background: linear-gradient(90deg, #ff4444 0%, #ff6b35 100%);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.3em 0.8em;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(255, 68, 68, 0.25);
+  letter-spacing: 1px;
+  z-index: 1;
+  /* Prevent layout shifts during page load */
+  will-change: auto;
+  contain: layout;
+  /* Delay animation start to prevent layout shifts */
+  animation: badge-pulse 2s ease-in-out infinite alternate;
+  animation-delay: 1s;
+}
+.offer-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  min-width: 0;
+}
+.offer-emoji {
+  font-size: 2rem;
+  margin-top: 0.1em;
+}
+
+
+.offer-bullets {
+  list-style: disc inside;
+  color: #B0BEC5;
+  font-size: 1rem;
+  margin: 0.5em 0 0 0;
+  padding: 0;
+}
+.subscribe-form {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  min-width: 0;
+  box-sizing: border-box;
+  /* Add relative positioning for form-message absolute positioning */
+  position: relative;
+  /* Prevent layout shifts */
+  transform: none;
+  transition: none;
+  animation: none;
+}
+
+/* Fixed height container to prevent button layout shifts */
+.button-container-fixed {
+  width: 100%;
+  height: 48px;
+  min-height: 48px;
+  max-height: 48px;
+  position: relative;
+  display: block;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* Prevent any layout changes */
+  contain: layout size;
+  overflow: hidden;
+}
+.subscribe-input {
+  width: 100%;
+  max-width: 100%;
+  height: 48px;
+  border-radius: 8px;
+  border: 2px solid #555555;
+  background: #2a2a2f;
+  color: #ffffff;
+  font-size: 1rem;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.subscribe-input:focus {
+  outline: none;
+  border-color: #00d4ff;
+  background: #2f2f35;
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2), 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+/* Ultra-specific button reset - nuclear option */
+.lead-magnet-subscribe .subscribe-form .subscribe-button,
+.lead-magnet-subscribe .subscribe-form button[type="submit"],
+.lead-magnet-subscribe .subscribe-form #subscribeButton {
+  /* Force stable dimensions first */
+  width: 100% !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  
+  /* Force stable positioning */
+  position: relative !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  
+  /* Force stable spacing */
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  outline: none !important;
+  
+  /* Force stable display */
+  display: block !important;
+  box-sizing: border-box !important;
+  
+  /* Nuclear reset of all transform/animation properties */
+  transform: none !important;
+  transform-origin: 50% 50% !important;
+  transform-style: flat !important;
+  will-change: auto !important;
+  backface-visibility: visible !important;
+  perspective: none !important;
+  perspective-origin: 50% 50% !important;
+  
+  /* Nuclear reset of all transition/animation properties */
+  transition: none !important;
+  animation: none !important;
+  animation-delay: 0s !important;
+  animation-duration: 0s !important;
+  animation-fill-mode: none !important;
+  
+  /* Force stable layout containment */
+  contain: layout style size !important;
+  isolation: isolate !important;
+  
+  /* Visual styling last */
+  background: linear-gradient(90deg, #00d4ff 0%, #0066ff 100%) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  font-size: 1.08rem !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  box-shadow: 0 2px 8px rgba(0,212,255,0.10) !important;
+}
+/* Highly specific hover selector to override global hover styles */
+.lead-magnet-subscribe .subscribe-form .subscribe-button:hover,
+.lead-magnet-subscribe .subscribe-form button[type="submit"]:hover,
+.lead-magnet-subscribe .subscribe-form #subscribeButton:hover {
+  box-shadow: 0 0 16px #00d4ff, 0 2px 8px rgba(0,212,255,0.18) !important;
+  background: linear-gradient(90deg, #00d4ff 0%, #00ffa3 100%) !important;
+  /* Critical: Override global hover transforms */
+  transform: none !important;
+}
+.trust-signals {
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #B0BEC5;
+  margin-top: 0.2rem;
+}
+.gdpr-badge {
+  background: #23232a;
+  border: 1px solid #404040;
+  border-radius: 6px;
+  padding: 0.1em 0.7em;
+  font-size: 0.85em;
+  color: #B0BEC5;
+  margin-left: 0.2em;
+}
+.pointing-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(340deg);
+  margin-left: 0.8rem;
+  filter: drop-shadow(0 0 6px rgba(0,212,255,0.25));
+  /* Prevent layout shifts during page load */
+  will-change: auto;
+  contain: layout;
+  /* Delay animation start to prevent layout shifts */
+  animation: arrow-bob 2s ease-in-out infinite;
+  animation-delay: 1s;
+}
+.pointing-arrow svg {
+  filter: drop-shadow(0 0 3px rgba(0,102,255,0.2));
+}
+@keyframes arrow-bob {
+  0%, 100% { transform: rotate(340deg) translateY(0); }
+  50% { transform: rotate(340deg) translateY(-8px); }
+}
+
+@keyframes badge-pulse {
+  0% { transform: scale(1); box-shadow: 0 2px 8px rgba(255, 68, 68, 0.25); }
+  100% { transform: scale(1.05); box-shadow: 0 4px 16px rgba(255, 68, 68, 0.4); }
+}
+@media (max-width: 1200px) {
+  .lead-magnet-container {
+    padding: 0 0.5rem;
+  }
+  .lead-magnet-grid {
+    padding: 1.2rem 0;
+    gap: 1.5rem;
+  }
+}
+@media (max-width: 900px) {
+  .lead-magnet-grid {
+    flex-direction: column;
+    gap: 2.2rem;
+    padding: 1.5rem 0.7rem;
+  }
+  .lead-magnet-left, .lead-magnet-right {
+    max-width: 100%;
+    width: 100%;
+  }
+  .icon-headline {
+    justify-content: center;
+  }
+  .headline {
+    font-size: 1.3rem;
+  }
+  .lead-magnet-left {
+    padding-left: 1rem;
+  }
+  .lead-magnet-right {
+    padding-right: 1rem;
+  }
+}
+.envelope-icon {
+  width: 48px;
+  height: 48px;
+  margin-right: 1rem;
+  animation: envelope-float 3s ease-in-out infinite, envelope-pulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px rgba(0,212,255,0.3));
+}
+.envelope-icon svg {
+  width: 100%;
+  height: 100%;
+  filter: none;
+}
+
+/* Form message styling */
+.form-message {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 500;
+  /* Prevent layout shifts when hidden */
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 0;
+  margin-top: 0.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+  z-index: 10;
+}
+
+.form-message.success {
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #22c55e;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.form-message.error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.form-message.loading {
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #3b82f6;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Button loading state */
+.subscribe-button.loading {
+  background: linear-gradient(90deg, #00d4ff 0%, #0066ff 100%);
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.subscribe-button.loading .button-text {
+  opacity: 0.7;
+}
+</style>
+
+<script>
+  declare const gtag: Function;
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('leadMagnetForm') as HTMLFormElement;
+    const emailInput = form?.querySelector('input[name="email"]') as HTMLInputElement;
+    const submitButton = document.getElementById('subscribeButton') as HTMLButtonElement;
+    const formMessage = document.getElementById('formMessage') as HTMLDivElement;
+
+    if (!form || !emailInput || !submitButton || !formMessage) {
+      console.error('Lead magnet form elements not found');
+      return;
+    }
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const email = emailInput.value.trim();
+      
+      if (!email || !email.includes('@')) {
+        showMessage('Please enter a valid email address.', 'error');
+        return;
+      }
+
+      // Show loading state
+      submitButton.classList.add('loading');
+      submitButton.disabled = true;
+      showMessage('Subscribing you now...', 'loading');
+
+      try {
+        const response = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            source: 'homepage-lead-magnet',
+            category: 'general'
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showMessage('🔥 BOOM! Check your email RIGHT NOW for your $10K+ AI Money Vault! You just made the BEST decision of 2025!', 'success');
+          emailInput.value = '';
+          
+          // Track successful subscription
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'newsletter_signup', {
+              'event_category': 'engagement',
+              'event_label': 'homepage_lead_magnet'
+            });
+          }
+          
+        } else {
+          showMessage(data.error || 'Something went wrong. Please try again.', 'error');
+        }
+      } catch (error) {
+        console.error('Subscription error:', error);
+        showMessage('Network error. Please check your connection and try again.', 'error');
+      } finally {
+        // Reset button state
+        submitButton.classList.remove('loading');
+        submitButton.disabled = false;
+      }
+    });
+
+    function showMessage(message: string, type: 'success' | 'error' | 'loading') {
+      if (!formMessage) return;
+      formMessage.textContent = message;
+      formMessage.className = `form-message ${type}`;
+      
+      // Auto-hide success messages after 13 seconds (longer for important message)
+      if (type === 'success') {
+        setTimeout(() => {
+          if (formMessage) formMessage.style.display = 'none';
+        }, 13000);
+      }
+    }
+  });
+</script>
