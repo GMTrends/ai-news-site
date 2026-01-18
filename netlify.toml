@@ -19,7 +19,7 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' http://localhost:3333 https://*.sanity.io https://www.google-analytics.com https://analytics.google.com https://graph.facebook.com; frame-src https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://www.googletagmanager.com https://www.google-analytics.com https://static.ads-twitter.com http://static.ads-twitter.com https://cdn.jsdelivr.net https://analytics.tiktok.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' http://localhost:3333 https://*.sanity.io https://www.google-analytics.com https://analytics.google.com https://graph.facebook.com https://www.facebook.com https://connect.facebook.net https://static.ads-twitter.com; frame-src https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';"
 
 # API routes
 [[redirects]]

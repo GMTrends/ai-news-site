@@ -4,7 +4,7 @@ import { ensureExcerpt } from '../utils/excerptGenerator'
 export const sanityClient = createClient({
   projectId: import.meta.env.VITE_SANITY_PROJECT_ID || 'crtekmb2',
   dataset: import.meta.env.VITE_SANITY_DATASET || 'production',
-  useCdn: import.meta.env.VITE_SANITY_USE_CDN === 'true' || false,
+  useCdn: import.meta.env.VITE_SANITY_USE_CDN !== 'false', // Default to true
   apiVersion: import.meta.env.VITE_SANITY_API_VERSION || '2024-01-01',
   token: import.meta.env.VITE_SANITY_TOKEN, // Only for write operations
 })
