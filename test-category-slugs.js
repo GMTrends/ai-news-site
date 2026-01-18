@@ -6,7 +6,7 @@ const sanityClient = createClient({
   dataset: 'production',
   useCdn: true,
   apiVersion: '2024-01-01',
-  token: 'skSVD1GXFMQmyjpYBtCyCOoeTpRkX26tmDk2IYcrRBVqEYuqbk3G4WssqQzEZnAJBCcNXWgjp2p7efoXHYnoRNusNum0147N5phOGqOR14hEMBZDglG57fIaqRxgifLc5qcRp5DeuTRotRrqi87heWf1cvcUEKNJxcLekTtFdQ5BlyU2CAhw'
+  token: process.env.VITE_SANITY_TOKEN
 })
 
 async function testCategorySlugs() {
