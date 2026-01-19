@@ -261,7 +261,7 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 		/>
 		
 		<!-- Additional Performance Optimizations -->
-		<script src="/unregister-sw.js"></script>
+		<script src="/unregister-sw.js" is:inline></script>
 		<script>
 			// Critical performance optimizations
 			if (typeof window !== 'undefined') {
