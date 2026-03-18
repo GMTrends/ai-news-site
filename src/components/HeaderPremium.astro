@@ -5,7 +5,7 @@ import AdminLink from './AdminLink.astro';
 import { SITE_TITLE, CATEGORIES } from '../consts';
 ---
 
-<header class="premium-header" id="premiumHeader">
+<header class="premium-header" id="premiumHeader" data-page-type={Astro.url.pathname === '/' ? 'home' : 'content'}>
 	<nav class="premium-nav">
 		<div class="premium-logo">
 			<a href="/" class="premium-logo-link">
@@ -318,6 +318,20 @@ import { SITE_TITLE, CATEGORIES } from '../consts';
 		border-bottom: none !important;
 		box-shadow: none !important;
 	}
+
+/* ADD NEW CLAUDE HEADER CODE HERE ↓ */
+/* Apple-style background for content pages (articles, categories) */
+.premium-header[data-page-type="content"] {
+	background: rgba(2, 6, 23, 0.7);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+}
+
+/* Enhance blur when scrolling on content pages */
+.premium-header[data-page-type="content"].premium-scrolled {
+	background: rgba(2, 6, 23, 0.85);
+}
+/* END OF NEW CODE ↑ */
 
 	.premium-header.premium-scrolled {
 		background: rgba(2, 6, 23, 0.85);
