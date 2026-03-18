@@ -1,7 +1,7 @@
 ---
 // CSS imports moved to public/styles for proper serving
 // import '../styles/critical.css';
-// import '../styles/global.css';
+// import '../styles/global-v2.css';
 // import '../styles/layout.css';
 // import '../styles/components.css';
 // import '../styles/utilities.css';
@@ -222,7 +222,7 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 		
 		<!-- CSS imports as link tags for proper serving -->
 		<link rel="stylesheet" href="/styles/critical.css">
-		<link rel="stylesheet" href="/styles/global.css">
+		<link rel="stylesheet" href="/styles/global-v2.css">
 		<link rel="stylesheet" href="/styles/layout.css">
 		<link rel="stylesheet" href="/styles/components.css">
 		<link rel="stylesheet" href="/styles/utilities.css">
@@ -533,11 +533,11 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 		background: #020617;
 		color: var(--color-text);
 		line-height: 1.6;
-		/* Remove conflicting display rules - let global.css handle this */
+		/* Remove conflicting display rules - let global-v2.css handle this */
 		width: 100%;
 	}
 
-	/* Body styles handled by global.css to prevent conflicts */
+	/* Body styles handled by global-v2.css to prevent conflicts */
 
 	/* Main content flows naturally */
 	main {
@@ -626,7 +626,7 @@ const canonicalURL = canonicalUrl || Astro.url.href;
 		z-index: 1;
 	}
 	
-	/* Body styles handled by global.css to prevent conflicts */
+	/* Body styles handled by global-v2.css to prevent conflicts */
 	
 	/* GPU acceleration for smooth animations */
 	.gpu-accelerated {
