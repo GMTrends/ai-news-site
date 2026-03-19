@@ -381,43 +381,35 @@ nav a {
 }
 
 /* ============================================================
-   CSS FIXES — aibuzzmedia.com
-   Added to: public/styles/critical.css (append at the end)
+   CSS FIXES v2 — aibuzzmedia.com
+   Added to: public/styles/critical.css (REPLACE previous fix)
 
-   Fix 1: Hero/content overlapping fixed navbar (ALL pages)
+   Fix 1: Hero/content spacing below fixed navbar (ALL pages)
    Fix 2: Grid layout alignment with sidebar
    ============================================================ */
 
 /* ============================================================
-   FIX 1: GLOBAL — Prevent content from hiding behind fixed header
+   FIX 1: GLOBAL — Content spacing below fixed header
 
-   The .premium-header is position:fixed, so it's removed from
-   document flow. Content below it needs padding-top equal to
-   the header's height to avoid being hidden underneath.
+   The .premium-header is position:fixed with ~56px height.
+   We need just enough padding to clear it without excess gap.
    ============================================================ */
 
-/* Main content area — add top padding to clear the fixed header */
+/* Main content area — padding to clear fixed header */
 .main-content {
-    padding-top: 80px;
+    padding-top: 56px;
 }
 
-/* For pages that use a hero section directly inside main,
-   ensure the hero also respects the header space */
-.convert-hero-section {
-    padding-top: 1rem;
-}
-
-/* Mobile: header is shorter on mobile, adjust accordingly */
+/* Mobile: header may be slightly different height */
 @media (max-width: 768px) {
     .main-content {
-        padding-top: 70px;
+        padding-top: 50px;
     }
 }
 
-/* Very small screens */
 @media (max-width: 480px) {
     .main-content {
-        padding-top: 60px;
+        padding-top: 46px;
     }
 }
 
@@ -427,7 +419,6 @@ nav a {
    container height so it aligns with the sidebar
    ============================================================ */
 
-/* Ensure the category sections container uses full height */
 .grid-layout-special {
     display: grid;
     min-height: 100%;
@@ -435,8 +426,6 @@ nav a {
     height: 100%;
 }
 
-/* The parent container that holds both the main content grid
-   and the sidebar should stretch both children equally */
 .category-section-wrapper,
 .content-with-sidebar,
 .two-column-layout {
@@ -446,7 +435,6 @@ nav a {
     gap: 1.5rem;
 }
 
-/* Sidebar should stretch to match main content height */
 .homepage-partner-sidebar,
 .business-sidebar {
     align-self: stretch;
@@ -454,14 +442,12 @@ nav a {
     min-height: 100%;
 }
 
-/* Sticky sidebar content (stays visible while scrolling) */
 .homepage-partner-sidebar .sticky-col,
 .business-sidebar .sticky-col {
     position: sticky;
-    top: 90px; /* header height + 10px breathing room */
+    top: 70px;
 }
 
-/* Mobile: stack sidebar below content */
 @media (max-width: 768px) {
     .category-section-wrapper,
     .content-with-sidebar,
