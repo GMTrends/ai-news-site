@@ -389,96 +389,128 @@ nav a {
 }
 
 /* ============================================================
-   CSS FIXES v2 — aibuzzmedia.com
-   Added to: public/styles/critical.css (REPLACE previous fix)
+   CSS FIX v3 — aibuzzmedia.com
 
-   Fix 1: Hero/content spacing below fixed navbar (ALL pages)
-   Fix 2: Grid layout alignment with sidebar
+   REPLACES the previous Fix 1 section in critical.css
+
+   Problem: .main-content is used for BOTH:
+     1. The page <main> wrapper (needs padding-top for fixed nav)
+     2. Category section content divs (should NOT have padding-top)
+
+   Solution: Target ONLY the page-level main element using
+   main.main-content (the <main> tag) instead of .main-content
    ============================================================ */
 
 /* ============================================================
-   FIX 1: GLOBAL — Content spacing below fixed header
-
-   The .premium-header is position:fixed with ~56px height.
-   We need just enough padding to clear it without excess gap.
+   FIX 1: Page-level main wrapper — clear fixed header
+   Uses "main.main-content" to target ONLY the <main> tag,
+   NOT the <div class="main-content"> inside sections
    ============================================================ */
 
-/* Main content area — padding to clear fixed header */
-.main-content {
+main.main-content {
     padding-top: 56px;
 }
 
-/* Homepage-only: reduce extra spacing since hero has its own padding */
-body.homepage .main-content,
-.main-content:has(.convert-hero-section) {
+/* Homepage: less padding since hero has dark background */
+body.homepage main.main-content,
+main.main-content:has(.convert-hero-section) {
     padding-top: 40px;
 }
 
-/* Mobile: header may be slightly different height */
+/* Reset: Ensure section-level .main-content divs have NO extra padding */
+.section-layout .main-content {
+    padding-top: 0;
+}
+
+/* Mobile adjustments */
 @media (max-width: 768px) {
-    .main-content {
+    main.main-content {
         padding-top: 50px;
     }
-    body.homepage .main-content,
-    .main-content:has(.convert-hero-section) {
+    body.homepage main.main-content,
+    main.main-content:has(.convert-hero-section) {
         padding-top: 34px;
+    }
+    .section-layout .main-content {
+        padding-top: 0;
     }
 }
 
 @media (max-width: 480px) {
-    .main-content {
+    main.main-content {
         padding-top: 46px;
     }
-    body.homepage .main-content,
-    .main-content:has(.convert-hero-section) {
+    body.homepage main.main-content,
+    main.main-content:has(.convert-hero-section) {
         padding-top: 28px;
+    }
+    .section-layout .main-content {
+        padding-top: 0;
     }
 }
 
 
 /* ============================================================
-   FIX 2: GRID LAYOUT — Make grid-layout-special fill its
-   container height so it aligns with the sidebar
+   FIX 2: Grid alignment — ensure grid-layout-special fills
+   its container to align with the sidebar
    ============================================================ */
 
-.grid-layout-special {
-    display: grid;
+.section-layout {
+    align-items: start;
+}
+
+.section-layout .main-content {
     min-height: 100%;
-    align-content: start;
+}
+
+.grid-layout-special {
+    min-height: 100%;
     height: 100%;
 }
 
-.category-section-wrapper,
-.content-with-sidebar,
-.two-column-layout {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    align-items: stretch;
-    gap: 1.5rem;
-}
 
-.homepage-partner-sidebar,
-.business-sidebar {
-    align-self: stretch;
-    height: auto;
-    min-height: 100%;
-}
-
-.homepage-partner-sidebar .sticky-col,
-.business-sidebar .sticky-col {
-    position: sticky;
-    top: 70px;
-}
+/* ============================================================
+   FIX 3: Mobile responsiveness for category sections
+   ============================================================ */
 
 @media (max-width: 768px) {
-    .category-section-wrapper,
-    .content-with-sidebar,
-    .two-column-layout {
+    /* Stack sidebar below content on tablets */
+    .section-layout {
         grid-template-columns: 1fr;
     }
 
-    .homepage-partner-sidebar,
-    .business-sidebar {
+    /* Full width for content on mobile */
+    .section-layout .main-content {
+        width: 100%;
+    }
+
+    .grid-layout-special {
         min-height: auto;
+        height: auto;
+    }
+
+    /* Sidebar goes full width below content */
+    .sidebar.sticky-col {
+        position: relative;
+        top: auto;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Tighter spacing on small phones */
+    .section-layout {
+        gap: 1rem;
+    }
+
+    .section-header {
+        flex-direction: column;
+        gap: 0.75rem;
+        text-align: center;
+    }
+
+    .grid-layout-special .top-row,
+    .grid-layout-special .bottom-row {
+        grid-template-columns: 1fr;
     }
 }
