@@ -1,3 +1,11 @@
+/* ============================================================
+   critical.css — AI Buzz Media
+   Last cleaned: March 2026
+
+   !important declarations have been removed except where
+   needed to override 3rd-party styles (ConvertKit, etc.)
+   ============================================================ */
+
 /* CRITICAL CSS - Above-the-fold styles only - Inline in <head> */
 /* OPTIMIZED: 8KB critical styles for immediate rendering */
 
@@ -90,29 +98,29 @@ h1, h2, h3 {
 /* HERO GRID - ENFORCED 2:1 RATIO WITH MAXIMUM SPECIFICITY */
 .hero .hero-container .hero-grid,
 .hero-grid {
-  display: grid !important;
-  grid-template-columns: 2fr 1fr !important;
-  gap: 1.2rem !important;
-  align-items: stretch !important;
-  width: 100% !important;
-  margin-top: 1.2rem !important;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.2rem;
+  align-items: stretch;
+  width: 100%;
+  margin-top: 1.2rem;
   /* Prevent any flex interference */
-  flex-direction: unset !important;
-  flex-wrap: unset !important;
+  flex-direction: unset;
+  flex-wrap: unset;
   /* Ensure grid behavior */
-  grid-auto-flow: row !important;
-  contain: layout !important;
+  grid-auto-flow: row;
+  contain: layout;
 }
 
 /* HERO GRID PROTECTION - Prevent external components from overriding */
 .hero .hero-grid > *,
 .hero-grid > * {
   /* Prevent children from affecting parent grid */
-  contain: layout style !important;
-  display: block !important;
+  contain: layout style;
+  display: block;
   /* Override any flex declarations that might leak from ads */
-  align-self: stretch !important;
-  min-width: 0 !important; /* Ensure grid items can shrink */
+  align-self: stretch;
+  min-width: 0; /* Ensure grid items can shrink */
 }
 
 /* Main Featured Article - Critical */

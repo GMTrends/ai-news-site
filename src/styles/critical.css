@@ -1,3 +1,11 @@
+/* ============================================================
+   critical.css — AI Buzz Media
+   Last cleaned: March 2026
+
+   !important declarations have been removed except where
+   needed to override 3rd-party styles (ConvertKit, etc.)
+   ============================================================ */
+
 /* CRITICAL CSS - Above-the-fold styles only - Inline in <head> */
 /* OPTIMIZED: 8KB critical styles for immediate rendering */
 
@@ -90,29 +98,29 @@ h1, h2, h3 {
 /* HERO GRID - ENFORCED 2:1 RATIO WITH MAXIMUM SPECIFICITY */
 .hero .hero-container .hero-grid,
 .hero-grid {
-  display: grid !important;
-  grid-template-columns: 2fr 1fr !important;
-  gap: 1.2rem !important;
-  align-items: stretch !important;
-  width: 100% !important;
-  margin-top: 1.2rem !important;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.2rem;
+  align-items: stretch;
+  width: 100%;
+  margin-top: 1.2rem;
   /* Prevent any flex interference */
-  flex-direction: unset !important;
-  flex-wrap: unset !important;
+  flex-direction: unset;
+  flex-wrap: unset;
   /* Ensure grid behavior */
-  grid-auto-flow: row !important;
-  contain: layout !important;
+  grid-auto-flow: row;
+  contain: layout;
 }
 
 /* HERO GRID PROTECTION - Prevent external components from overriding */
 .hero .hero-grid > *,
 .hero-grid > * {
   /* Prevent children from affecting parent grid */
-  contain: layout style !important;
-  display: block !important;
+  contain: layout style;
+  display: block;
   /* Override any flex declarations that might leak from ads */
-  align-self: stretch !important;
-  min-width: 0 !important; /* Ensure grid items can shrink */
+  align-self: stretch;
+  min-width: 0; /* Ensure grid items can shrink */
 }
 
 /* Main Featured Article - Critical */
@@ -378,4 +386,99 @@ nav a {
   nav a {
     font-size: 0.9rem;
   }
+}
+
+/* ============================================================
+   CSS FIXES v2 — aibuzzmedia.com
+   Added to: public/styles/critical.css (REPLACE previous fix)
+
+   Fix 1: Hero/content spacing below fixed navbar (ALL pages)
+   Fix 2: Grid layout alignment with sidebar
+   ============================================================ */
+
+/* ============================================================
+   FIX 1: GLOBAL — Content spacing below fixed header
+
+   The .premium-header is position:fixed with ~56px height.
+   We need just enough padding to clear it without excess gap.
+   ============================================================ */
+
+/* Main content area — padding to clear fixed header */
+.main-content {
+    padding-top: 56px;
+}
+
+/* Homepage-only: reduce extra spacing since hero has its own padding */
+body.homepage .main-content,
+.main-content:has(.convert-hero-section) {
+    padding-top: 40px;
+}
+
+/* Mobile: header may be slightly different height */
+@media (max-width: 768px) {
+    .main-content {
+        padding-top: 50px;
+    }
+    body.homepage .main-content,
+    .main-content:has(.convert-hero-section) {
+        padding-top: 34px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding-top: 46px;
+    }
+    body.homepage .main-content,
+    .main-content:has(.convert-hero-section) {
+        padding-top: 28px;
+    }
+}
+
+
+/* ============================================================
+   FIX 2: GRID LAYOUT — Make grid-layout-special fill its
+   container height so it aligns with the sidebar
+   ============================================================ */
+
+.grid-layout-special {
+    display: grid;
+    min-height: 100%;
+    align-content: start;
+    height: 100%;
+}
+
+.category-section-wrapper,
+.content-with-sidebar,
+.two-column-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    align-items: stretch;
+    gap: 1.5rem;
+}
+
+.homepage-partner-sidebar,
+.business-sidebar {
+    align-self: stretch;
+    height: auto;
+    min-height: 100%;
+}
+
+.homepage-partner-sidebar .sticky-col,
+.business-sidebar .sticky-col {
+    position: sticky;
+    top: 70px;
+}
+
+@media (max-width: 768px) {
+    .category-section-wrapper,
+    .content-with-sidebar,
+    .two-column-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .homepage-partner-sidebar,
+    .business-sidebar {
+        min-height: auto;
+    }
 }
