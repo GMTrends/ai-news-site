@@ -403,7 +403,7 @@ nav a {
 /* Homepage-only: reduce extra spacing since hero has its own padding */
 body.homepage .main-content,
 .main-content:has(.convert-hero-section) {
-    padding-top: 0px;
+    padding-top: 40px;
 }
 
 /* Mobile: header may be slightly different height */
@@ -413,7 +413,7 @@ body.homepage .main-content,
     }
     body.homepage .main-content,
     .main-content:has(.convert-hero-section) {
-        padding-top: 0px;
+        padding-top: 34px;
     }
 }
 
@@ -423,7 +423,7 @@ body.homepage .main-content,
     }
     body.homepage .main-content,
     .main-content:has(.convert-hero-section) {
-        padding-top: 0px;
+        padding-top: 28px;
     }
 }
 
