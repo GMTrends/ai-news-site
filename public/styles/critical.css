@@ -389,21 +389,21 @@ nav a {
 }
 
 /* ============================================================
-   CSS FIX v4 — aibuzzmedia.com
+   CSS FIX v5 — aibuzzmedia.com
    REPLACES the previous fix block at bottom of critical.css
 
    Fixes:
    1. Hero/content spacing below fixed navbar (ALL pages)
-   2. Category section grid alignment with sidebar
-   3. Category tag underline removal
+   2. Category section grid alignment with sidebar (desktop)
+   3. Category tag underline removal (desktop + mobile)
    4. Leaderboard promo mobile overflow
-   5. Mobile responsiveness for Marketing/Productivity sections
+   5. Mobile: Marketing & Productivity sections single-column
+   6. Mobile: ALL section layouts responsive
    ============================================================ */
 
 
 /* ============================================================
    FIX 1: Page-level main wrapper — clear fixed header
-   Uses "main.main-content" to target ONLY the <main> tag
    ============================================================ */
 
 main.main-content {
@@ -415,7 +415,8 @@ main.main-content:has(.convert-hero-section) {
     padding-top: 40px;
 }
 
-.section-layout .main-content {
+.section-layout .main-content,
+.section-layout[data-astro-cid-ylb2qzx2] .main-content {
     padding-top: 0;
 }
 
@@ -427,9 +428,6 @@ main.main-content:has(.convert-hero-section) {
     main.main-content:has(.convert-hero-section) {
         padding-top: 34px;
     }
-    .section-layout .main-content {
-        padding-top: 0;
-    }
 }
 
 @media (max-width: 480px) {
@@ -440,53 +438,39 @@ main.main-content:has(.convert-hero-section) {
     main.main-content:has(.convert-hero-section) {
         padding-top: 28px;
     }
-    .section-layout .main-content {
-        padding-top: 0;
-    }
 }
 
 
 /* ============================================================
-   FIX 2: ALL section layouts — align grid with sidebar
-
-   The .marketing-section-layout has align-items:stretch which
-   makes it work. Apply the same to ALL section layouts.
+   FIX 2: ALL section layouts — align grid with sidebar (desktop)
    ============================================================ */
 
-.section-layout {
+.section-layout,
+.section-layout[data-astro-cid-ylb2qzx2] {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 340px;
     gap: 2rem;
     align-items: stretch;
 }
 
-/* Make the main content area fill available height */
-.section-layout .main-content {
+.section-layout .main-content,
+.section-layout[data-astro-cid-ylb2qzx2] .main-content[data-astro-cid-ylb2qzx2] {
     display: flex;
     flex-direction: column;
     min-height: 100%;
+    padding-top: 0;
 }
 
-/* Grid fills its container */
 .section-layout .main-content .grid-layout-special {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
-/* Bottom row pushes to bottom of grid */
 .section-layout .main-content .grid-layout-special .bottom-row {
     margin-top: auto;
 }
 
-/* Sidebar stretches to match content height */
-.section-layout .sidebar {
-    align-self: stretch;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Sticky sidebar content */
 .section-layout .sidebar.sticky-col {
     position: sticky;
     top: 70px;
@@ -495,19 +479,15 @@ main.main-content:has(.convert-hero-section) {
 
 
 /* ============================================================
-   FIX 3: Remove underline from category tags
+   FIX 3: Remove underline from category tags (ALL screens)
    ============================================================ */
 
 .category-tag.category-link-safe,
 a.category-tag,
-a.category-link-safe {
-    text-decoration: none;
-}
-
-.category-tag.category-link-safe:hover,
-a.category-tag:hover,
-a.category-link-safe:hover {
-    text-decoration: none;
+a.category-link-safe,
+.category-tag.category-link-safe[data-astro-cid-ylb2qzx2],
+a.category-link-safe[data-astro-cid-ylb2qzx2] {
+    text-decoration: none !important;
 }
 
 
@@ -550,34 +530,41 @@ a.category-link-safe:hover {
 
 
 /* ============================================================
-   FIX 5: Mobile responsiveness for ALL category sections
-   (including Marketing & Productivity)
+   FIX 5: MOBILE — ALL section layouts go single column
+
+   KEY FIX: .marketing-section-layout was MISSING from the
+   mobile single-column rule. Now ALL layout variants are
+   included, with [data-astro-cid] for specificity matching.
    ============================================================ */
 
 @media (max-width: 768px) {
-    /* Stack all section layouts to single column on mobile */
+    /* Force ALL section layouts to single column */
     .section-layout,
+    .section-layout[data-astro-cid-ylb2qzx2],
     .section-layout.marketing-section-layout,
     .section-layout.creative-section-layout,
     .section-layout.ai-agents-section-layout {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
         gap: 1.5rem;
     }
 
     /* Full width content */
-    .section-layout .main-content {
+    .section-layout .main-content,
+    .section-layout[data-astro-cid-ylb2qzx2] .main-content {
         width: 100%;
         min-height: auto;
+        padding-top: 0;
     }
 
-    /* Grid adjustments for mobile */
+    /* Grid adjustments */
     .grid-layout-special {
         min-height: auto;
         height: auto;
     }
 
     .grid-layout-special .top-row {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
     }
 
     .grid-layout-special .bottom-row {
@@ -585,16 +572,17 @@ a.category-link-safe:hover {
         margin-top: 0;
     }
 
-    /* Sidebar unsticks and goes full width */
+    /* Sidebar unsticks and goes full width below content */
     .section-layout .sidebar,
-    .section-layout .sidebar.sticky-col {
+    .section-layout .sidebar.sticky-col,
+    .section-layout[data-astro-cid-ylb2qzx2] .sidebar[data-astro-cid-ylb2qzx2] {
         position: relative;
         top: auto;
         width: 100%;
         align-self: auto;
     }
 
-    /* Section header stacks on mobile */
+    /* Section header stacks */
     .section-header {
         flex-direction: column;
         gap: 0.75rem;
@@ -603,7 +591,8 @@ a.category-link-safe:hover {
 }
 
 @media (max-width: 480px) {
-    .section-layout {
+    .section-layout,
+    .section-layout[data-astro-cid-ylb2qzx2] {
         gap: 1rem;
     }
 
