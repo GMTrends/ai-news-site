@@ -379,3 +379,98 @@ nav a {
     font-size: 0.9rem;
   }
 }
+
+/* ============================================================
+   CSS FIXES — aibuzzmedia.com
+   Added to: public/styles/critical.css (append at the end)
+
+   Fix 1: Hero/content overlapping fixed navbar (ALL pages)
+   Fix 2: Grid layout alignment with sidebar
+   ============================================================ */
+
+/* ============================================================
+   FIX 1: GLOBAL — Prevent content from hiding behind fixed header
+
+   The .premium-header is position:fixed, so it's removed from
+   document flow. Content below it needs padding-top equal to
+   the header's height to avoid being hidden underneath.
+   ============================================================ */
+
+/* Main content area — add top padding to clear the fixed header */
+.main-content {
+    padding-top: 80px;
+}
+
+/* For pages that use a hero section directly inside main,
+   ensure the hero also respects the header space */
+.convert-hero-section {
+    padding-top: 1rem;
+}
+
+/* Mobile: header is shorter on mobile, adjust accordingly */
+@media (max-width: 768px) {
+    .main-content {
+        padding-top: 70px;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+    .main-content {
+        padding-top: 60px;
+    }
+}
+
+
+/* ============================================================
+   FIX 2: GRID LAYOUT — Make grid-layout-special fill its
+   container height so it aligns with the sidebar
+   ============================================================ */
+
+/* Ensure the category sections container uses full height */
+.grid-layout-special {
+    display: grid;
+    min-height: 100%;
+    align-content: start;
+    height: 100%;
+}
+
+/* The parent container that holds both the main content grid
+   and the sidebar should stretch both children equally */
+.category-section-wrapper,
+.content-with-sidebar,
+.two-column-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    align-items: stretch;
+    gap: 1.5rem;
+}
+
+/* Sidebar should stretch to match main content height */
+.homepage-partner-sidebar,
+.business-sidebar {
+    align-self: stretch;
+    height: auto;
+    min-height: 100%;
+}
+
+/* Sticky sidebar content (stays visible while scrolling) */
+.homepage-partner-sidebar .sticky-col,
+.business-sidebar .sticky-col {
+    position: sticky;
+    top: 90px; /* header height + 10px breathing room */
+}
+
+/* Mobile: stack sidebar below content */
+@media (max-width: 768px) {
+    .category-section-wrapper,
+    .content-with-sidebar,
+    .two-column-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .homepage-partner-sidebar,
+    .business-sidebar {
+        min-height: auto;
+    }
+}
