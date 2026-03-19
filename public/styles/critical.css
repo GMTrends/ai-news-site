@@ -389,22 +389,19 @@ nav a {
 }
 
 /* ============================================================
-   CSS FIX v5 — aibuzzmedia.com
+   CSS FIX v5.1 — aibuzzmedia.com
    REPLACES the previous fix block at bottom of critical.css
 
    Fixes:
    1. Hero/content spacing below fixed navbar (ALL pages)
    2. Category section grid alignment with sidebar (desktop)
-   3. Category tag underline removal (desktop + mobile)
-   4. Leaderboard promo mobile overflow
-   5. Mobile: Marketing & Productivity sections single-column
-   6. Mobile: ALL section layouts responsive
+   3. Category tag underline removal (ALL screens)
+   4. Leaderboard promo mobile overflow (UPDATED - deep fix)
+   5. Mobile: ALL section layouts responsive
    ============================================================ */
 
 
-/* ============================================================
-   FIX 1: Page-level main wrapper — clear fixed header
-   ============================================================ */
+/* FIX 1: Page-level main wrapper — clear fixed header */
 
 main.main-content {
     padding-top: 56px;
@@ -441,9 +438,7 @@ main.main-content:has(.convert-hero-section) {
 }
 
 
-/* ============================================================
-   FIX 2: ALL section layouts — align grid with sidebar (desktop)
-   ============================================================ */
+/* FIX 2: ALL section layouts — align grid with sidebar (desktop) */
 
 .section-layout,
 .section-layout[data-astro-cid-ylb2qzx2] {
@@ -478,9 +473,7 @@ main.main-content:has(.convert-hero-section) {
 }
 
 
-/* ============================================================
-   FIX 3: Remove underline from category tags (ALL screens)
-   ============================================================ */
+/* FIX 3: Remove underline from category tags (ALL screens) */
 
 .category-tag.category-link-safe,
 a.category-tag,
@@ -492,53 +485,152 @@ a.category-link-safe[data-astro-cid-ylb2qzx2] {
 
 
 /* ============================================================
-   FIX 4: Leaderboard promo — prevent mobile overflow
+   FIX 4 (UPDATED): Leaderboard promo — fit mobile screens
+
+   The UniversalPromo component hardcodes width: 728px !important
+   which overflows on phones (375-430px wide). We need !important
+   to override the component's own !important declarations.
    ============================================================ */
 
-.universal-promo.promo-leaderboard,
-.promo-leaderboard-main,
-.universal-ad-isolator {
-    max-width: 100%;
-    overflow: hidden;
-    box-sizing: border-box;
-}
+/* Desktop: keep original 728px behavior */
 
+/* Tablet and below: force leaderboard to fit screen */
 @media (max-width: 768px) {
     .universal-promo.promo-leaderboard,
-    .promo-leaderboard-main {
-        max-width: 100%;
-        width: 100%;
-        overflow: hidden;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        box-sizing: border-box;
+    .universal-promo.promo-leaderboard.promo-leaderboard-main {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding: 0 0.5rem !important;
+        box-sizing: border-box !important;
     }
 
-    .universal-promo.promo-leaderboard img,
-    .promo-leaderboard-main img {
-        max-width: 100%;
-        height: auto;
+    .universal-promo.promo-leaderboard .leaderboard-promo-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: 80px !important;
+        max-height: none !important;
+        margin: 0 auto 1.5rem auto !important;
+        box-sizing: border-box !important;
     }
 
+    .universal-promo.promo-leaderboard .leaderboard-promo-link {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 80px !important;
+        height: auto !important;
+        flex-direction: row !important;
+        padding: 0.75rem !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Prevent any child from overflowing */
+    .universal-promo.promo-leaderboard *,
+    .leaderboard-promo-container * {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Scale down the floating icon */
+    .leaderboard-floating-icon {
+        width: 50px !important;
+        height: 50px !important;
+        min-width: 50px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .leaderboard-icon-wrapper {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    /* Content area takes remaining space */
+    .leaderboard-content {
+        flex: 1 !important;
+        min-width: 0 !important;
+        padding: 0 0.5rem !important;
+    }
+
+    .leaderboard-title {
+        font-size: 0.85rem !important;
+        line-height: 1.2 !important;
+    }
+
+    .leaderboard-description {
+        font-size: 0.75rem !important;
+        line-height: 1.3 !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+    }
+
+    /* CTA button scales down */
+    .leaderboard-cta-section {
+        flex-shrink: 0 !important;
+    }
+
+    .leaderboard-cta-button {
+        font-size: 0.7rem !important;
+        padding: 0.4rem 0.8rem !important;
+        white-space: nowrap !important;
+    }
+
+    /* Hide particles on mobile (performance + overflow) */
+    .leaderboard-particles,
+    .leaderboard-particle {
+        display: none !important;
+    }
+
+    /* Universal ad isolator */
     .universal-ad-isolator {
-        max-width: 100vw;
-        overflow: hidden;
-        padding: 0 1rem;
-        box-sizing: border-box;
+        max-width: 100% !important;
+        overflow: hidden !important;
+        padding: 0 0.5rem !important;
+        box-sizing: border-box !important;
+    }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+    .universal-promo.promo-leaderboard .leaderboard-promo-link {
+        flex-direction: column !important;
+        text-align: center !important;
+        padding: 1rem 0.75rem !important;
+        min-height: auto !important;
+    }
+
+    .leaderboard-floating-icon {
+        margin-bottom: 0.5rem !important;
+    }
+
+    .leaderboard-content {
+        padding: 0 !important;
+        text-align: center !important;
+    }
+
+    .leaderboard-cta-section {
+        margin-top: 0.5rem !important;
+        width: 100% !important;
+    }
+
+    .leaderboard-cta-button {
+        width: 100% !important;
+        text-align: center !important;
+    }
+
+    .leaderboard-badge-wrapper {
+        justify-content: center !important;
     }
 }
 
 
-/* ============================================================
-   FIX 5: MOBILE — ALL section layouts go single column
-
-   KEY FIX: .marketing-section-layout was MISSING from the
-   mobile single-column rule. Now ALL layout variants are
-   included, with [data-astro-cid] for specificity matching.
-   ============================================================ */
+/* FIX 5: MOBILE — ALL section layouts go single column */
 
 @media (max-width: 768px) {
-    /* Force ALL section layouts to single column */
     .section-layout,
     .section-layout[data-astro-cid-ylb2qzx2],
     .section-layout.marketing-section-layout,
@@ -548,7 +640,6 @@ a.category-link-safe[data-astro-cid-ylb2qzx2] {
         gap: 1.5rem;
     }
 
-    /* Full width content */
     .section-layout .main-content,
     .section-layout[data-astro-cid-ylb2qzx2] .main-content {
         width: 100%;
@@ -556,7 +647,6 @@ a.category-link-safe[data-astro-cid-ylb2qzx2] {
         padding-top: 0;
     }
 
-    /* Grid adjustments */
     .grid-layout-special {
         min-height: auto;
         height: auto;
@@ -572,7 +662,6 @@ a.category-link-safe[data-astro-cid-ylb2qzx2] {
         margin-top: 0;
     }
 
-    /* Sidebar unsticks and goes full width below content */
     .section-layout .sidebar,
     .section-layout .sidebar.sticky-col,
     .section-layout[data-astro-cid-ylb2qzx2] .sidebar[data-astro-cid-ylb2qzx2] {
@@ -582,7 +671,6 @@ a.category-link-safe[data-astro-cid-ylb2qzx2] {
         align-self: auto;
     }
 
-    /* Section header stacks */
     .section-header {
         flex-direction: column;
         gap: 0.75rem;
@@ -596,7 +684,6 @@ a.category-link-safe[data-astro-cid-ylb2qzx2] {
         gap: 1rem;
     }
 
-    /* Single column cards on small phones */
     .grid-layout-special .top-row,
     .grid-layout-special .bottom-row {
         grid-template-columns: 1fr;
