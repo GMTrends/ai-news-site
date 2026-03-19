@@ -389,40 +389,36 @@ nav a {
 }
 
 /* ============================================================
-   CSS FIX v3 — aibuzzmedia.com
+   CSS FIX v4 — aibuzzmedia.com
+   REPLACES the previous fix block at bottom of critical.css
 
-   REPLACES the previous Fix 1 section in critical.css
-
-   Problem: .main-content is used for BOTH:
-     1. The page <main> wrapper (needs padding-top for fixed nav)
-     2. Category section content divs (should NOT have padding-top)
-
-   Solution: Target ONLY the page-level main element using
-   main.main-content (the <main> tag) instead of .main-content
+   Fixes:
+   1. Hero/content spacing below fixed navbar (ALL pages)
+   2. Category section grid alignment with sidebar
+   3. Category tag underline removal
+   4. Leaderboard promo mobile overflow
+   5. Mobile responsiveness for Marketing/Productivity sections
    ============================================================ */
+
 
 /* ============================================================
    FIX 1: Page-level main wrapper — clear fixed header
-   Uses "main.main-content" to target ONLY the <main> tag,
-   NOT the <div class="main-content"> inside sections
+   Uses "main.main-content" to target ONLY the <main> tag
    ============================================================ */
 
 main.main-content {
     padding-top: 56px;
 }
 
-/* Homepage: less padding since hero has dark background */
 body.homepage main.main-content,
 main.main-content:has(.convert-hero-section) {
     padding-top: 40px;
 }
 
-/* Reset: Ensure section-level .main-content divs have NO extra padding */
 .section-layout .main-content {
     padding-top: 0;
 }
 
-/* Mobile adjustments */
 @media (max-width: 768px) {
     main.main-content {
         padding-top: 50px;
@@ -451,66 +447,170 @@ main.main-content:has(.convert-hero-section) {
 
 
 /* ============================================================
-   FIX 2: Grid alignment — ensure grid-layout-special fills
-   its container to align with the sidebar
+   FIX 2: ALL section layouts — align grid with sidebar
+
+   The .marketing-section-layout has align-items:stretch which
+   makes it work. Apply the same to ALL section layouts.
    ============================================================ */
 
 .section-layout {
-    align-items: start;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 2rem;
+    align-items: stretch;
 }
 
+/* Make the main content area fill available height */
 .section-layout .main-content {
+    display: flex;
+    flex-direction: column;
     min-height: 100%;
 }
 
-.grid-layout-special {
-    min-height: 100%;
-    height: 100%;
+/* Grid fills its container */
+.section-layout .main-content .grid-layout-special {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Bottom row pushes to bottom of grid */
+.section-layout .main-content .grid-layout-special .bottom-row {
+    margin-top: auto;
+}
+
+/* Sidebar stretches to match content height */
+.section-layout .sidebar {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Sticky sidebar content */
+.section-layout .sidebar.sticky-col {
+    position: sticky;
+    top: 70px;
+    align-self: start;
 }
 
 
 /* ============================================================
-   FIX 3: Mobile responsiveness for category sections
+   FIX 3: Remove underline from category tags
+   ============================================================ */
+
+.category-tag.category-link-safe,
+a.category-tag,
+a.category-link-safe {
+    text-decoration: none;
+}
+
+.category-tag.category-link-safe:hover,
+a.category-tag:hover,
+a.category-link-safe:hover {
+    text-decoration: none;
+}
+
+
+/* ============================================================
+   FIX 4: Leaderboard promo — prevent mobile overflow
+   ============================================================ */
+
+.universal-promo.promo-leaderboard,
+.promo-leaderboard-main,
+.universal-ad-isolator {
+    max-width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .universal-promo.promo-leaderboard,
+    .promo-leaderboard-main {
+        max-width: 100%;
+        width: 100%;
+        overflow: hidden;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        box-sizing: border-box;
+    }
+
+    .universal-promo.promo-leaderboard img,
+    .promo-leaderboard-main img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .universal-ad-isolator {
+        max-width: 100vw;
+        overflow: hidden;
+        padding: 0 1rem;
+        box-sizing: border-box;
+    }
+}
+
+
+/* ============================================================
+   FIX 5: Mobile responsiveness for ALL category sections
+   (including Marketing & Productivity)
    ============================================================ */
 
 @media (max-width: 768px) {
-    /* Stack sidebar below content on tablets */
-    .section-layout {
+    /* Stack all section layouts to single column on mobile */
+    .section-layout,
+    .section-layout.marketing-section-layout,
+    .section-layout.creative-section-layout,
+    .section-layout.ai-agents-section-layout {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
 
-    /* Full width for content on mobile */
+    /* Full width content */
     .section-layout .main-content {
         width: 100%;
+        min-height: auto;
     }
 
+    /* Grid adjustments for mobile */
     .grid-layout-special {
         min-height: auto;
         height: auto;
     }
 
-    /* Sidebar goes full width below content */
-    .sidebar.sticky-col {
+    .grid-layout-special .top-row {
+        grid-template-columns: 1fr;
+    }
+
+    .grid-layout-special .bottom-row {
+        grid-template-columns: 1fr;
+        margin-top: 0;
+    }
+
+    /* Sidebar unsticks and goes full width */
+    .section-layout .sidebar,
+    .section-layout .sidebar.sticky-col {
         position: relative;
         top: auto;
         width: 100%;
-    }
-}
-
-@media (max-width: 480px) {
-    /* Tighter spacing on small phones */
-    .section-layout {
-        gap: 1rem;
+        align-self: auto;
     }
 
+    /* Section header stacks on mobile */
     .section-header {
         flex-direction: column;
         gap: 0.75rem;
         text-align: center;
     }
+}
 
+@media (max-width: 480px) {
+    .section-layout {
+        gap: 1rem;
+    }
+
+    /* Single column cards on small phones */
     .grid-layout-special .top-row,
     .grid-layout-special .bottom-row {
         grid-template-columns: 1fr;
+        gap: 0.75rem;
     }
 }
