@@ -400,16 +400,30 @@ nav a {
     padding-top: 56px;
 }
 
+/* Homepage-only: reduce extra spacing since hero has its own padding */
+body.homepage .main-content,
+.main-content:has(.convert-hero-section) {
+    padding-top: 0px;
+}
+
 /* Mobile: header may be slightly different height */
 @media (max-width: 768px) {
     .main-content {
         padding-top: 50px;
+    }
+    body.homepage .main-content,
+    .main-content:has(.convert-hero-section) {
+        padding-top: 0px;
     }
 }
 
 @media (max-width: 480px) {
     .main-content {
         padding-top: 46px;
+    }
+    body.homepage .main-content,
+    .main-content:has(.convert-hero-section) {
+        padding-top: 0px;
     }
 }
 
